@@ -1,6 +1,6 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
-export async function login(req: Request, res: Response) {
+export async function login(req: Request, res: Response, next: NextFunction) {
   //   const { username, password } = req.body
   //   try {
   //     const user = await authService.login(username, password)
@@ -14,7 +14,7 @@ export async function login(req: Request, res: Response) {
   //   }
 }
 
-export async function signup(req: Request, res: Response) {
+export async function signup(req: Request, res: Response, next: NextFunction) {
   //   try {
   //     const credentials = req.body
   //     // Never log passwords
@@ -35,7 +35,17 @@ export async function signup(req: Request, res: Response) {
   //   }
 }
 
-export async function logout(req: Request, res: Response) {
+export async function refresh(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const loginToken = req.cookies.loginToken
+  //     const user = authService.refresh(loginToken)
+  //     res.json(user)
+  //   } catch (err) {
+  //     res.status(401).send({ err: 'Failed to refresh' })
+  //   }
+}
+
+export async function logout(req: Request, res: Response, next: NextFunction) {
   //   try {
   //     res.clearCookie('loginToken')
   //     res.send({ msg: 'Logged out successfully' })
