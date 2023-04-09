@@ -10,5 +10,5 @@ const AuthSchema = new Schema({
   password: { type: String, required: true, select: false },
 })
 
-const AuthModel = model<IAuth>('Auth', AuthSchema)
-export default AuthModel
+const authModel = model<IAuth>('Auth', AuthSchema)
+export default authModel

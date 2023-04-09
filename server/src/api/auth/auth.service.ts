@@ -1,78 +1,43 @@
 import { Types } from 'mongoose'
-import userModel, { IUser } from '../../mongodb/models/user.model.js'
+import authModel, { IAuth } from '../../mongodb/models/auth.model.js'
 
-const addUser = async (user: IUser) => {
+const addAuthUser = async (authUser: IAuth) => {
   try {
-    const newUser = await userModel.create(user)
-    return newUser
+    const newAuthUser = await authModel.create(authUser)
+    return newAuthUser
   } catch (error) {
     throw error
   }
 }
 
-const getUserById = async (userId: Types.ObjectId) => {
+const getAuthUser = async (email: String) => {
   try {
-    const existingUser = await userModel.findById(userId)
-    return existingUser
+    const existingAuthUser = await authModel.findOne({ email })
+    return existingAuthUser
+  } catch (error) {
+    throw error
+  }
+}
+const getCredentials = async (email: String) => {
+  try {
+    const credentials = await authModel.findOne({ email }).select('+password')
+    return credentials
   } catch (error) {
     throw error
   }
 }
 
-const getUserByUsername = async (userName: String) => {
+const deleteAuthUser = async (email: String) => {
   try {
-    const existingUser = await userModel.findOne({ username: userName })
-    return existingUser
+    await authModel.findByIdAndDelete(email)
   } catch (error) {
     throw error
   }
 }
 
-const getUserByEmail = async (email: String) => {
-  try {
-    const existingUser = await userModel.findOne({ email })
-    return existingUser
-  } catch (error) {
-    throw error
-  }
-}
-
-const getUserWithPassword = async (userName: String) => {
-  try {
-    const existingUser = await userModel
-      .findOne({ username: userName })
-      .select('+password')
-    return existingUser
-  } catch (error) {
-    throw error
-  }
-}
-
-const updateUser = async (userId: String, user: IUser) => {
-  try {
-    const updatedUser = await userModel.findByIdAndUpdate(userId, user, {
-      new: true,
-    })
-    return updatedUser
-  } catch (error) {
-    throw error
-  }
-}
-
-const deleteUser = async (userId: String) => {
-  try {
-    await userModel.findByIdAndDelete(userId)
-  } catch (error) {
-    throw error
-  }
-}
-
-export const userService = {
-  addUser,
-  getUserById,
-  getUserByUsername,
-  getUserByEmail,
-  getUserWithPassword,
-  updateUser,
-  deleteUser,
+export const authService = {
+  addAuthUser,
+  getAuthUser,
+  getCredentials,
+  deleteAuthUser,
 }
