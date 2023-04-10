@@ -6,7 +6,7 @@ export interface IToken {
 }
 
 const TokenSchema = new Schema({
-  userId: { type: Types.ObjectId, ref: 'User', required: true },
+  userId: { type: Types.ObjectId, ref: 'Auth', required: true },
   refreshToken: { type: String, required: true, unique: true },
 })
 

@@ -24,12 +24,14 @@ async function saveToken(userId: Types.ObjectId, refreshToken: string) {
   const tokenData = await TokenModel.findOne({ userId })
 
   // update refresh token
+  console.log('refreshing token')
   if (tokenData) {
     tokenData.token = refreshToken
     return tokenData.save()
   }
 
   // new refresh token
+  console.log('saving new token')
   const token = await TokenModel.create({ userId, token: refreshToken })
   return token
 }

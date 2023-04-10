@@ -9,6 +9,7 @@ const registerNewUser = async (authUser: ICredentials) => {
     const isEmailTaken = await _isEmailTaken(authUser.email)
     if (isEmailTaken) {
       // logger.debug(`auth.service - attempt to create new account with existing email: ${authUser.email}`)
+      console.log('Email already taken')
       throw new Error('Email already taken')
     }
 
@@ -21,6 +22,7 @@ const registerNewUser = async (authUser: ICredentials) => {
     // logger.info(`auth.service - new account created: ${newAuthUser.email}`)
 
     // generate tokens
+    console.log('generating tokens')
     const { accessToken, refreshToken } = tokenService.generateTokens({
       id: newAuthUser._id,
       email: newAuthUser.email,

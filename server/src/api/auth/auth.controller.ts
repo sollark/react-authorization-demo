@@ -22,6 +22,7 @@ export async function registration(
   res: Response,
   next: NextFunction
 ) {
+  console.log('registration')
   try {
     const credentials = req.body
     const userData = await authService.registerNewUser(credentials)
@@ -35,6 +36,7 @@ export async function registration(
     return res.json(userData)
   } catch (err) {
     // logger.error('Failed to signup ' + err)
+    next(err)
   }
 }
 
