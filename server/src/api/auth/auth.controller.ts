@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import bcrypt from 'bcrypt'
+
 import { authService } from './auth.service.js'
+import { tokenService } from '../../service/token.service.js'
 
 export async function signin(req: Request, res: Response, next: NextFunction) {
   //   const { username, password } = req.body
@@ -23,28 +24,17 @@ export async function registration(
 ) {
   try {
     const credentials = req.body
+    const userData = await authService.registerNewUser(credentials)
 
-    const account = await authService.getAuthUser(credentials.email)
-    if (account) throw new Error('Account already exists')
-    // logger.debug(`auth.route - attempt to create new account with existing email: ` + JSON.stringify(account))
+    // save refresh token in cookie for 30 days
+    res.cookie('refreshToken', userData.refreshToken, {
+      maxAge: 30 * 24 ** 60 * 60 * 1000,
+      httpOnly: true,
+    })
 
-    const hashPassword = await bcrypt.hash(credentials.password, 3)
-    credentials.password = hashPassword
-
-    const newAccount = await authService.addAuthUser(credentials)
-    // logger.debug(`auth.route - new account created: ` + JSON.stringify(newAccount))
-
-    const user = await authService.signin(
-      credentials.username,
-      credentials.password
-    )
-    // logger.info('User signup:', user)
-    const loginToken = authService.getLoginToken(user)
-    res.cookie('loginToken', loginToken, { sameSite: 'None', secure: true })
-    res.json(user)
+    return res.json(userData)
   } catch (err) {
     // logger.error('Failed to signup ' + err)
-    res.status(500).send({ err: 'Failed to signup' })
   }
 }
 

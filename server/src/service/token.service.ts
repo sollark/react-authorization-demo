@@ -1,8 +1,10 @@
 import * as jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
+import { Types } from 'mongoose'
+import TokenModel from '../mongodb/models/token.model.js'
 dotenv.config()
 
-export function generateToken(payload: any): {
+function generateTokens(payload: any): {
   accessToken: string
   refreshToken: string
 } {
@@ -16,4 +18,23 @@ export function generateToken(payload: any): {
   const refreshToken = jwt.sign(payload, refreshSecret, { expiresIn: '10d' })
 
   return { accessToken, refreshToken }
+}
+
+async function saveToken(userId: Types.ObjectId, refreshToken: string) {
+  const tokenData = await TokenModel.findOne({ userId })
+
+  // update refresh token
+  if (tokenData) {
+    tokenData.token = refreshToken
+    return tokenData.save()
+  }
+
+  // new refresh token
+  const token = await TokenModel.create({ userId, token: refreshToken })
+  return token
+}
+
+export const tokenService = {
+  generateTokens,
+  saveToken,
 }

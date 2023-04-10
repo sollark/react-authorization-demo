@@ -1,23 +1,40 @@
 import { Types } from 'mongoose'
-import authModel, { IAuth } from '../../mongodb/models/auth.model.js'
+import bcrypt from 'bcrypt'
+import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
+import { tokenService } from '../../service/token.service.js'
 
-const addAuthUser = async (authUser: IAuth) => {
+const registerNewUser = async (authUser: ICredentials) => {
   try {
+    // check if email is already taken
+    const isEmailTaken = await _isEmailTaken(authUser.email)
+    if (isEmailTaken) {
+      // logger.debug(`auth.service - attempt to create new account with existing email: ${authUser.email}`)
+      throw new Error('Email already taken')
+    }
+
+    // hash password
+    const hashPassword = await bcrypt.hash(authUser.password, 10)
+    authUser.password = hashPassword
+
+    // create new account
     const newAuthUser = await authModel.create(authUser)
-    return newAuthUser
+    // logger.info(`auth.service - new account created: ${newAuthUser.email}`)
+
+    // generate tokens
+    const { accessToken, refreshToken } = tokenService.generateTokens({
+      id: newAuthUser._id,
+      email: newAuthUser.email,
+    })
+
+    // save refresh token to db
+    await tokenService.saveToken(newAuthUser._id, refreshToken)
+
+    return { accessToken, refreshToken, user: newAuthUser.email }
   } catch (error) {
     throw error
   }
 }
 
-const getAuthUser = async (email: String) => {
-  try {
-    const existingAuthUser = await authModel.findOne({ email })
-    return existingAuthUser
-  } catch (error) {
-    throw error
-  }
-}
 const getCredentials = async (email: String) => {
   try {
     const credentials = await authModel.findOne({ email }).select('+password')
@@ -36,8 +53,16 @@ const deleteAuthUser = async (email: String) => {
 }
 
 export const authService = {
-  addAuthUser,
-  getAuthUser,
+  registerNewUser,
   getCredentials,
   deleteAuthUser,
+}
+
+const _isEmailTaken = async (email: String) => {
+  try {
+    const existingAuthUser = await authModel.findOne({ email })
+    return existingAuthUser ? true : false
+  } catch (error) {
+    throw error
+  }
 }
