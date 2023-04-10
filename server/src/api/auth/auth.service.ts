@@ -22,7 +22,6 @@ const registerNewUser = async (authUser: ICredentials) => {
     // logger.info(`auth.service - new account created: ${newAuthUser.email}`)
 
     // generate tokens
-    console.log('generating tokens')
     const { accessToken, refreshToken } = tokenService.generateTokens({
       id: newAuthUser._id,
       email: newAuthUser.email,

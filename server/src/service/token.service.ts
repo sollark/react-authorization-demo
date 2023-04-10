@@ -8,6 +8,7 @@ function generateTokens(payload: any): {
   accessToken: string
   refreshToken: string
 } {
+  console.log('generating tokens ', payload)
   const accessSecret = process.env.JWT_ACCESS_SECRET
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
