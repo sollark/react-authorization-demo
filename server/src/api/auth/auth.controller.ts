@@ -22,14 +22,13 @@ export async function registration(
   res: Response,
   next: NextFunction
 ) {
-  console.log('registration')
   try {
     const credentials = req.body
     const userData = await authService.registerNewUser(credentials)
 
     // save refresh token in cookie for 30 days
     res.cookie('refreshToken', userData.refreshToken, {
-      maxAge: 30 * 24 ** 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     })
 

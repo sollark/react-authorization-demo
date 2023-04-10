@@ -1,4 +1,3 @@
-import { Types } from 'mongoose'
 import bcrypt from 'bcrypt'
 import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
 import { tokenService } from '../../service/token.service.js'

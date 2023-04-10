@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import { Types } from 'mongoose'
 import TokenModel from '../mongodb/models/token.model.js'
@@ -8,7 +8,6 @@ function generateTokens(payload: any): {
   accessToken: string
   refreshToken: string
 } {
-  console.log('generating tokens ', payload)
   const accessSecret = process.env.JWT_ACCESS_SECRET
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
@@ -25,15 +24,14 @@ async function saveToken(userId: Types.ObjectId, refreshToken: string) {
   const tokenData = await TokenModel.findOne({ userId })
 
   // update refresh token
-  console.log('refreshing token')
   if (tokenData) {
-    tokenData.token = refreshToken
+    tokenData.refreshToken = refreshToken
     return tokenData.save()
   }
 
   // new refresh token
-  console.log('saving new token')
-  const token = await TokenModel.create({ userId, token: refreshToken })
+  const token = await TokenModel.create({ userId, refreshToken })
+
   return token
 }
 

@@ -2,7 +2,7 @@ import { model, Schema, Types } from 'mongoose'
 
 export interface IToken {
   userId: Types.ObjectId
-  token: string
+  refreshToken: string
 }
 
 const TokenSchema = new Schema({
