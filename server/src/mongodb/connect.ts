@@ -4,11 +4,12 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 const MONGO_URL = process.env.MONGO_URL
-if (!MONGO_URL) {
-  throw new Error('MONGO_URL is not defined')
-}
 
 export const connectMongo = async () => {
+  if (!MONGO_URL) {
+    throw new Error('MONGO_URL is not defined')
+  }
+
   try {
     mongoose.set('strictQuery', true)
     await mongoose.connect(MONGO_URL)
