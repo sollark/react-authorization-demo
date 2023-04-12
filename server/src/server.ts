@@ -11,6 +11,11 @@ import errorHandler from './middleware/errorHandler.js'
 //import routes
 import { authRoutes } from './api/auth/auth.routes.js'
 
+// import for __dirname
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 const app = express()
 
 // middleware

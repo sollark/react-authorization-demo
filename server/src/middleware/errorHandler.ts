@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import CustomError from '../errors/CustomError.js'
 
 function errorHandler(
   error: Error,
@@ -6,9 +7,16 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode
+  console.log('errorHandler', error)
 
-  res.status(statusCode).json({
+  if (error instanceof CustomError) {
+    return res.status(error.statusCode).json({
+      message: error.serializeErrors(),
+    })
+  }
+
+  // unexpected error
+  res.status(500).json({
     message: error.message,
   })
 }

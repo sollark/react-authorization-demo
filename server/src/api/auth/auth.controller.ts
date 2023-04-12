@@ -13,7 +13,7 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
   //     res.json(user)
   //   } catch (err) {
   //     logger.error('Failed to Login ' + err)
-  //     res.status(401).send({ err: 'Failed to Login' })
+  //      next(e)
   //   }
 }
 
@@ -33,9 +33,9 @@ export async function registration(
     })
 
     return res.json(userData)
-  } catch (err) {
+  } catch (e) {
     // logger.error('Failed to signup ' + err)
-    next(err)
+    next(e)
   }
 }
 
@@ -45,7 +45,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
   //     const user = authService.refresh(loginToken)
   //     res.json(user)
   //   } catch (err) {
-  //     res.status(401).send({ err: 'Failed to refresh' })
+  //      next(e)
   //   }
 }
 
@@ -54,6 +54,6 @@ export async function signout(req: Request, res: Response, next: NextFunction) {
   //     res.clearCookie('loginToken')
   //     res.send({ msg: 'Logged out successfully' })
   //   } catch (err) {
-  //     res.status(500).send({ err: 'Failed to logout' })
+  //      next(e)
   //   }
 }

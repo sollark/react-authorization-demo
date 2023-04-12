@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
 import { tokenService } from '../../service/token.service.js'
+import BadRequestError from '../../errors/BadRequestError.js'
 
 const registerNewUser = async (authUser: ICredentials) => {
   try {
@@ -9,7 +10,7 @@ const registerNewUser = async (authUser: ICredentials) => {
     if (isEmailTaken) {
       // logger.debug(`auth.service - attempt to create new account with existing email: ${authUser.email}`)
       console.log('Email already taken')
-      throw new Error('Email already taken')
+      throw new BadRequestError('Email already taken', authUser.email)
     }
 
     // hash password
