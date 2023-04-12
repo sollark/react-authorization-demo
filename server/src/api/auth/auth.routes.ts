@@ -3,6 +3,7 @@ import asyncHandler from '../../utils/asyncHandler.js'
 import validateRequest from '../../middleware/validationHandler.js'
 import { registrationSchema } from '../../validations/registration.schema.js'
 import { refresh, registration, signin, signout } from './auth.controller.js'
+import { signinSchema } from '../../validations/signin.schema.js'
 
 const router = express.Router()
 
@@ -12,7 +13,7 @@ router.post(
   validateRequest,
   asyncHandler(registration)
 )
-router.post('/signin', signin)
+router.post('/signin', signinSchema, validateRequest, asyncHandler(signin))
 router.get('/refresh', refresh)
 router.put('/signout', signout)
 
