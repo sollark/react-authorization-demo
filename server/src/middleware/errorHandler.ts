@@ -1,10 +1,16 @@
 import { NextFunction, Request, Response } from 'express'
 
-export default function errorHandler(
-  error: any,
+function errorHandler(
+  error: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  return res.status(400).send(error.message)
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode
+
+  res.status(statusCode).json({
+    message: error.message,
+  })
 }
+
+export default errorHandler
