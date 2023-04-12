@@ -7,8 +7,6 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  console.log('errorHandler', error)
-
   if (error instanceof CustomError) {
     return res.status(error.statusCode).json({
       message: error.serializeErrors(),
@@ -16,7 +14,7 @@ function errorHandler(
   }
 
   // unexpected error
-  res.status(500).json({
+  return res.status(500).json({
     message: error.message,
   })
 }

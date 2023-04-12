@@ -9,7 +9,6 @@ const registerNewUser = async (authUser: ICredentials) => {
     const isEmailTaken = await _isEmailTaken(authUser.email)
     if (isEmailTaken) {
       // logger.debug(`auth.service - attempt to create new account with existing email: ${authUser.email}`)
-      console.log('Email already taken')
       throw new BadRequestError('Email already taken', authUser.email)
     }
 
