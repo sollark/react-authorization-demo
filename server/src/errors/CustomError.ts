@@ -8,7 +8,10 @@ abstract class CustomError extends Error {
     Object.setPrototypeOf(this, CustomError.prototype)
   }
 
-  abstract serializeErrors(): { message: string; property?: string }[]
+  abstract serializeErrors(): {
+    message: string
+    property?: string | Array<any>
+  }[]
 }
 
 export default CustomError
