@@ -3,8 +3,10 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
+import path from 'path'
 import http from 'http'
 import { connectMongo } from './mongodb/connect.js'
+import errorHandler from './middleware/errorHandler.js'
 
 //import routes
 import { authRoutes } from './api/auth/auth.routes.js'
@@ -26,6 +28,20 @@ const server = http.createServer(app)
 // routing in express
 // server.get('/', (req, res) => res.send('Hello, World!'))
 app.use('/api/auth', authRoutes)
+
+// server globals
+const publicPath = path.join(__dirname, '../public/index.html')
+const clientRoutes = ['/']
+app.get(clientRoutes, (req, res) => res.sendFile(publicPath))
+
+// 404
+app.use(clientRoutes, (req, res, next) => {
+  const error = new Error(`${req.method} ${req.originalUrl} not found`)
+  next(error)
+})
+
+// error handler
+app.use(errorHandler)
 
 server.listen(3030, () => console.log('Server is up and running on port 3030'))
 
