@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import { validationResult } from 'express-validator'
 
 import { authService } from './auth.service.js'
-import { tokenService } from '../../service/token.service.js'
-import ValidationError from '../../errors/ValidationError.js'
 
 export async function signin(req: Request, res: Response, next: NextFunction) {
   //   const { username, password } = req.body
@@ -25,12 +22,6 @@ export async function registration(
   next: NextFunction
 ) {
   try {
-    // validate request body with express-validator
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(new ValidationError('Validation error ', errors.array()))
-    }
-
     const credentials = req.body
     const userData = await authService.registerNewUser(credentials)
 

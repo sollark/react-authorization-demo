@@ -1,15 +1,11 @@
 import express from 'express'
-import { body } from 'express-validator'
-import { signin, registration, refresh, signout } from './auth.controller.js'
+import { registrationSchema } from '../../validations/registration.schema.js'
+import validateRequest from '../../middleware/validationHandler.js'
+import { refresh, registration, signin, signout } from './auth.controller.js'
 
 const router = express.Router()
 
-router.post(
-  '/register',
-  body('email').isEmail(),
-  body('password').isLength({ min: 8, max: 24 }),
-  registration
-)
+router.post('/register', registrationSchema, validateRequest, registration)
 router.post('/signin', signin)
 router.get('/refresh', refresh)
 router.put('/signout', signout)
