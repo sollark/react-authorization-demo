@@ -4,7 +4,7 @@ class UnauthorizedError extends CustomError {
   statusCode = 401
   errorType = 'UNAUTHORIZED_ERROR'
 
-  constructor(message: string, private property: string) {
+  constructor(message: string, private property?: string) {
     super(message)
     this.name = 'UnauthorizedError'
     Object.setPrototypeOf(this, UnauthorizedError.prototype)

@@ -1,6 +1,6 @@
 abstract class CustomError extends Error {
   abstract statusCode: number
-  abstract errorType: string
+  abstract errorType?: string
 
   constructor(message: string) {
     super(message)
