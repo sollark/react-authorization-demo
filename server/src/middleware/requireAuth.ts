@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
 import { ITokenPayload, tokenService } from '../service/token.service.js'
 
-async function authHandler(req: Request, res: Response, next: NextFunction) {
+async function requireAuth(req: Request, res: Response, next: NextFunction) {
   try {
     // check if authorization header is present
     const authorizationKey = req.headers.authorization
@@ -38,4 +38,4 @@ async function authHandler(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default authHandler
+export default requireAuth
