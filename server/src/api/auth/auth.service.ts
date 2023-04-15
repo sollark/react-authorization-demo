@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'
 import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
-import { tokenService } from '../../service/token.service.js'
+import { ITokenPayload, tokenService } from '../../service/token.service.js'
 import BadRequestError from '../../errors/BadRequestError.js'
+import UnauthorizedError from '../../errors/UnauthorizedError.js'
 
 const registration = async (authUser: ICredentials) => {
   // check if email is already taken
@@ -30,7 +31,7 @@ const registration = async (authUser: ICredentials) => {
   return { accessToken, refreshToken, user: account.email }
 }
 
-const signin = async (credentials: ICredentials) => {
+const signIn = async (credentials: ICredentials) => {
   const { email, password } = credentials
 
   // check if email exists
@@ -58,28 +59,45 @@ const signin = async (credentials: ICredentials) => {
   return { accessToken, refreshToken, user: account.email }
 }
 
-const getCredentials = async (email: String) => {
-  try {
-    const credentials = await authModel.findOne({ email }).select('+password')
-    return credentials
-  } catch (error) {
-    throw error
-  }
+const signOut = async (refreshToken: string) => {
+  const token = await tokenService.removeToken(refreshToken)
+
+  return token
 }
 
-const deleteAuthUser = async (email: String) => {
-  try {
-    await authModel.findByIdAndDelete(email)
-  } catch (error) {
-    throw error
+const refresh = async (refreshToken: string) => {
+  if (!refreshToken) throw new UnauthorizedError('Refresh token is required')
+
+  const userData = await tokenService.validateRefreshToken(refreshToken)
+  const tokenFromDb = await tokenService.findToken(refreshToken)
+
+  if (!userData || !tokenFromDb) {
+    throw new UnauthorizedError('Invalid refresh token')
   }
+
+  const { email } = userData as ITokenPayload
+  const account = await authModel.findOne({ email })
+
+  if (!account) {
+    throw new UnauthorizedError('User not found')
+  }
+
+  // generate tokens
+  const tokens = tokenService.generateTokens({
+    email: account.email,
+  })
+
+  // save refresh token to db
+  await tokenService.saveToken(account._id, tokens.refreshToken)
+
+  return { ...tokens, user: account.email }
 }
 
 export const authService = {
   registration,
-  signin,
-  getCredentials,
-  deleteAuthUser,
+  signIn,
+  signOut,
+  refresh,
 }
 
 const _isEmailTaken = async (email: String) => {

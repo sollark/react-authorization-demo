@@ -2,20 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 
 import { authService } from './auth.service.js'
 
-export async function signin(req: Request, res: Response, next: NextFunction) {
-  const credentials = req.body
-
-  const userData = await authService.signin(credentials)
-
-  // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', userData.refreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-  })
-
-  return res.json(userData)
-}
-
 export async function registration(
   req: Request,
   res: Response,
@@ -33,21 +19,39 @@ export async function registration(
   return res.json(userData)
 }
 
-export async function refresh(req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     const loginToken = req.cookies.loginToken
-  //     const user = authService.refresh(loginToken)
-  //     res.json(user)
-  //   } catch (err) {
-  //      next(e)
-  //   }
+export async function signIn(req: Request, res: Response, next: NextFunction) {
+  const credentials = req.body
+
+  const userData = await authService.signIn(credentials)
+
+  // save refresh token in cookie for 30 days
+  res.cookie('refreshToken', userData.refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  })
+
+  return res.json(userData)
 }
 
-export async function signout(req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     res.clearCookie('loginToken')
-  //     res.send({ msg: 'Logged out successfully' })
-  //   } catch (err) {
-  //      next(e)
-  //   }
+export async function signOut(req: Request, res: Response, next: NextFunction) {
+  const { refreshToken } = req.cookies
+  await authService.signOut(refreshToken)
+
+  // delete refresh token from cookie
+  res.clearCookie('refreshToken')
+
+  return res.json({ message: 'Sign out successful' })
+}
+
+export async function refresh(req: Request, res: Response, next: NextFunction) {
+  const { refreshToken } = req.cookies
+  const userData = await authService.refresh(refreshToken)
+
+  // save refresh token in cookie for 30 days
+  res.cookie('refreshToken', userData.refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  })
+
+  return res.json(userData)
 }
