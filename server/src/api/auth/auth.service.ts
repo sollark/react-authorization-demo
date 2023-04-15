@@ -93,11 +93,17 @@ const refresh = async (refreshToken: string) => {
   return { ...tokens, user: account.email }
 }
 
+const getAllAccounts = async () => {
+  const accounts = await authModel.find()
+  return accounts
+}
+
 export const authService = {
   registration,
   signIn,
   signOut,
   refresh,
+  getAllAccounts,
 }
 
 const _isEmailTaken = async (email: String) => {

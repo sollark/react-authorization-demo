@@ -55,3 +55,13 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
 
   return res.json(userData)
 }
+
+export async function getAccounts(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const accounts = await authService.getAllAccounts()
+
+  return res.json(accounts)
+}
