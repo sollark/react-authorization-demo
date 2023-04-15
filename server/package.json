@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "rimraf dist && tsc",
-    "dev": "nodemon --exec ts-node src/server.ts"
+    "dev": "nodemon --exec ts-node --files src/server.ts"
   },
   "keywords": [],
   "author": "",
