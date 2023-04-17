@@ -9,6 +9,15 @@ var api = axios.create({
   baseURL: API_URL,
 })
 
+//interceptor to add token to every request
+api.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 export const httpService = {
   get<T>(endpoint: string, data: T) {
     return ajax(endpoint, 'GET', data)
@@ -37,18 +46,18 @@ async function ajax<T>(
       params: method === 'GET' ? data : null,
     })
     return res.data
-  } catch (err) {
+  } catch (e) {
     console.log(
       `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `,
       data
     )
-    console.dir(err)
+    console.dir(e)
 
-    if ((err as AxiosError).response?.status === 401) {
+    if ((e as AxiosError).response?.status === 401) {
       sessionStorage.clear()
       window.location.assign('/')
     }
 
-    throw err
+    throw e
   }
 }
