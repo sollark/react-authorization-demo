@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosPromise } from 'axios'
 
 const API_URL =
   process.env.NODE_ENV === 'production' ? '/api/' : '//localhost:3030/api/'
@@ -19,25 +19,25 @@ api.interceptors.request.use((config) => {
 })
 
 export const httpService = {
-  get<T>(endpoint: string, data: T) {
+  get<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
     return ajax(endpoint, 'GET', data)
   },
-  post<T>(endpoint: string, data: T) {
+  post<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
     return ajax(endpoint, 'POST', data)
   },
-  put<T>(endpoint: string, data: T) {
+  put<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
     return ajax(endpoint, 'PUT', data)
   },
-  delete<T>(endpoint: string, data: T) {
+  delete<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
     return ajax(endpoint, 'DELETE', data)
   },
 }
 
-async function ajax<T>(
+async function ajax<T, R>(
   endpoint: string,
   method = 'GET',
   data: T | null = null
-) {
+): Promise<AxiosPromise<R>> {
   try {
     const res = await api({
       url: `${API_URL}${endpoint}`,
