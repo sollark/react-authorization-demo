@@ -56,7 +56,7 @@ const signIn = async (credentials: ICredentials) => {
   // save refresh token to db
   await tokenService.saveToken(account._id, refreshToken)
 
-  return { accessToken, refreshToken, user: account.email }
+  return { accessToken, refreshToken, user: { email: account.email } }
 }
 
 const signOut = async (refreshToken: string) => {

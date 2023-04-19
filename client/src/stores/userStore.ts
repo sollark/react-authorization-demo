@@ -5,9 +5,7 @@ import { IAuth } from '../models/User'
 
 interface UserState {
   user: {
-    name: string
     email: string
-    role: string
   } | null
   auth: IAuth
   setUser: (user: UserState['user']) => void

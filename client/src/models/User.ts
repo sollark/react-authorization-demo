@@ -1,6 +1,9 @@
+export interface IUser {
+  email: string
+}
+
 export interface IAuth {
   isAuth: boolean
-  credentials?: IAuthCredentials
 }
 
 export interface IAuthCredentials {
