@@ -13,6 +13,8 @@ function errorHandler(
     })
   }
 
+  console.error(error)
+
   // unexpected error
   return res.status(500).json({
     message: error.message,

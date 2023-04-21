@@ -15,7 +15,7 @@ import {
 const router = express.Router()
 
 router.post(
-  '/register',
+  '/registration',
   registrationSchema,
   validateRequest,
   asyncHandler(registration)

@@ -1,14 +1,15 @@
-import { AxiosResponse } from 'axios'
-import { httpService } from './http.service'
-import { IAuthResponse } from '../models/response/IAuthResponse'
 import { IAuthCredentials } from '../models/User'
+import { IAuthResponse } from '../models/response/IAuthResponse'
 import useUserStore from '../stores/userStore'
+import { httpService } from './http.service'
 
 async function signIn(email: string, password: string) {
   const response = await httpService.post<IAuthCredentials, IAuthResponse>(
     'auth/signin',
     { email, password }
   )
+
+  console.log('sign in response', response)
 
   // get the user and the tokens from the response
   const { user, refreshToken, accessToken } = response.data
@@ -34,6 +35,8 @@ async function registration(email: string, password: string) {
     'auth/registration',
     { email, password }
   )
+
+  console.log('registration response', response)
 
   // get the user and the tokens from the response
   const { user, refreshToken, accessToken } = response.data

@@ -22,6 +22,7 @@ const app = express()
 app.use(
   cors({
     credentials: true,
+    origin: ['http://localhost:3030', 'http://localhost:8080'],
   })
 )
 app.use(compression())
@@ -48,7 +49,7 @@ app.use(clientRoutes, (req, res, next) => {
 // error handler
 app.use(errorHandler)
 
-server.listen(3030, () => console.log('Server is up and running on port 3030'))
+server.listen(3000, () => console.log('Server is up and running on port 3000'))
 
 // connect to MongoDB
 connectMongo()

@@ -1,4 +1,5 @@
 import { FC, useState } from 'react'
+import { authService } from '../service/auth.service'
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState('')
@@ -18,8 +19,13 @@ const LoginForm: FC = () => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder='Password'
       />
-      <button>Sign in</button>
-      <button>Registration</button>
+      <button onClick={() => authService.signIn(email, password)}>
+        Sign in
+      </button>
+      <button onClick={() => authService.registration(email, password)}>
+        Registration
+      </button>
+      <button onClick={() => authService.signOut()}>Sign out</button>
     </div>
   )
 }
