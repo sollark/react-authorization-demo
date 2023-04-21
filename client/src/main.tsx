@@ -5,7 +5,12 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { HashRouter as Router } from 'react-router-dom'
 
 // All application has access to the same query client to share data
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    // All queries will be refetched every 5 minutes
+    //queries: { staleTime: 1000 * 60 * 5 },
+  },
+})
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
