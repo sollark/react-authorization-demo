@@ -4,14 +4,14 @@ export interface IUser {
   name: string
   lastname: string
   email: string
-  role: string
+  role: {}
 }
 
 const UserSchema = new Schema({
   name: { type: String, required: true },
   lastname: { type: String, required: true },
   email: { type: String, required: true, unique: true, select: false },
-  role: { type: String, required: true },
+  role: { type: Object, required: true, select: false },
 })
 
 const UserModel = model<IUser>('User', UserSchema)

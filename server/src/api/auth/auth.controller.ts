@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-
 import { authService } from './auth.service.js'
 
 export async function registration(

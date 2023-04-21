@@ -21,7 +21,7 @@ router.post(
   asyncHandler(registration)
 )
 router.post('/signin', signInSchema, validateRequest, asyncHandler(signIn))
-router.put('/signout', asyncHandler(signOut))
+router.put('/signout', requireAuth, asyncHandler(signOut))
 router.get('/refresh', asyncHandler(refresh))
 router.get('/account', requireAuth, asyncHandler(getAccounts))
 
