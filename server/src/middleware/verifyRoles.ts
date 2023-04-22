@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
 import { userService } from '../api/user/user.service.js'
 
-async function verifyRoles(...allowedRoles: number[]) {
+function verifyRoles(...allowedRoles: number[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const email = req.userData?.email
