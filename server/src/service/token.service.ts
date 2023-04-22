@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken'
-import * as dotenv from 'dotenv'
 import { Types } from 'mongoose'
+import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from '../config/config.js'
 import TokenModel from '../mongodb/models/token.model.js'
-dotenv.config()
 
 export interface ITokenPayload {
   email: string
@@ -12,14 +11,13 @@ function generateTokens(payload: ITokenPayload): {
   accessToken: string
   refreshToken: string
 } {
-  const accessSecret = process.env.JWT_ACCESS_SECRET
-  if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!JWT_ACCESS_SECRET) throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!JWT_REFRESH_SECRET) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  const refreshSecret = process.env.JWT_REFRESH_SECRET
-  if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
-
-  const accessToken = jwt.sign(payload, accessSecret, { expiresIn: '1h' })
-  const refreshToken = jwt.sign(payload, refreshSecret, { expiresIn: '10d' })
+  const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, { expiresIn: '1h' })
+  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
+    expiresIn: '10d',
+  })
 
   return { accessToken, refreshToken }
 }
@@ -52,11 +50,10 @@ async function findToken(refreshToken: string) {
 }
 
 async function validateAccessToken(token: string) {
-  const secret = process.env.JWT_ACCESS_SECRET
-  if (!secret) throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!JWT_ACCESS_SECRET) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, secret)
+    const userData = jwt.verify(token, JWT_ACCESS_SECRET)
     return userData
   } catch (e) {
     return null
@@ -64,11 +61,10 @@ async function validateAccessToken(token: string) {
 }
 
 async function validateRefreshToken(token: string) {
-  const secret = process.env.JWT_REFRESH_SECRET
-  if (!secret) throw new Error('JWT_REFRESH_SECRET is not defined')
+  if (!JWT_REFRESH_SECRET) throw new Error('JWT_REFRESH_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, secret)
+    const userData = jwt.verify(token, JWT_REFRESH_SECRET)
     return userData
   } catch (e) {
     return null
