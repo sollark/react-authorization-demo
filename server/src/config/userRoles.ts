@@ -1,7 +1,7 @@
 export const USER_ROLE = {
-  GUEST: '000',
-  USER: '001',
-  MANAGER: '010',
-  ADMIN: '100',
-  SUPER_ADMIN: '111',
+  Guest: 1000,
+  User: 1001,
+  Manager: 1010,
+  Admin: 1100,
+  SuperAdmin: 1111,
 }
