@@ -3,6 +3,8 @@ import { Types } from 'mongoose'
 import TokenModel from '../mongodb/models/token.model.js'
 import { config } from '../config/config.js'
 
+const { refreshSecret, accessSecret } = config.jwt
+
 export interface ITokenPayload {
   email: string
 }
@@ -11,15 +13,13 @@ function generateTokens(payload: ITokenPayload): {
   accessToken: string
   refreshToken: string
 } {
-  if (!config.jwt.accessSecret)
-    throw new Error('JWT_ACCESS_SECRET is not defined')
-  if (!config.jwt.refreshSecret)
-    throw new Error('JWT_REFRESH_SECRET is not defined')
+  if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  const accessToken = jwt.sign(payload, config.jwt.accessSecret, {
+  const accessToken = jwt.sign(payload, accessSecret, {
     expiresIn: '1h',
   })
-  const refreshToken = jwt.sign(payload, config.jwt.refreshSecret, {
+  const refreshToken = jwt.sign(payload, refreshSecret, {
     expiresIn: '10d',
   })
 
@@ -54,11 +54,10 @@ async function findToken(refreshToken: string) {
 }
 
 async function validateAccessToken(token: string) {
-  if (!config.jwt.accessSecret)
-    throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, config.jwt.accessSecret)
+    const userData = jwt.verify(token, accessSecret)
     return userData
   } catch (e) {
     return null
@@ -66,11 +65,10 @@ async function validateAccessToken(token: string) {
 }
 
 async function validateRefreshToken(token: string) {
-  if (!config.jwt.refreshSecret)
-    throw new Error('JWT_REFRESH_SECRET is not defined')
+  if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, config.jwt.refreshSecret)
+    const userData = jwt.verify(token, refreshSecret)
     return userData
   } catch (e) {
     return null
