@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Types } from 'mongoose'
-import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from '../config/config.js'
 import TokenModel from '../mongodb/models/token.model.js'
+import { config } from '../config/config.js'
 
 export interface ITokenPayload {
   email: string
@@ -11,11 +11,15 @@ function generateTokens(payload: ITokenPayload): {
   accessToken: string
   refreshToken: string
 } {
-  if (!JWT_ACCESS_SECRET) throw new Error('JWT_ACCESS_SECRET is not defined')
-  if (!JWT_REFRESH_SECRET) throw new Error('JWT_REFRESH_SECRET is not defined')
+  if (!config.jwt.accessSecret)
+    throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!config.jwt.refreshSecret)
+    throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, { expiresIn: '1h' })
-  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
+  const accessToken = jwt.sign(payload, config.jwt.accessSecret, {
+    expiresIn: '1h',
+  })
+  const refreshToken = jwt.sign(payload, config.jwt.refreshSecret, {
     expiresIn: '10d',
   })
 
@@ -50,10 +54,11 @@ async function findToken(refreshToken: string) {
 }
 
 async function validateAccessToken(token: string) {
-  if (!JWT_ACCESS_SECRET) throw new Error('JWT_ACCESS_SECRET is not defined')
+  if (!config.jwt.accessSecret)
+    throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, JWT_ACCESS_SECRET)
+    const userData = jwt.verify(token, config.jwt.accessSecret)
     return userData
   } catch (e) {
     return null
@@ -61,10 +66,11 @@ async function validateAccessToken(token: string) {
 }
 
 async function validateRefreshToken(token: string) {
-  if (!JWT_REFRESH_SECRET) throw new Error('JWT_REFRESH_SECRET is not defined')
+  if (!config.jwt.refreshSecret)
+    throw new Error('JWT_REFRESH_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, JWT_REFRESH_SECRET)
+    const userData = jwt.verify(token, config.jwt.refreshSecret)
     return userData
   } catch (e) {
     return null

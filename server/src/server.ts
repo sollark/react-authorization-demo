@@ -13,7 +13,7 @@ import { authRoutes } from './api/auth/auth.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
-import { SERVER_PORT } from './config/config.js'
+import { config } from './config/config.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -50,8 +50,8 @@ app.use(clientRoutes, (req, res, next) => {
 // error handler
 app.use(errorHandler)
 
-server.listen(SERVER_PORT, () =>
-  console.log(`Server is up and running on port ${SERVER_PORT}`)
+server.listen(config.server.port, () =>
+  console.log(`Server is up and running on port ${config.server.port}`)
 )
 
 // connect to MongoDB
