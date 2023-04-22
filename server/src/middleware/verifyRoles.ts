@@ -49,3 +49,5 @@ async function verifyRoles(...allowedRoles: number[]) {
     }
   }
 }
+
+export default verifyRoles
