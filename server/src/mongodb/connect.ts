@@ -1,9 +1,5 @@
 import * as mongoose from 'mongoose'
-import * as dotenv from 'dotenv'
-
-dotenv.config()
-
-const MONGO_URL = process.env.MONGO_URL
+import { MONGO_URL } from '../config/config.js'
 
 export const connectMongo = async () => {
   if (!MONGO_URL) {
