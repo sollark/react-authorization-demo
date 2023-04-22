@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import UnauthorizedError from '../errors/UnauthorizedError.js'
 import { userService } from '../api/user/user.service.js'
+import UnauthorizedError from '../errors/UnauthorizedError.js'
 
 function verifyRoles(...allowedRoles: number[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +26,6 @@ function verifyRoles(...allowedRoles: number[]) {
       }
 
       const roleCodes = Object.values(userRoles)
-
       allowedRoles.forEach((role) => {
         if (roleCodes.includes(role)) {
           hasAccess = true

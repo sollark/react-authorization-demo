@@ -7,4 +7,6 @@ export async function addUser(req: Request, res: Response, next: NextFunction) {
   const user = await userService.addUser(email, lastname, role, name)
 
   res.status(201).json(user)
+
+  next()
 }

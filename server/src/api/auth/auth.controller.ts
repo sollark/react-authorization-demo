@@ -15,7 +15,9 @@ export async function registration(
     httpOnly: true,
   })
 
-  return res.json(userData)
+  res.json(userData)
+
+  next()
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
@@ -29,7 +31,9 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     httpOnly: true,
   })
 
-  return res.json(userData)
+  res.json(userData)
+
+  next()
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
@@ -39,7 +43,9 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
   // delete refresh token from cookie
   res.clearCookie('refreshToken')
 
-  return res.json({ message: 'Sign out successful' })
+  res.json({ message: 'Sign out successful' })
+
+  next()
 }
 
 export async function refresh(req: Request, res: Response, next: NextFunction) {
@@ -52,7 +58,9 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
     httpOnly: true,
   })
 
-  return res.json(userData)
+  res.json(userData)
+
+  next()
 }
 
 export async function getAccounts(
@@ -62,5 +70,7 @@ export async function getAccounts(
 ) {
   const accounts = await authService.getAllAccounts()
 
-  return res.json(accounts)
+  res.json(accounts)
+
+  next()
 }
