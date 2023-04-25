@@ -11,6 +11,12 @@ const addUser = async (
   return user
 }
 
+const getUser = async (email: string) => {
+  const user = UserModel.findOne({ email })
+
+  return user
+}
+
 const getRoles = async (email: string) => {
   const user = await UserModel.findOne({ email })
 
@@ -19,5 +25,6 @@ const getRoles = async (email: string) => {
 
 export const userService = {
   addUser,
+  getUser,
   getRoles,
 }
