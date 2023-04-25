@@ -3,12 +3,15 @@ import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
 import { ITokenPayload, tokenService } from '../../service/token.service.js'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
+import logger from '../../service/logger.service.js'
 
 const registration = async (authUser: ICredentials) => {
   // check if email is already taken
   const isEmailTaken = await _isEmailTaken(authUser.email)
   if (isEmailTaken) {
-    // logger.info(`auth.service - attempt to create new account with existing email: ${authUser.email}`)
+    logger.warn(
+      `auth.service - attempt to create new account with existing email: ${authUser.email}`
+    )
     throw new BadRequestError('Email already taken', authUser.email)
   }
 
@@ -18,7 +21,7 @@ const registration = async (authUser: ICredentials) => {
 
   // create new account
   const account = await authModel.create(authUser)
-  // logger.info(`auth.service - new account created: ${account.email}`)
+  logger.info(`auth.service - new account created: ${account.email}`)
 
   // generate tokens
   const { accessToken, refreshToken } = tokenService.generateTokens({
@@ -37,14 +40,16 @@ const signIn = async (credentials: ICredentials) => {
   // check if email exists
   const account = await authModel.findOne({ email }).select('+password')
   if (!account) {
-    // logger.warning(`auth.service - attempt to sign in with wrong email: ${email}`)
+    logger.warn(`auth.service - attempt to sign in with wrong email: ${email}`)
     throw new BadRequestError('Invalid credentials', email)
   }
 
   // check if password is valid
   const isPasswordValid = await bcrypt.compare(password, account.password)
   if (!isPasswordValid) {
-    // logger.warning(`auth.service - attempt to sign in with wrong password: ${email}`)
+    logger.warn(
+      `auth.service - attempt to sign in with wrong password: ${email}`
+    )
     throw new BadRequestError('Invalid credentials', email)
   }
 

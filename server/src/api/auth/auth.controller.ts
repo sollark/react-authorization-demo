@@ -16,8 +16,6 @@ export async function registration(
   })
 
   res.json(userData)
-
-  next()
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
@@ -32,8 +30,6 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
   })
 
   res.json(userData)
-
-  next()
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
@@ -42,10 +38,6 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
 
   // delete refresh token from cookie
   res.clearCookie('refreshToken')
-
-  res.json({ message: 'Sign out successful' })
-
-  next()
 }
 
 export async function refresh(req: Request, res: Response, next: NextFunction) {
@@ -59,8 +51,6 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
   })
 
   res.json(userData)
-
-  next()
 }
 
 export async function getAccounts(
@@ -71,6 +61,4 @@ export async function getAccounts(
   const accounts = await authService.getAllAccounts()
 
   res.json(accounts)
-
-  next()
 }

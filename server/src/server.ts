@@ -14,6 +14,7 @@ import { authRoutes } from './api/auth/auth.routes.js'
 // import for __dirname
 import { fileURLToPath } from 'url'
 import { config } from './config/config.js'
+import setupAsyncLocalStorage from './middleware/als.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -32,14 +33,16 @@ app.use(bodyParser.json())
 
 const server = http.createServer(app)
 
-// routing in express
-// server.get('/', (req, res) => res.send('Hello, World!'))
+// als middleware
+app.all('*', setupAsyncLocalStorage)
+
+// routes
 app.use('/api/auth', authRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, '../public/index.html')
 const clientRoutes = ['/']
-app.get(clientRoutes, (req, res) => res.sendFile(publicPath))
+app.get(clientRoutes, (req, res, next) => res.sendFile(publicPath))
 
 // 404
 app.use(clientRoutes, (req, res, next) => {

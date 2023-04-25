@@ -24,7 +24,7 @@ function doLog(level: string, ...args: any[]): void {
   let line = strs.join(' | ')
   const store = asyncLocalStorage.getStore()
   const userEmail = store?.userData?.email
-  const str = userEmail ? `(userEmail: ${userEmail})` : ''
+  const str = userEmail ? `(user: ${userEmail})` : 'unauthenticated'
   line = `${getTime()} - ${level} - ${line} ${str}\n`
   console.log(line)
 
