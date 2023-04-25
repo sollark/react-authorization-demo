@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
-import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
-import { ITokenPayload, tokenService } from '../../service/token.service.js'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
+import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
 import logger from '../../service/logger.service.js'
+import { ITokenPayload, tokenService } from '../../service/token.service.js'
 
 const registration = async (authUser: ICredentials) => {
   // check if email is already taken
