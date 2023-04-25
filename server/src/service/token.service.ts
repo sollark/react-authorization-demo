@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Types } from 'mongoose'
-import TokenModel from '../mongodb/models/token.model.js'
 import { config } from '../config/config.js'
+import TokenModel from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
