@@ -61,11 +61,15 @@ const signIn = async (credentials: ICredentials) => {
   // save refresh token to db
   await tokenService.saveToken(account._id, refreshToken)
 
+  logger.info(`auth.service - user signed in: ${email}`)
+
   return { accessToken, refreshToken, user: { email: account.email } }
 }
 
 const signOut = async (refreshToken: string) => {
   const token = await tokenService.removeToken(refreshToken)
+
+  logger.info(`auth.service - user signed out`)
 
   return token
 }
@@ -100,6 +104,9 @@ const refresh = async (refreshToken: string) => {
 
 const getAllAccounts = async () => {
   const accounts = await authModel.find()
+
+  logger.info(`auth.service - user fetched all accounts`)
+
   return accounts
 }
 
