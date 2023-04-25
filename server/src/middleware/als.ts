@@ -8,12 +8,14 @@ async function setupAsyncLocalStorage(
 ) {
   const storage = {}
   asyncLocalStorage.run(storage, async () => {
-    if (!req.userData) return next()
+    const userData = req.headers['x-user-email'] as string
+
+    if (!userData) return next()
 
     const alsStore = asyncLocalStorage.getStore()
     if (!alsStore) return next()
 
-    alsStore.userData = req.userData
+    alsStore.userData = { email: userData }
 
     next()
   })
