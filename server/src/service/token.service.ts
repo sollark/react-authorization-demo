@@ -18,10 +18,12 @@ function generateTokens(payload: ITokenPayload): {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  const accessToken = jwt.sign(payload, accessSecret, {
+  const { email, organization, roles } = payload
+
+  const accessToken = jwt.sign({ email, organization, roles }, accessSecret, {
     expiresIn: '1h',
   })
-  const refreshToken = jwt.sign(payload, refreshSecret, {
+  const refreshToken = jwt.sign({ email }, refreshSecret, {
     expiresIn: '10d',
   })
 
