@@ -7,6 +7,8 @@ const { refreshSecret, accessSecret } = config.jwt
 
 export interface ITokenPayload {
   email: string
+  organization: string
+  roles: number[]
 }
 
 function generateTokens(payload: ITokenPayload): {
