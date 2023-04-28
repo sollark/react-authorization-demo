@@ -5,9 +5,16 @@ const addUser = async (
   name: string,
   lastname: string,
   email: string,
+  organization: string,
   roles = { guest: 1000 }
 ) => {
-  const user = await UserModel.create({ name, lastname, email, roles })
+  const user = await UserModel.create({
+    name,
+    lastname,
+    email,
+    organization,
+    roles,
+  })
 
   logger.info(`user.service - user added: ${user}`)
 
