@@ -5,7 +5,7 @@ import UnauthorizedError from '../errors/UnauthorizedError.js'
 function verifyRoles(...allowedRoles: number[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const email = req.userData?.email
+      const email = req.headers['X-User-Email'] as string
 
       let hasAccess = false
       if (!email) {
