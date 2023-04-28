@@ -1,0 +1,4 @@
+:root {
+    --shadow: 0 0 10px 3px var(--clr-secondary);
+    --main-margin: 2rem;
+}

@@ -1,0 +1,15 @@
+/* basic */
+@import 'basic/basic.css';
+@import 'basic/helpers.css';
+@import 'basic/layout.css';
+
+/* setup  */
+@import 'setup/variables.css';
+@import 'setup/typography.css';
+@import 'setup/elements.css';
+@import 'setup/colors.css';
+
+/* components  */
+@import 'cmps/header.css';
+@import 'cmps/footer.css';
+@import 'cmps/main.css';

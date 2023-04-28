@@ -1,0 +1,13 @@
+:root {
+    --clr-primary: hsl(140, 10%, 94%);
+    --clr-secondary: hsl(214, 17%, 71%);
+    --clr-accent: hsl(184, 70%, 20%);
+    --clr-brand: hsl(156, 57%, 47%);
+
+    --text-primary: hsla(0, 0%, 0%, 1);
+    --text-secondary: hsla(0, 0%, 0%, .7);
+}
+
+body {
+    background-color: var(--clr-primary);
+}

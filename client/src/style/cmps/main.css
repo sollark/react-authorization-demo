@@ -1,0 +1,17 @@
+.app-main {
+  background-color: var(--clr-primary);
+  position: relative;
+}
+
+/* MEDIA QUERIES*/
+@media screen and (max-width: 480px) {
+}
+
+@media screen and (min-width: 481px) {
+}
+
+@media screen and (min-width: 769px) {
+}
+
+@media screen and (min-width: 1281px) {
+}

@@ -1,0 +1,22 @@
+/* ========== BUTTON STYLES ==========  */
+/* button collection  */
+.btn--style1,
+.btn--style2,
+.btn--style3 {
+    border-width: 0.2em;
+    border-style: solid;
+    border-radius: 2em;
+    padding: 1em 2em;
+    text-align: center;
+    font-weight: 600;
+}
+
+.btn.hero {
+    font-size: clamp(.8rem, 0.67vw + 0.60rem, 1.1rem);
+}
+
+/* button:hover{} */
+
+
+
+/* ============= TOOLTIPS =============  */
