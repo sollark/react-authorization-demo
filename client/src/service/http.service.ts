@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
   //interceptor to add token to every request
   const token = sessionStorage.getItem('token')
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.authorization = `Bearer ${token}`
   }
 
   //interceptor to add user's email to every request
