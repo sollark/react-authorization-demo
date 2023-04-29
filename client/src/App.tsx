@@ -3,6 +3,7 @@ import React from 'react'
 import { config } from './config/config.js'
 import Home from './pages/Home'
 import Shift from './pages/Shift'
+import Role from './pages/Role'
 
 // Routes
 const shiftRoute = new Route({
@@ -10,9 +11,14 @@ const shiftRoute = new Route({
   path: '/shift',
   component: Shift,
 })
+const roleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/role',
+  component: Role,
+})
 
 const rootRoute = new RootRoute({ component: Home })
-const routeTree = rootRoute.addChildren([shiftRoute])
+const routeTree = rootRoute.addChildren([shiftRoute, roleRoute])
 const router = new Router({ routeTree })
 
 // TanStack devtools
