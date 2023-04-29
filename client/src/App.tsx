@@ -5,19 +5,14 @@ import Home from './pages/Home'
 import Shift from './pages/Shift'
 
 // Routes
-let rootRoute = new RootRoute()
-const homeRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  component: Home,
-})
 const shiftRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/shift',
   component: Shift,
 })
 
-const routeTree = rootRoute.addChildren([homeRoute, shiftRoute])
+const rootRoute = new RootRoute({ component: Home })
+const routeTree = rootRoute.addChildren([shiftRoute])
 const router = new Router({ routeTree })
 
 // TanStack devtools
