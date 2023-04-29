@@ -5,20 +5,65 @@ import Home from './pages/Home'
 import Shift from './pages/Shift'
 import Role from './pages/Role'
 
-// Routes
+// Routes, Home page
+const homeRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: Home,
+})
+
+// Routes, Shift page
 const shiftRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/shift',
   component: Shift,
 })
+
+// Routes, Role page
 const roleRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/role',
   component: Role,
 })
+const guestRoute = new Route({
+  getParentRoute: () => roleRoute,
+  path: '/guest',
+  component: () => <div>Guest</div>,
+})
+const employeeRoute = new Route({
+  getParentRoute: () => roleRoute,
+  path: '/employee',
+  component: () => <div>Employee</div>,
+})
+const managerRoute = new Route({
+  getParentRoute: () => roleRoute,
+  path: '/manager',
+  component: () => <div>Manager</div>,
+})
+const superVisorRoute = new Route({
+  getParentRoute: () => roleRoute,
+  path: '/supervisor',
+  component: () => <div>Supervisor</div>,
+})
+const adminRoute = new Route({
+  getParentRoute: () => roleRoute,
+  path: '/admin',
+  component: () => <div>Admin</div>,
+})
 
-const rootRoute = new RootRoute({ component: Home })
-const routeTree = rootRoute.addChildren([shiftRoute, roleRoute])
+const rootRoute = new RootRoute()
+// const rootRoute = new RootRoute({ component: Home })
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  shiftRoute,
+  roleRoute.addChildren([
+    guestRoute,
+    employeeRoute,
+    managerRoute,
+    superVisorRoute,
+    adminRoute,
+  ]),
+])
 const router = new Router({ routeTree })
 
 // TanStack devtools
