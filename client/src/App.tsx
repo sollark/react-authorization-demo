@@ -1,17 +1,23 @@
-import { config } from './config/config.js'
-import Home from './pages/Home'
-
 import { RootRoute, Route, Router, RouterProvider } from '@tanstack/router'
 import React from 'react'
+import { config } from './config/config.js'
+import Home from './pages/Home'
+import Shift from './pages/Shift'
 
 // Routes
 let rootRoute = new RootRoute()
-const indexRoute = new Route({
+const homeRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
   component: Home,
 })
-const routeTree = rootRoute.addChildren([indexRoute])
+const shiftRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/shift',
+  component: Shift,
+})
+
+const routeTree = rootRoute.addChildren([homeRoute, shiftRoute])
 const router = new Router({ routeTree })
 
 // TanStack devtools
