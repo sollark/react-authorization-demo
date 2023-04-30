@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import Role from './pages/Role'
 import Shift from './pages/Shift'
 import Unauthorized from './pages/Unauthorized'
+import Missing from './pages/Missing'
 
 // Routes, Home page
 const homeRoute = new Route({
@@ -76,6 +77,11 @@ const adminRoute = new Route({
   path: '/admin',
   component: () => <div>Admin</div>,
 })
+const missingRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '*',
+  component: Missing,
+})
 
 const rootRoute = new RootRoute()
 // const rootRoute = new RootRoute({ component: Home })
@@ -90,6 +96,7 @@ const routeTree = rootRoute.addChildren([
     superVisorRoute,
     adminRoute,
   ]),
+  missingRoute,
 ])
 const router = new Router({ routeTree })
 
