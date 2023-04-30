@@ -1,12 +1,12 @@
 import { model, Schema } from 'mongoose'
-import { IRoleArray } from '../../config/userRoles.js'
+import { UserRole } from '../../config/userRoles.js'
 
 export interface IUser {
   name: string
   lastname: string
   email: string
   organization: string
-  roles: IRoleArray
+  roles: UserRole[]
 }
 
 const UserSchema = new Schema({

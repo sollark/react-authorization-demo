@@ -1,3 +1,4 @@
+import { UserRole, USER_ROLE } from '../../config/userRoles.js'
 import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
 
@@ -6,7 +7,7 @@ const addUser = async (
   lastname: string,
   email: string,
   organization: string,
-  roles = { guest: 1000 }
+  roles: UserRole[] = [USER_ROLE.Guest] as UserRole[]
 ) => {
   const user = await UserModel.create({
     name,

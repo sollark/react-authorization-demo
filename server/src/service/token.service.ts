@@ -7,8 +7,6 @@ const { refreshSecret, accessSecret } = config.jwt
 
 export interface ITokenPayload {
   email: string
-  organization: string
-  roles: number[]
 }
 
 function generateTokens(payload: ITokenPayload): {
@@ -18,9 +16,9 @@ function generateTokens(payload: ITokenPayload): {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  const { email, organization, roles } = payload
+  const { email } = payload
 
-  const accessToken = jwt.sign({ email, organization, roles }, accessSecret, {
+  const accessToken = jwt.sign({ email }, accessSecret, {
     expiresIn: '1h',
   })
   const refreshToken = jwt.sign({ email }, refreshSecret, {
