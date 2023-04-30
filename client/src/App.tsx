@@ -1,15 +1,41 @@
-import { RootRoute, Route, Router, RouterProvider } from '@tanstack/router'
 import React from 'react'
-import { config } from './config/config.js'
+import { config } from './config/config'
+import { RootRoute, Route, Router, RouterProvider } from '@tanstack/router'
+import Registration from './cmps/Registration'
+import Signin from './cmps/SignIn'
+import Auth from './pages/Auth'
 import Home from './pages/Home'
-import Shift from './pages/Shift'
 import Role from './pages/Role'
+import Shift from './pages/Shift'
+import Unauthorized from './pages/Unauthorized'
 
 // Routes, Home page
 const homeRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
   component: Home,
+})
+
+// Routes, Auth page
+const authRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/auth',
+  component: Auth,
+})
+const signinRoute = new Route({
+  getParentRoute: () => authRoute,
+  path: '/signin',
+  component: Signin,
+})
+const registrationRoute = new Route({
+  getParentRoute: () => authRoute,
+  path: '/registration',
+  component: Registration,
+})
+const unauthorizedRoute = new Route({
+  getParentRoute: () => authRoute,
+  path: '/unauthorized',
+  component: Unauthorized,
 })
 
 // Routes, Shift page
@@ -55,6 +81,7 @@ const rootRoute = new RootRoute()
 // const rootRoute = new RootRoute({ component: Home })
 const routeTree = rootRoute.addChildren([
   homeRoute,
+  authRoute.addChildren([signinRoute, registrationRoute, unauthorizedRoute]),
   shiftRoute,
   roleRoute.addChildren([
     guestRoute,
