@@ -13,7 +13,7 @@ import {
   signIn,
   signOut,
 } from './auth.controller.js'
-import { USER_ROLE } from '../../config/userRoles.js'
+import { USER_ROLE, UserRole } from '../../config/userRoles.js'
 
 const router = express.Router()
 
@@ -29,7 +29,7 @@ router.get('/refresh', asyncHandler(refresh))
 router.get(
   '/account',
   requireAuth,
-  verifyRoles(USER_ROLE.Admin),
+  verifyRoles(USER_ROLE.Admin as UserRole),
   asyncHandler(getAccounts)
 )
 

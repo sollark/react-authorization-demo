@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { userService } from '../api/user/user.service.js'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
+import { UserRole } from '../config/userRoles.js'
 
-function verifyRoles(...allowedRoles: number[]) {
+function verifyRoles(...allowedRoles: UserRole[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const email = req.headers['X-User-Email'] as string
