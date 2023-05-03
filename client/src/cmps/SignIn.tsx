@@ -1,31 +1,16 @@
 import { Box, Button, TextField } from '@mui/material'
 import { Link } from '@tanstack/router'
+import { FC } from 'react'
+import Input from './inputs/Input'
 
-export default function Signin() {
+const Signin: FC = () => {
   console.log('Signin connected')
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Sign in</h1>
       <form>
-        <TextField
-          fullWidth
-          margin='normal'
-          label='Email'
-          type='email'
-          name='email'
-          id='email'
-          placeholder='Email'
-        />
-
-        <TextField
-          fullWidth
-          margin='normal'
-          label='Password'
-          type='password'
-          name='password'
-          id='password'
-          placeholder='Password'
-        />
+        <Input fullWidth margin='normal' name={'email'} label={'Email'} />
+        <Input fullWidth margin='normal' name={'password'} label={'Password'} />
         <Button variant='contained' type='submit'>
           Sign in
         </Button>
@@ -36,3 +21,5 @@ export default function Signin() {
     </Box>
   )
 }
+
+export default Signin

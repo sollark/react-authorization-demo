@@ -1,14 +1,13 @@
+import EmailInput from '@/cmps/inputs/EmailInput'
+import PasswordInput from '@/cmps/inputs/PasswordInput'
 import { Box, Button } from '@mui/material'
-import React from 'react'
-import EmailInput from './inputs/EmailInput'
-import PasswordInput from './inputs/PasswordInput'
 import { Link } from '@tanstack/router'
+import { FC } from 'react'
 
-export default function Registration() {
+const Registration: FC = () => {
   console.log('Registration connected')
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
-      {' '}
       <h1>Registration</h1>
       <form>
         <EmailInput fullWidth margin='normal' />
@@ -24,3 +23,5 @@ export default function Registration() {
     </Box>
   )
 }
+
+export default Registration

@@ -1,4 +1,4 @@
-import Input from './Input'
+import Input from '@/cmps/inputs/Input'
 
 interface Props {
   [key: string]: any // allow any other prop that is not explicitly defined

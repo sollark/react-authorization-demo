@@ -1,4 +1,5 @@
 import { TextField } from '@mui/material'
+import { FC } from 'react'
 
 interface Props {
   name: string
@@ -6,7 +7,7 @@ interface Props {
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
-export default function Input(props: Props) {
+const Input: FC<Props> = (props: Props) => {
   const { name, label, ...rest } = props
   return (
     <TextField
@@ -19,3 +20,5 @@ export default function Input(props: Props) {
     />
   )
 }
+
+export default Input
