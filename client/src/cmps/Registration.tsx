@@ -11,7 +11,12 @@ const Registration: FC = () => {
       <form>
         <Input fullWidth margin='normal' name={'email'} label={'Email'} />
         <Input fullWidth margin='normal' name={'password'} label={'Password'} />
-        <Input fullWidth margin='normal' name={'password'} label={'Password'} />
+        <Input
+          fullWidth
+          margin='normal'
+          name={'password'}
+          label={'Confirm password'}
+        />
         <Button variant='contained' type='submit'>
           Registration
         </Button>
