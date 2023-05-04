@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
-import Input from './inputs/Input'
+import Input from './form/Input'
 
 const Signin: FC = () => {
   console.log('Signin connected')
