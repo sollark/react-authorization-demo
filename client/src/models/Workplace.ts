@@ -1,9 +1,9 @@
-export interface IWorkplace {
-  organization: IOrganization
+export interface Workplace {
+  organization: Organization
   role: UserRole[]
 }
 
-export interface IOrganization {
+export interface Organization {
   name: string
   description: string
 }

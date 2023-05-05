@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose'
 
-export interface ICredentials {
+export interface Credentials {
   email: string
   password: string
 }
@@ -10,5 +10,5 @@ const AuthSchema = new Schema({
   password: { type: String, required: true, select: false },
 })
 
-const authModel = model<ICredentials>('Auth', AuthSchema)
+const authModel = model<Credentials>('Auth', AuthSchema)
 export default authModel

@@ -54,18 +54,18 @@ async function ajax<T, R>(
       params: method === 'GET' ? data : null,
     })
     return res.data
-  } catch (e) {
+  } catch (error) {
     console.log(
       `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `,
       data
     )
-    console.dir(e)
+    console.dir(error)
 
-    if ((e as AxiosError).response?.status === 401) {
+    if ((error as AxiosError).response?.status === 401) {
       sessionStorage.clear()
       window.location.assign('/')
     }
 
-    throw e
+    throw error
   }
 }

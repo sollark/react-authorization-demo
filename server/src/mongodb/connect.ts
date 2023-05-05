@@ -10,7 +10,7 @@ export const connectMongo = async () => {
     mongoose.set('strictQuery', true)
     await mongoose.connect(config.mongo.url)
     console.log('Connected to MongoDB')
-  } catch (err) {
-    console.log(err)
+  } catch (error) {
+    console.log(error)
   }
 }

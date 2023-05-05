@@ -5,11 +5,11 @@ import TokenModel from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
-export interface ITokenPayload {
+export interface TokenPayload {
   email: string
 }
 
-function generateTokens(payload: ITokenPayload): {
+function generateTokens(payload: TokenPayload): {
   accessToken: string
   refreshToken: string
 } {
@@ -61,7 +61,7 @@ async function validateAccessToken(token: string) {
   try {
     const userData = jwt.verify(token, accessSecret)
     return userData
-  } catch (e) {
+  } catch (error) {
     return null
   }
 }
@@ -72,7 +72,7 @@ async function validateRefreshToken(token: string) {
   try {
     const userData = jwt.verify(token, refreshSecret)
     return userData
-  } catch (e) {
+  } catch (error) {
     return null
   }
 }

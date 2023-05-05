@@ -1,9 +1,9 @@
 import { AsyncLocalStorage } from 'async_hooks'
 
-interface IAsyncLocalStorage {
+interface UserData {
   userData?: {
     email: string
   }
 }
 
-export const asyncLocalStorage = new AsyncLocalStorage<IAsyncLocalStorage>()
+export const asyncLocalStorage = new AsyncLocalStorage<UserData>()

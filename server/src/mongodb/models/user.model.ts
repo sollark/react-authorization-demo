@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { UserRole } from '../../config/userRoles.js'
 
-export interface IUser {
+export interface User {
   name: string
   lastname: string
   email: string
@@ -17,5 +17,5 @@ const UserSchema = new Schema({
   roles: { type: Array, required: true },
 })
 
-const UserModel = model<IUser>('User', UserSchema)
+const UserModel = model<User>('User', UserSchema)
 export default UserModel

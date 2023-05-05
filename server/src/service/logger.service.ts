@@ -12,8 +12,8 @@ function getTime(): string {
   return now.toLocaleString('he')
 }
 
-function isError(e: any): e is Error {
-  return e && e.stack && e.message
+function isError(error: any): error is Error {
+  return error && error.stack && error.message
 }
 
 function doLog(level: string, ...args: any[]): void {
@@ -31,8 +31,8 @@ function doLog(level: string, ...args: any[]): void {
   line = `${getTime()} - ${level} - ${line} ${str}\n`
   console.log(line)
 
-  fs.appendFile('./logs/backend.log', line, (err) => {
-    if (err) console.log('FATAL: cannot write to log file')
+  fs.appendFile('./logs/backend.log', line, (error) => {
+    if (error) console.log('FATAL: cannot write to log file')
   })
 }
 

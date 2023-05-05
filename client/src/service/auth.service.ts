@@ -1,10 +1,10 @@
-import { IAuthCredentials } from '../models/User'
-import { IAuthResponse } from '../models/response/IAuthResponse'
+import { AuthCredentials } from '../models/User'
+import { AuthResponse } from '../models/response/AuthResponse'
 import useUserStore from '../stores/userStore'
 import { httpService } from './http.service'
 
 async function signIn(email: string, password: string) {
-  const response = await httpService.post<IAuthCredentials, IAuthResponse>(
+  const response = await httpService.post<AuthCredentials, AuthResponse>(
     'auth/signin',
     { email, password }
   )
@@ -31,7 +31,7 @@ async function signOut() {
 }
 
 async function registration(email: string, password: string) {
-  const response = await httpService.post<IAuthCredentials, IAuthResponse>(
+  const response = await httpService.post<AuthCredentials, AuthResponse>(
     'auth/registration',
     { email, password }
   )

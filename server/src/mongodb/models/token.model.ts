@@ -1,6 +1,6 @@
 import { model, Schema, Types } from 'mongoose'
 
-export interface IToken {
+export interface Token {
   userId: Types.ObjectId
   refreshToken: string
 }
@@ -10,5 +10,5 @@ const TokenSchema = new Schema({
   refreshToken: { type: String, required: true, unique: true },
 })
 
-const TokenModel = model<IToken>('Token', TokenSchema)
+const TokenModel = model<Token>('Token', TokenSchema)
 export default TokenModel

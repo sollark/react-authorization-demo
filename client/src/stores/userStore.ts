@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
-import { IAuth } from '../models/User'
+import { Auth } from '../models/User'
 
 interface UserState {
   user: {
     email: string
   } | null
-  auth: IAuth
+  auth: Auth
   setUser: (user: UserState['user']) => void
   setAuth: (auth: UserState['auth']) => void
 }

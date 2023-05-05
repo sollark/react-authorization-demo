@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
 import { httpService } from './http.service'
-import { IUser } from '../models/User'
+import { User } from '../models/User'
 
 export const userService = {
   getAccounts,
 }
 
-async function getAccounts(): Promise<AxiosResponse<IUser[]>> {
-  return await httpService.get<null, IUser[]>('auth/account', null)
+async function getAccounts(): Promise<AxiosResponse<User[]>> {
+  return await httpService.get<null, User[]>('auth/account', null)
 }

@@ -3,11 +3,11 @@ import { userService } from './user.service.js'
 import { asyncLocalStorage } from '../../service/als.service.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import logger from '../../service/logger.service.js'
-import { IUser } from '../../mongodb/models/user.model.js'
+import { User } from '../../mongodb/models/user.model.js'
 
 export async function addUser(req: Request, res: Response, next: NextFunction) {
   const { userData } = req.body
-  const { email, name, lastname, organization, roles } = userData as IUser
+  const { email, name, lastname, organization, roles } = userData as User
 
   const user = await userService.addUser(
     email,

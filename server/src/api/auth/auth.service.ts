@@ -1,14 +1,14 @@
 import bcrypt from 'bcrypt'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
-import authModel, { ICredentials } from '../../mongodb/models/auth.model.js'
+import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import logger from '../../service/logger.service.js'
-import { ITokenPayload, tokenService } from '../../service/token.service.js'
+import { TokenPayload, tokenService } from '../../service/token.service.js'
 
-const registration = async (authUser: ICredentials) => {
+const registration = async (authUser: Credentials) => {
   // check if email is already taken
-  const isEmailTaken = await _isEmailTaken(authUser.email)
-  if (isEmailTaken) {
+  const isEmailExist = await isEmailTaken(authUser.email)
+  if (isEmailExist) {
     logger.warn(
       `auth.service - attempt to create new account with existing email: ${authUser.email}`
     )
@@ -34,7 +34,7 @@ const registration = async (authUser: ICredentials) => {
   return { accessToken, refreshToken, user: account.email }
 }
 
-const signIn = async (credentials: ICredentials) => {
+const signIn = async (credentials: Credentials) => {
   const { email, password } = credentials
 
   // check if email exists
@@ -84,7 +84,7 @@ const refresh = async (refreshToken: string) => {
     throw new UnauthorizedError('Invalid refresh token')
   }
 
-  const { email } = userData as ITokenPayload
+  const { email } = userData as TokenPayload
   const account = await authModel.findOne({ email })
 
   if (!account) {
@@ -118,7 +118,7 @@ export const authService = {
   getAllAccounts,
 }
 
-const _isEmailTaken = async (email: String) => {
+const isEmailTaken = async (email: String) => {
   try {
     const existingAuthUser = await authModel.findOne({ email })
     return existingAuthUser ? true : false

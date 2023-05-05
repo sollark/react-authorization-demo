@@ -1,20 +1,20 @@
-import { IWorkplace } from './Workplace'
+import { Workplace } from './Workplace'
 
-export interface IUser {
+export interface User {
   email: string
   isProfileComplete: boolean
   profile: {
     name: string
     lastname: string
-    workplace: IWorkplace[]
+    workplace: Workplace[]
   }
 }
 
-export interface IAuth {
+export interface Auth {
   isAuth: boolean
 }
 
-export interface IAuthCredentials {
+export interface AuthCredentials {
   email: string
   password: string
 }
