@@ -1,20 +1,23 @@
-import { Box, Button, TextField } from '@mui/material'
+import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
+import Form from './form/Form'
 import Input from './form/Input'
 
 const Signin: FC = () => {
   console.log('Signin connected')
+
+  function submit(form: Object) {
+    console.log('Signin form submitted: ', form)
+  }
+
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Sign in</h1>
-      <form>
-        <Input name={'email'} label={'Email'} />
-        <Input name={'password'} label={'Password'} />
-        <Button variant='contained' type='submit'>
-          Sign in
-        </Button>
-      </form>
+      <Form submit={submit}>
+        <Input name={'email'} label={'Email'} initialValue='' />
+        <Input name={'password'} label={'Password'} initialValue='' />
+      </Form>
       <p>
         Don't have an account? <Link to='/auth/registration'>Registration</Link>
       </p>

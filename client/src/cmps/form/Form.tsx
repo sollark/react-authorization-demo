@@ -1,31 +1,43 @@
-import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
+import { Button } from '@mui/material'
+import React, {
+  ChangeEvent,
+  FC,
+  MouseEventHandler,
+  ReactNode,
+  useState,
+} from 'react'
 
 interface Props {
   children: ReactNode
+  submit: (form: Object) => void
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
 export const FormContext = React.createContext({
   form: {},
-  handleFormChange: (event: ChangeEvent<HTMLInputElement>) => {},
+  onFormChange: (event: ChangeEvent<HTMLInputElement>) => {},
 })
 
 const Form: FC<Props> = (props: Props) => {
-  const { children, submit = () => {}, ...rest } = props
+  const { children, submit, ...rest } = props
 
   const [form, setForm] = useState({})
 
-  const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onFormChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
     const updatedForm = {
       ...form,
       [name]: value,
     }
+    setForm(updatedForm)
 
     console.log('Form changed: ', updatedForm)
+  }
 
-    setForm(updatedForm)
+  const onSubmit: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault()
+    submit(form)
   }
 
   return (
@@ -33,10 +45,13 @@ const Form: FC<Props> = (props: Props) => {
       <FormContext.Provider
         value={{
           form,
-          handleFormChange,
+          onFormChange,
         }}>
         {children}
       </FormContext.Provider>
+      <Button variant='contained' type='submit' onClick={onSubmit}>
+        Registration
+      </Button>
     </form>
   )
 }
