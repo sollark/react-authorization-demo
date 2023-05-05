@@ -16,11 +16,8 @@ const Form: FC<Props> = (props: Props) => {
   const [form, setForm] = useState({})
 
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
-    // Get the name of the field that caused this change event
-    // Get the new value of this field
     const { name, value } = event.target
 
-    // Assign new value to the appropriate form field
     const updatedForm = {
       ...form,
       [name]: value,
@@ -28,7 +25,6 @@ const Form: FC<Props> = (props: Props) => {
 
     console.log('Form changed: ', updatedForm)
 
-    // Update state
     setForm(updatedForm)
   }
 

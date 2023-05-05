@@ -9,8 +9,8 @@ const Signin: FC = () => {
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Sign in</h1>
       <form>
-        <Input fullWidth margin='normal' name={'email'} label={'Email'} />
-        <Input fullWidth margin='normal' name={'password'} label={'Password'} />
+        <Input name={'email'} label={'Email'} />
+        <Input name={'password'} label={'Password'} />
         <Button variant='contained' type='submit'>
           Sign in
         </Button>

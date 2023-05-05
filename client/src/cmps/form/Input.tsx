@@ -16,6 +16,8 @@ const Input: FC<Props> = (props: Props) => {
 
   return (
     <TextField
+      fullWidth
+      margin='normal'
       label={label}
       type={name}
       name={name}
