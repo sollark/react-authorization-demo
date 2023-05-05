@@ -1,9 +1,9 @@
-interface InputStyleProps {
+interface TextInputStyleProps {
   fullWidth?: boolean
   margin?: 'none' | 'dense' | 'normal'
 }
 
-export const inputStyle: InputStyleProps = {
+export const textInputStyle: TextInputStyleProps = {
   fullWidth: true,
   margin: 'normal',
 }

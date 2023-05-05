@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
-import Input from './form/Input'
+import Input from './form/TextInput'
 
 const Registration: FC = () => {
   console.log('Registration connected')
@@ -14,13 +14,9 @@ const Registration: FC = () => {
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Registration</h1>
       <Form submit={submit}>
-        <Input name={'email'} label={'Email'} type='text' initialValue='' />
-        <Input name={'password'} label={'Password'} initialValue='' />
-        <Input
-          name={'confirmedPassword'}
-          label={'Confirm password'}
-          initialValue=''
-        />
+        <Input name={'email'} label={'Email'} type='text' />
+        <Input name={'password'} label={'Password'} />
+        <Input name={'confirmedPassword'} label={'Confirm password'} />
       </Form>
       <p>
         Already have an account? <Link to='/auth/signin'>Sign in</Link>

@@ -1,17 +1,17 @@
 import { TextField } from '@mui/material'
 import { FC, useContext } from 'react'
 import { FormContext } from './Form'
-import { inputStyle } from './input-style'
+import { textInputStyle } from './input-style'
 
 interface Props {
   name: string
   label: string
-  initialValue: string | number | boolean
+  initialValue?: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
 const Input: FC<Props> = (props: Props) => {
-  const { name, label, initialValue, ...rest } = props
+  const { name, label, initialValue = '', ...rest } = props
 
   const formContext = useContext(FormContext)
   const { form, onFormChange } = formContext
@@ -24,7 +24,7 @@ const Input: FC<Props> = (props: Props) => {
       id={name}
       placeholder={label}
       {...rest}
-      {...inputStyle}
+      {...textInputStyle}
       value={form[name as keyof typeof form] || initialValue}
       onChange={onFormChange}
     />
