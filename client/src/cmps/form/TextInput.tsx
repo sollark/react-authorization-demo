@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material'
 import { FC, useContext } from 'react'
 import { FormContext } from './Form'
-import { textInputStyle } from './input-style'
+import { textInputStyle } from './textInputStyle'
 
 interface Props {
   name: string

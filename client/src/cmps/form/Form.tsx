@@ -42,11 +42,7 @@ const Form: FC<Props> = (props: Props) => {
 
   return (
     <form>
-      <FormContext.Provider
-        value={{
-          form,
-          onFormChange,
-        }}>
+      <FormContext.Provider value={{ form, onFormChange }}>
         {children}
       </FormContext.Provider>
       <Button variant='contained' type='submit' onClick={onSubmit}>
