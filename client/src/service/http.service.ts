@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosPromise } from 'axios'
 import useUserStore from '../stores/userStore'
 
 const API_URL =
-  process.env.NODE_ENV === 'production' ? '/api/' : '//localhost:3000/api/'
+  process.env.NODE_ENV === 'production' ? '/api/' : '//localhost:3030/api/'
 
 var api = axios.create({
   // to allow cookies to be sent to the server automatically
@@ -18,10 +18,10 @@ api.interceptors.request.use((config) => {
   }
 
   //interceptor to add user's email to every request
-  const email = useUserStore((state) => state.user?.email)
-  if (email) {
-    config.headers['X-User-Email'] = email
-  }
+  // const email = useUserStore((state) => state.user?.email)
+  // if (email) {
+  //   config.headers['X-User-Email'] = email
+  // }
 
   return config
 })

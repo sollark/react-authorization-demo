@@ -6,6 +6,8 @@ async function setupAsyncLocalStorage(
   res: Response,
   next: NextFunction
 ) {
+  console.log('setupAsyncLocalStorage')
+
   const storage = {}
   asyncLocalStorage.run(storage, async () => {
     const userData = req.headers['x-user-email'] as string

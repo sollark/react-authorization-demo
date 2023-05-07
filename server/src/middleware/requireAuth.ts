@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
-import { ITokenPayload, tokenService } from '../service/token.service.js'
+import { TokenPayload, tokenService } from '../service/token.service.js'
 
 async function requireAuth(req: Request, res: Response, next: NextFunction) {
   try {
@@ -28,7 +28,7 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
       )
     }
 
-    req.userData = userData as ITokenPayload
+    req.userData = userData as TokenPayload
 
     next()
   } catch (error) {

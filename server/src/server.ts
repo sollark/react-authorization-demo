@@ -24,7 +24,7 @@ const app = express()
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3030', 'http://localhost:8080'],
+    origin: ['http://localhost:3000', 'http://localhost:8080'],
   })
 )
 app.use(compression())
