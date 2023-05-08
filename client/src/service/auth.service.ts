@@ -1,7 +1,7 @@
 import { AuthCredentials } from '../models/User'
 import { AuthResponse } from '../models/response/AuthResponse'
 import useUserStore from '../stores/userStore'
-import { httpService } from './http.service'
+import { httpService } from './axios/http.service'
 
 async function signIn(email: string, password: string) {
   const response = await httpService.post<AuthCredentials, AuthResponse>(
@@ -16,6 +16,9 @@ async function signIn(email: string, password: string) {
 
   // save the tokens to the session storage
   sessionStorage.setItem('token', accessToken)
+
+  //save email to session storage
+  sessionStorage.setItem('email', user.email)
 
   // set the user store
   useUserStore.setState((state) => state.setUser(user))

@@ -1,5 +1,9 @@
-import axios, { AxiosError, AxiosPromise } from 'axios'
-import useUserStore from '../stores/userStore'
+import axios, {
+  AxiosError,
+  AxiosPromise,
+  InternalAxiosRequestConfig,
+} from 'axios'
+import { headerService } from './header.service'
 
 const API_URL =
   process.env.NODE_ENV === 'production' ? '/api/' : '//localhost:3030/api/'
@@ -10,18 +14,11 @@ var api = axios.create({
   baseURL: API_URL,
 })
 
-api.interceptors.request.use((config) => {
-  //interceptor to add token to every request
-  const token = sessionStorage.getItem('token')
-  if (token) {
-    config.headers.authorization = `Bearer ${token}`
-  }
-
-  //interceptor to add user's email to every request
-  // const email = useUserStore((state) => state.user?.email)
-  // if (email) {
-  //   config.headers['X-User-Email'] = email
-  // }
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const headers = headerService.getHeaders()
+  headers.forEach(([headerName, value]) => {
+    config.headers[headerName] = value
+  })
 
   return config
 })
@@ -59,13 +56,12 @@ async function ajax<T, R>(
       `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `,
       data
     )
-    console.dir(error)
 
     if ((error as AxiosError).response?.status === 401) {
       sessionStorage.clear()
       window.location.assign('/')
     }
 
-    throw error
+    throw new Error()
   }
 }

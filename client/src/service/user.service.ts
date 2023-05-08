@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { httpService } from './http.service'
+import { httpService } from './axios/http.service'
 import { User } from '../models/User'
 
 export const userService = {
