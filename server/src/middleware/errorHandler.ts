@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
+import { config } from '../config/config.js'
 import CustomError from '../errors/CustomError.js'
 import loggerService from '../service/logger.service.js'
+import InternalServerError from '../errors/InternalServerError.js'
 
 function errorHandler(
   error: Error,
@@ -8,17 +10,23 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ) {
+  if (config.env === 'development') {
+    console.log('Error handler')
+    console.log(error.stack)
+  }
+
   loggerService.error(error.message)
 
   if (error instanceof CustomError) {
     return res.status(error.statusCode).json({
-      message: error.serializeErrors(),
+      errors: error.serializeErrors(),
     })
   }
 
-  // unexpected error
-  return res.status(500).json({
-    message: error.message,
+  // unknown error 500
+  const internalServerError = new InternalServerError('Internal Server Error')
+  return res.status(internalServerError.statusCode).json({
+    errors: internalServerError.serializeErrors(),
   })
 }
 

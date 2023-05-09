@@ -3,10 +3,10 @@ import axios, {
   AxiosPromise,
   InternalAxiosRequestConfig,
 } from 'axios'
+import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
 
-const API_URL =
-  process.env.NODE_ENV === 'production' ? '/api/' : '//localhost:3030/api/'
+const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
 
 var api = axios.create({
   // to allow cookies to be sent to the server automatically
@@ -53,10 +53,10 @@ async function ajax<T, R>(
 
     return res.data
   } catch (error) {
-    console.log(
-      `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `,
-      data
-    )
+    if (isDevelopment())
+      console.log(
+        `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${data}`
+      )
 
     if ((error as AxiosError).response?.status === 401) {
       sessionStorage.clear()
