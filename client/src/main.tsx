@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import App from './App'
 import { theme } from './ui/theme/theme'
-import { HashRouter as Router } from 'react-router-dom'
 
 // All application has access to the same query client to share data
 const queryClient = new QueryClient({
