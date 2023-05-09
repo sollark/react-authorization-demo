@@ -3,12 +3,24 @@ import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
 import Input from './form/TextInput'
+import { authService } from '@/service/auth.service'
+
+interface SigninForm {
+  email: string
+  password: string
+}
 
 const Signin: FC = () => {
   console.log('Signin connected')
 
   function submit(form: Object) {
     console.log('Signin form submitted: ', form)
+
+    const { email, password } = form as SigninForm
+
+    const response = authService.signIn(email, password)
+
+    console.log('Signin response: ', response)
   }
 
   return (

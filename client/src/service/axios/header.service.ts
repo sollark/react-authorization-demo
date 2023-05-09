@@ -1,4 +1,4 @@
-const getHeaders = () => {
+function getHeaders(): [string, string][] {
   const email = sessionStorage.getItem('email')
   const token = sessionStorage.getItem('token')
   const headers: [string, string][] = []

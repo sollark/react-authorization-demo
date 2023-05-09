@@ -11,8 +11,10 @@ async function signIn(email: string, password: string) {
 
   console.log('sign in response', response)
 
+  console.log('response data', response)
+
   // get the user and the tokens from the response
-  const { user, refreshToken, accessToken } = response.data
+  const { user, refreshToken, accessToken } = response as any
 
   // save the tokens to the session storage
   sessionStorage.setItem('token', accessToken)

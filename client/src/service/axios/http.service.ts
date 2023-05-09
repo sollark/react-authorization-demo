@@ -50,6 +50,7 @@ async function ajax<T, R>(
       data,
       params: method === 'GET' ? data : null,
     })
+
     return res.data
   } catch (error) {
     console.log(
