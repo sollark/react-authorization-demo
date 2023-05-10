@@ -1,10 +1,10 @@
 import express from 'express'
 import requireAuth from '../../middleware/requireAuth.js'
-import validateRequest from '../../middleware/validationHandler.js'
+import validateRequest from '../../middleware/validations/validationHandler.js'
 import verifyRoles from '../../middleware/verifyRoles.js'
 import asyncHandler from '../../utils/asyncHandler.js'
-import { registrationSchema } from '../../validations/registration.schema.js'
-import { signInSchema } from '../../validations/signIn.schema.js'
+import { registrationSchema } from '../../middleware/validations/registration.schema.js'
+import { signInSchema } from '../../middleware/validations/signIn.schema.js'
 
 import {
   getAccounts,
