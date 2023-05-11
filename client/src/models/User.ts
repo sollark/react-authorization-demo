@@ -20,12 +20,3 @@ export const UserSchema = z.object({
     workplace: z.array(WorkplaceSchema),
   }),
 })
-
-export interface Auth {
-  isAuth: boolean
-}
-
-export interface AuthCredentials {
-  email: string
-  password: string
-}
