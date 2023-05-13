@@ -1,5 +1,6 @@
 import { Button } from '@mui/material'
 import { FC } from 'react'
+import { buttonStyle } from './formStyle'
 
 interface Props {
   children?: any
@@ -8,7 +9,7 @@ interface Props {
 const SubmitButton: FC<Props> = (props: Props) => {
   const { children } = props
   return (
-    <Button variant='contained' type='submit' sx={{ marginTop: '1.5rem' }}>
+    <Button variant='contained' type='submit' sx={buttonStyle}>
       {children ? children : 'Submit'}
     </Button>
   )

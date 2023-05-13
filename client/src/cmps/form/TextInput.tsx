@@ -9,7 +9,6 @@ interface Props {
   name: string
   type: string
   label: string
-  initialValue?: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 

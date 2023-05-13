@@ -13,5 +13,5 @@ export const errorTextStyle = {
 }
 
 export const buttonStyle = {
-  marginTop: '1rem',
+  marginTop: '1.5rem',
 }

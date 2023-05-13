@@ -7,6 +7,7 @@ interface Props {
   children: ReactNode
   submit: (data: any) => void
   schema: any
+  defaultValues?: any
   buttonText?: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
