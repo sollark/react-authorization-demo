@@ -16,7 +16,7 @@ import {
   signinRoute,
   superVisorRoute,
   unauthorizedRoute,
-} from './routes'
+} from './routes/routes'
 
 const routeTree = rootRoute.addChildren([
   homeRoute,

@@ -1,12 +1,12 @@
 import { RootRoute, Route } from '@tanstack/router'
-import Registration from './cmps/Registration'
-import Signin from './cmps/SignIn'
-import Auth from './pages/Auth'
-import Home from './pages/Home'
-import Missing from './pages/Missing'
-import Role from './pages/Role'
-import Shift from './pages/Shift'
-import Unauthorized from './pages/Unauthorized'
+import Registration from '../cmps/Registration'
+import Signin from '../cmps/SignIn'
+import Auth from '../pages/Auth'
+import Home from '../pages/Home'
+import Missing from '../pages/Missing'
+import Role from '../pages/Role'
+import Shift from '../pages/Shift'
+import Unauthorized from '../pages/Unauthorized'
 
 export const rootRoute = new RootRoute()
 
