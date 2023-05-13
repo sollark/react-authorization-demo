@@ -1,33 +1,59 @@
+import { ErrorMessage } from '@hookform/error-message'
 import { TextField } from '@mui/material'
-import { FC, useContext } from 'react'
-import { FormContext } from './Form'
-import { textInputStyle } from './textInputStyle'
+import { ChangeEvent, FC } from 'react'
+import { useFormContext } from 'react-hook-form'
+import ErrorMessageText from './ErrorMessageText'
+import { errorTextStyle, textInputStyle } from './formStyle'
 
 interface Props {
   name: string
+  type: string
   label: string
   initialValue?: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
 const Input: FC<Props> = (props: Props) => {
-  const { name, label, initialValue = '', ...rest } = props
+  const { type, label, name, ...rest } = props
 
-  const formContext = useContext(FormContext)
-  const { form, onFormChange } = formContext
+  //get methods from useFormContext
+  const {
+    register,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext()
+
+  const formValues = getValues()
+
+  //update the value in the form and validate it
+  function onChange(e: ChangeEvent<HTMLInputElement>) {
+    setValue(name, e.target.value, { shouldValidate: true })
+  }
 
   return (
-    <TextField
-      label={label}
-      type={name}
-      name={name}
-      id={name}
-      placeholder={label}
-      {...rest}
-      {...textInputStyle}
-      value={form[name as keyof typeof form] || initialValue}
-      onChange={onFormChange}
-    />
+    <>
+      <TextField
+        {...register(name)}
+        type={type}
+        label={label}
+        name={name}
+        id={name}
+        placeholder={label}
+        value={formValues[name]}
+        onChange={onChange}
+        {...textInputStyle}
+        {...rest}
+      />
+
+      <ErrorMessage
+        errors={errors}
+        name={name}
+        render={({ message }) => (
+          <ErrorMessageText errorTextStyle={errorTextStyle} message={message} />
+        )}
+      />
+    </>
   )
 }
 
