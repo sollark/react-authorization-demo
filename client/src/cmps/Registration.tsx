@@ -1,44 +1,15 @@
+import { RegistrationSchema } from '@/models/Auth'
 import { authService } from '@/service/auth.service'
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
-import { z } from 'zod'
 import Form from './form/Form'
 import Input from './form/TextInput'
 
 interface RegistrationForm {
   email: string
   password: string
-  confirmedPassword: string
 }
-
-const schema = z
-  .object({
-    email: z
-      .string()
-      .trim()
-      .nonempty({ message: 'Field can not be empty' })
-      .email({ message: 'Invalid email address' }),
-    password: z
-      .string()
-      .trim()
-      .nonempty({ message: 'Field can not be empty' })
-      .min(6, { message: 'Password must be at least 6 characters' }),
-    confirmedPassword: z
-      .string()
-      .trim()
-      .nonempty({ message: 'Field can not be empty' })
-      .min(6, { message: 'Password must be at least 6 characters' }),
-  })
-  .superRefine(({ confirmedPassword, password }, ctx) => {
-    if (confirmedPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Passwords do not match',
-        path: ['confirmedPassword'],
-      })
-    }
-  })
 
 const defaultValues = {
   email: '',
@@ -52,12 +23,7 @@ const Registration: FC = () => {
   async function submit(form: Object) {
     console.log('Registration form submitted: ', form)
 
-    const { email, password, confirmedPassword } = form as RegistrationForm
-
-    if (password !== confirmedPassword) {
-      console.log('Password and confirmed password do not match')
-      return
-    }
+    const { email, password } = form as RegistrationForm
 
     const response = await authService.registration(email, password)
 
@@ -68,7 +34,7 @@ const Registration: FC = () => {
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Registration</h1>
       <Form
-        schema={schema}
+        schema={RegistrationSchema}
         defaultValues={defaultValues}
         submit={submit}
         buttonText='Registration'>
