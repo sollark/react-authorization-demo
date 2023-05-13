@@ -36,3 +36,16 @@ export const RegistrationSchema = z
       })
     }
   })
+
+export const SignInSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .nonempty({ message: 'Field can not be empty' })
+    .email({ message: 'Invalid email address' }),
+  password: z
+    .string()
+    .trim()
+    .nonempty({ message: 'Field can not be empty' })
+    .min(6, { message: 'Password must be at least 6 characters' }),
+})

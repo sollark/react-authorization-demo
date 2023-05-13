@@ -4,16 +4,22 @@ import { FC } from 'react'
 import Form from './form/Form'
 import Input from './form/TextInput'
 import { authService } from '@/service/auth.service'
+import { SignInSchema } from '@/models/Auth'
 
 interface SigninForm {
   email: string
   password: string
 }
 
+const defaultValues = {
+  email: '',
+  password: '',
+}
+
 const Signin: FC = () => {
   console.log('Signin connected')
 
-  function submit(form: Object) {
+  async function submit(form: Object) {
     console.log('Signin form submitted: ', form)
 
     const { email, password } = form as SigninForm
@@ -26,9 +32,13 @@ const Signin: FC = () => {
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Sign in</h1>
-      <Form submit={submit}>
-        <Input name={'email'} label={'Email'} />
-        <Input name={'password'} label={'Password'} />
+      <Form
+        schema={SignInSchema}
+        defaultValues={defaultValues}
+        submit={submit}
+        buttonText='Sign In'>
+        <Input name={'email'} label={'Email'} type='email' />
+        <Input name={'password'} label={'Password'} type='password' />
       </Form>
       <p>
         Don't have an account? <Link to='/auth/registration'>Registration</Link>
