@@ -1,10 +1,10 @@
+import { SignInSchema } from '@/models/Auth'
+import { authService } from '@/service/auth.service'
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
 import Input from './form/TextInput'
-import { authService } from '@/service/auth.service'
-import { SignInSchema } from '@/models/Auth'
 
 interface SigninForm {
   email: string
@@ -37,8 +37,8 @@ const Signin: FC = () => {
         defaultValues={defaultValues}
         submit={submit}
         buttonText='Sign In'>
-        <Input name={'email'} label={'Email'} type='email' />
-        <Input name={'password'} label={'Password'} type='password' />
+        <Input name='email' label='Email' type='email' />
+        <Input name='password' label='Password' type='password' />
       </Form>
       <p>
         Don't have an account? <Link to='/auth/registration'>Registration</Link>

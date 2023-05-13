@@ -38,8 +38,8 @@ const Registration: FC = () => {
         defaultValues={defaultValues}
         submit={submit}
         buttonText='Registration'>
-        <Input name={'email'} label={'Email'} type='email' />
-        <Input name={'password'} label={'Password'} type='password' />
+        <Input name='email' label='Email' type='email' />
+        <Input name='password' label='Password' type='password' />
         <Input
           name={'confirmedPassword'}
           label={'Confirm password'}
