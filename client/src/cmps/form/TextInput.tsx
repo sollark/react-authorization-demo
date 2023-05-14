@@ -2,8 +2,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import { TextField } from '@mui/material'
 import { ChangeEvent, FC } from 'react'
 import { useFormContext } from 'react-hook-form'
-import ErrorMessageText from './ErrorMessageText'
-import { errorTextStyle, textInputStyle } from './formStyle'
+import { textInputStyle } from './formStyle'
 
 interface Props {
   name: string
@@ -21,13 +20,15 @@ const Input: FC<Props> = (props: Props) => {
     setValue,
     getValues,
     formState: { errors },
+    trigger,
   } = useFormContext()
 
   const formValues = getValues()
 
   //update the value in the form and validate it
   function onChange(e: ChangeEvent<HTMLInputElement>) {
-    setValue(name, e.target.value, { shouldValidate: true })
+    setValue(name, e.target.value, { shouldValidate: false })
+    trigger(name)
   }
 
   return (
@@ -42,16 +43,14 @@ const Input: FC<Props> = (props: Props) => {
         value={formValues[name]}
         onChange={onChange}
         error={!!errors[name]}
+        helperText={
+          <ErrorMessage
+            name={name}
+            message={('* ' + errors[name]?.message) as string}
+          />
+        }
         {...textInputStyle}
         {...rest}
-      />
-
-      <ErrorMessage
-        errors={errors}
-        name={name}
-        render={({ message }) => (
-          <ErrorMessageText errorTextStyle={errorTextStyle} message={message} />
-        )}
       />
     </>
   )
