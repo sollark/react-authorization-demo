@@ -26,6 +26,8 @@ const Form: FC<Props> = (props: Props) => {
     resolver: zodResolver(schema),
     defaultValues,
     criteriaMode: 'all',
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
   })
   const { handleSubmit } = methods
 

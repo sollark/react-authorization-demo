@@ -41,6 +41,7 @@ const Input: FC<Props> = (props: Props) => {
         placeholder={label}
         value={formValues[name]}
         onChange={onChange}
+        error={!!errors[name]}
         {...textInputStyle}
         {...rest}
       />
