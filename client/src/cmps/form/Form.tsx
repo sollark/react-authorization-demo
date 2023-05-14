@@ -27,6 +27,7 @@ const Form: FC<Props> = (props: Props) => {
     defaultValues,
     criteriaMode: 'all',
     mode: 'onBlur',
+    reValidateMode: 'onBlur',
   })
   const { handleSubmit } = methods
 

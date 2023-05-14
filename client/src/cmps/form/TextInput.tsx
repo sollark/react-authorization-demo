@@ -14,11 +14,18 @@ interface Props {
 const Input: FC<Props> = (props: Props) => {
   const { type, label, name, ...rest } = props
 
-  //get methods from useFormContext
   const {
     formState: { errors },
     control,
+    setValue,
   } = useFormContext()
+
+  const errorMessage = errors[name]?.message as string
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    // validate on change only after the first onBlur validation
+    setValue(name, value, { shouldValidate: errorMessage ? true : false })
+  }
 
   return (
     <>
@@ -32,6 +39,7 @@ const Input: FC<Props> = (props: Props) => {
             label={label}
             id={name}
             placeholder={label}
+            onChange={handleChange}
             error={!!errors[name]}
             helperText={
               <ErrorMessage
