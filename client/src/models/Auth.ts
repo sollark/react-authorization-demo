@@ -20,21 +20,18 @@ export const RegistrationSchema = z
       .string()
       .trim()
       .nonempty({ message: 'Field can not be empty' })
-      .min(6, { message: 'Password must be at least 6 characters' }),
+      .min(6, { message: 'Password must be at least 6 characters' })
+      .max(20, { message: 'Password must be less than 20 characters' }),
     confirmedPassword: z
       .string()
       .trim()
       .nonempty({ message: 'Field can not be empty' })
-      .min(6, { message: 'Password must be at least 6 characters' }),
+      .min(6, { message: 'Password must be at least 6 characters' })
+      .max(20, { message: 'Password must be less than 20 characters' }),
   })
-  .superRefine(({ confirmedPassword, password }, ctx) => {
-    if (confirmedPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Passwords do not match',
-        path: ['confirmedPassword'],
-      })
-    }
+  .refine(({ confirmedPassword, password }) => confirmedPassword === password, {
+    message: 'Passwords do not match',
+    path: ['confirmedPassword'],
   })
 
 export const SignInSchema = z.object({
