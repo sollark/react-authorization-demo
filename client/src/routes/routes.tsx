@@ -7,6 +7,7 @@ import Missing from '../pages/Missing'
 import Role from '../pages/Role'
 import Shift from '../pages/Shift'
 import Unauthorized from '../pages/Unauthorized'
+import ProtectedRoute from './ProtectedRoute'
 
 export const rootRoute = new RootRoute()
 
@@ -43,7 +44,11 @@ export const unauthorizedRoute = new Route({
 export const shiftRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/shift',
-  component: Shift,
+  component: () => (
+    <ProtectedRoute>
+      <Shift />
+    </ProtectedRoute>
+  ),
 })
 
 // Routes, Role page

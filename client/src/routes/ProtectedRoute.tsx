@@ -1,10 +1,11 @@
-import { FC, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
-interface Props {
+interface ProtectedRouteProps {
   children: ReactNode
 }
-const ProtectedRoute: FC<Props> = (props) => {
-  const { children } = props
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps): JSX.Element => {
+  console.log('ProtectedRoute')
   return <>{children}</>
 }
 

@@ -9,6 +9,7 @@ import {
   homeRoute,
   managerRoute,
   missingRoute,
+  // protectedRoute,
   registrationRoute,
   roleRoute,
   rootRoute,
@@ -21,6 +22,7 @@ import {
 const routeTree = rootRoute.addChildren([
   homeRoute,
   authRoute.addChildren([signinRoute, registrationRoute, unauthorizedRoute]),
+  // protectedRoute.addChildren([shiftRoute]),
   shiftRoute,
   roleRoute.addChildren([
     guestRoute,

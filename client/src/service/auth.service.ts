@@ -10,7 +10,6 @@ async function signIn(email: string, password: string) {
   )
 
   console.log('sign in response', response)
-
   console.log('response data', response)
 
   // get the user and the tokens from the response
