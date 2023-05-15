@@ -1,4 +1,4 @@
-import { AuthCredentials } from '../models/User'
+import { AuthCredentials } from '@/models/Auth'
 import { AuthResponse } from '../models/response/AuthResponse'
 import useUserStore from '../stores/userStore'
 import { httpService } from './axios/http.service'
@@ -24,7 +24,6 @@ async function signIn(email: string, password: string) {
 
   // set the user store
   useUserStore.setState((state) => state.setUser(user))
-  useUserStore.setState((state) => state.setAuth({ isAuth: true }))
 }
 
 async function signOut() {
@@ -32,7 +31,6 @@ async function signOut() {
 
   sessionStorage.removeItem('token')
   useUserStore.setState((state) => state.setUser(null))
-  useUserStore.setState((state) => state.setAuth({ isAuth: false }))
 }
 
 async function registration(email: string, password: string) {
@@ -51,7 +49,6 @@ async function registration(email: string, password: string) {
 
   // set the user store
   useUserStore.setState((state) => state.setUser(user))
-  useUserStore.setState((state) => state.setAuth({ isAuth: true }))
 }
 
 export const authService = { signIn, signOut, registration }

@@ -8,10 +8,6 @@ export const textInputStyle: FormStyleProps = {
   margin: 'normal',
 }
 
-export const errorTextStyle = {
-  fontSize: '0.75rem',
-}
-
 export const buttonStyle = {
   marginTop: '1.5rem',
 }
