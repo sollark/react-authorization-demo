@@ -1,33 +1,58 @@
+import { ErrorMessage } from '@hookform/error-message'
 import { TextField } from '@mui/material'
-import { FC, useContext } from 'react'
-import { FormContext } from './Form'
-import { textInputStyle } from './textInputStyle'
+import { FC } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
+import { textInputStyle } from './formStyle'
 
 interface Props {
   name: string
+  type: string
   label: string
-  initialValue?: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
 const Input: FC<Props> = (props: Props) => {
-  const { name, label, initialValue = '', ...rest } = props
+  const { type, label, name, ...rest } = props
 
-  const formContext = useContext(FormContext)
-  const { form, onFormChange } = formContext
+  const {
+    formState: { errors },
+    control,
+    setValue,
+  } = useFormContext()
+
+  const errorMessage = errors[name]?.message as string
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    // validate on change only after the first onBlur validation
+    setValue(name, value, { shouldValidate: errorMessage ? true : false })
+  }
 
   return (
-    <TextField
-      label={label}
-      type={name}
-      name={name}
-      id={name}
-      placeholder={label}
-      {...rest}
-      {...textInputStyle}
-      value={form[name as keyof typeof form] || initialValue}
-      onChange={onFormChange}
-    />
+    <>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            type={type}
+            label={label}
+            id={name}
+            placeholder={label}
+            onChange={handleChange}
+            error={!!errors[name]}
+            helperText={
+              <ErrorMessage
+                name={name}
+                message={('* ' + errors[name]?.message) as string}
+              />
+            }
+            {...textInputStyle}
+            {...rest}
+          />
+        )}
+      />
+    </>
   )
 }
 

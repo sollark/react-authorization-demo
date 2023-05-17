@@ -1,14 +1,20 @@
+import { RegistrationSchema } from '@/models/Auth'
+import { authService } from '@/service/auth.service'
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
 import Input from './form/TextInput'
-import { authService } from '@/service/auth.service'
 
 interface RegistrationForm {
   email: string
   password: string
-  confirmedPassword: string
+}
+
+const defaultValues = {
+  email: '',
+  password: '',
+  confirmedPassword: '',
 }
 
 const Registration: FC = () => {
@@ -17,12 +23,7 @@ const Registration: FC = () => {
   async function submit(form: Object) {
     console.log('Registration form submitted: ', form)
 
-    const { email, password, confirmedPassword } = form as RegistrationForm
-
-    if (password !== confirmedPassword) {
-      console.log('Password and confirmed password do not match')
-      return
-    }
+    const { email, password } = form as RegistrationForm
 
     const response = await authService.registration(email, password)
 
@@ -32,10 +33,18 @@ const Registration: FC = () => {
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <h1>Registration</h1>
-      <Form submit={submit}>
-        <Input name={'email'} label={'Email'} type='text' />
-        <Input name={'password'} label={'Password'} />
-        <Input name={'confirmedPassword'} label={'Confirm password'} />
+      <Form
+        schema={RegistrationSchema}
+        defaultValues={defaultValues}
+        submit={submit}
+        buttonText='Registration'>
+        <Input name='email' label='Email' type='email' />
+        <Input name='password' label='Password' type='password' />
+        <Input
+          name={'confirmedPassword'}
+          label={'Confirm password'}
+          type='password'
+        />
       </Form>
       <p>
         Already have an account? <Link to='/auth/signin'>Sign in</Link>
