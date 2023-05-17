@@ -5,6 +5,7 @@ export default function Home() {
   return (
     <div>
       <h1>Hello, world!</h1>
+      <Link to='/auth'>Auth</Link>
       <Link to='/shift'>Shift</Link>
     </div>
   )
