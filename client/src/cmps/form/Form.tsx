@@ -36,8 +36,7 @@ const Form: FC<Props> = (props: Props) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} {...rest}>
         {children}
-        {/* <SubmitButton>{buttonText}</SubmitButton> */}
-        {submitButton}
+        {submitButton ? submitButton : null}
       </form>
     </FormProvider>
   )

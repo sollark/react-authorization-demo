@@ -5,7 +5,7 @@ interface Props {
   children: ReactElement[]
   submit: (data: any) => void
   nextButton: ReactElement
-  prevButton: ReactElement
+  backButton: ReactElement
   // schema: any
   // defaultValues?: any
   buttonText?: string
@@ -20,7 +20,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
     // schema,
     // defaultValues,
     nextButton,
-    prevButton,
+    backButton,
     submit,
     buttonText = 'Submit',
   } = props
@@ -33,8 +33,8 @@ const MultistepForm: FC<Props> = (props: Props) => {
       <div>
         {/* <button onClick={step.prev}>Prev</button>
         <button onClick={step.next}>Next</button> */}
+        {backButton}
         {nextButton}
-        {prevButton}
       </div>
     </>
   )
