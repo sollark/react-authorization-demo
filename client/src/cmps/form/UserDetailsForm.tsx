@@ -1,12 +1,6 @@
 import { FC } from 'react'
 import Input from './TextInput'
 
-// interface UserDetailsForm {
-//   firstName: string
-//   lastName: string
-//   phone: string
-// }
-
 const UserDetails: FC = () => {
   console.log('UserDetails connected')
 

@@ -41,11 +41,7 @@ const Registration: FC = () => {
         defaultValues={defaultValues}
         submit={submit}
         buttonText='Registration'>
-        <MultistepForm>
-          <AccountForm />
-          <UserDetailsForm />
-          <OrganizationDetailsForm />
-        </MultistepForm>
+        <AccountForm />
       </Form>
       <p>
         Already have an account? <Link to='/auth/signin'>Sign in</Link>

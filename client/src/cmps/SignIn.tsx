@@ -5,6 +5,7 @@ import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
 import SignInForm from './form/SignInForm'
+import SubmitButton from './form/buttons/SubmitButton'
 
 interface SigninForm {
   email: string
@@ -36,7 +37,7 @@ const Signin: FC = () => {
         schema={SignInSchema}
         defaultValues={defaultValues}
         submit={submit}
-        buttonText='Sign In'>
+        submitButton={<SubmitButton />}>
         <SignInForm />
       </Form>
       <p>
