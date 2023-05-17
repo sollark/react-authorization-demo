@@ -1,13 +1,13 @@
 import { FC } from 'react'
 import Input from './TextInput'
 
-interface OrganizationDetailsForm {
-  organizationName: string
-}
+// interface OrganizationDetailsForm {
+//   organizationName: string
+// }
 
-const defaultValues = {
-  organizationName: '',
-}
+// const defaultValues = {
+//   organizationName: '',
+// }
 
 const OrganizationDetails: FC = () => {
   console.log('OrganizationDetails connected')
@@ -19,3 +19,5 @@ const OrganizationDetails: FC = () => {
     </>
   )
 }
+
+export default OrganizationDetails

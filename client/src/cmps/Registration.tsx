@@ -3,9 +3,11 @@ import { authService } from '@/service/auth.service'
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
-import Form from './form/Form'
-import Input from './form/TextInput'
 import AccountForm from './form/AccountForm'
+import Form from './form/Form'
+import MultistepForm from './form/MultistepForm'
+import OrganizationDetailsForm from './form/OrganizationDetailsForm'
+import UserDetailsForm from './form/UserDetailsForm'
 
 interface RegistrationForm {
   email: string
@@ -39,7 +41,11 @@ const Registration: FC = () => {
         defaultValues={defaultValues}
         submit={submit}
         buttonText='Registration'>
-        <AccountForm />
+        <MultistepForm>
+          <AccountForm />
+          <UserDetailsForm />
+          <OrganizationDetailsForm />
+        </MultistepForm>
       </Form>
       <p>
         Already have an account? <Link to='/auth/signin'>Sign in</Link>
