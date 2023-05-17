@@ -1,3 +1,4 @@
+import { UserRole } from '@/models/Workplace'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -5,6 +6,8 @@ import { immer } from 'zustand/middleware/immer'
 interface UserState {
   user: {
     email: string
+    name: string
+    roles: UserRole[]
   } | null
 
   setUser: (user: UserState['user']) => void
