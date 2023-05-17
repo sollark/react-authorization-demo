@@ -1,28 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, ReactElement, ReactNode } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import SubmitButton from './SubmitButton'
+import SubmitButton from './buttons/SubmitButton'
 
 interface Props {
   children: ReactElement
   submit: (data: any) => void
   schema: any
   defaultValues?: any
-  buttonText?: string
+  submitButton?: ReactElement
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
 const Form: FC<Props> = (props: Props) => {
   console.log('Form connected')
 
-  const {
-    children,
-    schema,
-    defaultValues,
-    submit,
-    buttonText = 'Submit',
-    ...rest
-  } = props
+  const { children, schema, defaultValues, submit, submitButton, ...rest } =
+    props
 
   const methods = useForm({
     resolver: zodResolver(schema),
@@ -42,7 +36,8 @@ const Form: FC<Props> = (props: Props) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} {...rest}>
         {children}
-        <SubmitButton>{buttonText}</SubmitButton>
+        {/* <SubmitButton>{buttonText}</SubmitButton> */}
+        {submitButton}
       </form>
     </FormProvider>
   )
