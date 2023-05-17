@@ -5,6 +5,7 @@ import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
 import Input from './form/TextInput'
+import AccountForm from './form/AccountForm'
 
 interface RegistrationForm {
   email: string
@@ -38,13 +39,7 @@ const Registration: FC = () => {
         defaultValues={defaultValues}
         submit={submit}
         buttonText='Registration'>
-        <Input name='email' label='Email' type='email' />
-        <Input name='password' label='Password' type='password' />
-        <Input
-          name={'confirmedPassword'}
-          label={'Confirm password'}
-          type='password'
-        />
+        <AccountForm />
       </Form>
       <p>
         Already have an account? <Link to='/auth/signin'>Sign in</Link>
