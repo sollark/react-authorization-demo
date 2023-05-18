@@ -1,6 +1,6 @@
 import { Button } from '@mui/material'
 import { FC } from 'react'
-import { buttonStyle } from '../formStyle'
+import { buttonStyle } from '../style/formStyle'
 
 interface Props {
   children?: any

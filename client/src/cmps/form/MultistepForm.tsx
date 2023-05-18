@@ -6,24 +6,13 @@ interface Props {
   submit: (data: any) => void
   nextButton: ReactElement
   backButton: ReactElement
-  // schema: any
-  // defaultValues?: any
-  buttonText?: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
 const MultistepForm: FC<Props> = (props: Props) => {
   console.log('MultistepForm connected')
 
-  const {
-    children,
-    // schema,
-    // defaultValues,
-    nextButton,
-    backButton,
-    submit,
-    buttonText = 'Submit',
-  } = props
+  const { children, nextButton, backButton, submit } = props
 
   const { step, steps, currentStep } = useMultistepForm([...children])
   return (
@@ -31,8 +20,6 @@ const MultistepForm: FC<Props> = (props: Props) => {
       {currentStep + 1} / {steps.length}
       {step}
       <div>
-        {/* <button onClick={step.prev}>Prev</button>
-        <button onClick={step.next}>Next</button> */}
         {backButton}
         {nextButton}
       </div>

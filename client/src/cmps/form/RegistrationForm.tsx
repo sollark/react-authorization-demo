@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import Input from './TextInput'
+import Input from './inputs/TextInput'
 
-const AccountForm: FC = () => {
+const RegistrationForm: FC = () => {
   console.log('AccountForm connected')
 
   return (
@@ -18,4 +18,4 @@ const AccountForm: FC = () => {
   )
 }
 
-export default AccountForm
+export default RegistrationForm

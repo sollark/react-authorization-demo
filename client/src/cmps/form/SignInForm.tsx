@@ -1,4 +1,4 @@
-import Input from './TextInput'
+import Input from './inputs/TextInput'
 
 const SignInForm = () => {
   console.log('SignInForm connected')

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Input from './TextInput'
+import Input from './inputs/TextInput'
 
 const OrganizationDetails: FC = () => {
   console.log('OrganizationDetails connected')

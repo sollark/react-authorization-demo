@@ -2,7 +2,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import { TextField } from '@mui/material'
 import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { textInputStyle } from './formStyle'
+import { textInputStyle } from '../style/formStyle'
 
 interface Props {
   name: string
