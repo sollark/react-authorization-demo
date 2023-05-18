@@ -6,7 +6,7 @@ const RegistrationForm: FC = () => {
 
   return (
     <>
-      <h2>AccountForm</h2>
+      <h2>Registration</h2>
       <Input name='email' label='Email' type='email' />
       <Input name='password' label='Password' type='password' />
       <Input

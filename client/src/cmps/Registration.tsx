@@ -32,7 +32,6 @@ const Registration: FC = () => {
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
-      <h1>Registration</h1>
       <Form
         schema={RegistrationSchema}
         defaultValues={defaultValues}

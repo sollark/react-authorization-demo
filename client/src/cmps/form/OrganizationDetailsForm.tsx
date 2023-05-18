@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Input from './inputs/TextInput'
 
-const OrganizationDetails: FC = () => {
+const OrganizationDetailsForm: FC = () => {
   console.log('OrganizationDetails connected')
 
   return (
@@ -12,4 +12,4 @@ const OrganizationDetails: FC = () => {
   )
 }
 
-export default OrganizationDetails
+export default OrganizationDetailsForm
