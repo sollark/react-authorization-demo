@@ -4,8 +4,8 @@ import logger from '../../service/logger.service.js'
 
 const addUser = async (
   identifier: string,
-  name: string,
-  lastname: string
+  name?: string,
+  lastname?: string
   // organization: string,
   // roles: UserRole[] = [USER_ROLE.Guest] as UserRole[]
 ) => {
@@ -22,8 +22,8 @@ const addUser = async (
   return user
 }
 
-const getUser = async (email: string) => {
-  const user = UserModel.findOne({ email })
+const getUser = async (identifier: string) => {
+  const user = UserModel.findOne({ identifier })
 
   logger.info(`user.service - user fetched: ${user}`)
 

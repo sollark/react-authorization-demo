@@ -3,7 +3,7 @@ import { Document, Schema, Types, model } from 'mongoose'
 export interface Account {
   isComplete: boolean
   user: Types.ObjectId
-  workspaces: Workspace[]
+  workspaces?: Workspace[]
 }
 
 interface AccountDocument extends Document, Account {}
