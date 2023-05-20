@@ -1,20 +1,20 @@
-import { UserRole, USER_ROLE } from '../../config/userRoles.js'
+// import { UserRole, USER_ROLE } from '../../config/userRoles.js'
 import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
 
 const addUser = async (
+  identifier: string,
   name: string,
-  lastname: string,
-  email: string,
-  organization: string,
-  roles: UserRole[] = [USER_ROLE.Guest] as UserRole[]
+  lastname: string
+  // organization: string,
+  // roles: UserRole[] = [USER_ROLE.Guest] as UserRole[]
 ) => {
   const user = await UserModel.create({
+    identifier,
     name,
     lastname,
-    email,
-    organization,
-    roles,
+    // organization,
+    // roles,
   })
 
   logger.info(`user.service - user added: ${user}`)
@@ -30,16 +30,15 @@ const getUser = async (email: string) => {
   return user
 }
 
-const getRoles = async (email: string) => {
-  const user = await UserModel.findOne({ email })
+// const getRoles = async (email: string) => {
+//   const user = await UserModel.findOne({ email })
 
-  logger.info(`user.service - user roles fetched: ${user}`)
+//   logger.info(`user.service - user roles fetched: ${user}`)
 
-  return user?.roles
-}
+//   return user?.roles
+// }
 
 export const userService = {
   addUser,
   getUser,
-  getRoles,
 }

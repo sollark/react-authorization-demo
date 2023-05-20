@@ -2,7 +2,7 @@ import { AsyncLocalStorage } from 'async_hooks'
 
 interface UserData {
   userData?: {
-    email: string
+    identifier: string
   }
 }
 

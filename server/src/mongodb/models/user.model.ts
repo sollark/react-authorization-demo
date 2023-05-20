@@ -1,20 +1,19 @@
 import { model, Schema } from 'mongoose'
-import { UserRole } from '../../config/userRoles.js'
 
 export interface User {
+  identifier: string
   name: string
   lastname: string
-  email: string
-  organization: string
-  roles: UserRole[]
+  // organization: string
+  // roles: UserRole[]
 }
 
 const UserSchema = new Schema({
+  identifier: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   lastname: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  organization: { type: String, required: true },
-  roles: { type: Array, required: true },
+  // organization: { type: String, required: true },
+  // roles: { type: Array, required: true },
 })
 
 const UserModel = model<User>('User', UserSchema)

@@ -7,14 +7,14 @@ import { User } from '../../mongodb/models/user.model.js'
 
 export async function addUser(req: Request, res: Response, next: NextFunction) {
   const { userData } = req.body
-  const { email, name, lastname, organization, roles } = userData as User
+  const { identifier, name, lastname } = userData as User
 
   const user = await userService.addUser(
-    email,
+    identifier,
     name,
-    lastname,
-    organization,
-    roles
+    lastname
+    // organization,
+    // roles
   )
 
   res.status(201).json(user)
@@ -22,14 +22,14 @@ export async function addUser(req: Request, res: Response, next: NextFunction) {
 
 export async function getUser(req: Request, res: Response, next: NextFunction) {
   const store = asyncLocalStorage.getStore()
-  const email = store?.userData?.email
+  const identifier = store?.userData?.identifier
 
-  if (!email) {
+  if (!identifier) {
     logger.warn(`user.controller - unauthenticated request to fetch user `)
     return new UnauthorizedError('unauthenticated')
   }
 
-  const user = await userService.getUser(email)
+  const user = await userService.getUser(identifier)
 
   res.status(200).json(user)
 }
