@@ -5,6 +5,7 @@ import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './form/Form'
 import RegistrationForm from './form/RegistrationForm'
+import SubmitButton from './form/buttons/SubmitButton'
 
 interface RegistrationForm {
   email: string
@@ -32,11 +33,12 @@ const Registration: FC = () => {
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
+      <h1>Registration</h1>
       <Form
         schema={RegistrationSchema}
         defaultValues={defaultValues}
         submit={submit}
-        buttonText='Registration'>
+        submitButton={<SubmitButton />}>
         <RegistrationForm />
       </Form>
       <p>

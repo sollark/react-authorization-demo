@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, ReactElement } from 'react'
+import { FC, ReactElement, ReactNode } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 interface Props {
-  children: ReactElement
+  children: ReactNode
   submit: (data: any) => void
   schema: any
   defaultValues?: any
@@ -35,7 +35,7 @@ const Form: FC<Props> = (props: Props) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} {...rest}>
         {children}
-        {submitButton ? submitButton : null}
+        <div>{submitButton ? submitButton : null}</div>
       </form>
     </FormProvider>
   )
