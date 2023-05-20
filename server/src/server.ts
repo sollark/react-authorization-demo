@@ -3,16 +3,17 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import path from 'path'
 import http from 'http'
-import { connectMongo } from './mongodb/connect.js'
+import path from 'path'
 import errorHandler from './middleware/errorHandler.js'
+import { connectMongo } from './mongodb/connect.js'
 
 //import routes
 import { authRoutes } from './api/auth/auth.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
+import { accountRoutes } from './api/account/account.routes.js'
 import { config } from './config/config.js'
 import setupAsyncLocalStorage from './middleware/als.js'
 const __filename = fileURLToPath(import.meta.url)
@@ -38,6 +39,7 @@ app.all('*', setupAsyncLocalStorage)
 
 // routes
 app.use('/api/auth', authRoutes)
+app.use('/api/account', accountRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, '../public/index.html')

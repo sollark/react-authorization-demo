@@ -1,17 +1,22 @@
 import { NextFunction, Request, Response } from 'express'
-import { userService } from './user.service.js'
+import { userService } from './account.service.js'
 import { asyncLocalStorage } from '../../service/als.service.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import logger from '../../service/logger.service.js'
 import { User } from '../../mongodb/models/user.model.js'
 
-export async function addUser(req: Request, res: Response, next: NextFunction) {
+export async function addAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const { userData } = req.body
-  const { identifier, name, lastname } = userData as User
+  const { userDetails } = userData
+  const { identifier, firstName, lastname } = userDetails as User
 
   const user = await userService.addUser(
     identifier,
-    name,
+    firstName,
     lastname
     // organization,
     // roles

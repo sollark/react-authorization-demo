@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { userService } from '../api/user/user.service.js'
+import { userService } from '../api/account/account.service.js'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
 import { UserRole } from '../config/userRoles.js'
 

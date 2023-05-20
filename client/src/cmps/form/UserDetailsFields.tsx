@@ -9,6 +9,7 @@ const UserDetailsFields: FC = () => {
       <h2>UserDetails</h2>
       <Input name='firstName' label='First name' type='text' />
       <Input name='lastName' label='Last name' type='text' />
+      <Input name='email' label='Email' type='email' />
       <Input name='phone' label='Phone' type='text' />
     </>
   )

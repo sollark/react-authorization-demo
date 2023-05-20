@@ -3,12 +3,12 @@ import loggerService from './logger.service.js'
 
 const addUser = async (
   identifier: string,
-  name: string,
+  firstName: string,
   lastname: string
 ): Promise<User> => {
   const user = await UserModel.create({
     identifier,
-    name,
+    firstName,
     lastname,
   })
 

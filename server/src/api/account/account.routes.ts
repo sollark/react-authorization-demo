@@ -1,19 +1,21 @@
 import express from 'express'
 import requireAuth from '../../middleware/requireAuth.js'
+import { accountSchema } from '../../middleware/validations/accountSchema.js'
 import validateRequest from '../../middleware/validations/validationHandler.js'
 import asyncHandler from '../../utils/asyncHandler.js'
-import { newUserSchema } from '../../middleware/validations/newUser.schema.js'
-import { addUser, getUser } from './user.controller.js'
+import { addAccount } from './account.controller.js'
 
 const router = express.Router()
 
 router.post(
   '/add',
   requireAuth,
-  newUserSchema,
+  accountSchema,
   validateRequest,
-  asyncHandler(addUser)
+  asyncHandler(addAccount)
 )
 
-router.get('/get', asyncHandler(getUser))
+router.get('/get', asyncHandler(addAccount))
 // router.get('/get', requireAuth, asyncHandler(getUser))
+
+export { router as accountRoutes }

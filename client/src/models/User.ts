@@ -1,22 +1,20 @@
 import { z } from 'zod'
-import { Workplace, WorkplaceSchema } from './Workplace'
 
 export interface User {
-  email: string
-  isProfileComplete: boolean
-  profile: {
-    name: string
+  identifier: string
+  isAccountComplete: boolean
+  account: {
+    firstName: string
     lastname: string
-    workplace: Workplace[]
   }
 }
 
-export const UserSchema = z.object({
-  email: z.string(),
-  isProfileComplete: z.boolean(),
-  profile: z.object({
-    name: z.string(),
+export const UserDetailsSchema = z.object({
+  identifier: z.string(),
+  isAccountComplete: z.boolean(),
+  account: z.object({
+    firstName: z.string(),
     lastname: z.string(),
-    workplace: z.array(WorkplaceSchema),
+    // workplace: z.array(WorkplaceSchema),
   }),
 })
