@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import Input from './inputs/TextInput'
 
-const UserDetailsForm: FC = () => {
-  console.log('UserDetailsForm connected')
+const UserDetailsFields: FC = () => {
+  console.log('UserDetailsFields connected')
 
   return (
     <>
@@ -14,4 +14,4 @@ const UserDetailsForm: FC = () => {
   )
 }
 
-export default UserDetailsForm
+export default UserDetailsFields

@@ -1,8 +1,8 @@
 import { Box } from '@mui/material'
 import { FC } from 'react'
 import AccountForm from './form/AccountForm'
-import OrganizationDetailsForm from './form/OrganizationDetailsForm'
-import UserDetailsForm from './form/UserDetailsForm'
+import UserDetailsFields from './form/UserDetailsFields'
+import OrganizationDetailsFields from './form/OrganizationDetailsFields'
 
 const Account: FC = () => {
   console.log('Account connected')
@@ -10,8 +10,8 @@ const Account: FC = () => {
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <AccountForm>
-        <UserDetailsForm />
-        <OrganizationDetailsForm />
+        <UserDetailsFields />
+        <OrganizationDetailsFields />
       </AccountForm>
     </Box>
   )
