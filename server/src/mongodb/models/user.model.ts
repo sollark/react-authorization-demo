@@ -1,13 +1,13 @@
-import { model, Schema } from 'mongoose'
+import { model, Schema, Types } from 'mongoose'
 
 export interface User {
-  identifier: string
+  identifier: Types.ObjectId
   firstName?: string
   lastname?: string
 }
 
 const UserSchema = new Schema({
-  identifier: { type: String, required: true, unique: true },
+  identifier: { type: Types.ObjectId, required: true, unique: true },
   firstName: { type: String },
   lastname: { type: String },
 })

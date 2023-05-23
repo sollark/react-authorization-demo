@@ -44,5 +44,5 @@ const AccountSchema = new Schema<AccountDocument>({
   },
 })
 
-const AccountModel = model<AccountDocument>('Account', AccountSchema)
-export default AccountModel
+const accountModel = model<AccountDocument>('Account', AccountSchema)
+export default accountModel

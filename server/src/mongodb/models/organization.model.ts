@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose'
 
-export type OrganizationIdentifier = string
+export type OrganizationIdentifier = number
 
 export interface Organization {
   identifier: OrganizationIdentifier
@@ -8,7 +8,7 @@ export interface Organization {
 }
 
 const OrganizationSchema = new Schema({
-  identifier: { type: String, required: true, unique: true },
+  identifier: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
 })
 

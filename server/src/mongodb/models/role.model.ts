@@ -7,7 +7,7 @@ export interface Role {
 
 const RoleSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  code: { type: String, required: true, unique: true },
+  code: { type: Number, required: true, unique: true },
 })
 
 const RoleModel = model('Role', RoleSchema)

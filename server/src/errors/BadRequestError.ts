@@ -4,7 +4,7 @@ class BadRequestError extends CustomError {
   statusCode = 400
   errorType = 'BAD_REQUEST_ERROR'
 
-  constructor(message: string, private property: string) {
+  constructor(message: string, private property?: string) {
     super(message)
     this.name = 'BadRequestError'
     Object.setPrototypeOf(this, BadRequestError.prototype)
