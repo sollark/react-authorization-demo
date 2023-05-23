@@ -17,6 +17,7 @@ function verifyRoles(...allowedRoles: UserRole[]) {
         )
       }
 
+      const userId = await userService.getUserId(email)
       const userRoles = await userService.getRoles(email)
       if (!userRoles) {
         return next(

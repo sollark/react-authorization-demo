@@ -16,7 +16,7 @@ async function setupAsyncLocalStorage(
     const alsStore = asyncLocalStorage.getStore()
     if (!alsStore) return next()
 
-    alsStore.userData = { email: userData }
+    alsStore.userData = { identifier: userData }
 
     next()
   })

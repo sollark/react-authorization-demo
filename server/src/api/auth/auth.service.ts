@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
-import accountModel from '../../mongodb/models/account.model.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import logger from '../../service/logger.service.js'
 import { TokenPayload, tokenService } from '../../service/token.service.js'
 import { userService } from '../../service/user.service.js'
+import { accountService } from '../account/account.service.js'
 
 const registration = async (credentials: Credentials) => {
   // check if email is already taken
@@ -25,19 +25,22 @@ const registration = async (credentials: Credentials) => {
   const auth = await authModel.create(credentials)
   logger.info(`auth.service - new authentication created: ${auth.email}`)
 
-  // id for user and account schemas
+  // identifier for user and account schemas
+  // hashIdentifier for tokens
   const identifier = auth._id
+  const hashIdentifier = await bcrypt.hash(identifier.toString(), 5)
 
   // create new user
   const user = await userService.addUser(identifier)
   const userId = await userService.getUserId(identifier)
 
   //create new account
-  const account = await accountModel.create({ user: userId })
+  const account = await accountService.addAccount(userId)
+  // const account = await accountModel.create({ user: userId })
 
   // generate tokens
   const { accessToken, refreshToken } = tokenService.generateTokens({
-    email: credentials.email,
+    id: hashIdentifier,
   })
 
   // save refresh token to db
@@ -65,9 +68,11 @@ const signIn = async (credentials: Credentials) => {
     throw new BadRequestError('Invalid credentials', email)
   }
 
+  const hashIdentifier = await bcrypt.hash(auth._id.toString(), 5)
+
   // generate tokens
   const { accessToken, refreshToken } = tokenService.generateTokens({
-    email,
+    id: hashIdentifier,
   })
 
   // save refresh token to db
@@ -97,14 +102,17 @@ const refresh = async (refreshToken: string) => {
   }
 
   // check if user exists
-  const { email } = userData as TokenPayload
-  const auth = await authModel.findOne({ email })
+  // This is hash!!!!
+  const { id } = userData as TokenPayload
+
+  const auth = await authModel.findById(id)
+
   if (!auth) {
     throw new UnauthorizedError('User not found')
   }
 
   // get user
-  const user = await userService.getUser(auth._id)
+  const user = await userService.getUserByIdentifier(auth._id)
   if (!user) {
     logger.warn(`auth.service - user is missing: ${auth.email}`)
     throw new BadRequestError('User is not found', auth.email)

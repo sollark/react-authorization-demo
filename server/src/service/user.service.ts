@@ -13,7 +13,9 @@ const addUser = async (identifier: Types.ObjectId): Promise<User> => {
   return user
 }
 
-const getUser = async (identifier: Types.ObjectId): Promise<User | null> => {
+const getUserByIdentifier = async (
+  identifier: Types.ObjectId
+): Promise<User | null> => {
   const user = await UserModel.findOne({ identifier })
 
   loggerService.info(`user.service - user fetched ${user}`)
@@ -55,7 +57,7 @@ const getUserId = async (
 
 export const userService = {
   addUser,
-  getUser,
+  getUserByIdentifier,
   updateUser,
   deleteUser,
   getUserId,

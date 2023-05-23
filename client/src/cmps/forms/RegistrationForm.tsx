@@ -17,6 +17,7 @@ const defaultValues = {
 
 const RegistrationForm = () => {
   console.log('RegistrationForm connected')
+
   async function submit(form: Object) {
     console.log('Registration form submitted: ', form)
 
@@ -26,6 +27,7 @@ const RegistrationForm = () => {
 
     console.log('Registration response: ', response)
   }
+
   return (
     <Form
       schema={RegistrationSchema}
