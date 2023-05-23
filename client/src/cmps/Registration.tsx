@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
-import RegistrationForm from './form/RegistrationForm'
+import RegistrationForm from './forms/RegistrationForm'
 
 const Registration: FC = () => {
   console.log('Registration connected')

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
-import SignInForm from './form/SignInForm'
+import SignInForm from './forms/SignInForm'
 
 const Signin: FC = () => {
   console.log('Signin connected')
