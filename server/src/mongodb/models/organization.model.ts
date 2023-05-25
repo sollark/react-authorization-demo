@@ -1,15 +1,14 @@
 import { model, Schema } from 'mongoose'
-
-export type OrganizationIdentifier = number
+import { OrganizationCode } from './organizationCode.model.js'
 
 export interface Organization {
-  identifier: OrganizationIdentifier
   name: string
+  code: OrganizationCode
 }
 
 const OrganizationSchema = new Schema({
-  identifier: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
+  code: { type: String, required: true, unique: true },
 })
 
 const OrganizationModel = model<Organization>(

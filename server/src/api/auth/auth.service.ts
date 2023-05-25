@@ -3,7 +3,8 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import logger from '../../service/logger.service.js'
-import { TokenPayload, tokenService } from '../../service/token.service.js'
+import { payloadService } from '../../service/payload.service.js'
+import { tokenService } from '../../service/token.service.js'
 import { userService } from '../../service/user.service.js'
 import { accountService } from '../account/account.service.js'
 
@@ -39,9 +40,8 @@ const registration = async (credentials: Credentials) => {
   // const account = await accountModel.create({ user: userId })
 
   // generate tokens
-  const { accessToken, refreshToken } = tokenService.generateTokens({
-    id: hashIdentifier,
-  })
+  const payload: string = payloadService.generateTokenPayload([])
+  const { accessToken, refreshToken } = tokenService.generateTokens({ payload })
 
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
@@ -103,7 +103,7 @@ const refresh = async (refreshToken: string) => {
 
   // check if user exists
   // This is hash!!!!
-  const { id } = userData as TokenPayload
+  const { id } = userData
 
   const auth = await authModel.findById(id)
 

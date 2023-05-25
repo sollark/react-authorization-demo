@@ -1,15 +1,14 @@
 import OrganizationModel, {
   Organization,
-  OrganizationIdentifier,
 } from '../mongodb/models/organization.model.js'
 import loggerService from './logger.service.js'
 
 const addOrganization = async (
-  identifier: OrganizationIdentifier,
+  code: number,
   name: string
 ): Promise<Organization> => {
   const organization = await OrganizationModel.create({
-    identifier,
+    code,
     name,
   })
 
@@ -20,10 +19,8 @@ const addOrganization = async (
   return organization
 }
 
-const getOrganization = async (
-  identifier: OrganizationIdentifier
-): Promise<Organization | null> => {
-  const organization = await OrganizationModel.findOne({ identifier })
+const getOrganization = async (code: number): Promise<Organization | null> => {
+  const organization = await OrganizationModel.findOne({ code })
 
   loggerService.info(
     `organization.service - organization fetched ${organization}`
@@ -32,11 +29,11 @@ const getOrganization = async (
 }
 
 const updateOrganization = async (
-  identifier: OrganizationIdentifier,
+  code: number,
   name: string
 ): Promise<Organization | null> => {
   const organization = await OrganizationModel.findOneAndUpdate(
-    { identifier },
+    { code },
     { name },
     { new: true }
   )
@@ -48,10 +45,8 @@ const updateOrganization = async (
   return organization
 }
 
-const deleteOrganization = async (
-  identifier: OrganizationIdentifier
-): Promise<void> => {
-  await OrganizationModel.deleteOne({ identifier })
+const deleteOrganization = async (code: number): Promise<void> => {
+  await OrganizationModel.deleteOne({ code })
 }
 
 export const organizationService = {

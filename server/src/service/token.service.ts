@@ -5,23 +5,19 @@ import TokenModel from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
-export interface TokenPayload {
-  id: string
-}
-
-function generateTokens(payload: TokenPayload): {
+function generateTokens(payload: string): {
   accessToken: string
   refreshToken: string
 } {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  const { id } = payload
+  // const { id } = payload
 
-  const accessToken = jwt.sign({ id }, accessSecret, {
+  const accessToken = jwt.sign({ payload }, accessSecret, {
     expiresIn: '1h',
   })
-  const refreshToken = jwt.sign({ id }, refreshSecret, {
+  const refreshToken = jwt.sign({ payload }, refreshSecret, {
     expiresIn: '10d',
   })
 
