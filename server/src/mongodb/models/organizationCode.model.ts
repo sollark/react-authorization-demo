@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose'
 
 export type OrganizationCode = string
 
-export interface OrganizationCodeMap {
+export interface OrganizationMap {
   name: string
   code: OrganizationCode
 }

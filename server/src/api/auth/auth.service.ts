@@ -29,15 +29,14 @@ const registration = async (credentials: Credentials) => {
   // identifier for user and account schemas
   // hashIdentifier for tokens
   const identifier = auth._id
-  const hashIdentifier = await bcrypt.hash(identifier.toString(), 5)
 
   // create new user
   const user = await userService.addUser(identifier)
+  logger.info(`auth.service - new user created: ${user}`)
   const userId = await userService.getUserId(identifier)
 
   //create new account
-  const account = await accountService.addAccount(userId)
-  // const account = await accountModel.create({ user: userId })
+  const account = await accountService.addAccount(identifier, userId)
 
   // generate tokens
   const payload: string = payloadService.generateTokenPayload([])

@@ -1,30 +1,13 @@
 import { Document, Schema, Types, model } from 'mongoose'
 
 export interface Account {
-  isComplete: boolean
+  identifier: Types.ObjectId
   user: Types.ObjectId
-  workspaces?: Workspace[]
+  workspaces?: Types.ObjectId[]
+  isComplete: boolean
 }
 
 interface AccountDocument extends Document, Account {}
-
-interface Workspace {
-  organization: Types.ObjectId
-  userRoles: Types.ObjectId[]
-}
-
-const WorkspaceSchema = new Schema<Workspace>({
-  organization: {
-    type: Schema.Types.ObjectId,
-    ref: 'Organization',
-  },
-  userRoles: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'UserRole',
-    },
-  ],
-})
 
 const AccountSchema = new Schema<AccountDocument>({
   isComplete: {
@@ -35,13 +18,13 @@ const AccountSchema = new Schema<AccountDocument>({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
-    unique: true,
   },
-
-  workspaces: {
-    type: [WorkspaceSchema],
-  },
+  workspaces: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Workspace',
+    },
+  ],
 })
 
 const accountModel = model<AccountDocument>('Account', AccountSchema)

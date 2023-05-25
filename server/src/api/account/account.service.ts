@@ -5,14 +5,13 @@ import AccountModel from '../../mongodb/models/account.model.js'
 import logger from '../../service/logger.service.js'
 
 const addAccount = async (
-  user: Types.ObjectId
-  // name?: string,
-  // lastname?: string
-  // organization: string,
-  // roles: UserRole[] = [USER_ROLE.Guest] as UserRole[]
+  identifier: Types.ObjectId,
+  user: Types.ObjectId,
+  isComplete: boolean = false
 ) => {
-  const account = await AccountModel.create({ user })
+  const account = await AccountModel.create({ identifier, user, isComplete })
 
+  // TODO: add account is null check
   logger.info(`account.service - account added: ${account}`)
 
   return account
