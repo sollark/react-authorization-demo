@@ -24,6 +24,8 @@ const RoleMapSchema = new Schema({
 const RoleMapModel = model('RoleMap', RoleMapSchema)
 export default RoleMapModel
 
+/*
+// Call the populateRoles function to initiate the population process
 const populateRoles = async () => {
   try {
     // Clear existing roles (optional, depending on your requirements)
@@ -40,5 +42,5 @@ const populateRoles = async () => {
   } catch (error) {}
 }
 
-// Call the populateRoles function to initiate the population process
-// populateRoles()
+populateRoles()
+*/
