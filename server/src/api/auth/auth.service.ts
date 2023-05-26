@@ -2,15 +2,14 @@ import bcrypt from 'bcrypt'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
+import TokenModel from '../../mongodb/models/token.model.js'
+import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
 import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { userService } from '../../service/user.service.js'
-import { accountService } from '../account/account.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
-import TokenModel from '../../mongodb/models/token.model.js'
-import UserModel from '../../mongodb/models/user.model.js'
-import { Types } from 'mongoose'
+import { accountService } from '../account/account.service.js'
 
 const registration = async (credentials: Credentials) => {
   // check if email is already taken
@@ -29,18 +28,6 @@ const registration = async (credentials: Credentials) => {
   // create new authentication
   const auth = await authModel.create(credentials)
   logger.info(`auth.service - new authentication created: ${auth.email}`)
-
-  // identifier for user and account schemas
-  // hashIdentifier for tokens
-  const identifier = auth._id
-
-  // create new user
-  const user = await userService.addUser(identifier)
-  logger.info(`auth.service - new user created: ${user}`)
-  const userId = await userService.getUserId(identifier)
-
-  //create new account
-  const account = await accountService.addAccount(identifier, userId)
 
   // generate tokens
   const payload: string = payloadService.generateTokenPayload([])
@@ -127,20 +114,11 @@ const refresh = async (refreshToken: string) => {
   return { ...tokens, user }
 }
 
-const getAllAccounts = async () => {
-  const accounts = await authModel.find()
-
-  logger.info(`auth.service - user fetched all accounts`)
-
-  return accounts
-}
-
 export const authService = {
   registration,
   signIn,
   signOut,
   refresh,
-  getAllAccounts,
 }
 
 const isEmailTaken = async (email: String) => {

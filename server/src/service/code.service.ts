@@ -1,12 +1,15 @@
 import OrganizationModel from '../mongodb/models/organization.model.js'
-import RoleMapModel, { USER_ROLE } from '../mongodb/models/roleCode.model.js'
+import RoleMapModel, {
+  Role,
+  ROLE_CODE_MAPPING,
+} from '../mongodb/models/role.model.js'
 import { Workspace, WorkspaceCode } from '../mongodb/models/workspace.model.js'
 
 function castToCode(workspaces: Workspace[]): WorkspaceCode[] {
   const codes = workspaces.map((workspace) => {
     return {
       organization: workspace.organization.code,
-      roles: workspace.roles.map((role) => USER_ROLE[role]),
+      roles: workspace.roles.map((role) => ROLE_CODE_MAPPING[role as Role]),
     }
   })
 

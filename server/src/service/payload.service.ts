@@ -1,4 +1,4 @@
-import { RoleCode } from '../mongodb/models/roleCode.model.js'
+import { RoleCode } from '../mongodb/models/role.model.js'
 import { Workspace, WorkspaceCode } from '../mongodb/models/workspace.model.js'
 import { codeService } from './code.service.js'
 

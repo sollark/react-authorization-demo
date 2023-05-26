@@ -1,11 +1,11 @@
 import { Schema, Types, model } from 'mongoose'
 import { Organization } from './organization.model.js'
 import { OrganizationCode } from './organizationCode.model.js'
-import { RoleCode, UserRole } from './roleCode.model.js'
+import { RoleCode, Role } from './role.model.js'
 
 export interface Workspace {
   organization: Organization
-  roles: UserRole[]
+  roles: Role[]
 }
 
 export interface WorkspaceCode {
@@ -15,7 +15,7 @@ export interface WorkspaceCode {
 
 export interface WorkspaceSchema {
   organization: Types.ObjectId
-  userRoles: Types.ObjectId[]
+  roles: Types.ObjectId[]
 }
 
 const WorkspaceSchema = new Schema<Workspace>({
@@ -26,7 +26,7 @@ const WorkspaceSchema = new Schema<Workspace>({
   roles: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'UserRole',
+      ref: 'RoleMap',
     },
   ],
 })

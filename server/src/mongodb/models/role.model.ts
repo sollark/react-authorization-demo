@@ -1,9 +1,9 @@
 import { model, Schema } from 'mongoose'
 
 export type RoleCode = '0000' | '1001' | '1010' | '1100' | '1110'
-export type UserRole = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
+export type Role = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
 
-export const USER_ROLE = {
+export const ROLE_CODE_MAPPING = {
   Guest: '0000' as RoleCode,
   Employee: '1001' as RoleCode,
   Manager: '1010' as RoleCode,
@@ -12,7 +12,7 @@ export const USER_ROLE = {
 }
 
 export interface RoleMap {
-  name: UserRole
+  name: Role
   code: RoleCode
 }
 
@@ -31,8 +31,8 @@ const populateRoles = async () => {
     // Clear existing roles (optional, depending on your requirements)
     await RoleMapModel.deleteMany({})
 
-    // Iterate over the USER_ROLE object and create RoleMap documents
-    const roles = Object.entries(USER_ROLE).map(([name, code]) => ({
+    // Iterate over the ROLE_CODE_MAPPING object and create RoleMap documents
+    const roles = Object.entries(ROLE_CODE_MAPPING).map(([name, code]) => ({
       name,
       code,
     }))
