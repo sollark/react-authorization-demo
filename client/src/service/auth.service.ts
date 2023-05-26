@@ -42,10 +42,6 @@ async function registration(email: string, password: string) {
 
   // get the user and the tokens from the response
   const { account } = response.data
-  const { accessToken } = response.cookies.accessToken
-
-  // save the tokens to the session storage
-  sessionStorage.setItem('token', accessToken)
 
   // set the user store
   // TODO fix this, i get access token and account from response

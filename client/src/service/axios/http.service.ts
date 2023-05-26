@@ -14,14 +14,34 @@ var api = axios.create({
   baseURL: API_URL,
 })
 
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const headers = headerService.getHeaders()
-  headers.forEach(([headerName, value]) => {
-    config.headers[headerName] = value
-  })
+api.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    // set custom headers to all requests
+    const headers = headerService.getHeaders()
+    headers.forEach(([headerName, value]) => {
+      config.headers[headerName] = value
+    })
 
-  return config
-})
+    // get access token from cookie and set authorization header to all requests
+    // npm install js-cookie to improve code readability, maintainability, and reduce potential errors when working with cookies in your application.
+    let accessToken = null
+    const cookies = document.cookie.split('; ')
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=')
+      if (cookie[0] === 'accessToken') {
+        accessToken = cookie[1]
+      }
+    }
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`
+    }
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 export const httpService = {
   get<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
