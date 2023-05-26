@@ -17,9 +17,28 @@ export interface RoleMap {
 }
 
 const RoleMapSchema = new Schema({
-  name: { type: String, required: true, unique: true },
-  code: { type: Number, required: true, unique: true },
+  name: { type: String, required: true, unique: true, immutable: true },
+  code: { type: String, required: true, unique: true, immutable: true },
 })
 
 const RoleMapModel = model('RoleMap', RoleMapSchema)
 export default RoleMapModel
+
+const populateRoles = async () => {
+  try {
+    // Clear existing roles (optional, depending on your requirements)
+    await RoleMapModel.deleteMany({})
+
+    // Iterate over the USER_ROLE object and create RoleMap documents
+    const roles = Object.entries(USER_ROLE).map(([name, code]) => ({
+      name,
+      code,
+    }))
+
+    // Insert the roles into the database
+    await RoleMapModel.insertMany(roles)
+  } catch (error) {}
+}
+
+// Call the populateRoles function to initiate the population process
+// populateRoles()
