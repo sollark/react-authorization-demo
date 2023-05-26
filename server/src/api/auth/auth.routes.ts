@@ -1,11 +1,11 @@
 import express from 'express'
 import requireAuth from '../../middleware/requireAuth.js'
+import { registrationSchema } from '../../middleware/validations/registration.schema.js'
+import { signInSchema } from '../../middleware/validations/signIn.schema.js'
 import validateRequest from '../../middleware/validations/validationHandler.js'
 import verifyRoles from '../../middleware/verifyRoles.js'
 import asyncHandler from '../../utils/asyncHandler.js'
-import { registrationSchema } from '../../middleware/validations/registration.schema.js'
-import { signInSchema } from '../../middleware/validations/signIn.schema.js'
-
+import { USER_ROLE, UserRole } from '../../mongodb/models/roleCode.model.js'
 import {
   getAccounts,
   refresh,
@@ -13,7 +13,6 @@ import {
   signIn,
   signOut,
 } from './auth.controller.js'
-import { USER_ROLE, UserRole } from '../../config/userRoles.js'
 
 const router = express.Router()
 

@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
-import { userService } from './account.service.js'
 import { asyncLocalStorage } from '../../service/als.service.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import logger from '../../service/logger.service.js'
 import { User } from '../../mongodb/models/user.model.js'
+import { userService } from '../../service/user.service.js'
 
 export async function addAccount(
   req: Request,
@@ -14,27 +14,21 @@ export async function addAccount(
   const { userDetails } = userData
   const { identifier, firstName, lastname } = userDetails as User
 
-  const user = await userService.addUser(
-    identifier,
-    firstName,
-    lastname
-    // organization,
-    // roles
-  )
+  const user = await userService.addUser(identifier)
 
   res.status(201).json(user)
 }
 
-export async function getUser(req: Request, res: Response, next: NextFunction) {
-  const store = asyncLocalStorage.getStore()
-  const identifier = store?.userData?.identifier
+// export async function getUser(req: Request, res: Response, next: NextFunction) {
+//   const store = asyncLocalStorage.getStore()
+//   const identifier = store?.userData?.identifier
 
-  if (!identifier) {
-    logger.warn(`user.controller - unauthenticated request to fetch user `)
-    return new UnauthorizedError('unauthenticated')
-  }
+//   if (!identifier) {
+//     logger.warn(`user.controller - unauthenticated request to fetch user `)
+//     return new UnauthorizedError('unauthenticated')
+//   }
 
-  const user = await userService.getUser(identifier)
+//   const user = await userService.getUserByIdentifier(identifier)
 
-  res.status(200).json(user)
-}
+//   res.status(200).json(user)
+// }

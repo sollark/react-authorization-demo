@@ -12,8 +12,6 @@ function generateTokens(payload: string): {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  // const { id } = payload
-
   const accessToken = jwt.sign({ payload }, accessSecret, {
     expiresIn: '1h',
   })
@@ -66,8 +64,8 @@ async function validateRefreshToken(token: string) {
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
   try {
-    const userData = jwt.verify(token, refreshSecret)
-    return userData
+    const payload = jwt.verify(token, refreshSecret)
+    return payload
   } catch (error) {
     return null
   }

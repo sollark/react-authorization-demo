@@ -7,6 +7,10 @@ import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { userService } from '../../service/user.service.js'
 import { accountService } from '../account/account.service.js'
+import { workspaceService } from '../../service/workspace.service.js'
+import TokenModel from '../../mongodb/models/token.model.js'
+import UserModel from '../../mongodb/models/user.model.js'
+import { Types } from 'mongoose'
 
 const registration = async (credentials: Credentials) => {
   // check if email is already taken
@@ -40,7 +44,7 @@ const registration = async (credentials: Credentials) => {
 
   // generate tokens
   const payload: string = payloadService.generateTokenPayload([])
-  const { accessToken, refreshToken } = tokenService.generateTokens({ payload })
+  const { accessToken, refreshToken } = tokenService.generateTokens(payload)
 
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
@@ -67,19 +71,27 @@ const signIn = async (credentials: Credentials) => {
     throw new BadRequestError('Invalid credentials', email)
   }
 
-  const hashIdentifier = await bcrypt.hash(auth._id.toString(), 5)
+  // fetch user
+  const user = await userService.getUserByIdentifier(auth._id)
+
+  // fetch account
+  const account = await accountService.getAccount(auth._id)
 
   // generate tokens
-  const { accessToken, refreshToken } = tokenService.generateTokens({
-    id: hashIdentifier,
-  })
+  const workspaceIds = account.workspaces
+  const workspaces =
+    workspaceIds && (await workspaceService.getWorkspaces(workspaceIds))
+
+  const payload: string = payloadService.generateTokenPayload(workspaces || [])
+
+  const { accessToken, refreshToken } = tokenService.generateTokens(payload)
 
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
 
   logger.info(`auth.service - user signed in: ${email}`)
 
-  return { accessToken, refreshToken, user: { email: auth.email } }
+  return { accessToken, refreshToken, user }
 }
 
 const signOut = async (refreshToken: string) => {
@@ -93,39 +105,26 @@ const signOut = async (refreshToken: string) => {
 const refresh = async (refreshToken: string) => {
   if (!refreshToken) throw new UnauthorizedError('Refresh token is required')
 
-  const userData = await tokenService.validateRefreshToken(refreshToken)
+  const payload = await tokenService.validateRefreshToken(refreshToken)
   const tokenFromDb = await tokenService.findToken(refreshToken)
 
-  if (!userData || !tokenFromDb) {
+  if (!payload || !tokenFromDb) {
     throw new UnauthorizedError('Invalid refresh token')
   }
 
-  // check if user exists
-  // This is hash!!!!
-  const { id } = userData
-
-  const auth = await authModel.findById(id)
-
-  if (!auth) {
-    throw new UnauthorizedError('User not found')
-  }
-
-  // get user
-  const user = await userService.getUserByIdentifier(auth._id)
-  if (!user) {
-    logger.warn(`auth.service - user is missing: ${auth.email}`)
-    throw new BadRequestError('User is not found', auth.email)
-  }
+  // find user
+  const userId = TokenModel.findOne({ refreshToken: refreshToken }).select(
+    'userId'
+  )
+  const user = await UserModel.findById(userId)
 
   // generate tokens
-  const tokens = tokenService.generateTokens({
-    email,
-  })
+  const tokens = tokenService.generateTokens(payload as string)
 
   // save refresh token to db
-  await tokenService.saveToken(auth._id, tokens.refreshToken)
+  await tokenService.saveToken(user!._id, tokens.refreshToken)
 
-  return { ...tokens, email }
+  return { ...tokens, user }
 }
 
 const getAllAccounts = async () => {

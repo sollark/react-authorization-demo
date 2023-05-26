@@ -1,7 +1,7 @@
 // import { UserRole, USER_ROLE } from '../../config/userRoles.js'
 import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
-import AccountModel from '../../mongodb/models/account.model.js'
+import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import logger from '../../service/logger.service.js'
 
 const addAccount = async (
@@ -17,11 +17,11 @@ const addAccount = async (
   return account
 }
 
-const getAccount = async (user: Types.ObjectId) => {
-  const account = await AccountModel.findOne({ user })
+const getAccount = async (identifier: Types.ObjectId): Promise<Account> => {
+  const account = await AccountModel.findOne({ identifier })
 
   if (!account) {
-    logger.warn(`account.service - account is not found: ${user}`)
+    logger.warn(`account.service - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
 

@@ -13,17 +13,17 @@ export interface WorkspaceCode {
   roles: RoleCode[]
 }
 
-export interface WorkspaceRef {
+export interface WorkspaceSchema {
   organization: Types.ObjectId
   userRoles: Types.ObjectId[]
 }
 
-const WorkspaceRefSchema = new Schema<WorkspaceRef>({
+const WorkspaceSchema = new Schema<Workspace>({
   organization: {
     type: Schema.Types.ObjectId,
     ref: 'Organization',
   },
-  userRoles: [
+  roles: [
     {
       type: Schema.Types.ObjectId,
       ref: 'UserRole',
@@ -31,5 +31,5 @@ const WorkspaceRefSchema = new Schema<WorkspaceRef>({
   ],
 })
 
-const workspaceRefModel = model<WorkspaceRef>('Workspace', WorkspaceRefSchema)
-export default workspaceRefModel
+const WorkspaceRefModel = model<Workspace>('Workspace', WorkspaceSchema)
+export default WorkspaceRefModel

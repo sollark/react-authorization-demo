@@ -3,6 +3,10 @@ import { Workspace, WorkspaceCode } from '../mongodb/models/workspace.model.js'
 import { codeService } from './code.service.js'
 
 function generateTokenPayload(workspaces: Workspace[]): string {
+  if (workspaces.length === 0) {
+    return '0000'
+  }
+
   const workspacesCodes = codeService.castToCode(workspaces)
   const payloadParts: string[] = []
 
