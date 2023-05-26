@@ -36,7 +36,7 @@ const registration = async (credentials: Credentials) => {
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
 
-  return { accessToken, refreshToken, user: auth.email }
+  return { accessToken }
 }
 
 const signIn = async (credentials: Credentials) => {
@@ -59,7 +59,7 @@ const signIn = async (credentials: Credentials) => {
   }
 
   // fetch user
-  const user = await userService.getUserByIdentifier(auth._id)
+  // const user = await userService.getUserByIdentifier(auth._id)
 
   // fetch account
   const account = await accountService.getAccount(auth._id)
@@ -78,7 +78,7 @@ const signIn = async (credentials: Credentials) => {
 
   logger.info(`auth.service - user signed in: ${email}`)
 
-  return { accessToken, refreshToken, user }
+  return { accessToken, account }
 }
 
 const signOut = async (refreshToken: string) => {

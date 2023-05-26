@@ -1,14 +1,12 @@
 import { z } from 'zod'
-import { User, UserSchema } from '../User'
+import { Account, AccountSchema } from '../Account'
 
 export interface AuthResponse {
   accessToken: string
-  refreshToken: string
-  user: User
+  account: Account
 }
 
 export const AuthResponseSchema = z.object({
   accessToken: z.string(),
-  refreshToken: z.string(),
-  user: UserSchema,
+  account: AccountSchema,
 })

@@ -41,13 +41,15 @@ async function registration(email: string, password: string) {
   console.log('registration response', response)
 
   // get the user and the tokens from the response
-  const { user, refreshToken, accessToken } = response.data
+  const { account } = response.data
+  const { accessToken } = response.cookies.accessToken
 
   // save the tokens to the session storage
   sessionStorage.setItem('token', accessToken)
 
   // set the user store
-  useUserStore.setState((state) => state.setUser(user))
+  // TODO fix this, i get access token and account from response
+  // useUserStore.setState((state) => state.setUser(user))
 }
 
 export const authService = { signIn, signOut, registration }

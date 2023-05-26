@@ -19,6 +19,21 @@ export async function addAccount(
   res.status(201).json(user)
 }
 
+export async function getAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  // const store = asyncLocalStorage.getStore()
+  // const identifier = store?.userData?.identifier
+  // if (!identifier) {
+  //   logger.warn(`user.controller - unauthenticated request to fetch user `)
+  //   return new UnauthorizedError('unauthenticated')
+  // }
+  // const user = await userService.getUserByIdentifier(identifier)
+  // res.status(200).json(user)
+}
+
 // export async function getUser(req: Request, res: Response, next: NextFunction) {
 //   const store = asyncLocalStorage.getStore()
 //   const identifier = store?.userData?.identifier

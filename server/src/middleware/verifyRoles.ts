@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
-import { UserRole } from '../mongodb/models/role.model.js'
+import { Role } from '../mongodb/models/role.model.js'
 
-function verifyRoles(...allowedRoles: UserRole[]) {
+function verifyRoles(...allowedRoles: Role[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       //   const email = req.headers['X-User-Email'] as string

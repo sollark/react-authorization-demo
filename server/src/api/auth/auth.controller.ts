@@ -10,12 +10,13 @@ export async function registration(
   const userData = await authService.registration(credentials)
 
   // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', userData.refreshToken, {
+  res.cookie('accessToken', userData.accessToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.json(userData)
+  // TODO fix this , i have no account at registration stage
+  // res.json(userData.account)
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
@@ -24,20 +25,20 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
   const userData = await authService.signIn(credentials)
 
   // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', userData.refreshToken, {
+  res.cookie('accessToken', userData.accessToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.json(userData)
+  res.json(userData.account)
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
-  const { refreshToken } = req.cookies
-  await authService.signOut(refreshToken)
+  const { accessToken } = req.cookies
+  await authService.signOut(accessToken)
 
   // delete refresh token from cookie
-  res.clearCookie('refreshToken')
+  res.clearCookie('accessToken')
 }
 
 export async function refresh(req: Request, res: Response, next: NextFunction) {
