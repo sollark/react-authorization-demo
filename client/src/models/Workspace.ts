@@ -2,12 +2,12 @@ import { z } from 'zod'
 import { Organization, OrganizationSchema } from './Organization'
 import { UserRole, userRoleSchema } from './User'
 
-export interface Workplace {
+export interface Workspace {
   organization: Organization
   role: UserRole[]
 }
 
-export const WorkplaceSchema = z.object({
+export const WorkspaceSchema = z.object({
   organization: OrganizationSchema,
   role: z.array(userRoleSchema),
 })
