@@ -1,9 +1,9 @@
-import { UserRole } from '@/config/userRoles'
+import { Role } from '@/models/Role'
 import { ReactNode } from 'react'
 
 interface ProtectedRouteProps {
   children: ReactNode
-  allowed: UserRole[]
+  allowed: Role[]
 }
 
 const ProtectedRoute = ({

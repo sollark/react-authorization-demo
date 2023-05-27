@@ -1,4 +1,3 @@
-// import { UserRole, USER_ROLE } from '../../config/userRoles.js'
 import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
