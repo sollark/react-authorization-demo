@@ -28,7 +28,6 @@ async function signIn(email: string, password: string) {
 async function signOut() {
   await httpService.put('auth/signout', null)
 
-  sessionStorage.removeItem('token')
   useUserStore.setState((state) => state.setUser(null))
 }
 

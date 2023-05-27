@@ -5,6 +5,7 @@ import axios, {
 } from 'axios'
 import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
+import { cookieService } from '../cookie.service'
 
 const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
 
@@ -23,18 +24,8 @@ api.interceptors.request.use(
     })
 
     // get access token from cookie and set authorization header to all requests
-    // npm install js-cookie to improve code readability, maintainability, and reduce potential errors when working with cookies in your application.
-    let accessToken = null
-    const cookies = document.cookie.split('; ')
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].split('=')
-      if (cookie[0] === 'accessToken') {
-        accessToken = cookie[1]
-      }
-    }
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`
-    }
+    let accessToken = cookieService.getCookieValue('accessToken')
+    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
 
     return config
   },
