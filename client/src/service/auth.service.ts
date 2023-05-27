@@ -38,13 +38,6 @@ async function registration(email: string, password: string) {
   )
 
   console.log('registration response', response)
-
-  // get the user and the tokens from the response
-  const { account } = response.data
-
-  // set the user store
-  // TODO fix this, i get access token and account from response
-  // useUserStore.setState((state) => state.setUser(user))
 }
 
 export const authService = { signIn, signOut, registration }

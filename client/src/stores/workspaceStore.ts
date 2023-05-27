@@ -2,23 +2,23 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-interface UserState {
-  user: {
+interface WorkspaceState {
+  workspace: {
     firstName: string
     lastname: string
   } | null
 
-  setUser: (user: UserState['user']) => void
+  setWorkspace: (workspace: WorkspaceState['workspace']) => void
 }
 
 // Create a store with initial state
-const useUserStore = create<UserState>()(
+const useWorkspaceStore = create<WorkspaceState>()(
   devtools(
     immer((set) => ({
-      user: null,
-      setUser: (user) => set({ user }),
+      workspace: null,
+      setWorkspace: (workspace) => set({ workspace }),
     }))
   )
 )
 
-export default useUserStore
+export default useWorkspaceStore
