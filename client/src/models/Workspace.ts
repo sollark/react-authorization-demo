@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { Organization, OrganizationSchema } from './Organization'
-import { UserRole, userRoleSchema } from './User'
+import { Role, userRoleSchema } from './Role'
 
 export interface Workspace {
   organization: Organization
-  role: UserRole[]
+  role: Role[]
 }
 
 export const WorkspaceSchema = z.object({

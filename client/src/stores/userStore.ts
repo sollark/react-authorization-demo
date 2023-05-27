@@ -1,12 +1,10 @@
+import { User } from '@/models/User'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 interface UserState {
-  user: {
-    firstName: string
-    lastname: string
-  } | null
+  user: User | null
 
   setUser: (user: UserState['user']) => void
 }
