@@ -8,7 +8,7 @@ import Role from '../pages/Role'
 import Shift from '../pages/Shift'
 import Unauthorized from '../pages/Unauthorized'
 import ProtectedRoute from './ProtectedRoute'
-import { USER_ROLE } from '@/config/userRoles'
+import { USER_ROLE } from '@/models/Role'
 
 export const rootRoute = new RootRoute()
 

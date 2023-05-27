@@ -12,11 +12,11 @@ export const userRoleSchema = z.enum([
 ])
 
 export const USER_ROLE = {
-  Guest: 'Guest',
-  Employee: 'Employee',
-  Manager: 'Manager',
-  Supervisor: 'Supervisor',
-  Admin: 'Admin',
+  Guest: 'Guest' as Role,
+  Employee: 'Employee' as Role,
+  Manager: 'Manager' as Role,
+  Supervisor: 'Supervisor' as Role,
+  Admin: 'Admin' as Role,
 }
 
 export const CODE_ROLE_MAPPING: Readonly<Record<RoleCode, Role>> = {
