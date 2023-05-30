@@ -4,19 +4,34 @@ import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import logger from '../../service/logger.service.js'
 import { User } from '../../mongodb/models/user.model.js'
 import { userService } from '../../service/user.service.js'
+import { Types } from 'mongoose'
+import accountModel from '../../mongodb/models/account.model.js'
+import { workspaceService } from '../../service/workspace.service.js'
+import { organizationService } from '../../service/organization.service.js'
 
-export async function addAccount(
+export async function createAccount(
+  identifier: Types.ObjectId,
+  userId: Types.ObjectId,
+  workspaces: Types.ObjectId[]
+) {
+  const account = await accountModel.create({
+    identifier,
+    user: userId,
+    workspaces,
+  })
+
+  return account
+}
+
+export async function joinToExistingOrganization(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  const { userData } = req.body
-  const { userDetails } = userData
-  const { identifier, firstName, lastname } = userDetails as User
-
-  const user = await userService.addUser(identifier)
-
-  res.status(201).json(user)
+  const { identifier, organizationCode } = req.body
+  const organization = await organizationService.getOrganization(
+    organizationCode
+  )
 }
 
 export async function getAccount(

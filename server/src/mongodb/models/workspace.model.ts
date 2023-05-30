@@ -13,23 +13,18 @@ export interface WorkspaceCode {
   roles: RoleCode[]
 }
 
-export interface WorkspaceSchema {
+interface WorkspaceRef {
   organization: Types.ObjectId
-  roles: Types.ObjectId[]
+  roles: Role[]
 }
 
-const WorkspaceSchema = new Schema<Workspace>({
+const WorkspaceSchema = new Schema({
   organization: {
     type: Schema.Types.ObjectId,
     ref: 'Organization',
   },
-  roles: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'RoleMap',
-    },
-  ],
+  roles: [{ type: String }],
 })
 
-const WorkspaceRefModel = model<Workspace>('Workspace', WorkspaceSchema)
+const WorkspaceRefModel = model<WorkspaceRef>('Workspace', WorkspaceSchema)
 export default WorkspaceRefModel

@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose'
 
-export type OrganizationCode = string
+export type OrganizationCode = number
 
 export interface OrganizationMap {
   name: string

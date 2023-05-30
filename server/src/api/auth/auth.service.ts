@@ -7,7 +7,6 @@ import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
 import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
-import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from '../account/account.service.js'
 

@@ -3,7 +3,7 @@ import BadRequestError from '../errors/BadRequestError.js'
 import UserModel, { User } from '../mongodb/models/user.model.js'
 import loggerService from './logger.service.js'
 
-const addUser = async (identifier: Types.ObjectId): Promise<User> => {
+const addUser = async (identifier: Types.ObjectId) => {
   const user = await UserModel.create({
     identifier,
   })

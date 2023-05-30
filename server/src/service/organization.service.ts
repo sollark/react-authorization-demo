@@ -1,6 +1,7 @@
 import OrganizationModel, {
   Organization,
 } from '../mongodb/models/organization.model.js'
+import { OrganizationCode } from '../mongodb/models/organizationCode.model.js'
 import loggerService from './logger.service.js'
 
 const addOrganization = async (
@@ -19,12 +20,15 @@ const addOrganization = async (
   return organization
 }
 
-const getOrganization = async (code: number): Promise<Organization | null> => {
+const getOrganization = async (
+  code: OrganizationCode
+): Promise<Organization | null> => {
   const organization = await OrganizationModel.findOne({ code })
 
   loggerService.info(
     `organization.service - organization fetched ${organization}`
   )
+
   return organization
 }
 
