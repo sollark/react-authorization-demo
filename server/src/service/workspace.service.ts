@@ -6,7 +6,6 @@ import { Role } from '../mongodb/models/role.model.js'
 import loggerService from './logger.service.js'
 
 async function addWorkspace(
-  name: string,
   organization: Types.ObjectId,
   roles: Role[]
 ): Promise<Workspace | null> {
@@ -25,9 +24,15 @@ async function addWorkspace(
   return workspace as Workspace | null
 }
 
-async function getWorkspace(name: string): Promise<Workspace | null> {
-  const workspace = await WorkspaceRefModel.findOne({ name })
-    .populate('organization')
+async function getWorkspace(
+  organizationId: Types.ObjectId,
+  roles: Role[]
+): Promise<Workspace | null> {
+  const workspace = await WorkspaceRefModel.findOne({
+    organizationRef: organizationId,
+    roles: { $all: roles },
+  })
+    .populate('organizationRef')
     .exec()
 
   return workspace as Workspace | null

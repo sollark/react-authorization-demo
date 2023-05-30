@@ -20,9 +20,7 @@ const addOrganization = async (
   return organization
 }
 
-const getOrganization = async (
-  code: OrganizationCode
-): Promise<Organization | null> => {
+const getOrganization = async (code: OrganizationCode) => {
   const organization = await OrganizationModel.findOne({ code })
 
   loggerService.info(

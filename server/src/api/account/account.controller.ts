@@ -8,6 +8,7 @@ import { Types } from 'mongoose'
 import accountModel from '../../mongodb/models/account.model.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { organizationService } from '../../service/organization.service.js'
+import BadRequestError from '../../errors/BadRequestError.js'
 
 export async function createAccount(
   identifier: Types.ObjectId,
@@ -32,6 +33,26 @@ export async function joinToExistingOrganization(
   const organization = await organizationService.getOrganization(
     organizationCode
   )
+
+  if (!organization) {
+    return next(
+      new BadRequestError('Organization not found', organizationCode.toString())
+    )
+  }
+
+  const workspace = await workspaceService.getWorkspace(organization._id, [
+    'Employee',
+  ])
+
+  if (workspace) {
+    // const account = await accountService.updateAccount(identifier, workspace._id)
+  }
+
+  const newWorkspace = await workspaceService.addWorkspace(organization._id, [
+    'Employee',
+  ])
+
+  // Continue here add workspace to account
 }
 
 export async function getAccount(
