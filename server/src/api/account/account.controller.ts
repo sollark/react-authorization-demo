@@ -26,6 +26,12 @@ export async function createAccount(
   return account
 }
 
+export async function updateAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {}
+
 export async function getAccount(
   req: Request,
   res: Response,
