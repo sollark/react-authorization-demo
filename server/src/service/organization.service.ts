@@ -1,13 +1,15 @@
 import OrganizationModel, {
   Organization,
 } from '../mongodb/models/organization.model.js'
-import { OrganizationCode } from '../mongodb/models/organizationCode.model.js'
+import OrganizationCodeModel, {
+  OrganizationCode,
+} from '../mongodb/models/organizationCode.model.js'
+import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
-const addOrganization = async (
-  code: number,
-  name: string
-): Promise<Organization> => {
+const addOrganization = async (name: string) => {
+  const code = generateOrganizationCode(name)
+
   const organization = await OrganizationModel.create({
     code,
     name,
@@ -56,4 +58,24 @@ export const organizationService = {
   getOrganization,
   updateOrganization,
   deleteOrganization,
+}
+
+async function generateOrganizationCode(
+  name: string
+): Promise<OrganizationCode> {
+  let code = utilService.getRandomInt(1000, 9999)
+
+  const existingCode = await OrganizationCodeModel.findOne({ code })
+
+  if (existingCode) {
+    // Code already exists, generate a new one recursively
+    return generateOrganizationCode(name)
+  }
+
+  const organizationCode = await OrganizationCodeModel.create({
+    code,
+    name,
+  })
+
+  return code as OrganizationCode
 }

@@ -1,3 +1,4 @@
+//=========== Copy Array ===========//
 declare global {
   interface Array<T> {
     equals(array: T[]): boolean
@@ -28,3 +29,14 @@ Array.prototype.equals = function <T>(array: T[]): boolean {
 
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, 'equals', { enumerable: false })
+
+//=========== Util Functions ===========//
+
+// random int generator
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+export const utilService = {
+  getRandomInt,
+}

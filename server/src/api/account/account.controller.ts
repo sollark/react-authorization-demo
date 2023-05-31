@@ -9,6 +9,8 @@ import accountModel from '../../mongodb/models/account.model.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { organizationService } from '../../service/organization.service.js'
 import BadRequestError from '../../errors/BadRequestError.js'
+import { Workspace } from '../../mongodb/models/workspace.model.js'
+import { OrganizationCode } from '../../mongodb/models/organizationCode.model.js'
 
 export async function createAccount(
   identifier: Types.ObjectId,
@@ -22,37 +24,6 @@ export async function createAccount(
   })
 
   return account
-}
-
-export async function joinToExistingOrganization(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const { identifier, organizationCode } = req.body
-  const organization = await organizationService.getOrganization(
-    organizationCode
-  )
-
-  if (!organization) {
-    return next(
-      new BadRequestError('Organization not found', organizationCode.toString())
-    )
-  }
-
-  const workspace = await workspaceService.getWorkspace(organization._id, [
-    'Employee',
-  ])
-
-  if (workspace) {
-    // const account = await accountService.updateAccount(identifier, workspace._id)
-  }
-
-  const newWorkspace = await workspaceService.addWorkspace(organization._id, [
-    'Employee',
-  ])
-
-  // Continue here add workspace to account
 }
 
 export async function getAccount(
@@ -83,3 +54,39 @@ export async function getAccount(
 
 //   res.status(200).json(user)
 // }
+
+export async function joinExistingOrganization(
+  organizationCode: OrganizationCode
+): Promise<Workspace | null> {
+  const organization = await organizationService.getOrganization(
+    organizationCode
+  )
+
+  if (!organization)
+    throw new BadRequestError(
+      'Organization not found',
+      organizationCode.toString()
+    )
+
+  // at first sign in user gets employee role at chosen organization, later it can be changed by manager
+  const workspace = await workspaceService.getWorkspace(organization._id, [
+    'Employee',
+  ])
+  if (workspace) return workspace
+
+  // if user workspace is not exist, create it
+  const newWorkspace = await workspaceService.addWorkspace(organization._id, [
+    'Employee',
+  ])
+
+  return newWorkspace
+}
+
+export async function joinNewOrganization(name: string) {
+  const organization = await organizationService.addOrganization(name)
+  const workspace = await workspaceService.addWorkspace(organization._id, [
+    'Manager',
+  ])
+
+  return workspace
+}
