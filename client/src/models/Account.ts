@@ -1,20 +1,17 @@
 import { z } from 'zod'
-// TODO account is not correct, its just copy from user, need to fix
+import { User } from './User'
+import { Workspace } from './Workspace'
+import { UserDetailsSchema } from './User'
+import { WorkspaceSchema } from './Workspace'
+
 export interface Account {
-  identifier: string
-  isAccountComplete: boolean
-  account: {
-    firstName: string
-    lastname: string
-  }
+  isComplete: boolean
+  user: User
+  workspaces: Workspace
 }
 
 export const AccountSchema = z.object({
-  identifier: z.string(),
   isAccountComplete: z.boolean(),
-  account: z.object({
-    firstName: z.string(),
-    lastname: z.string(),
-    // workplace: z.array(WorkplaceSchema),
-  }),
+  user: UserDetailsSchema,
+  workspaces: WorkspaceSchema,
 })
