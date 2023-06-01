@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Types } from 'mongoose'
 import { config } from '../config/config.js'
-import TokenModel from '../mongodb/models/token.model.js'
+import TokenModel, { Token } from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
@@ -22,8 +22,8 @@ function generateTokens(payload: string): {
   return { accessToken, refreshToken }
 }
 
-async function saveToken(userId: Types.ObjectId, refreshToken: string) {
-  const tokenData = await TokenModel.findOne({ userId })
+async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
+  const tokenData = await TokenModel.findOne({ identifier })
 
   // update refresh token
   if (tokenData) {
@@ -32,7 +32,7 @@ async function saveToken(userId: Types.ObjectId, refreshToken: string) {
   }
 
   // new refresh token
-  const token = await TokenModel.create({ userId, refreshToken })
+  const token = await TokenModel.create({ identifier, refreshToken })
 
   return token
 }
@@ -43,10 +43,18 @@ async function removeToken(refreshToken: string) {
   return tokenData
 }
 
-async function findToken(refreshToken: string) {
+async function getToken(refreshToken: string): Promise<Token | null> {
   const tokenData = await TokenModel.findOne({ refreshToken })
 
   return tokenData
+}
+
+async function getIdentifier(
+  refreshToken: string
+): Promise<Types.ObjectId | null> {
+  const tokenData = await TokenModel.findOne({ refreshToken })
+
+  return tokenData?.identifier || null
 }
 
 async function validateAccessToken(token: string) {
@@ -75,7 +83,8 @@ export const tokenService = {
   generateTokens,
   saveToken,
   removeToken,
-  findToken,
+  getToken,
+  getIdentifier,
   validateAccessToken,
   validateRefreshToken,
 }
