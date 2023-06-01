@@ -68,11 +68,14 @@ const signIn = async (credentials: Credentials) => {
   const workspaces =
     workspaceIds && (await workspaceService.getWorkspaces(workspaceIds))
 
+  //TEST
+  console.log('TEST: workspaces', workspaces)
+
   const payload: string = payloadService.generateTokenPayload(workspaces || [])
 
   const { accessToken, refreshToken } = tokenService.generateTokens(payload)
 
-  // save refresh token to db
+  // save refresh token with identifier to db
   await tokenService.saveToken(auth._id, refreshToken)
 
   logger.info(`auth.service - user signed in: ${email}`)

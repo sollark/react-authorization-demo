@@ -27,6 +27,7 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
         new UnauthorizedError('You are not authorized to access this resource')
       )
     }
+    // TODO get identity from database and attach to req object
 
     req.userData = { data: userData as string }
 

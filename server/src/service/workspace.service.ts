@@ -38,7 +38,23 @@ async function getWorkspace(
   return workspace as Workspace | null
 }
 
+async function getWorkspaces(workspaceIds: Types.ObjectId[]) {
+  const workspaces = await WorkspaceRefModel.find({
+    _id: { $in: workspaceIds },
+  })
+    .populate('organizationRef')
+    .exec()
+
+  return workspaces.map((workspace) => {
+    return {
+      ...workspace.toObject(),
+      organization: workspace.organizationRef, // Rename organizationRef to organization
+    } as unknown as Workspace
+  })
+}
+
 export const workspaceService = {
   addWorkspace,
   getWorkspace,
+  getWorkspaces,
 }
