@@ -35,7 +35,7 @@ const registration = async (credentials: Credentials) => {
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
 
-  return { accessToken }
+  return { accessToken, refreshToken }
 }
 
 const signIn = async (credentials: Credentials) => {
@@ -105,6 +105,7 @@ const refresh = async (refreshToken: string) => {
   const userId = TokenModel.findOne({ refreshToken: refreshToken }).select(
     'userId'
   )
+  // TODO i send account info, not user, fix it
   const user = await UserModel.findById(userId)
 
   // generate tokens
