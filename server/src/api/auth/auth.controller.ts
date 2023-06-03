@@ -15,7 +15,7 @@ export async function registration(
     httpOnly: true,
   })
 
-  res.json(userData)
+  res.status(200).json(userData)
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
@@ -29,7 +29,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     httpOnly: true,
   })
 
-  res.json(userData.account)
+  res.status(200).json(userData.account)
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
@@ -51,5 +51,5 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
     httpOnly: true,
   })
 
-  res.json(userData)
+  res.status(200).json(userData)
 }

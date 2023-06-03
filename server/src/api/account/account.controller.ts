@@ -11,6 +11,7 @@ import { organizationService } from '../../service/organization.service.js'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Workspace } from '../../mongodb/models/workspace.model.js'
 import { OrganizationCode } from '../../mongodb/models/organizationCode.model.js'
+import { accountService } from './account.service.js'
 
 export async function createAccount(
   identifier: Types.ObjectId,
@@ -30,7 +31,20 @@ export async function updateAccount(
   req: Request,
   res: Response,
   next: NextFunction
-) {}
+) {
+  const store = asyncLocalStorage.getStore()
+  const identifier = store?.userData?.identifier
+
+  if (!identifier) {
+    logger.warn(`account.controller - unauthenticated request to fetch user `)
+    return new UnauthorizedError('unauthenticated')
+  }
+
+  const account = req.body.account
+  const updatedAccount = accountService.updateAccount(identifier, account)
+
+  res.status(200).json(updatedAccount)
+}
 
 export async function getAccount(
   req: Request,

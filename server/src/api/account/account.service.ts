@@ -3,11 +3,11 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import logger from '../../service/logger.service.js'
 
-const createAccount = async (
+async function createAccount(
   identifier: Types.ObjectId,
   user: Types.ObjectId,
   isComplete: boolean = false
-) => {
+) {
   const account = await AccountModel.create({ identifier, user, isComplete })
 
   // TODO: add account is null check
@@ -16,7 +16,7 @@ const createAccount = async (
   return account
 }
 
-const getAccount = async (identifier: Types.ObjectId): Promise<Account> => {
+async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
 
   if (!account) {
@@ -29,9 +29,23 @@ const getAccount = async (identifier: Types.ObjectId): Promise<Account> => {
   return account
 }
 
-const updateAccount = async () => {}
+async function updateAccount(identifier: Types.ObjectId, account: Account) {
+  const updatedAccount = await AccountModel.findOneAndUpdate({
+    ...account,
+    identifier,
+  })
 
-const deleteAccount = async () => {}
+  if (!updatedAccount) {
+    logger.warn(`account.service - account is not found: ${identifier}`)
+    throw new BadRequestError('Account is not found')
+  }
+
+  return updatedAccount
+}
+
+async function deleteAccount(identifier: Types.ObjectId) {
+  await AccountModel.findOneAndDelete({ identifier })
+}
 
 export const accountService = {
   createAccount,
