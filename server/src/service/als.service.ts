@@ -1,8 +1,9 @@
 import { AsyncLocalStorage } from 'async_hooks'
+import { Types } from 'mongoose'
 
 interface UserData {
   userData?: {
-    identifier: string
+    identifier: Types.ObjectId
   }
 }
 
