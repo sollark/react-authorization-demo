@@ -11,7 +11,7 @@ async function setupAsyncLocalStorage(
 
   const storage = {}
   asyncLocalStorage.run(storage, async () => {
-    const refreshToken = req.cookies('refreshToken')
+    const refreshToken = req.cookies['refreshToken']
     if (!refreshToken) return next()
 
     const identifier = await tokenService.getIdentifier(refreshToken)

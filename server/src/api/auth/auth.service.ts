@@ -35,6 +35,12 @@ const registration = async (credentials: Credentials) => {
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
 
+  //create new user
+  const user = await UserModel.create({ auth: auth._id })
+
+  //create new account for user
+  await accountService.createAccount(auth._id, user._id)
+
   return { accessToken, refreshToken }
 }
 

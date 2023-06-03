@@ -3,7 +3,7 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import logger from '../../service/logger.service.js'
 
-const addAccount = async (
+const createAccount = async (
   identifier: Types.ObjectId,
   user: Types.ObjectId,
   isComplete: boolean = false
@@ -34,7 +34,7 @@ const updateAccount = async () => {}
 const deleteAccount = async () => {}
 
 export const accountService = {
-  addAccount,
+  createAccount,
   getAccount,
   updateAccount,
   deleteAccount,
