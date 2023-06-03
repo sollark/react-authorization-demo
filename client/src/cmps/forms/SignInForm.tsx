@@ -23,8 +23,6 @@ const SignInForm: FC = () => {
     const { email, password } = form as SigninForm
 
     const response = authService.signIn(email, password)
-
-    console.log('Signin response: ', response)
   }
 
   return (

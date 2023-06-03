@@ -16,7 +16,17 @@ export const rootRoute = new RootRoute()
 export const homeRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: Home,
+  component: () => (
+    <ProtectedRoute
+      allowed={[
+        USER_ROLE.Employee,
+        USER_ROLE.Manager,
+        USER_ROLE.Supervisor,
+        USER_ROLE.Admin,
+      ]}>
+      <Home />
+    </ProtectedRoute>
+  ),
 })
 
 // Routes, Auth page

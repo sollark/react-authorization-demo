@@ -9,7 +9,6 @@ import {
   homeRoute,
   managerRoute,
   missingRoute,
-  // protectedRoute,
   registrationRoute,
   roleRoute,
   rootRoute,

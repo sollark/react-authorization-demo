@@ -11,7 +11,7 @@ import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from '../account/account.service.js'
 import { userService } from '../../service/user.service.js'
 
-const registration = async (credentials: Credentials) => {
+async function registration(credentials: Credentials) {
   // check if email is already taken
   const isEmailExist = await isEmailTaken(credentials.email)
   if (isEmailExist) {
@@ -65,7 +65,7 @@ const signIn = async (credentials: Credentials) => {
   }
 
   // fetch user
-  // const user = await userService.getUserByIdentifier(auth._id)
+  const user = await userService.getUserByIdentifier(auth._id)
 
   // fetch account
   const account = await accountService.getAccount(auth._id)
@@ -84,7 +84,7 @@ const signIn = async (credentials: Credentials) => {
 
   logger.info(`auth.service - user signed in: ${email}`)
 
-  return { accessToken, account }
+  return { accessToken, refreshToken, account }
 }
 
 const signOut = async (refreshToken: string) => {

@@ -24,8 +24,6 @@ const RegistrationForm = () => {
     const { email, password } = form as RegistrationForm
 
     const response = await authService.registration(email, password)
-
-    console.log('Registration response: ', response)
   }
 
   return (

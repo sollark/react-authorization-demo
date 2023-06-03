@@ -1,7 +1,6 @@
 import { Document, Schema, Types, model } from 'mongoose'
 
 export interface Account {
-  identifier: Types.ObjectId
   user: Types.ObjectId
   workspaces: Types.ObjectId[]
   isComplete: boolean

@@ -17,7 +17,10 @@ async function createAccount(
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
-  const account = await AccountModel.findOne({ identifier })
+  const account = await AccountModel.findOne({ identifier }).populate(
+    'user',
+    'workspaces'
+  )
 
   if (!account) {
     logger.warn(`account.service - account is not found: ${identifier}`)
