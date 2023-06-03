@@ -75,9 +75,6 @@ const signIn = async (credentials: Credentials) => {
   const workspaces =
     workspaceIds && (await workspaceService.getWorkspaces(workspaceIds))
 
-  //TEST
-  console.log('TEST: workspaces', workspaces)
-
   const payload: string = payloadService.generateTokenPayload(workspaces || [])
 
   const { accessToken, refreshToken } = tokenService.generateTokens(payload)
