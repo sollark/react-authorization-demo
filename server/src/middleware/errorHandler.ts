@@ -10,6 +10,8 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ) {
+  console.log('errorHandler middleware')
+
   if (config.env === 'development') {
     console.log('Error handler')
     console.log(error.stack)

@@ -23,12 +23,12 @@ function doLog(level: string, ...args: any[]): void {
 
   let line = strs.join(' | ')
 
-  // get the user email from the async local storage
+  // get the user identifier from the async local storage
   const store = asyncLocalStorage.getStore()
   const identifier = store?.userData?.identifier
 
   const str = identifier ? `(user: ${identifier})` : 'unauthenticated'
-  line = `${getTime()} - ${level} - ${line} ${str}\n`
+  line = `${getTime()} - ${level} - ${str}- ${line}`
   console.log(line)
 
   fs.appendFile('./logs/backend.log', line, (error) => {
