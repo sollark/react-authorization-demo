@@ -3,7 +3,7 @@ import BadRequestError from '../errors/BadRequestError.js'
 import UserModel, { User } from '../mongodb/models/user.model.js'
 import loggerService from './logger.service.js'
 
-const addUser = async (identifier: Types.ObjectId) => {
+async function addUser(identifier: Types.ObjectId) {
   const user = await UserModel.create({
     identifier,
   })
@@ -13,9 +13,9 @@ const addUser = async (identifier: Types.ObjectId) => {
   return user
 }
 
-const getUserByIdentifier = async (
+async function getUserByIdentifier(
   identifier: Types.ObjectId
-): Promise<User | null> => {
+): Promise<User | null> {
   const user = await UserModel.findOne({ identifier })
 
   loggerService.info(`user.service - user fetched ${user}`)
@@ -23,11 +23,11 @@ const getUserByIdentifier = async (
   return user
 }
 
-const updateUser = async (
+async function updateUser(
   identifier: Types.ObjectId,
   name: string,
   lastname: string
-): Promise<User | null> => {
+): Promise<User | null> {
   const user = await UserModel.findOneAndUpdate(
     { identifier },
     { name, lastname },
@@ -39,7 +39,7 @@ const updateUser = async (
   return user
 }
 
-const deleteUser = async (identifier: Types.ObjectId): Promise<void> => {
+async function deleteUser(identifier: Types.ObjectId): Promise<void> {
   await UserModel.deleteOne({ identifier })
 }
 

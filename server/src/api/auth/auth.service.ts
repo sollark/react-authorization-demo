@@ -9,6 +9,7 @@ import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from '../account/account.service.js'
+import { userService } from '../../service/user.service.js'
 
 const registration = async (credentials: Credentials) => {
   // check if email is already taken
@@ -36,7 +37,7 @@ const registration = async (credentials: Credentials) => {
   await tokenService.saveToken(auth._id, refreshToken)
 
   //create new user
-  const user = await UserModel.create({ auth: auth._id })
+  const user = await userService.addUser(auth._id)
 
   //create new account for user
   await accountService.createAccount(auth._id, user._id)
