@@ -1,7 +1,6 @@
 import { model, Schema, Types } from 'mongoose'
 
 export interface User {
-  identifier: Types.ObjectId
   firstName?: string
   lastname?: string
 }

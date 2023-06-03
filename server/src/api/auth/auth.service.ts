@@ -40,9 +40,9 @@ async function registration(credentials: Credentials) {
   const user = await userService.addUser(auth._id)
 
   //create new account for user
-  await accountService.createAccount(auth._id, user._id)
+  const account = await accountService.createAccount(auth._id, user._id)
 
-  return { accessToken, refreshToken }
+  return { accessToken, refreshToken, account }
 }
 
 const signIn = async (credentials: Credentials) => {
