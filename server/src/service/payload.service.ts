@@ -1,5 +1,6 @@
 import { RoleCode } from '../mongodb/models/role.model.js'
 import { Workspace } from '../mongodb/models/workspace.model.js'
+import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
 import { codeService } from './code.service.js'
 
 function generateTokenPayload(workspaces: Workspace[]): string {
@@ -32,7 +33,7 @@ async function decodeTokenPayload(tokenPayload: string) {
     var roleCodes = parts.slice(1)
 
     const workspace: WorkspaceCode = {
-      organization: organizationCode,
+      organization: +organizationCode,
       roles: roleCodes as RoleCode[],
     }
 

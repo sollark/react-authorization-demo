@@ -3,7 +3,8 @@ import RoleMapModel, {
   Role,
   ROLE_CODE_MAPPING,
 } from '../mongodb/models/role.model.js'
-import { Workspace, WorkspaceCode } from '../mongodb/models/workspace.model.js'
+import { Workspace } from '../mongodb/models/workspace.model.js'
+import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
 
 function castToCode(workspaces: Workspace[]): WorkspaceCode[] {
   const codes = workspaces.map((workspace) => {
