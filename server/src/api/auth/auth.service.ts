@@ -95,7 +95,7 @@ const refresh = async (refreshToken: string) => {
   if (!refreshToken) throw new UnauthorizedError('Refresh token is required')
 
   const payload = await tokenService.validateRefreshToken(refreshToken)
-  const tokenFromDb = await tokenService.findToken(refreshToken)
+  const tokenFromDb = await tokenService.getToken(refreshToken)
 
   if (!payload || !tokenFromDb) {
     throw new UnauthorizedError('Invalid refresh token')
