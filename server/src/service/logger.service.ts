@@ -25,9 +25,9 @@ function doLog(level: string, ...args: any[]): void {
 
   // get the user email from the async local storage
   const store = asyncLocalStorage.getStore()
-  const userEmail = store?.userData?.identifier
+  const identifier = store?.userData?.identifier
 
-  const str = userEmail ? `(user: ${userEmail})` : 'unauthenticated'
+  const str = identifier ? `(user: ${identifier})` : 'unauthenticated'
   line = `${getTime()} - ${level} - ${line} ${str}\n`
   console.log(line)
 
