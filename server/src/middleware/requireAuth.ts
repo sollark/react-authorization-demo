@@ -3,6 +3,8 @@ import UnauthorizedError from '../errors/UnauthorizedError.js'
 import { tokenService } from '../service/token.service.js'
 
 async function requireAuth(req: Request, res: Response, next: NextFunction) {
+  console.log('requireAuth middleware')
+
   try {
     // check if authorization header is present
     const authorizationKey = req.headers.authorization
@@ -27,23 +29,6 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
         new UnauthorizedError('You are not authorized to access this resource')
       )
     }
-
-    // TODO get identity from database and attach to req object
-    const refreshToken = req.cookies('refreshToken')
-    if (!refreshToken) {
-      next(
-        new UnauthorizedError('You are not authorized to access this resource')
-      )
-    }
-
-    const identifier = await tokenService.getIdentifier(refreshToken)
-    if (!identifier) {
-      return next(
-        new UnauthorizedError('You are not authorized to access this resource')
-      )
-    }
-
-    req.userData = { identifier }
 
     next()
   } catch (error) {
