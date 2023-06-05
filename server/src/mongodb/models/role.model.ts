@@ -41,4 +41,4 @@ const populateRoles = async () => {
   } catch (error) {}
 }
 
-// populateRoles()
+populateRoles()

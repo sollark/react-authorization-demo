@@ -7,43 +7,50 @@ async function createAccount(
   identifier: Types.ObjectId,
   user: Types.ObjectId,
   isComplete: boolean = false
-) {
-  const account = await AccountModel.create({ identifier, user, isComplete })
+): Promise<Account> {
+  const accountDoc = await (
+    await AccountModel.create({ identifier, user, isComplete })
+  ).populate('user')
 
-  // TODO: add account is null check
-  logger.info(`account.service - account added: ${account}`)
+  logger.info(`account.service - account added: ${accountDoc}`)
+
+  // remove _id and __v from accountDoc
+  const { _id, __v, ...account } = accountDoc.toObject()
 
   return account
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
-  const account = await AccountModel.findOne({ identifier }).populate(
+  const accountDoc = await AccountModel.findOne({ identifier }).populate(
     'user',
     'workspaces'
   )
 
-  if (!account) {
+  if (!accountDoc) {
     logger.warn(`account.service - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
 
-  logger.info(`account.service - account fetched: ${account}`)
+  logger.info(`account.service - account fetched: ${accountDoc}`)
+
+  // remove _id and __v from accountDoc
+  const { _id, __v, ...account } = accountDoc.toObject()
 
   return account
 }
 
 async function updateAccount(identifier: Types.ObjectId, account: Account) {
-  const updatedAccount = await AccountModel.findOneAndUpdate({
+  const updatedAccountDoc = await AccountModel.findOneAndUpdate({
     ...account,
     identifier,
   })
 
-  if (!updatedAccount) {
+  if (!updatedAccountDoc) {
     logger.warn(`account.service - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
 
-  return updatedAccount
+  return updatedAccountDoc
 }
 
 async function deleteAccount(identifier: Types.ObjectId) {

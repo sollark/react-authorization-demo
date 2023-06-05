@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
-import accountModel from '../../mongodb/models/account.model.js'
 import { OrganizationCode } from '../../mongodb/models/organizationCode.model.js'
 import { Workspace } from '../../mongodb/models/workspace.model.js'
 import { asyncLocalStorage } from '../../service/als.service.js'
@@ -10,20 +8,6 @@ import logger from '../../service/logger.service.js'
 import { organizationService } from '../../service/organization.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
-
-export async function createAccount(
-  identifier: Types.ObjectId,
-  userId: Types.ObjectId,
-  workspaces: Types.ObjectId[]
-) {
-  const account = await accountModel.create({
-    identifier,
-    user: userId,
-    workspaces,
-  })
-
-  return account
-}
 
 export async function updateAccount(
   req: Request,

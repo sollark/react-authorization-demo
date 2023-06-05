@@ -16,6 +16,7 @@ import { fileURLToPath } from 'url'
 import { accountRoutes } from './api/account/account.routes.js'
 import { config } from './config/config.js'
 import setupAsyncLocalStorage from './middleware/als.js'
+import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -36,6 +37,9 @@ const server = http.createServer(app)
 
 // als middleware
 app.all('*', setupAsyncLocalStorage)
+
+// delete sensitive data
+app.use(deleteSensitiveData)
 
 // routes
 app.use('/api/auth', authRoutes)
