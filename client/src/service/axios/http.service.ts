@@ -66,7 +66,9 @@ async function ajax<T, R>(
   } catch (error) {
     if (isDevelopment())
       console.log(
-        `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${data}`
+        `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
+          data ? { ...data } : null
+        }`
       )
 
     if ((error as AxiosError).response?.status === 401) {

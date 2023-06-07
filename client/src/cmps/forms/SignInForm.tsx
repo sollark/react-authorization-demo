@@ -1,9 +1,10 @@
+import { SignInSchema } from '@/models/Auth'
 import { authService } from '@/service/auth.service'
+import { useNavigate } from '@tanstack/router'
 import { FC } from 'react'
 import Form from './Form'
-import Input from './inputs/TextInput'
-import { SignInSchema } from '@/models/Auth'
 import SubmitButton from './buttons/SubmitButton'
+import Input from './inputs/TextInput'
 interface SigninForm {
   email: string
   password: string
@@ -17,12 +18,17 @@ const defaultValues = {
 const SignInForm: FC = () => {
   console.log('SignInForm connected')
 
+  const navigate = useNavigate()
+
   async function submit(form: Object) {
     console.log('Signin form submitted: ', form)
 
     const { email, password } = form as SigninForm
 
-    const response = authService.signIn(email, password)
+    const account = await authService.signIn(email, password)
+
+    if (account.isComplete) navigate({ to: '/' })
+    else navigate({ to: '/account' })
   }
 
   return (

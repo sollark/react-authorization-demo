@@ -29,7 +29,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     httpOnly: true,
   })
 
-  res.status(200).json(userData.account)
+  res.status(200).json(userData)
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {

@@ -19,15 +19,23 @@ export function deleteSensitiveData(
   next()
 }
 
-function deleteSensitivePropertiesRecursive(obj: any) {
+function deleteSensitivePropertiesRecursive(
+  obj: any,
+  processed: Set<any> = new Set()
+) {
+  if (processed.has(obj)) {
+    return // Break recursion if object has already been processed
+  }
+
+  processed.add(obj)
+
   if (Array.isArray(obj)) {
-    obj.forEach((item) => deleteSensitivePropertiesRecursive(item))
+    obj.forEach((item) => deleteSensitivePropertiesRecursive(item, processed))
   } else if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (obj.hasOwnProperty(key))
         if (sensitiveData.includes(key)) delete obj[key]
-        else deleteSensitivePropertiesRecursive(obj[key])
-      }
+        else deleteSensitivePropertiesRecursive(obj[key], processed)
     }
   }
 }

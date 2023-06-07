@@ -9,6 +9,7 @@ import Shift from '../pages/Shift'
 import Unauthorized from '../pages/Unauthorized'
 import ProtectedRoute from './ProtectedRoute'
 import { USER_ROLE } from '@/models/Role'
+import Account from '@/pages/Account'
 
 export const rootRoute = new RootRoute()
 
@@ -49,6 +50,23 @@ export const unauthorizedRoute = new Route({
   getParentRoute: () => authRoute,
   path: '/unauthorized',
   component: Unauthorized,
+})
+
+// Routes, Account page
+export const accountRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/account',
+  component: () => (
+    <ProtectedRoute
+      allowed={[
+        USER_ROLE.Employee,
+        USER_ROLE.Manager,
+        USER_ROLE.Supervisor,
+        USER_ROLE.Admin,
+      ]}>
+      <Account />
+    </ProtectedRoute>
+  ),
 })
 
 // Routes, Shift page

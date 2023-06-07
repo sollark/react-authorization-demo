@@ -20,3 +20,7 @@ const useUserStore = create<UserState>()(
 )
 
 export default useUserStore
+
+// usage:
+// const { user } = useUserStore()
+// const firstName = user?.firstName
