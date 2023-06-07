@@ -11,9 +11,8 @@ export function deleteSensitiveData(
 
   const originalJson = res.json
   res.json = function (body) {
-    if (body) {
-      deleteSensitivePropertiesRecursive(body)
-    }
+    if (body) deleteSensitivePropertiesRecursive(body)
+
     return originalJson.call(this, body)
   }
 
@@ -26,13 +25,8 @@ function deleteSensitivePropertiesRecursive(obj: any) {
   } else if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
-        if (sensitiveData.includes(key)) {
-          console.log('deleting', key)
-          delete obj[key]
-          console.log('deleted', obj[key])
-        } else {
-          deleteSensitivePropertiesRecursive(obj[key])
-        }
+        if (sensitiveData.includes(key)) delete obj[key]
+        else deleteSensitivePropertiesRecursive(obj[key])
       }
     }
   }

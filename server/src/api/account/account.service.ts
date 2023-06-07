@@ -14,10 +14,7 @@ async function createAccount(
 
   logger.info(`account.service - account added: ${accountDoc}`)
 
-  // remove _id and __v from accountDoc
-  const { _id, __v, ...account } = accountDoc.toObject()
-
-  return account
+  return accountDoc
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
@@ -33,10 +30,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
 
   logger.info(`account.service - account fetched: ${accountDoc}`)
 
-  // remove _id and __v from accountDoc
-  const { _id, __v, ...account } = accountDoc.toObject()
-
-  return account
+  return accountDoc
 }
 
 async function updateAccount(identifier: Types.ObjectId, account: Account) {
