@@ -1,5 +1,6 @@
 import { useMultistepForm } from '@/hooks/useMultistepForm'
 import { FC, ReactElement } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
 interface Props {
   children: ReactElement[]
@@ -14,16 +15,25 @@ const MultistepForm: FC<Props> = (props: Props) => {
 
   const { children, nextButton, backButton, submit } = props
 
+  const methods = useForm({
+    // resolver: zodResolver(schema),
+    // defaultValues,
+    criteriaMode: 'all',
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
+  })
+
   const { step, steps, currentStep } = useMultistepForm([...children])
+
   return (
-    <>
+    <FormProvider {...methods}>
       {currentStep + 1} / {steps.length}
       {step}
       <div>
         {backButton}
         {nextButton}
       </div>
-    </>
+    </FormProvider>
   )
 }
 

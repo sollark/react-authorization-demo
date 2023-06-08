@@ -1,3 +1,5 @@
+import { USER_ROLE } from '@/models/Role'
+import AccountPage from '@/pages/AccountPage'
 import { RootRoute, Route } from '@tanstack/router'
 import Registration from '../cmps/Registration'
 import Signin from '../cmps/SignIn'
@@ -8,8 +10,6 @@ import Role from '../pages/Role'
 import Shift from '../pages/Shift'
 import Unauthorized from '../pages/Unauthorized'
 import ProtectedRoute from './ProtectedRoute'
-import { USER_ROLE } from '@/models/Role'
-import Account from '@/pages/Account'
 
 export const rootRoute = new RootRoute()
 
@@ -64,7 +64,7 @@ export const accountRoute = new Route({
         USER_ROLE.Supervisor,
         USER_ROLE.Admin,
       ]}>
-      <Account />
+      <AccountPage />
     </ProtectedRoute>
   ),
 })

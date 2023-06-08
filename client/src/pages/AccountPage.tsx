@@ -1,7 +1,8 @@
+import Account from '@/cmps/Account'
 import useUserStore from '@/stores/userStore'
 import { Link } from '@tanstack/router'
 
-export default function Account() {
+export default function AccountPage() {
   console.log('Account connected')
 
   const { user } = useUserStore()
@@ -11,6 +12,7 @@ export default function Account() {
     <div>
       <h1>Hello, {firstName ? firstName : 'Guest'}!</h1>
       <Link to='/'>Home</Link>
+      <Account />
     </div>
   )
 }
