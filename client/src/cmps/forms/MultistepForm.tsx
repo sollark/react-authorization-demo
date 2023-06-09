@@ -23,11 +23,11 @@ const MultistepForm: FC<Props> = (props: Props) => {
     reValidateMode: 'onBlur',
   })
 
-  const { step, steps, currentStep } = useMultistepForm([...children])
+  const { step, steps, currentStepIndex } = useMultistepForm([...children])
 
   return (
     <FormProvider {...methods}>
-      {currentStep + 1} / {steps.length}
+      {currentStepIndex + 1} / {steps.length}
       {step}
       <div>
         {backButton}
