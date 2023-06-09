@@ -4,12 +4,17 @@ import { buttonStyle } from '../style/formStyle'
 
 interface Props {
   children?: any
+  onClick?: () => void
 }
 
 const NextButton: FC<Props> = (props: Props) => {
-  const { children } = props
+  const { onClick, children } = props
   return (
-    <Button variant='contained' type='submit' sx={buttonStyle}>
+    <Button
+      variant='contained'
+      type='button'
+      sx={buttonStyle}
+      onClick={onClick}>
       {children ? children : 'Next'}
     </Button>
   )

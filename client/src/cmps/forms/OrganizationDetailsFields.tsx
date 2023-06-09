@@ -6,7 +6,7 @@ const OrganizationDetailsFields: FC = () => {
 
   return (
     <>
-      <h2>Organization Details</h2>
+      <h2>Organization details</h2>
       <Input name='organization' label='Organization' type='text' />
     </>
   )
