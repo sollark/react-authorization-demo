@@ -35,8 +35,8 @@ const RegistrationForm = () => {
       <Input name='email' label='Email' type='email' />
       <Input name='password' label='Password' type='password' />
       <Input
-        name={'confirmedPassword'}
-        label={'Confirm password'}
+        name='confirmedPassword'
+        label='Confirm password'
         type='password'
       />
     </Form>

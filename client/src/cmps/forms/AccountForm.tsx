@@ -13,8 +13,8 @@ interface Props {
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
 
-  function submit() {
-    console.log('AccountForm - onSubmit')
+  async function submit(form: Object) {
+    console.log('Account form submitted: ', form)
   }
 
   return (

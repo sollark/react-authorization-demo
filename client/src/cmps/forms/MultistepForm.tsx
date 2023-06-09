@@ -1,13 +1,13 @@
 import { useMultistepForm } from '@/hooks/useMultistepForm'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, ReactElement, createContext } from 'react'
+import { FC, ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { MultistepFormProvider } from './context/MultistepFormContext'
 
 interface Props {
   children: ReactElement[]
   schema: any
-  submit: () => void
+  submit: (data: any) => void
   nextButton: ReactElement
   backButton: ReactElement
   submitButton: ReactElement
@@ -28,7 +28,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
   } = props
 
   const methods = useForm({
-    // resolver: zodResolver(schema),
+    resolver: zodResolver(schema),
     // defaultValues,
     criteriaMode: 'all',
     mode: 'onBlur',
@@ -38,9 +38,8 @@ const MultistepForm: FC<Props> = (props: Props) => {
   const { handleSubmit } = methods
 
   const onSubmit = (data: any) => {
-    console.log('MultipleStep Form - onSubmit', data)
-    // next()
-    // submit(data)
+    console.log('MultistepForm - onSubmit', data)
+    submit(data)
   }
 
   const { step, steps, back, next, currentStepIndex, isFirstStep, isLastStep } =
@@ -48,19 +47,16 @@ const MultistepForm: FC<Props> = (props: Props) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} {...rest}>
-        {currentStepIndex + 1} / {steps.length}
-        {step}
-        <div>
-          <MultistepFormProvider
-            goToPreviousStep={back}
-            goToNextStep={next}
-            submitForm={submit}>
+      <MultistepFormProvider goToPreviousStep={back} goToNextStep={next}>
+        <form onSubmit={handleSubmit(onSubmit)} {...rest}>
+          {currentStepIndex + 1} / {steps.length}
+          {step}
+          <div>
             {isFirstStep ? null : backButton}
             {isLastStep ? submitButton : nextButton}
-          </MultistepFormProvider>
-        </div>
-      </form>
+          </div>
+        </form>
+      </MultistepFormProvider>
     </FormProvider>
   )
 }
