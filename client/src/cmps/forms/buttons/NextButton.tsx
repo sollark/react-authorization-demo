@@ -1,20 +1,30 @@
 import { Button } from '@mui/material'
-import { FC } from 'react'
+import { FC, useContext } from 'react'
+import {
+  MultistepFormContext,
+  MultistepFormContextValue,
+} from '../context/MultistepFormContext'
 import { buttonStyle } from '../style/formStyle'
 
 interface Props {
   children?: any
-  onClick?: () => void
 }
 
 const NextButton: FC<Props> = (props: Props) => {
-  const { onClick, children } = props
+  const { children } = props
+
+  const { goToNextStep } = useContext(
+    MultistepFormContext
+  ) as MultistepFormContextValue
+
   return (
     <Button
       variant='contained'
       type='button'
       sx={buttonStyle}
-      onClick={onClick}>
+      onClick={() => {
+        goToNextStep()
+      }}>
       {children ? children : 'Next'}
     </Button>
   )

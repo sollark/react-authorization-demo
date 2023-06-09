@@ -1,12 +1,13 @@
 import { useMultistepForm } from '@/hooks/useMultistepForm'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, ReactElement } from 'react'
+import { FC, ReactElement, createContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { MultistepFormProvider } from './context/MultistepFormContext'
 
 interface Props {
   children: ReactElement[]
   schema: any
-  submit: (data: any) => void
+  submit: () => void
   nextButton: ReactElement
   backButton: ReactElement
   submitButton: ReactElement
@@ -45,15 +46,19 @@ const MultistepForm: FC<Props> = (props: Props) => {
   const { step, steps, back, next, currentStepIndex, isFirstStep, isLastStep } =
     useMultistepForm([...children])
 
-  console.log(nextButton)
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} {...rest}>
         {currentStepIndex + 1} / {steps.length}
         {step}
         <div>
-          {isFirstStep ? null : backButton}
-          {isLastStep ? submitButton : nextButton}
+          <MultistepFormProvider
+            goToPreviousStep={back}
+            goToNextStep={next}
+            submitForm={submit}>
+            {isFirstStep ? null : backButton}
+            {isLastStep ? submitButton : nextButton}
+          </MultistepFormProvider>
         </div>
       </form>
     </FormProvider>
