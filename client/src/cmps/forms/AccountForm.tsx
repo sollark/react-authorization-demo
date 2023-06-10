@@ -13,6 +13,12 @@ interface Props {
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
 
+  const defaultValues = {
+    firstName: '',
+    lastName: '',
+    organization: '',
+  }
+
   async function submit(form: Object) {
     console.log('Account form submitted: ', form)
   }
@@ -20,6 +26,7 @@ const AccountForm: FC<Props> = (props: Props) => {
   return (
     <MultistepForm
       schema={AccountSchema}
+      defaultValues={defaultValues}
       backButton={<BackButton />}
       nextButton={<NextButton />}
       submitButton={<SubmitButton />}

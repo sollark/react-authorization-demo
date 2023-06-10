@@ -7,6 +7,7 @@ import { MultistepFormProvider } from './context/MultistepFormContext'
 interface Props {
   children: ReactElement[]
   schema: any
+  defaultValues: any
   submit: (data: any) => void
   nextButton: ReactElement
   backButton: ReactElement
@@ -20,6 +21,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
   const {
     children,
     schema,
+    defaultValues,
     nextButton,
     backButton,
     submitButton,
@@ -29,7 +31,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
 
   const methods = useForm({
     resolver: zodResolver(schema),
-    // defaultValues,
+    defaultValues,
     criteriaMode: 'all',
     mode: 'onBlur',
     reValidateMode: 'onBlur',
@@ -38,7 +40,6 @@ const MultistepForm: FC<Props> = (props: Props) => {
   const { handleSubmit } = methods
 
   const onSubmit = (data: any) => {
-    console.log('MultistepForm - onSubmit', data)
     submit(data)
   }
 
