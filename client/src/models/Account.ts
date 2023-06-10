@@ -1,8 +1,7 @@
 import { z } from 'zod'
-import { User } from './User'
+import { OrganizationSchema } from './Organization'
+import { User, UserDetailsSchema } from './User'
 import { Workspace } from './Workspace'
-import { UserDetailsSchema } from './User'
-import { WorkspaceSchema } from './Workspace'
 
 export interface Account {
   isComplete: boolean
@@ -10,8 +9,7 @@ export interface Account {
   workspaces: Workspace
 }
 
-export const AccountSchema = z.object({
-  isAccountComplete: z.boolean(),
-  user: UserDetailsSchema,
-  workspaces: WorkspaceSchema,
-})
+export const AccountSchema = z
+  .object({})
+  .merge(UserDetailsSchema)
+  .merge(OrganizationSchema)

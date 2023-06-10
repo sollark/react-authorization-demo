@@ -9,5 +9,5 @@ export interface Workspace {
 
 export const WorkspaceSchema = z.object({
   organization: OrganizationSchema,
-  role: z.array(userRoleSchema),
+  // role: z.array(userRoleSchema),
 })
