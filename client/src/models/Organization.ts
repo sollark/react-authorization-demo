@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export interface Organization {
   organization: string
-  description: string
+  // description: string
 }
 
 export const OrganizationSchema = z.object({

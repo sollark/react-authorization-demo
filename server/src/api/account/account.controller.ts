@@ -18,14 +18,15 @@ export async function updateAccount(
   const identifier = store?.userData?.identifier
 
   if (!identifier) {
-    logger.warn(`account.controller - unauthenticated request to fetch user `)
+    logger.warn(`account.controller - unauthenticated request update account`)
     return new UnauthorizedError('unauthenticated')
   }
 
   const account = req.body.account
-  const updatedAccount = accountService.updateAccount(identifier, account)
+  // const updatedAccount = accountService.updateAccount(identifier, account)
 
-  res.status(200).json(updatedAccount)
+  // res.status(200).json(updatedAccount)
+  res.status(200).json(account)
 }
 
 export async function getAccount(

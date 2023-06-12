@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 export interface User {
   firstName: string
-  lastname: string
+  lastName: string
 }
 
 export const UserDetailsSchema = z.object({

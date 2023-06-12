@@ -1,6 +1,7 @@
-import { AccountSchema } from '@/models/Account'
+import { Account, AccountSchema } from '@/models/Account'
 import { FC, ReactElement } from 'react'
 import MultistepForm from './MultistepForm'
+import { accountService } from '@/service/account.service'
 
 interface Props {
   children: ReactElement[]
@@ -16,8 +17,14 @@ const AccountForm: FC<Props> = (props: Props) => {
     organization: '',
   }
 
-  async function submit(form: Object) {
+  async function submit(form: Account) {
     console.log('Account form submitted: ', form)
+
+    const response = await accountService.update(
+      form.firstName,
+      form.lastName,
+      form.organization
+    )
   }
 
   return (
