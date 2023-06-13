@@ -25,12 +25,12 @@ async function getUserByIdentifier(
 
 async function updateUser(
   identifier: Types.ObjectId,
-  name: string,
-  lastname: string
+  firstName: string,
+  lastName: string
 ): Promise<User | null> {
   const user = await UserModel.findOneAndUpdate(
     { identifier },
-    { name, lastname },
+    { firstName, lastName },
     { new: true }
   )
 

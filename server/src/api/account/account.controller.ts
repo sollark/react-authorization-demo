@@ -8,6 +8,7 @@ import logger from '../../service/logger.service.js'
 import { organizationService } from '../../service/organization.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
+import { userService } from '../../service/user.service.js'
 
 export async function updateAccount(
   req: Request,
@@ -23,7 +24,30 @@ export async function updateAccount(
     throw new UnauthorizedError('unauthenticated')
   }
 
-  const account = req.body.account
+  const account = req.body
+
+  console.log('updateAccount account', account)
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    address,
+    city,
+    state,
+    zip,
+    country,
+    organization,
+  } = account
+
+  const updatedUser = await userService.updateUser(
+    identifier,
+    firstName,
+    lastName
+  )
+
+  // const updatedWorkspace = await workspaceService.updateWorkspace()
+
   const updatedAccount = accountService.updateAccount(identifier, account)
 
   res.status(200).json(updatedAccount)
