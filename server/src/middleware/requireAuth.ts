@@ -10,7 +10,9 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
     const authorizationKey = req.headers.authorization
     if (!authorizationKey) {
       return next(
-        new UnauthorizedError('You are not authorized to access this resource')
+        new UnauthorizedError(
+          'You are not authorized to access this resource. Error code 1'
+        )
       )
     }
 
@@ -18,7 +20,9 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
     const accessToken = authorizationKey.split(' ')[1]
     if (!accessToken) {
       return next(
-        new UnauthorizedError('You are not authorized to access this resource')
+        new UnauthorizedError(
+          'You are not authorized to access this resource. Error code 2'
+        )
       )
     }
 
@@ -26,14 +30,18 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
     const userData = await tokenService.validateAccessToken(accessToken)
     if (!userData) {
       return next(
-        new UnauthorizedError('You are not authorized to access this resource')
+        new UnauthorizedError(
+          'You are not authorized to access this resource. Error code 3'
+        )
       )
     }
 
     next()
   } catch (error) {
     return next(
-      new UnauthorizedError('You are not authorized to access this resource')
+      new UnauthorizedError(
+        'You are not authorized to access this resource. Error code 4'
+      )
     )
   }
 }

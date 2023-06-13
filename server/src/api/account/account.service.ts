@@ -51,9 +51,22 @@ async function deleteAccount(identifier: Types.ObjectId) {
   await AccountModel.findOneAndDelete({ identifier })
 }
 
+async function addWorkspace(
+  identifier: Types.ObjectId,
+  workspaceId: Types.ObjectId
+) {
+  const account = await AccountModel.findOne({ identifier })
+
+  if (account) {
+    account.workspaces.push(workspaceId)
+    await account.save()
+  }
+}
+
 export const accountService = {
   createAccount,
   getAccount,
   updateAccount,
   deleteAccount,
+  addWorkspace,
 }

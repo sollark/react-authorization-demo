@@ -22,6 +22,18 @@ const addOrganization = async (name: string) => {
   return organization
 }
 
+const isOrganizationCodeExists = async (organization: string) => {
+  if (!utilService.convertToNumber(organization)) return false
+
+  const organizationCode = await OrganizationCodeModel.findOne({
+    code: +organization,
+  })
+
+  if (!organizationCode) return false
+
+  return true
+}
+
 const getOrganization = async (code: OrganizationCode) => {
   const organization = await OrganizationModel.findOne({ code })
 
@@ -54,6 +66,7 @@ const deleteOrganization = async (code: number): Promise<void> => {
 }
 
 export const organizationService = {
+  isOrganizationCodeExists,
   addOrganization,
   getOrganization,
   updateOrganization,

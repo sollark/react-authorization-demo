@@ -58,12 +58,21 @@ async function getIdentifier(
 }
 
 async function validateAccessToken(token: string) {
+  console.log('validateAccessToken token', token, accessSecret)
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
+    console.log('here 1')
+
+    console.log('here', jwt.verify(token, accessSecret))
+    console.log('here 2')
+
     const userData = jwt.verify(token, accessSecret)
+
+    console.log('validateAccessToken userData', userData)
     return userData
   } catch (error) {
+    console.log('validateAccessToken error', error)
     return null
   }
 }

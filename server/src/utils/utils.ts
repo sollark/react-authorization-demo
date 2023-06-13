@@ -37,6 +37,19 @@ function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+function isNumeric(input: string): boolean {
+  return !isNaN(parseFloat(input)) && isFinite(+input)
+}
+
+function convertToNumber(input: string): number | null {
+  if (isNumeric(input)) {
+    return parseFloat(input)
+  }
+  return null
+}
+
 export const utilService = {
   getRandomInt,
+  isNumeric,
+  convertToNumber,
 }

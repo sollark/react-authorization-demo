@@ -5,10 +5,7 @@ import WorkspaceRefModel, {
 import { Role } from '../mongodb/models/role.model.js'
 import loggerService from './logger.service.js'
 
-async function addWorkspace(
-  organization: Types.ObjectId,
-  roles: Role[]
-): Promise<Workspace | null> {
+async function addWorkspace(organization: Types.ObjectId, roles: Role[]) {
   const workspaceRef = await WorkspaceRefModel.create({
     name,
     organization,
@@ -21,13 +18,10 @@ async function addWorkspace(
 
   loggerService.info(`account.service - account added: ${workspace}`)
 
-  return workspace as Workspace | null
+  return workspace
 }
 
-async function getWorkspace(
-  organizationId: Types.ObjectId,
-  roles: Role[]
-): Promise<Workspace | null> {
+async function getWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
   const workspace = await WorkspaceRefModel.findOne({
     organizationRef: organizationId,
     roles: { $all: roles },
@@ -35,7 +29,7 @@ async function getWorkspace(
     .populate('organizationRef')
     .exec()
 
-  return workspace as Workspace | null
+  return workspace
 }
 
 async function getWorkspaces(workspaceIds: Types.ObjectId[]) {

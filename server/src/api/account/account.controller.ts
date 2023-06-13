@@ -9,6 +9,7 @@ import { organizationService } from '../../service/organization.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
 import { userService } from '../../service/user.service.js'
+import { utilService } from '../../utils/utils.js'
 
 export async function updateAccount(
   req: Request,
@@ -46,9 +47,26 @@ export async function updateAccount(
     lastName
   )
 
-  // const updatedWorkspace = await workspaceService.updateWorkspace()
+  const isOrganizationCodeExists =
+    await organizationService.isOrganizationCodeExists(organization)
+  if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
+    throw new BadRequestError('Organization not found', organization.toString())
 
-  const updatedAccount = accountService.updateAccount(identifier, account)
+  let workspace = null
+
+  if (utilService.isNumeric(organization))
+    workspace = await joinExistingOrganization(+organization)
+
+  if (!utilService.isNumeric(organization))
+    workspace = await joinNewOrganization(organization)
+
+  if (!workspace)
+    throw new BadRequestError('Organization not found', organization.toString())
+
+  const updatedAccount = await accountService.addWorkspace(
+    identifier,
+    workspace?._id
+  )
 
   res.status(200).json(updatedAccount)
 }
@@ -82,9 +100,7 @@ export async function getAccount(
 //   res.status(200).json(user)
 // }
 
-export async function joinExistingOrganization(
-  organizationCode: OrganizationCode
-): Promise<Workspace | null> {
+async function joinExistingOrganization(organizationCode: OrganizationCode) {
   const organization = await organizationService.getOrganization(
     organizationCode
   )
@@ -109,7 +125,7 @@ export async function joinExistingOrganization(
   return newWorkspace
 }
 
-export async function joinNewOrganization(name: string) {
+async function joinNewOrganization(name: string) {
   const organization = await organizationService.addOrganization(name)
   const workspace = await workspaceService.addWorkspace(organization._id, [
     'Manager',
