@@ -19,14 +19,14 @@ export async function updateAccount(
 
   if (!identifier) {
     logger.warn(`account.controller - unauthenticated request update account`)
-    return new UnauthorizedError('unauthenticated')
+
+    throw new UnauthorizedError('unauthenticated')
   }
 
   const account = req.body.account
-  // const updatedAccount = accountService.updateAccount(identifier, account)
+  const updatedAccount = accountService.updateAccount(identifier, account)
 
-  // res.status(200).json(updatedAccount)
-  res.status(200).json(account)
+  res.status(200).json(updatedAccount)
 }
 
 export async function getAccount(

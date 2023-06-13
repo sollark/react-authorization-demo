@@ -17,7 +17,7 @@ const AccountForm: FC<Props> = (props: Props) => {
     organization: '',
   }
 
-  async function submit(form: Account) {
+  async function submit(form: any) {
     console.log('Account form submitted: ', form)
 
     const response = await accountService.update(
@@ -25,6 +25,8 @@ const AccountForm: FC<Props> = (props: Props) => {
       form.lastName,
       form.organization
     )
+
+    console.log('Account form response: ', response)
   }
 
   return (

@@ -24,7 +24,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
   const userData = await authService.signIn(credentials)
 
   // save refresh token in cookie for 30 days
-  res.cookie('accessToken', userData.accessToken, {
+  res.cookie('refreshToken', userData.refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })

@@ -18,7 +18,7 @@ async function update(
     }
   )
 
-  //   return response ? response : null
+  return response ? response : null
 }
 
 export const accountService = { update }

@@ -12,15 +12,13 @@ async function signIn(email: string, password: string): Promise<Account> {
 
   console.log('response data', response)
 
-  // get the user and the tokens from the response
   const { account, refreshToken, accessToken } = response as any
 
   console.log('account', account)
   console.log('refreshToken', refreshToken)
   console.log('accessToken', accessToken)
 
-  // save the tokens to the session storage
-  sessionStorage.setItem('token', accessToken)
+  localStorage.setItem('accessToken', accessToken)
 
   // set the user store
   useUserStore.setState((state) => state.setUser(account.user))
@@ -39,6 +37,10 @@ async function registration(email: string, password: string) {
     'auth/registration',
     { email, password }
   )
+
+  const { account, refreshToken, accessToken } = response as any
+
+  localStorage.setItem('accessToken', accessToken)
 
   console.log('registration response', response)
 }

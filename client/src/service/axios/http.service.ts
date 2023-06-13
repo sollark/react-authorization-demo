@@ -5,7 +5,6 @@ import axios, {
 } from 'axios'
 import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
-import { cookieService } from '../cookie.service'
 
 const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
 
@@ -23,9 +22,10 @@ api.interceptors.request.use(
       config.headers[headerName] = value
     })
 
-    // get access token from cookie and set authorization header to all requests
-    let accessToken = cookieService.getCookieValue('accessToken')
+    const accessToken = localStorage.getItem('accessToken')
     if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
+
+    // console.log('config', config)
 
     return config
   },
