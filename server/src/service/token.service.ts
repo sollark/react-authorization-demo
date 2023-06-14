@@ -84,6 +84,7 @@ async function validateRefreshToken(token: string) {
     const payload = jwt.verify(token, refreshSecret)
     return payload
   } catch (error) {
+    console.log('validateRefreshToken error', error)
     return null
   }
 }

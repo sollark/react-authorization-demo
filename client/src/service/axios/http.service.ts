@@ -1,6 +1,7 @@
+import { AuthResponse } from '@/models/response/AuthResponse'
 import axios, {
-  AxiosError,
   AxiosPromise,
+  AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios'
 import { isDevelopment } from '../utils.service'
@@ -14,9 +15,9 @@ var api = axios.create({
   baseURL: API_URL,
 })
 
+// set access token in the authorization header
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // set custom headers to all requests
     const headers = headerService.getHeaders()
     headers.forEach(([headerName, value]) => {
       config.headers[headerName] = value
@@ -31,6 +32,29 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
+  }
+)
+
+api.interceptors.response.use(
+  (config: AxiosResponse) => {
+    return config
+  },
+  async (error) => {
+    try {
+      const originalRequest = error.config
+      if (error.response.status === 401) {
+        const response = await axios.get<AuthResponse>(`auth/refresh`, {
+          // to allow cookies to be sent to the server automatically
+          withCredentials: true,
+          baseURL: API_URL,
+        })
+        localStorage.setItem('accessToken', response.data.accessToken)
+
+        return api.request(originalRequest)
+      }
+    } catch (error) {
+      return error
+    }
   }
 )
 
@@ -71,10 +95,10 @@ async function ajax<T, R>(
         }`
       )
 
-    if ((error as AxiosError).response?.status === 401) {
-      sessionStorage.clear()
-      window.location.assign('/')
-    }
+    // if ((error as AxiosError).response?.status === 401) {
+    //   sessionStorage.clear()
+    //   window.location.assign('/')
+    // }
 
     throw new Error()
   }

@@ -106,11 +106,11 @@ const refresh = async (refreshToken: string) => {
   }
 
   // find user
-  const userId = TokenModel.findOne({ refreshToken: refreshToken }).select(
-    'userId'
+  const identifier = TokenModel.findOne({ refreshToken: refreshToken }).select(
+    'identifier'
   )
   // TODO i send account info, not user, fix it
-  const user = await UserModel.findById(userId)
+  const user = await UserModel.findOne(identifier)
 
   // generate tokens
   const tokens = tokenService.generateTokens(payload as string)

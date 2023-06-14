@@ -41,6 +41,8 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function refresh(req: Request, res: Response, next: NextFunction) {
+  console.log('refresh controller')
+
   const { refreshToken } = req.cookies
 
   const userData = await authService.refresh(refreshToken)
