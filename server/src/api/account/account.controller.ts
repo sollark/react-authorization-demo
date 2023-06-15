@@ -2,14 +2,13 @@ import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import { OrganizationCode } from '../../mongodb/models/organizationCode.model.js'
-import { Workspace } from '../../mongodb/models/workspace.model.js'
 import { asyncLocalStorage } from '../../service/als.service.js'
 import logger from '../../service/logger.service.js'
 import { organizationService } from '../../service/organization.service.js'
-import { workspaceService } from '../../service/workspace.service.js'
-import { accountService } from './account.service.js'
 import { userService } from '../../service/user.service.js'
+import { workspaceService } from '../../service/workspace.service.js'
 import { utilService } from '../../utils/utils.js'
+import { accountService } from './account.service.js'
 
 export async function updateAccount(
   req: Request,
@@ -47,8 +46,10 @@ export async function updateAccount(
     lastName
   )
 
+  // TODO push code to organization/workspace service
   const isOrganizationCodeExists =
     await organizationService.isOrganizationCodeExists(organization)
+
   if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
     throw new BadRequestError('Organization not found', organization.toString())
 

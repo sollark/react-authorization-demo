@@ -7,7 +7,6 @@ import loggerService from './logger.service.js'
 
 async function addWorkspace(organization: Types.ObjectId, roles: Role[]) {
   const workspaceRef = await WorkspaceRefModel.create({
-    name,
     organization,
     roles,
   })
@@ -16,7 +15,7 @@ async function addWorkspace(organization: Types.ObjectId, roles: Role[]) {
     .populate('organization')
     .exec()
 
-  loggerService.info(`account.service - account added: ${workspace}`)
+  loggerService.info(`workspace.service - workspace added: ${workspace}`)
 
   return workspace
 }
