@@ -5,7 +5,6 @@ import { immer } from 'zustand/middleware/immer'
 
 interface UserState {
   user: User | null
-
   setUser: (user: UserState['user']) => void
 }
 
@@ -14,13 +13,16 @@ const useUserStore = create<UserState>()(
   devtools(
     immer((set) => ({
       user: null,
-      setUser: (user) => set({ user }),
+      setUser: (user) => set(() => ({ user: user })),
     }))
   )
 )
 
 export default useUserStore
 
-// usage:
+// getter:
 // const { user } = useUserStore()
 // const firstName = user?.firstName
+
+// setter
+// useUserStore.setState({ user: account.user })

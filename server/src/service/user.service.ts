@@ -28,7 +28,7 @@ async function updateUser(
   updatedUserData: Partial<User>
 ): Promise<User | null> {
   const user = await UserModel.findOneAndUpdate(
-    { _id: identifier },
+    { identifier },
     updatedUserData,
     { new: true }
   )

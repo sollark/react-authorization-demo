@@ -7,15 +7,15 @@ export default function Home() {
   console.log('Home connected')
   const navigate = useNavigate()
   const { isComplete } = useAccountStore()
+  const user = useUserStore((state) => state.user)
 
   useEffect(() => {
-    if (!isComplete) {
-      console.log('to account', isComplete)
-      navigate({ to: '/account' })
-    }
+    console.log('Home-useEffect user store', user)
+    console.log('Home-useEffect account store', isComplete)
+    if (!user) navigate({ to: '/auth/signin' })
+    else if (!isComplete) navigate({ to: '/account' })
   }, [])
 
-  const { user } = useUserStore()
   const firstName = user?.firstName
 
   return (

@@ -3,6 +3,7 @@ import { authService } from '@/service/auth.service'
 import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput'
+import { useNavigate } from '@tanstack/router'
 
 interface RegistrationForm {
   email: string
@@ -18,12 +19,17 @@ const defaultValues = {
 const RegistrationForm = () => {
   console.log('RegistrationForm connected')
 
+  const navigate = useNavigate()
+
   async function submit(form: Object) {
     console.log('Registration form submitted: ', form)
 
     const { email, password } = form as RegistrationForm
 
-    const response = await authService.registration(email, password)
+    const account = await authService.registration(email, password)
+
+    if (account.isComplete) navigate({ to: '/' })
+    else navigate({ to: '/account' })
   }
 
   return (

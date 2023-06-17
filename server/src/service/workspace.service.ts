@@ -11,6 +11,22 @@ import BadRequestError from '../errors/BadRequestError.js'
 async function updateWorkspace(updatedWorkspaceData: any) {}
 
 async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
+  // Check if a matching workspace already exists
+  const existingWorkspace = await WorkspaceRefModel.findOne({
+    organization: organizationId,
+    roles: { $all: roles },
+  })
+    .populate('organization')
+    .exec()
+
+  if (existingWorkspace) {
+    loggerService.info(
+      `workspace.service - existing workspace found: ${existingWorkspace}`
+    )
+    return existingWorkspace
+  }
+
+  // Create a new workspace if no match is found
   const workspaceRef = await WorkspaceRefModel.create({
     organization: organizationId,
     roles,
@@ -20,7 +36,7 @@ async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
     .populate('organization')
     .exec()
 
-  loggerService.info(`workspace.service - workspace added: ${workspace}`)
+  loggerService.info(`workspace.service - new workspace added: ${workspace}`)
 
   return workspace
 }

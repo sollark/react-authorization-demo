@@ -54,6 +54,8 @@ export async function updateAccount(
     workspace?._id
   )
 
+  if (updatedAccount) updatedAccount.isComplete = true
+
   console.log('updateAccount updatedAccount', updatedAccount)
 
   res.status(200).json({ account: updatedAccount })

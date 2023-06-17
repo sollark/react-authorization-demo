@@ -22,28 +22,26 @@ const AccountForm: FC<Props> = (props: Props) => {
   async function submit(form: any) {
     console.log('Account form submitted: ', form)
 
-    let response = null
+    let account = null
     // if organization is not a number, it means it is a new organization name
     if (isNaN(form.organization))
-      response = await accountService.update(
+      account = await accountService.update(
         form.firstName,
         form.lastName,
         form.organization
       )
     // else it is an existing organization code
     else
-      response = await accountService.update(
+      account = await accountService.update(
         form.firstName,
         form.lastName,
         undefined,
         form.organization
       )
 
-    console.log('Account form response: ', response)
+    console.log('Account form account: ', account)
 
-    const { account } = response as any
-
-    if (account.isComplete) navigate({ to: '/' })
+    if (account?.isComplete) navigate({ to: '/' })
   }
 
   return (
