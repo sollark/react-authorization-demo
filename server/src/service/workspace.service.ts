@@ -4,6 +4,9 @@ import WorkspaceRefModel, {
   Workspace,
 } from '../mongodb/models/workspace.model.js'
 import loggerService from './logger.service.js'
+import { organizationService } from './organization.service.js'
+import { OrganizationCode } from '../mongodb/models/organizationCode.model.js'
+import BadRequestError from '../errors/BadRequestError.js'
 
 async function updateWorkspace(updatedWorkspaceData: any) {
   // const organization = await organizationService.getOrganization(organization)
@@ -63,9 +66,39 @@ async function getWorkspaces(workspaceIds: Types.ObjectId[]) {
   })
 }
 
+async function joinExistingOrganization(organizationCode: OrganizationCode) {
+  const organization = await organizationService.getOrganization(
+    organizationCode
+  )
+
+  if (!organization)
+    throw new BadRequestError(
+      'Organization not found',
+      organizationCode.toString()
+    )
+
+  // at first sign in user gets employee role at chosen organization, later it can be changed by manager
+  const workspace = await getWorkspace(organization._id, ['Employee'])
+  if (workspace) return workspace
+
+  // if user workspace is not exist, create it
+  const newWorkspace = await addWorkspace(organization._id, ['Employee'])
+
+  return newWorkspace
+}
+
+async function joinNewOrganization(name: string) {
+  const organization = await organizationService.addOrganization(name)
+  const workspace = await addWorkspace(organization._id, ['Manager'])
+
+  return workspace
+}
+
 export const workspaceService = {
   addWorkspace,
   updateWorkspace,
   getWorkspace,
   getWorkspaces,
+  joinExistingOrganization,
+  joinNewOrganization,
 }

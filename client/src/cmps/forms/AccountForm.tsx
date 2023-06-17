@@ -41,8 +41,9 @@ const AccountForm: FC<Props> = (props: Props) => {
 
     console.log('Account form response: ', response)
 
-    //  if(response.account.isComplete)
-    //    navigate({ to: '/' }
+    const { account } = response as any
+
+    if (account.isComplete) navigate({ to: '/' })
   }
 
   return (
