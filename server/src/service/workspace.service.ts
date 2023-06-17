@@ -1,32 +1,21 @@
 import { Types } from 'mongoose'
+import { Role } from '../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../mongodb/models/workspace.model.js'
-import { Role } from '../mongodb/models/role.model.js'
 import loggerService from './logger.service.js'
-import { organizationService } from './organization.service.js'
 
-async function updateWorkspace(updatedWorkspaceData: {
-  organizationInfo: string
-}) {
-  const { organizationInfo } = updatedWorkspaceData
-
+async function updateWorkspace(updatedWorkspaceData: any) {
   // const organization = await organizationService.getOrganization(organization)
-
   // if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
   //   throw new BadRequestError('Organization not found', organization.toString())
-
   // let workspace = null
-
   // if (utilService.isNumeric(organization))
   //   workspace = await joinExistingOrganization(+organization)
-
   // if (!utilService.isNumeric(organization))
   //   workspace = await joinNewOrganization(organization)
-
   // if (!workspace)
   //   throw new BadRequestError('Organization not found', organization.toString())
-
   // const updatedAccount = await accountService.addWorkspace(
   //   identifier,
   //   workspace?._id

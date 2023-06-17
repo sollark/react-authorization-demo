@@ -27,16 +27,17 @@ export async function updateAccount(
 
   console.log('updateAccount account', account)
 
-  const [updatedUserData, updatedWorkspaceData] =
+  const [updatedUserData, updatedWorkspaceData, updatedOrganizationData] =
     accountService.sortAccountData(account)
 
   console.log('updateAccount updatedUserData', updatedUserData)
   console.log('updateAccount updatedWorkspaceData', updatedWorkspaceData)
+  console.log('updateAccount updatedOrganizationData', updatedOrganizationData)
 
   const updatedUser = await userService.updateUser(identifier, updatedUserData)
 
   const updatedWorkspace = await workspaceService.updateWorkspace(
-    updatedWorkspaceData as { organizationInfo: string }
+    updatedWorkspaceData
   )
 
   // TODO push code to organization/workspace service

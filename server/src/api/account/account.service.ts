@@ -4,6 +4,7 @@ import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
 import WorkspaceRefModel from '../../mongodb/models/workspace.model.js'
+import OrganizationModel from '../../mongodb/models/organization.model.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
@@ -82,25 +83,35 @@ async function addWorkspace(
 
 function sortAccountData(
   accountData: any
-): [updatedUserData: Object, updatedWorkspaceData: Object] {
+): [
+  updatedUserData: Object,
+  updatedWorkspaceData: Object,
+  updatedOrganizationData: Object
+] {
   const userSchemaKeys = Object.keys(UserModel.schema.paths)
   const workspaceSchemaKeys = Object.keys(WorkspaceRefModel.schema.paths)
+  const organizationSchemaKeys = Object.keys(OrganizationModel.schema.paths)
 
-  const { updatedUserData, updatedWorkspaceData } = Object.entries(
-    accountData
-  ).reduce(
-    (accumulator: any, [key, value]) => {
-      if (userSchemaKeys.includes(key)) {
-        accumulator.updatedUserData[key] = value
-      } else if (workspaceSchemaKeys.includes(key)) {
-        accumulator.updatedWorkspaceData[key] = value
+  const { updatedUserData, updatedWorkspaceData, updatedOrganizationData } =
+    Object.entries(accountData).reduce(
+      (accumulator: any, [key, value]) => {
+        if (userSchemaKeys.includes(key)) {
+          accumulator.updatedUserData[key] = value
+        } else if (workspaceSchemaKeys.includes(key)) {
+          accumulator.updatedWorkspaceData[key] = value
+        } else if (organizationSchemaKeys.includes(key)) {
+          accumulator.updatedOrganizationData[key] = value
+        }
+        return accumulator
+      },
+      {
+        updatedUserData: {},
+        updatedWorkspaceData: {},
+        updatedOrganizationData: {},
       }
-      return accumulator
-    },
-    { updatedUserData: {}, updatedWorkspaceData: {} }
-  )
+    )
 
-  return [updatedUserData, updatedWorkspaceData]
+  return [updatedUserData, updatedWorkspaceData, updatedOrganizationData]
 }
 
 export const accountService = {
