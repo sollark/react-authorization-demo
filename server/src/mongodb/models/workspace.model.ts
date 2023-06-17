@@ -7,7 +7,7 @@ export interface Workspace {
   roles: Role[]
 }
 
-interface WorkspaceRef {
+export interface WorkspaceRef {
   organizationRef: Types.ObjectId
   roles: Role[]
 }

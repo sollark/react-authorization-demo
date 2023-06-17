@@ -8,11 +8,11 @@ import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
 const addOrganization = async (name: string) => {
-  const code = generateOrganizationCode(name)
+  const code = await generateOrganizationCode(name)
 
   const organization = await OrganizationModel.create({
-    code,
-    name,
+    organizationCode: code,
+    organizationName: name,
   })
 
   loggerService.info(
