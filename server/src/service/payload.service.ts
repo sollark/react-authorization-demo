@@ -33,7 +33,7 @@ async function decodeTokenPayload(tokenPayload: string) {
     var roleCodes = parts.slice(1)
 
     const workspace: WorkspaceCode = {
-      organization: +organizationCode,
+      organization: organizationCode,
       roles: roleCodes as RoleCode[],
     }
 
