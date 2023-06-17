@@ -8,22 +8,7 @@ import { organizationService } from './organization.service.js'
 import { OrganizationCode } from '../mongodb/models/organizationCode.model.js'
 import BadRequestError from '../errors/BadRequestError.js'
 
-async function updateWorkspace(updatedWorkspaceData: any) {
-  // const organization = await organizationService.getOrganization(organization)
-  // if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
-  //   throw new BadRequestError('Organization not found', organization.toString())
-  // let workspace = null
-  // if (utilService.isNumeric(organization))
-  //   workspace = await joinExistingOrganization(+organization)
-  // if (!utilService.isNumeric(organization))
-  //   workspace = await joinNewOrganization(organization)
-  // if (!workspace)
-  //   throw new BadRequestError('Organization not found', organization.toString())
-  // const updatedAccount = await accountService.addWorkspace(
-  //   identifier,
-  //   workspace?._id
-  // )
-}
+async function updateWorkspace(updatedWorkspaceData: any) {}
 
 async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
   const workspaceRef = await WorkspaceRefModel.create({

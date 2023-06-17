@@ -64,26 +64,15 @@ export async function getAccount(
   res: Response,
   next: NextFunction
 ) {
-  // const store = asyncLocalStorage.getStore()
-  // const identifier = store?.userData?.identifier
-  // if (!identifier) {
-  //   logger.warn(`user.controller - unauthenticated request to fetch user `)
-  //   return new UnauthorizedError('unauthenticated')
-  // }
-  // const user = await userService.getUserByIdentifier(identifier)
-  // res.status(200).json(user)
+  const store = asyncLocalStorage.getStore()
+  const identifier = store?.userData?.identifier
+  if (!identifier) {
+    logger.warn(`account.controller - unauthenticated request update account`)
+
+    throw new UnauthorizedError('You are not unauthorized')
+  }
+
+  const account = await accountService.getAccount(identifier)
+
+  res.status(200).json({ account })
 }
-
-// export async function getUser(req: Request, res: Response, next: NextFunction) {
-//   const store = asyncLocalStorage.getStore()
-//   const identifier = store?.userData?.identifier
-
-//   if (!identifier) {
-//     logger.warn(`user.controller - unauthenticated request to fetch user `)
-//     return new UnauthorizedError('unauthenticated')
-//   }
-
-//   const user = await userService.getUserByIdentifier(identifier)
-
-//   res.status(200).json(user)
-// }

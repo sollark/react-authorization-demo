@@ -21,48 +21,21 @@ async function createAccount(
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
-  const accountDoc = await AccountModel.findOne({ identifier }).populate(
-    'user',
-    'workspaces'
-  )
+  const account = await AccountModel.findOne({ identifier })
+    .populate('user')
+    .populate({
+      path: 'workspaces',
+      populate: { path: 'organization' },
+    })
 
-  if (!accountDoc) {
+  if (!account) {
     logger.warn(`account.service - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
 
-  logger.info(`account.service - account fetched: ${accountDoc}`)
+  logger.info(`account.service - account fetched: ${account}`)
 
-  return accountDoc
-}
-
-// TODO controller has updateAccount function and it take care of user updating
-
-async function updateAccount(identifier: Types.ObjectId, account: Account) {
-  console.log('updateAccount', account)
-  // const updatedAccountDoc = await AccountModel.findOneAndUpdate({
-  //   ...account,
-  //   identifier,
-  // })
-  // if (!updatedAccountDoc) {
-  //   logger.warn(`account.service - account is not found: ${identifier}`)
-  //   throw new BadRequestError('Account is not found')
-  // }
-  // copied to controller
-  //
-  // const userSchemaKeys = Object.keys(UserModel.schema.paths)
-  // const workspaceSchemaKeys = Object.keys(workspace.schema.paths)
-  // const updatedUserData = {}
-  // const updatedWorkspaceData = {}
-  // Object.entries(updates).forEach(([key, value]) => {
-  //   if (userSchemaKeys.includes(key)) {
-  //     updatedUserData[key] = value
-  //   } else if (workspaceSchemaKeys.includes(key)) {
-  //     updatedWorkspaceData[key] = value
-  //   }
-  // })
-  // console.log('updatedAccountDoc', updatedAccountDoc)
-  // return updatedAccountDoc
+  return account
 }
 
 async function deleteAccount(identifier: Types.ObjectId) {
@@ -123,7 +96,6 @@ function sortAccountData(
 export const accountService = {
   createAccount,
   getAccount,
-  updateAccount,
   deleteAccount,
   addWorkspace,
   sortAccountData,
