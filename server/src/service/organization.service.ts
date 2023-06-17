@@ -78,7 +78,9 @@ async function generateOrganizationCode(
 ): Promise<OrganizationCode> {
   let code = utilService.getRandomInt(1000, 9999)
 
-  const existingCode = await OrganizationCodeModel.findOne({ code })
+  const existingCode = await OrganizationCodeModel.findOne({
+    organizationCode: code.toString(),
+  })
 
   if (existingCode) {
     // Code already exists, generate a new one recursively

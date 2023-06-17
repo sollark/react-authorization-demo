@@ -24,7 +24,7 @@ async function updateWorkspace(updatedWorkspaceData: any) {
 
 async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
   const workspaceRef = await WorkspaceRefModel.create({
-    organizationId,
+    organization: organizationId,
     roles,
   })
 
@@ -39,10 +39,10 @@ async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
 
 async function getWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
   const workspace = await WorkspaceRefModel.findOne({
-    organizationRef: organizationId,
+    organization: organizationId,
     roles: { $all: roles },
   })
-    .populate('organizationRef')
+    .populate('organization')
     .exec()
 
   return workspace
@@ -52,13 +52,13 @@ async function getWorkspaces(workspaceIds: Types.ObjectId[]) {
   const workspaces = await WorkspaceRefModel.find({
     _id: { $in: workspaceIds },
   })
-    .populate('organizationRef')
+    .populate('organization')
     .exec()
 
   return workspaces.map((workspace) => {
     return {
       ...workspace.toObject(),
-      organization: workspace.organizationRef, // Rename organizationRef to organization
+      organization: workspace.organization,
     } as unknown as Workspace
   })
 }

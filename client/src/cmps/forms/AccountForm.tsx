@@ -2,6 +2,7 @@ import { AccountSchema } from '@/models/Account'
 import { accountService } from '@/service/account.service'
 import { FC, ReactElement } from 'react'
 import MultistepForm from './MultistepForm'
+import { useNavigate } from '@tanstack/router'
 
 interface Props {
   children: ReactElement[]
@@ -10,6 +11,7 @@ interface Props {
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
+  const navigate = useNavigate()
 
   const defaultValues = {
     firstName: '',
@@ -38,6 +40,9 @@ const AccountForm: FC<Props> = (props: Props) => {
       )
 
     console.log('Account form response: ', response)
+
+    //  if(response.account.isComplete)
+    //    navigate({ to: '/' }
   }
 
   return (

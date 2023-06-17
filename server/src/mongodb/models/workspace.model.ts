@@ -8,12 +8,12 @@ export interface Workspace {
 }
 
 export interface WorkspaceRef {
-  organizationRef: Types.ObjectId
+  organization: Types.ObjectId
   roles: Role[]
 }
 
 const WorkspaceSchema = new Schema({
-  organizationRef: {
+  organization: {
     type: Schema.Types.ObjectId,
     ref: 'Organization',
   },

@@ -39,7 +39,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
 // TODO controller has updateAccount function and it take care of user updating
 
 async function updateAccount(identifier: Types.ObjectId, account: Account) {
-  // console.log('updateAccount', account)
+  console.log('updateAccount', account)
   // const updatedAccountDoc = await AccountModel.findOneAndUpdate({
   //   ...account,
   //   identifier,
@@ -73,12 +73,18 @@ async function addWorkspace(
   identifier: Types.ObjectId,
   workspaceId: Types.ObjectId
 ) {
-  const account = await AccountModel.findOne({ identifier })
+  const account = await AccountModel.findOneAndUpdate(
+    { identifier },
+    { $push: { workspaces: workspaceId } },
+    { new: true }
+  )
+    .populate('user')
+    .populate({
+      path: 'workspaces',
+      populate: { path: 'organization' },
+    })
 
-  if (account) {
-    account.workspaces.push(workspaceId)
-    await account.save()
-  }
+  return account
 }
 
 function sortAccountData(

@@ -49,15 +49,14 @@ export async function updateAccount(
   if (organizationCode)
     workspace = await joinExistingOrganization(organizationCode)
 
-  console.log('111')
   if (organizationName) workspace = await joinNewOrganization(organizationName)
 
-  console.log('222')
   const updatedAccount = await accountService.addWorkspace(
     identifier,
     workspace?._id
   )
-  console.log('333')
+
+  console.log('updateAccount updatedAccount', updatedAccount)
 
   res.status(200).json(updatedAccount)
 }
