@@ -1,7 +1,7 @@
-import { Account, AccountSchema } from '@/models/Account'
+import { AccountSchema } from '@/models/Account'
+import { accountService } from '@/service/account.service'
 import { FC, ReactElement } from 'react'
 import MultistepForm from './MultistepForm'
-import { accountService } from '@/service/account.service'
 
 interface Props {
   children: ReactElement[]
@@ -20,11 +20,22 @@ const AccountForm: FC<Props> = (props: Props) => {
   async function submit(form: any) {
     console.log('Account form submitted: ', form)
 
-    const response = await accountService.update(
-      form.firstName,
-      form.lastName,
-      form.organization
-    )
+    let response = null
+    // if organization is not a number, it means it is a new organization name
+    if (isNaN(form.organization))
+      response = await accountService.update(
+        form.firstName,
+        form.lastName,
+        form.organization
+      )
+    // else it is an existing organization code
+    else
+      response = await accountService.update(
+        form.firstName,
+        form.lastName,
+        undefined,
+        form.organization
+      )
 
     console.log('Account form response: ', response)
   }

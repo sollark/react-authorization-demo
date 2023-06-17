@@ -6,7 +6,8 @@ import { Organization } from '@/models/Organization'
 async function update(
   firstName: string,
   lastName: string,
-  organization: string
+  organizationName?: string,
+  organizationCode?: string
 ) {
   //  :Promise<Account>
   const response = await httpService.post<User & Organization, Account>(
@@ -14,7 +15,8 @@ async function update(
     {
       firstName,
       lastName,
-      organization,
+      organizationName,
+      organizationCode,
     }
   )
 

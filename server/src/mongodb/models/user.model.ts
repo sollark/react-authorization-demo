@@ -2,13 +2,13 @@ import { model, Schema, Types } from 'mongoose'
 
 export interface User {
   firstName?: string
-  lastname?: string
+  lastName?: string
 }
 
 const UserSchema = new Schema({
   identifier: { type: Types.ObjectId, required: true, unique: true },
   firstName: { type: String },
-  lastname: { type: String },
+  lastName: { type: String },
 })
 
 const UserModel = model<User>('User', UserSchema)

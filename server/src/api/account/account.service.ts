@@ -3,6 +3,7 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
+import WorkspaceRefModel from '../../mongodb/models/workspace.model.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
@@ -42,29 +43,25 @@ async function updateAccount(identifier: Types.ObjectId, account: Account) {
   //   ...account,
   //   identifier,
   // })
-
   // if (!updatedAccountDoc) {
   //   logger.warn(`account.service - account is not found: ${identifier}`)
   //   throw new BadRequestError('Account is not found')
   // }
-
-  const userSchemaKeys = Object.keys(UserModel.schema.paths)
-  const workspaceSchemaKeys = Object.keys(workspace.schema.paths)
-
-  const updatedUserData = {}
-  const updatedWorkspaceData = {}
-
-  Object.entries(updates).forEach(([key, value]) => {
-    if (userSchemaKeys.includes(key)) {
-      updatedUserData[key] = value
-    } else if (workspaceSchemaKeys.includes(key)) {
-      updatedWorkspaceData[key] = value
-    }
-  })
-
-  console.log('updatedAccountDoc', updatedAccountDoc)
-
-  return updatedAccountDoc
+  // copied to controller
+  //
+  // const userSchemaKeys = Object.keys(UserModel.schema.paths)
+  // const workspaceSchemaKeys = Object.keys(workspace.schema.paths)
+  // const updatedUserData = {}
+  // const updatedWorkspaceData = {}
+  // Object.entries(updates).forEach(([key, value]) => {
+  //   if (userSchemaKeys.includes(key)) {
+  //     updatedUserData[key] = value
+  //   } else if (workspaceSchemaKeys.includes(key)) {
+  //     updatedWorkspaceData[key] = value
+  //   }
+  // })
+  // console.log('updatedAccountDoc', updatedAccountDoc)
+  // return updatedAccountDoc
 }
 
 async function deleteAccount(identifier: Types.ObjectId) {
@@ -83,10 +80,34 @@ async function addWorkspace(
   }
 }
 
+function sortAccountData(
+  accountData: any
+): [updatedUserData: Object, updatedWorkspaceData: Object] {
+  const userSchemaKeys = Object.keys(UserModel.schema.paths)
+  const workspaceSchemaKeys = Object.keys(WorkspaceRefModel.schema.paths)
+
+  const { updatedUserData, updatedWorkspaceData } = Object.entries(
+    accountData
+  ).reduce(
+    (accumulator: any, [key, value]) => {
+      if (userSchemaKeys.includes(key)) {
+        accumulator.updatedUserData[key] = value
+      } else if (workspaceSchemaKeys.includes(key)) {
+        accumulator.updatedWorkspaceData[key] = value
+      }
+      return accumulator
+    },
+    { updatedUserData: {}, updatedWorkspaceData: {} }
+  )
+
+  return [updatedUserData, updatedWorkspaceData]
+}
+
 export const accountService = {
   createAccount,
   getAccount,
   updateAccount,
   deleteAccount,
   addWorkspace,
+  sortAccountData,
 }

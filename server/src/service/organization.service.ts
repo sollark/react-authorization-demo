@@ -74,7 +74,7 @@ export const organizationService = {
 }
 
 async function generateOrganizationCode(
-  name: string
+  organizationName: string
 ): Promise<OrganizationCode> {
   let code = utilService.getRandomInt(1000, 9999)
 
@@ -82,13 +82,13 @@ async function generateOrganizationCode(
 
   if (existingCode) {
     // Code already exists, generate a new one recursively
-    return generateOrganizationCode(name)
+    return generateOrganizationCode(organizationName)
   }
 
-  const organizationCode = await OrganizationCodeModel.create({
-    code,
-    name,
+  const organizationCodeMap = await OrganizationCodeModel.create({
+    organizationName,
+    organizationCode: code.toString(),
   })
 
-  return code as OrganizationCode
+  return code.toString() as OrganizationCode
 }

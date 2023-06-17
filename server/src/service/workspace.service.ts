@@ -4,10 +4,38 @@ import WorkspaceRefModel, {
 } from '../mongodb/models/workspace.model.js'
 import { Role } from '../mongodb/models/role.model.js'
 import loggerService from './logger.service.js'
+import { organizationService } from './organization.service.js'
 
-async function addWorkspace(organization: Types.ObjectId, roles: Role[]) {
+async function updateWorkspace(updatedWorkspaceData: {
+  organizationInfo: string
+}) {
+  const { organizationInfo } = updatedWorkspaceData
+
+  // const organization = await organizationService.getOrganization(organization)
+
+  // if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
+  //   throw new BadRequestError('Organization not found', organization.toString())
+
+  // let workspace = null
+
+  // if (utilService.isNumeric(organization))
+  //   workspace = await joinExistingOrganization(+organization)
+
+  // if (!utilService.isNumeric(organization))
+  //   workspace = await joinNewOrganization(organization)
+
+  // if (!workspace)
+  //   throw new BadRequestError('Organization not found', organization.toString())
+
+  // const updatedAccount = await accountService.addWorkspace(
+  //   identifier,
+  //   workspace?._id
+  // )
+}
+
+async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
   const workspaceRef = await WorkspaceRefModel.create({
-    organization,
+    organizationId,
     roles,
   })
 
@@ -48,6 +76,7 @@ async function getWorkspaces(workspaceIds: Types.ObjectId[]) {
 
 export const workspaceService = {
   addWorkspace,
+  updateWorkspace,
   getWorkspace,
   getWorkspaces,
 }

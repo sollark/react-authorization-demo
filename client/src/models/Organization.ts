@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
 export interface Organization {
-  organization: string
+  organizationName?: string
+  organizationCode?: string
   // description: string
 }
 

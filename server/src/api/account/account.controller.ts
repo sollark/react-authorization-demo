@@ -7,7 +7,6 @@ import logger from '../../service/logger.service.js'
 import { organizationService } from '../../service/organization.service.js'
 import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
-import { utilService } from '../../utils/utils.js'
 import { accountService } from './account.service.js'
 
 export async function updateAccount(
@@ -27,49 +26,43 @@ export async function updateAccount(
   const account = req.body
 
   console.log('updateAccount account', account)
-  const {
-    firstName,
-    lastName,
-    email,
-    phone,
-    address,
-    city,
-    state,
-    zip,
-    country,
-    organization,
-  } = account
 
-  const updatedUser = await userService.updateUser(
-    identifier,
-    firstName,
-    lastName
+  const [updatedUserData, updatedWorkspaceData] =
+    accountService.sortAccountData(account)
+
+  console.log('updateAccount updatedUserData', updatedUserData)
+  console.log('updateAccount updatedWorkspaceData', updatedWorkspaceData)
+
+  const updatedUser = await userService.updateUser(identifier, updatedUserData)
+
+  const updatedWorkspace = await workspaceService.updateWorkspace(
+    updatedWorkspaceData as { organizationInfo: string }
   )
 
   // TODO push code to organization/workspace service
-  const isOrganizationCodeExists =
-    await organizationService.isOrganizationCodeExists(organization)
+  // const isOrganizationCodeExists =
+  //   await organizationService.isOrganizationCodeExists(organization)
 
-  if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
-    throw new BadRequestError('Organization not found', organization.toString())
+  // if (utilService.isNumeric(organization) && !isOrganizationCodeExists)
+  //   throw new BadRequestError('Organization not found', organization.toString())
 
-  let workspace = null
+  // let workspace = null
 
-  if (utilService.isNumeric(organization))
-    workspace = await joinExistingOrganization(+organization)
+  // if (utilService.isNumeric(organization))
+  //   workspace = await joinExistingOrganization(+organization)
 
-  if (!utilService.isNumeric(organization))
-    workspace = await joinNewOrganization(organization)
+  // if (!utilService.isNumeric(organization))
+  //   workspace = await joinNewOrganization(organization)
 
-  if (!workspace)
-    throw new BadRequestError('Organization not found', organization.toString())
+  // if (!workspace)
+  //   throw new BadRequestError('Organization not found', organization.toString())
 
-  const updatedAccount = await accountService.addWorkspace(
-    identifier,
-    workspace?._id
-  )
+  // const updatedAccount = await accountService.addWorkspace(
+  //   identifier,
+  //   workspace?._id
+  // )
 
-  res.status(200).json(updatedAccount)
+  // res.status(200).json(updatedAccount)
 }
 
 export async function getAccount(

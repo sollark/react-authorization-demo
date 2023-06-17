@@ -1,16 +1,19 @@
 import { model, Schema } from 'mongoose'
 
-export type OrganizationCode = number
+export type OrganizationCode = string
 
-export interface OrganizationMap {
-  name: string
-  code: OrganizationCode
+export interface OrganizationCodeMap {
+  organizationName: string
+  organizationCode: OrganizationCode
 }
 
-const OrganizationCodeSchema = new Schema({
-  name: { type: String, required: true, unique: true },
-  code: { type: Number, required: true, unique: true },
+const OrganizationCodeMapSchema = new Schema({
+  organizationName: { type: String, required: true },
+  organizationCode: { type: String, required: true, unique: true },
 })
 
-const OrganizationCodeModel = model('OrganizationCode', OrganizationCodeSchema)
+const OrganizationCodeModel = model(
+  'OrganizationCode',
+  OrganizationCodeMapSchema
+)
 export default OrganizationCodeModel
