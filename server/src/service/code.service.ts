@@ -9,7 +9,7 @@ import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
 function castToCode(workspaces: Workspace[]): WorkspaceCode[] {
   const codes = workspaces.map((workspace) => {
     return {
-      organization: workspace.organization.code,
+      organization: workspace.organization.organizationCode,
       roles: workspace.roles.map((role) => ROLE_CODE_MAPPING[role as Role]),
     }
   })
