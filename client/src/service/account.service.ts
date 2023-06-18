@@ -25,7 +25,10 @@ async function update(
 
   const { account } = response as any
 
-  if (account?.isComplete) useAccountStore.setState({ isComplete: true })
+  const setAccountAsComplete = useAccountStore(
+    (state) => state.setAccountAsComplete
+  )
+  if (account?.isComplete) setAccountAsComplete()
 
   return account ? account : null
 }

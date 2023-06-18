@@ -6,6 +6,7 @@ import { immer } from 'zustand/middleware/immer'
 interface RoleState {
   roles: Role[]
   setRoles: (roles: Role[]) => void
+  clearRoles: () => void
 }
 
 // Create a store with initial state
@@ -14,6 +15,7 @@ const useRoleStore = create<RoleState>()(
     immer((set) => ({
       roles: ['Guest'],
       setRoles: (roles) => set(() => ({ roles })),
+      clearRoles: () => set(() => ({ roles: ['Guest'] })),
     }))
   )
 )

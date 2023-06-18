@@ -6,6 +6,7 @@ import { MultistepFormProvider } from './context/MultistepFormContext'
 import BackButton from './buttons/BackButton'
 import SubmitButton from './buttons/SubmitButton'
 import NextButton from './buttons/NextButton'
+import { isEmptyObject } from '@/service/utils.service'
 
 interface Props {
   children: ReactElement[]
@@ -28,7 +29,10 @@ const MultistepForm: FC<Props> = (props: Props) => {
     reValidateMode: 'onBlur',
   })
 
-  const { handleSubmit } = methods
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = methods
 
   const onSubmit = (data: any) => {
     submit(data)
@@ -45,7 +49,15 @@ const MultistepForm: FC<Props> = (props: Props) => {
           {step}
           <div>
             {isFirstStep ? null : <BackButton onClick={back} />}
-            {isLastStep ? <SubmitButton /> : <NextButton onClick={next} />}
+            {isLastStep ? (
+              <SubmitButton />
+            ) : (
+              <NextButton
+                onClick={() => {
+                  if (isEmptyObject(errors)) next()
+                }}
+              />
+            )}
           </div>
         </form>
       </MultistepFormProvider>

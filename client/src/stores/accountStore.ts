@@ -4,7 +4,8 @@ import { immer } from 'zustand/middleware/immer'
 
 interface AccountState {
   isComplete: boolean
-  setIsComplete: (isComplete: AccountState['isComplete']) => void
+  setAccountAsComplete: () => void
+  clearAccount: () => void
 }
 
 // Create a store with initial state
@@ -12,7 +13,8 @@ const useAccountStore = create<AccountState>()(
   devtools(
     immer((set) => ({
       isComplete: false,
-      setIsComplete: (isComplete) => set(() => ({ isComplete: isComplete })),
+      setAccountAsComplete: () => set(() => ({ isComplete: true })),
+      clearAccount: () => set(() => ({ isComplete: false })),
     }))
   )
 )
@@ -21,6 +23,8 @@ export default useAccountStore
 
 // getter:
 // const { isComplete } = useAccountStore()
+// const  isComplete = useAccountStore(state => state.isComplete) // this is optimal and not cause rerender when other state properties change
 
 // setter
 // useAccountStore.setState({ isComplete: true })
+// const setAccountAsComplete = useAccountStore((state) => state.setAccountAsComplete)
