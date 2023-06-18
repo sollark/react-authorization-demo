@@ -29,3 +29,14 @@ export default useUserStore
 
 // setter
 // useUserStore.setState({ user: account.user })
+
+// run function
+// useUserStore.getState().setUser(account.user)
+
+// doesn't work in function (hooks rules)
+// const setAccountAsComplete = useAccountStore(
+//   (state) => state.setAccountAsComplete
+// )
+
+// works in function
+// useAccountStore.getState().setAccountAsComplete()

@@ -28,6 +28,7 @@ const RegistrationForm = () => {
 
     const account = await authService.registration(email, password)
 
+    // TODO: is complete in db is false
     if (account.isComplete) navigate({ to: '/' })
     else navigate({ to: '/account' })
   }
