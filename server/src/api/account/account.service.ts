@@ -93,10 +93,24 @@ function sortAccountData(
   return [updatedUserData, updatedWorkspaceData, updatedOrganizationData]
 }
 
+function completeAccount(accountId: Types.ObjectId) {
+  const updatedAccount = AccountModel.findByIdAndUpdate(accountId, {
+    isComplete: true,
+  })
+    .populate('user')
+    .populate({
+      path: 'workspaces',
+      populate: { path: 'organization' },
+    })
+
+  return updatedAccount
+}
+
 export const accountService = {
   createAccount,
   getAccount,
   deleteAccount,
   addWorkspace,
   sortAccountData,
+  completeAccount,
 }
