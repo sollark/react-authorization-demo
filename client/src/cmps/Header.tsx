@@ -13,11 +13,11 @@ const Header: FC = () => {
     <header className='app-header'>
       <Logo />
       <div className='app-header__user'>
-        {user ? user.firstName : 'no user'}
+        {user ? user.firstName : 'Not signed in'}
       </div>
 
       <div className='app-header__account-status'>
-        {isComplete ? 'Complete' : 'not complete'}
+        {isComplete ? 'Complete' : 'Your account is not complete'}
       </div>
     </header>
   )
