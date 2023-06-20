@@ -1,6 +1,6 @@
 import { User } from '@/models/User'
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 interface UserState {
@@ -11,12 +11,15 @@ interface UserState {
 
 // Create a store with initial state
 const useUserStore = create<UserState>()(
-  devtools(
-    immer((set) => ({
-      user: null,
-      setUser: (user) => set(() => ({ user })),
-      clearUser: () => set(() => ({ user: null })),
-    }))
+  persist(
+    devtools(
+      immer((set) => ({
+        user: null,
+        setUser: (user) => set(() => ({ user })),
+        clearUser: () => set(() => ({ user: null })),
+      }))
+    ),
+    { name: 'user-storage' }
   )
 )
 

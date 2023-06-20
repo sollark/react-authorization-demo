@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 interface AccountState {
@@ -11,13 +11,16 @@ interface AccountState {
 
 // Create a store with initial state
 const useAccountStore = create<AccountState>()(
-  devtools(
-    immer((set) => ({
-      isComplete: false,
-      setIsComplete: (isComplete) => set(() => ({ isComplete })),
-      setAccountAsComplete: () => set(() => ({ isComplete: true })),
-      clearAccount: () => set(() => ({ isComplete: false })),
-    }))
+  persist(
+    devtools(
+      immer((set) => ({
+        isComplete: false,
+        setIsComplete: (isComplete) => set(() => ({ isComplete })),
+        setAccountAsComplete: () => set(() => ({ isComplete: true })),
+        clearAccount: () => set(() => ({ isComplete: false })),
+      }))
+    ),
+    { name: 'account-storage' }
   )
 )
 

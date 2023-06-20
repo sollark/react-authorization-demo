@@ -1,13 +1,21 @@
 import Account from '@/cmps/Account'
 import Header from '@/cmps/Header'
+import useAccountStore from '@/stores/accountStore'
 import useUserStore from '@/stores/userStore'
-import { Link } from '@tanstack/router'
+import { Link, useNavigate } from '@tanstack/router'
+import { useEffect } from 'react'
 
 export default function AccountPage() {
   console.log('Account connected')
 
+  const navigate = useNavigate()
   const { user } = useUserStore()
-  const firstName = user?.firstName
+  const { isComplete } = useAccountStore()
+
+  useEffect(() => {
+    if (!user) navigate({ to: '/signin' })
+    else if (isComplete) navigate({ to: '/' })
+  }, [])
 
   return (
     <div>

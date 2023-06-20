@@ -6,18 +6,15 @@ import { useEffect } from 'react'
 
 export default function Home() {
   console.log('Home connected')
+
   const navigate = useNavigate()
   const { isComplete } = useAccountStore()
-  const user = useUserStore((state) => state.user)
+  const { user } = useUserStore()
 
   useEffect(() => {
-    console.log('Home-useEffect user store', user)
-    console.log('Home-useEffect account store', isComplete)
-    if (!user) navigate({ to: '/auth/signin' })
+    if (!user) navigate({ to: '/signin' })
     else if (!isComplete) navigate({ to: '/account' })
   }, [])
-
-  const firstName = user?.firstName
 
   return (
     <div>
