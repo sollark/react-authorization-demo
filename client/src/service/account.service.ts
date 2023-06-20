@@ -1,9 +1,8 @@
 import { Account } from '@/models/Account'
-import { User } from '@/models/User'
-import { httpService } from './axios/http.service'
 import { Organization } from '@/models/Organization'
+import { User } from '@/models/User'
 import useAccountStore from '@/stores/accountStore'
-import useUserStore from '@/stores/userStore'
+import { httpService } from './axios/http.service'
 
 async function update(
   firstName: string,

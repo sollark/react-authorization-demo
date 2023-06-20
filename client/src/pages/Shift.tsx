@@ -1,8 +1,11 @@
+import Header from '@/cmps/Header'
+
 export default function Shift() {
   console.log('Shift connected')
   return (
-    <div>
+    <>
+      <Header />
       <h1>Shift</h1>
-    </div>
+    </>
   )
 }
