@@ -2,6 +2,7 @@ import { User } from '@/models/User'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
+import { zustandLogger } from './zustandLogger'
 
 interface UserState {
   user: User | null
@@ -11,15 +12,17 @@ interface UserState {
 
 // Create a store with initial state
 const useUserStore = create<UserState>()(
-  persist(
-    devtools(
-      immer((set) => ({
-        user: null,
-        setUser: (user) => set(() => ({ user })),
-        clearUser: () => set(() => ({ user: null })),
-      }))
-    ),
-    { name: 'user-storage' }
+  zustandLogger(
+    persist(
+      devtools(
+        immer((set) => ({
+          user: null,
+          setUser: (user) => set(() => ({ user })),
+          clearUser: () => set(() => ({ user: null })),
+        }))
+      ),
+      { name: 'user-storage' }
+    )
   )
 )
 

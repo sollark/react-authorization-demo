@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
+import { zustandLogger } from './zustandLogger'
 
 interface AccountState {
   isComplete: boolean
@@ -11,16 +12,18 @@ interface AccountState {
 
 // Create a store with initial state
 const useAccountStore = create<AccountState>()(
-  persist(
-    devtools(
-      immer((set) => ({
-        isComplete: false,
-        setIsComplete: (isComplete) => set(() => ({ isComplete })),
-        setAccountAsComplete: () => set(() => ({ isComplete: true })),
-        clearAccount: () => set(() => ({ isComplete: false })),
-      }))
-    ),
-    { name: 'account-storage' }
+  zustandLogger(
+    persist(
+      devtools(
+        immer((set) => ({
+          isComplete: false,
+          setIsComplete: (isComplete) => set(() => ({ isComplete })),
+          setAccountAsComplete: () => set(() => ({ isComplete: true })),
+          clearAccount: () => set(() => ({ isComplete: false })),
+        }))
+      ),
+      { name: 'account-storage' }
+    )
   )
 )
 
