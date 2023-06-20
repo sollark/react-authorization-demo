@@ -1,3 +1,4 @@
+import Header from '@/cmps/Header'
 import useAccountStore from '@/stores/accountStore'
 import useUserStore from '@/stores/userStore'
 import { Link, useNavigate } from '@tanstack/router'
@@ -20,7 +21,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Hello, {firstName ? firstName : 'Guest'}!</h1>
+      <Header />
       <Link to='/account'>Account</Link>
       <Link to='/shift'>Shift</Link>
     </div>

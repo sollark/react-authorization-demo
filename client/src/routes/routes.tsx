@@ -30,24 +30,19 @@ export const homeRoute = new Route({
   ),
 })
 
-// Routes, Auth page
-export const authRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/auth',
-  component: Auth,
-})
+// Routes, Auth pages
 export const signinRoute = new Route({
-  getParentRoute: () => authRoute,
+  getParentRoute: () => rootRoute,
   path: '/signin',
   component: Signin,
 })
 export const registrationRoute = new Route({
-  getParentRoute: () => authRoute,
+  getParentRoute: () => rootRoute,
   path: '/registration',
   component: Registration,
 })
 export const unauthorizedRoute = new Route({
-  getParentRoute: () => authRoute,
+  getParentRoute: () => rootRoute,
   path: '/unauthorized',
   component: Unauthorized,
 })
