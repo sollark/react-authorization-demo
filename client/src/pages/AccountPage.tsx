@@ -1,15 +1,23 @@
-import Account from '@/cmps/Account'
-import { Link } from '@tanstack/router'
+import AccountForm from '@/cmps/forms/AccountForm'
+import OrganizationDetailsFields from '@/cmps/forms/OrganizationDetailsFields'
+import UserDetailsFields from '@/cmps/forms/UserDetailsFields'
+import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const AccountPage: FC = () => {
   console.log('Account connected')
 
   return (
-    <div>
-      <Link to='/'>Home</Link>
-      <Account />
-    </div>
+    <>
+      <Box
+        component='article'
+        sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
+        <AccountForm>
+          <UserDetailsFields />
+          <OrganizationDetailsFields />
+        </AccountForm>
+      </Box>
+    </>
   )
 }
 
