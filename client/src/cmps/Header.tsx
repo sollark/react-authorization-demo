@@ -2,6 +2,7 @@ import { FC } from 'react'
 import Logo from './Logo'
 import useAccountStore from '@/stores/accountStore'
 import useUserStore from '@/stores/userStore'
+import Navigation from './Navigation'
 
 const Header: FC = () => {
   console.log('Header connected')
@@ -12,6 +13,8 @@ const Header: FC = () => {
   return (
     <header className='app-header'>
       <Logo />
+      <Navigation />
+
       <div className='app-header__user'>
         {user ? user.firstName : 'Not signed in'}
       </div>

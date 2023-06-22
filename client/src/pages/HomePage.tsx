@@ -6,8 +6,7 @@ const HomePage: FC = () => {
 
   return (
     <div>
-      <Link to='/account'>Account</Link>
-      <Link to='/shift'>Shift</Link>
+      <h1>Home page</h1>
     </div>
   )
 }
