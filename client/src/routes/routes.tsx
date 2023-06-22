@@ -1,17 +1,19 @@
 import { USER_ROLE } from '@/models/Role'
 import AccountPage from '@/pages/AccountPage'
+import RootPage from '@/pages/RootPage'
 import { RootRoute, Route } from '@tanstack/router'
-import Registration from '../pages/Registration'
-import Signin from '../pages/SignIn'
-import Auth from '../pages/Auth'
-import Home from '../pages/Home'
-import Missing from '../pages/Missing'
-import Role from '../pages/Role'
-import Shift from '../pages/Shift'
-import Unauthorized from '../pages/Unauthorized'
+import Home from '../pages/HomePage'
+import Missing from '../pages/MissingPage'
+import Registration from '../pages/RegistrationPage'
+import Role from '../pages/RolePage'
+import Shift from '../pages/ShiftPage'
+import Signin from '../pages/SigninPage'
+import Unauthorized from '../pages/UnauthorizedPage'
 import ProtectedRoute from './ProtectedRoute'
 
-export const rootRoute = new RootRoute()
+export const rootRoute = new RootRoute({
+  component: RootPage,
+})
 
 // Routes, Home page
 export const homeRoute = new Route({

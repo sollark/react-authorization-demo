@@ -1,7 +1,9 @@
 import { Link, Outlet } from '@tanstack/router'
+import { FC } from 'react'
 
-export default function Role() {
+const RolePage: FC = () => {
   console.log('Role connected')
+
   return (
     <>
       <div>
@@ -16,3 +18,5 @@ export default function Role() {
     </>
   )
 }
+
+export default RolePage

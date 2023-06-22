@@ -1,4 +1,6 @@
-export default function Unauthorized() {
+import { FC } from 'react'
+
+const UnauthorizedPage: FC = () => {
   console.log('Unauthorized connected')
 
   return (
@@ -7,3 +9,5 @@ export default function Unauthorized() {
     </div>
   )
 }
+
+export default UnauthorizedPage

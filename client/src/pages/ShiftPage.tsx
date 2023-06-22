@@ -1,11 +1,13 @@
-import Header from '@/cmps/Header'
+import { FC } from 'react'
 
-export default function Shift() {
+const ShiftPage: FC = () => {
   console.log('Shift connected')
+
   return (
     <>
-      <Header />
       <h1>Shift</h1>
     </>
   )
 }
+
+export default ShiftPage

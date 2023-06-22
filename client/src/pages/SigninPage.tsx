@@ -2,14 +2,12 @@ import { Box } from '@mui/material'
 import { Link } from '@tanstack/router'
 import { FC } from 'react'
 import SignInForm from '../cmps/forms/SignInForm'
-import Header from '@/cmps/Header'
 
-const Signin: FC = () => {
+const SigninPage: FC = () => {
   console.log('Signin connected')
 
   return (
     <>
-      <Header />
       <Box
         component='article'
         sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
@@ -23,4 +21,4 @@ const Signin: FC = () => {
   )
 }
 
-export default Signin
+export default SigninPage

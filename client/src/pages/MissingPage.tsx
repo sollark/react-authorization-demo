@@ -1,11 +1,13 @@
-import Header from '@/cmps/Header'
+import { FC } from 'react'
 
-export default function Missing() {
+const MissingPage: FC = () => {
   console.log('Missing connected')
+
   return (
     <div>
-      <Header />
       <h1>The page is not found!</h1>
     </div>
   )
 }
+
+export default MissingPage
