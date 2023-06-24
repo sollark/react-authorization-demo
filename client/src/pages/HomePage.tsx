@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/router'
 import { FC } from 'react'
 
 const HomePage: FC = () => {

@@ -1,4 +1,4 @@
-import AdbIcon from '@mui/icons-material/Adb'
+import logo from '@/assets/logo/logo.png'
 
 import {
   AppBar,
@@ -17,6 +17,7 @@ import { Link } from '@tanstack/router'
 import { FC, useState } from 'react'
 import MenuIcon from './menu/MenuIcon'
 import Navigation from './menu/Navigation'
+import Logo from './logo/Logo'
 
 const pages = [
   { key: 'Home', link: <Link to='/'>Home</Link> },
@@ -51,23 +52,11 @@ const Header: FC = () => {
       <AppBar position='static'>
         <Container maxWidth='xl'>
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-            <Typography
-              variant='h6'
-              noWrap
-              component='a'
-              href='/'
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}>
-              LOGO
-            </Typography>
+            {/* Large screen logo */}
+            <Logo
+              sxImg={{ display: { xs: 'none', md: 'flex' } }}
+              sxText={{ display: { xs: 'none', md: 'flex' } }}
+            />
 
             {/* Menu */}
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -78,24 +67,12 @@ const Header: FC = () => {
               />
             </Box>
 
-            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-            <Typography
-              variant='h5'
-              noWrap
-              component='a'
-              href=''
-              sx={{
-                mr: 2,
-                display: { xs: 'flex', md: 'none' },
-                flexGrow: 1,
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}>
-              LOGO
-            </Typography>
+            {/* Small screen logo */}
+            <Logo
+              sxImg={{ display: { xs: 'flex', md: 'none' } }}
+              sxText={{ display: { xs: 'flex', md: 'none', flexGrow: 1 } }}
+            />
+
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                 <Button

@@ -1,4 +1,4 @@
-import { Box, Menu, MenuItem, Typography } from '@mui/material'
+import { Menu, MenuItem, Typography } from '@mui/material'
 import { Link } from '@tanstack/router'
 
 const pages = [
