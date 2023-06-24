@@ -5,7 +5,7 @@ const ShiftPage: FC = () => {
 
   return (
     <div>
-      <h1>Shift</h1>
+      <h1>Shift page</h1>
     </div>
   )
 }

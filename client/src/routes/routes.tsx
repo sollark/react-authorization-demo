@@ -10,6 +10,7 @@ import Shift from '../pages/ShiftPage'
 import Signin from '../pages/SigninPage'
 import Unauthorized from '../pages/UnauthorizedPage'
 import ProtectedRoute from './ProtectedRoute'
+import ProfilePage from '@/pages/ProfilePage'
 
 export const rootRoute = new RootRoute({
   component: RootPage,
@@ -62,6 +63,22 @@ export const accountRoute = new Route({
         USER_ROLE.Admin,
       ]}>
       <AccountPage />
+    </ProtectedRoute>
+  ),
+})
+
+export const profileRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/profile',
+  component: () => (
+    <ProtectedRoute
+      allowed={[
+        USER_ROLE.Employee,
+        USER_ROLE.Manager,
+        USER_ROLE.Supervisor,
+        USER_ROLE.Admin,
+      ]}>
+      <ProfilePage />
     </ProtectedRoute>
   ),
 })

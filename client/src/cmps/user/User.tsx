@@ -1,3 +1,5 @@
+import { authService } from '@/service/auth.service'
+import useUserStore from '@/stores/userStore'
 import {
   Avatar,
   IconButton,
@@ -7,6 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import { yellow } from '@mui/material/colors'
+import { Link } from '@tanstack/router'
 import React from 'react'
 
 interface UserProps {
@@ -17,8 +20,24 @@ interface UserProps {
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
+const pages = [
+  { key: 'Profile', link: <Link to='/profile'>Profile</Link> },
+  { key: 'Account', link: <Link to='/account'>Account</Link> },
+  {
+    key: 'Logout',
+    link: (
+      <Link onClick={() => authService.signOut()} to='/'>
+        Logout
+      </Link>
+    ),
+  },
+]
+
 const User = (props: UserProps) => {
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
+
+  const { user } = useUserStore()
+
   return (
     <>
       <Tooltip title='Open settings'>
@@ -32,7 +51,8 @@ const User = (props: UserProps) => {
               width: 56,
               height: 56,
             }}>
-            Guest
+            {user?.firstName[0].toUpperCase()}
+            {user?.lastName[0].toUpperCase()}
           </Avatar>
         </IconButton>
       </Tooltip>
@@ -51,9 +71,9 @@ const User = (props: UserProps) => {
         }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}>
-        {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography textAlign='center'>{setting}</Typography>
+        {pages.map((page) => (
+          <MenuItem key={page.key} onClick={handleCloseUserMenu}>
+            <Typography textAlign='center'>{page.link}</Typography>
           </MenuItem>
         ))}
       </Menu>

@@ -51,6 +51,8 @@ async function signIn(email: string, password: string): Promise<Account> {
 }
 
 async function signOut() {
+  console.log('signOut')
+
   await httpService.put('auth/signout', null)
 
   storeService.clearStoreStates()
