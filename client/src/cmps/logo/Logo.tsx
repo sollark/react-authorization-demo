@@ -1,4 +1,4 @@
-import logo from '@/assets/logo/logo.png'
+import logo from '@/assets/logo/logo-160.png'
 import { Box, SxProps, Typography } from '@mui/material'
 import { FC } from 'react'
 
