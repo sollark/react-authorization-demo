@@ -2,7 +2,6 @@ import {
   AppBar,
   Avatar,
   Box,
-  Button,
   Container,
   IconButton,
   Menu,
@@ -11,16 +10,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { Link } from '@tanstack/router'
 import { FC, useState } from 'react'
-import MenuIcon from './menu/MenuIcon'
-import Navigation from './menu/Navigation'
 import Logo from './logo/Logo'
-
-const pages = [
-  { key: 'Home', link: <Link to='/'>Home</Link> },
-  { key: 'Shift', link: <Link to='/shift'>Shift</Link> },
-]
+import MenuIcon from './menu/MenuIcon'
+import MobileMenu from './menu/MobileMenu'
+import SiteNavigation from './menu/SiteNavigation'
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
@@ -56,30 +50,24 @@ const Header: FC = () => {
               sxText={{ display: { xs: 'none', md: 'flex' } }}
             />
 
-            {/* Menu */}
+            {/* Mobile navigation */}
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <MenuIcon handleOpenNavMenu={handleOpenNavMenu} />
-              <Navigation
+              <MobileMenu
                 anchorElNav={anchorElNav}
                 handleCloseNavMenu={handleCloseNavMenu}
               />
             </Box>
 
-            {/* Small screen logo */}
+            {/* Mobile screen logo */}
             <Logo
               sxImg={{ display: { xs: 'flex', md: 'none' } }}
               sxText={{ display: { xs: 'flex', md: 'none', flexGrow: 1 } }}
             />
 
+            {/* Site navigation  */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page.key}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}>
-                  {page.link}
-                </Button>
-              ))}
+              <SiteNavigation handleCloseNavMenu={handleCloseNavMenu} />
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>

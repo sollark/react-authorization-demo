@@ -11,7 +11,7 @@ interface NavigationProps {
   handleCloseNavMenu: () => void
 }
 
-const Navigation = (props: NavigationProps) => {
+const MobileMenu = (props: NavigationProps) => {
   const { anchorElNav, handleCloseNavMenu } = props
 
   return (
@@ -41,4 +41,4 @@ const Navigation = (props: NavigationProps) => {
   )
 }
 
-export default Navigation
+export default MobileMenu
