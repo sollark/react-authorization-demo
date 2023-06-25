@@ -7,8 +7,8 @@ export interface User {
 
 const UserSchema = new Schema({
   identifier: { type: Types.ObjectId, required: true, unique: true },
-  firstName: { type: String },
-  lastName: { type: String },
+  firstName: { type: String, default: '' },
+  lastName: { type: String, default: '' },
 })
 
 const UserModel = model<User>('User', UserSchema)

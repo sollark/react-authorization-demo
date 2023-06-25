@@ -43,16 +43,16 @@ const User = (props: UserProps) => {
       <Tooltip title='Open settings'>
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar
-            alt='Moshe'
-            src='/static/images/avatar/2.jpg'
+            alt='Avatar'
+            src=''
             sx={{
               bgcolor: yellow[600],
               color: 'black',
               width: 56,
               height: 56,
             }}>
-            {user?.firstName[0].toUpperCase()}
-            {user?.lastName[0].toUpperCase()}
+            {user?.firstName[0]?.toUpperCase()}
+            {user?.lastName[0]?.toUpperCase()}
           </Avatar>
         </IconButton>
       </Tooltip>

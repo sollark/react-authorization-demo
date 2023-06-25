@@ -56,6 +56,7 @@ async function addWorkspace(
       path: 'workspaces',
       populate: { path: 'organization' },
     })
+    .exec()
 
   return account
 }
@@ -93,15 +94,18 @@ function sortAccountData(
   return [updatedUserData, updatedWorkspaceData, updatedOrganizationData]
 }
 
-function completeAccount(accountId: Types.ObjectId) {
-  const updatedAccount = AccountModel.findByIdAndUpdate(accountId, {
-    isComplete: true,
-  })
+async function completeAccount(accountId: Types.ObjectId) {
+  const updatedAccount = await AccountModel.findByIdAndUpdate(
+    accountId,
+    { isComplete: true },
+    { new: true }
+  )
     .populate('user')
     .populate({
       path: 'workspaces',
       populate: { path: 'organization' },
     })
+    .exec()
 
   return updatedAccount
 }
