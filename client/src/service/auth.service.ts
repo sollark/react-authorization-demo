@@ -4,7 +4,7 @@ import useAccountStore from '@/stores/accountStore'
 import { AuthResponse } from '../models/response/AuthResponse'
 import useUserStore from '../stores/userStore'
 import { httpService } from './axios/http.service'
-import { storeService } from './store.servies'
+import { storeService } from './store.service'
 
 async function registration(email: string, password: string) {
   const response = await httpService.post<AuthCredentials, AuthResponse>(

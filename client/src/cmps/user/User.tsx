@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { yellow } from '@mui/material/colors'
 import { Link } from '@tanstack/router'
-import React from 'react'
+import React, { ReactNode, useEffect } from 'react'
 
 interface UserProps {
   anchorElUser: null | HTMLElement
@@ -18,9 +18,7 @@ interface UserProps {
   handleCloseUserMenu: () => void
 }
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
-
-const pages = [
+const userMenu = [
   { key: 'Profile', link: <Link to='/profile'>Profile</Link> },
   { key: 'Account', link: <Link to='/account'>Account</Link> },
   {
@@ -33,10 +31,27 @@ const pages = [
   },
 ]
 
+const guestMenu = [
+  {
+    key: 'SignIn',
+    link: <Link to='/signin'>Sign in</Link>,
+  },
+]
+
+const menu: Array<{ key: string; link: ReactNode }> = []
+
 const User = (props: UserProps) => {
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
 
   const { user } = useUserStore()
+
+  useEffect(() => {
+    console.log('useEffect')
+    menu.length = 0
+
+    if (user) menu.push(...userMenu)
+    else menu.push(...guestMenu)
+  }, [])
 
   return (
     <>
@@ -71,9 +86,9 @@ const User = (props: UserProps) => {
         }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}>
-        {pages.map((page) => (
-          <MenuItem key={page.key} onClick={handleCloseUserMenu}>
-            <Typography textAlign='center'>{page.link}</Typography>
+        {menu.map((menuItem) => (
+          <MenuItem key={menuItem.key} onClick={handleCloseUserMenu}>
+            <Typography textAlign='center'>{menuItem.link}</Typography>
           </MenuItem>
         ))}
       </Menu>

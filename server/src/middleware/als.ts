@@ -10,6 +10,7 @@ async function setupAsyncLocalStorage(
   console.log('setupAsyncLocalStorage middleware')
 
   const storage = {}
+
   asyncLocalStorage.run(storage, async () => {
     const refreshToken = req.cookies['refreshToken']
     if (!refreshToken) return next()

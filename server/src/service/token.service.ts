@@ -59,6 +59,7 @@ async function getIdentifier(
 
 async function validateAccessToken(token: string) {
   console.log('validateAccessToken token', token, accessSecret)
+
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {

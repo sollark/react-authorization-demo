@@ -11,13 +11,13 @@ async function createAccount(
   user: Types.ObjectId,
   isComplete: boolean = false
 ): Promise<Account> {
-  const accountDoc = await (
+  const account = await (
     await AccountModel.create({ identifier, user, isComplete })
   ).populate('user')
 
-  logger.info(`account.service - account added: ${accountDoc}`)
+  logger.info(`account.service - account added: ${account}`)
 
-  return accountDoc
+  return account
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {

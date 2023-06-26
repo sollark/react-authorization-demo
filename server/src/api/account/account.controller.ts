@@ -16,7 +16,7 @@ export async function updateAccount(
   const identifier = store?.userData?.identifier
 
   if (!identifier) {
-    logger.warn(`account.controller - unauthenticated request update account`)
+    logger.warn(`account.controller - unauthenticated request updateAccount()`)
 
     throw new UnauthorizedError('You are not unauthorized')
   }
@@ -69,8 +69,9 @@ export async function getAccount(
 ) {
   const store = asyncLocalStorage.getStore()
   const identifier = store?.userData?.identifier
+
   if (!identifier) {
-    logger.warn(`account.controller - unauthenticated request update account`)
+    logger.warn(`account.controller - unauthenticated request getAccount()`)
 
     throw new UnauthorizedError('You are not unauthorized')
   }
