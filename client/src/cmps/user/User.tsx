@@ -1,4 +1,5 @@
 import { authService } from '@/service/auth.service'
+import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 import {
   Avatar,
@@ -44,6 +45,7 @@ const User = (props: UserProps) => {
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
 
   const { user } = useUserStore()
+  const roles = useRoleStore((state) => state.roles)
 
   useEffect(() => {
     console.log('useEffect')

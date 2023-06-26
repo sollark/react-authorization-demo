@@ -1,6 +1,5 @@
 import { Account } from '@/models/Account'
 import { AuthCredentials } from '@/models/Auth'
-import useAccountStore from '@/stores/accountStore'
 import { AuthResponse } from '../models/response/AuthResponse'
 import useUserStore from '../stores/userStore'
 import { httpService } from './axios/http.service'
@@ -18,9 +17,6 @@ async function registration(email: string, password: string) {
 
   // set the user store
   useUserStore.getState().setUser(account.user)
-
-  //set the account store
-  useAccountStore.getState().setIsComplete(account.isComplete)
 
   return account ? account : null
 }
@@ -43,9 +39,6 @@ async function signIn(email: string, password: string): Promise<Account> {
 
   // set the user store
   useUserStore.getState().setUser(account.user)
-
-  //set the account store
-  useAccountStore.getState().setIsComplete(account.isComplete)
 
   return account ? account : null
 }
