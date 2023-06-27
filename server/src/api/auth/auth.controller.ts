@@ -37,7 +37,7 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
   await authService.signOut(refreshToken)
 
   // delete refresh token from cookie
-  res.clearCookie('refreshToken')
+  res.clearCookie('refreshToken').status(200).json({ message: 'success' })
 }
 
 export async function refresh(req: Request, res: Response, next: NextFunction) {

@@ -27,8 +27,6 @@ const SignInForm: FC = () => {
 
     const account = await authService.signIn(email, password)
 
-    // TODO: is complete in db is false
-    // mb to delete useACcount. is complete, coz we get it from response
     if (account.isComplete) navigate({ to: '/' })
     else navigate({ to: '/account' })
   }

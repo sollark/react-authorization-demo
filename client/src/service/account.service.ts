@@ -1,8 +1,8 @@
 import { Account } from '@/models/Account'
 import { Organization } from '@/models/Organization'
 import { User } from '@/models/User'
-import useAccountStore from '@/stores/accountStore'
 import { httpService } from './axios/http.service'
+import useAccountStore from '@/stores/accountStore'
 
 async function update(
   firstName: string,
@@ -25,7 +25,7 @@ async function update(
 
   const { account } = response as any
 
-  if (account?.isComplete) useAccountStore.getState().setAccountAsComplete()
+  if (account?.isComplete) useAccountStore.getState().setIsComplete(false)
 
   return account ? account : null
 }

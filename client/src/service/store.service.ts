@@ -1,17 +1,24 @@
-import useOrganizationStore from '@/stores/orgainzaionStore'
+import { Account } from '@/models/Account'
+import useAccountStore from '@/stores/accountStore'
+import useOrganizationStore from '@/stores/organizationStore'
 import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 
-function clearStoreStates() {
-  const clearUser = useUserStore((state) => state.clearUser)
-  const clearRoles = useRoleStore((state) => state.clearRoles)
-  const clearOrganization = useOrganizationStore(
-    (state) => state.clearOrganization
-  )
-
-  clearUser()
-  clearOrganization()
-  clearRoles()
+function saveToStore(account: Account) {
+  useAccountStore.getState().setIsComplete(account.isComplete)
+  useUserStore.getState().setUser(account.user)
+  useOrganizationStore
+    .getState()
+    .setOrganization(account.workspaces.organization)
 }
 
-export const storeService = { clearStoreStates }
+function clearStoreStates() {
+  console.log('clearStoreStates()')
+
+  useAccountStore.getState().resetIsComplete()
+  useUserStore.getState().clearUser()
+  useRoleStore.getState().clearRoles()
+  useOrganizationStore.getState().clearOrganization()
+}
+
+export const storeService = { saveToStore, clearStoreStates }

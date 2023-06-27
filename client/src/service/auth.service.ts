@@ -15,8 +15,7 @@ async function registration(email: string, password: string) {
 
   localStorage.setItem('accessToken', accessToken)
 
-  // set the user store
-  useUserStore.getState().setUser(account.user)
+  storeService.saveToStore(account)
 
   return account ? account : null
 }
@@ -37,8 +36,7 @@ async function signIn(email: string, password: string): Promise<Account> {
 
   localStorage.setItem('accessToken', accessToken)
 
-  // set the user store
-  useUserStore.getState().setUser(account.user)
+  storeService.saveToStore(account)
 
   return account ? account : null
 }
@@ -46,7 +44,10 @@ async function signIn(email: string, password: string): Promise<Account> {
 async function signOut() {
   console.log('signOut')
 
+  console.log('1')
+
   await httpService.put('auth/signout', null)
+  console.log('1')
 
   storeService.clearStoreStates()
   localStorage.removeItem('accessToken')
