@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { yellow } from '@mui/material/colors'
 import { Link } from '@tanstack/router'
+import { stat } from 'fs'
 import React, { ReactNode, useEffect } from 'react'
 
 interface UserProps {
@@ -23,10 +24,10 @@ const userMenu = [
   { key: 'Profile', link: <Link to='/profile'>Profile</Link> },
   { key: 'Account', link: <Link to='/account'>Account</Link> },
   {
-    key: 'Logout',
+    key: 'SignOut',
     link: (
-      <Link onClick={() => authService.signOut()} to='/'>
-        Logout
+      <Link onClick={() => authService.signOut()} to='/signin'>
+        Sign out
       </Link>
     ),
   },
@@ -42,10 +43,11 @@ const guestMenu = [
 const menu: Array<{ key: string; link: ReactNode }> = []
 
 const User = (props: UserProps) => {
+  console.log('User connected')
+
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
 
-  const { user } = useUserStore()
-  const roles = useRoleStore((state) => state.roles)
+  const user = useUserStore((state) => state.user)
 
   useEffect(() => {
     console.log('useEffect')
@@ -53,7 +55,7 @@ const User = (props: UserProps) => {
 
     if (user) menu.push(...userMenu)
     else menu.push(...guestMenu)
-  }, [])
+  }, [user])
 
   return (
     <>
@@ -68,8 +70,9 @@ const User = (props: UserProps) => {
               width: 56,
               height: 56,
             }}>
-            {user?.firstName[0]?.toUpperCase()}
-            {user?.lastName[0]?.toUpperCase()}
+            {user
+              ? (user?.firstName[0] + user?.lastName[0]).toUpperCase()
+              : 'Guest'}
           </Avatar>
         </IconButton>
       </Tooltip>
