@@ -30,10 +30,6 @@ async function signIn(email: string, password: string): Promise<Account> {
 
   const { account, refreshToken, accessToken } = response as any
 
-  console.log('account', account)
-  console.log('refreshToken', refreshToken)
-  console.log('accessToken', accessToken)
-
   localStorage.setItem('accessToken', accessToken)
 
   storeService.saveToStore(account)

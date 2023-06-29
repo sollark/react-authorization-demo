@@ -6,7 +6,7 @@ import { Workspace } from './Workspace'
 export interface Account {
   isComplete: boolean
   user: User
-  workspaces: Workspace
+  workspaces: Workspace[]
 }
 
 export const AccountSchema = z

@@ -7,9 +7,10 @@ import useUserStore from '@/stores/userStore'
 function saveToStore(account: Account) {
   useAccountStore.getState().setIsComplete(account.isComplete)
   useUserStore.getState().setUser(account.user)
+  useRoleStore.getState().setRoles(account.workspaces.pop()!.roles)
   useOrganizationStore
     .getState()
-    .setOrganization(account.workspaces.organization)
+    .setOrganization(account.workspaces.pop()!.organization)
 }
 
 function clearStoreStates() {

@@ -4,7 +4,7 @@ import { Role, userRoleSchema } from './Role'
 
 export interface Workspace {
   organization: Organization
-  role: Role[]
+  roles: Role[]
 }
 
 export const WorkspaceSchema = z.object({
