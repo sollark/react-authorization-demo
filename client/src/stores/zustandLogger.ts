@@ -1,4 +1,4 @@
-import { create, State, StateCreator, StoreMutatorIdentifier } from 'zustand'
+import { State, StateCreator, StoreMutatorIdentifier } from 'zustand'
 
 type Logger = <
   T extends State,

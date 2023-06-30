@@ -1,4 +1,4 @@
-import { Role } from '@/models/Role'
+import { Role, USER_ROLE } from '@/models/Role'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -16,9 +16,9 @@ const useRoleStore = create<RoleState>()(
     persist(
       devtools(
         immer((set) => ({
-          roles: ['Guest'],
+          roles: [USER_ROLE.Guest],
           setRoles: (roles) => set(() => ({ roles })),
-          clearRoles: () => set(() => ({ roles: ['Guest'] })),
+          clearRoles: () => set(() => ({ roles: [USER_ROLE.Guest] })),
         }))
       ),
       { name: 'role-storage' }

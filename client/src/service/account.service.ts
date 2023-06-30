@@ -11,15 +11,15 @@ async function update(
   organizationCode?: string
 ) {
   //  :Promise<Account>
-  const response = await httpService.post<User & Organization, Account>(
-    'account/update',
-    {
-      firstName,
-      lastName,
-      organizationName,
-      organizationCode,
-    }
-  )
+  const response = await httpService.post<
+    User & Partial<Organization>,
+    Account
+  >('account/update', {
+    firstName,
+    lastName,
+    organizationName,
+    organizationCode,
+  })
 
   console.log('response data', response)
 
