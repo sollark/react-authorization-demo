@@ -13,7 +13,6 @@ import {
   roleRoute,
   rootRoute,
   shiftRoute,
-  profileRoute,
   signinRoute,
   superVisorRoute,
   unauthorizedRoute,
@@ -44,7 +43,6 @@ const routeTree = rootRoute.addChildren([
   registrationRoute,
   accountRoute,
   shiftRoute,
-  profileRoute,
   roleRoute.addChildren([
     guestRoute,
     employeeRoute,

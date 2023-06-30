@@ -1,5 +1,4 @@
 import { authService } from '@/service/auth.service'
-import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 import {
   Avatar,
@@ -11,7 +10,6 @@ import {
 } from '@mui/material'
 import { yellow } from '@mui/material/colors'
 import { Link } from '@tanstack/router'
-import { stat } from 'fs'
 import React, { ReactNode, useEffect } from 'react'
 
 interface UserProps {
@@ -21,7 +19,6 @@ interface UserProps {
 }
 
 const userMenu = [
-  { key: 'Profile', link: <Link to='/profile'>Profile</Link> },
   { key: 'Account', link: <Link to='/account'>Account</Link> },
   {
     key: 'SignOut',
@@ -49,8 +46,8 @@ const User = (props: UserProps) => {
 
   const user = useUserStore((state) => state.user)
 
+  // build user menu
   useEffect(() => {
-    console.log('useEffect')
     menu.length = 0
 
     if (user) menu.push(...userMenu)
@@ -77,7 +74,7 @@ const User = (props: UserProps) => {
         </IconButton>
       </Tooltip>
       <Menu
-        sx={{ mt: '45px' }}
+        sx={{ mt: '60px' }}
         id='menu-appbar'
         anchorEl={anchorElUser}
         anchorOrigin={{
