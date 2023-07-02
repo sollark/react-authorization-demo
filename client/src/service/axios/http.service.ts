@@ -1,8 +1,4 @@
-import axios, {
-  AxiosPromise,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios'
+import axios, { AxiosPromise, InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
@@ -35,14 +31,18 @@ api.interceptors.request.use(
 
 // send refresh token if access token is expired
 api.interceptors.response.use(
-  (config: AxiosResponse) => {
-    return config
-  },
+  (response) => response,
   async (error) => {
     try {
-      const originalRequest = error.config
-      if (error.response.status === 401) {
-        authService.refreshTokens()
+      const originalRequest: InternalAxiosRequestConfig = error?.config
+      if (error?.response?.status === 401) {
+        await authService.refreshTokens()
+
+        // add your custom headers to the request here
+        const headers = headerService.getHeaders()
+        headers.forEach(([headerName, value]) => {
+          originalRequest.headers[headerName] = value
+        })
 
         return api.request(originalRequest)
       }

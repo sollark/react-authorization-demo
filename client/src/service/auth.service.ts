@@ -41,10 +41,7 @@ async function signIn(email: string, password: string): Promise<Account> {
 async function signOut() {
   console.log('signOut')
 
-  console.log('1')
-
   await httpService.put('auth/signout', null)
-  console.log('1')
 
   storeService.clearStoreStates()
   localStorage.removeItem('accessToken')
@@ -60,7 +57,7 @@ async function refreshTokens() {
 
   const { account, refreshToken, accessToken } = response as any
 
-  localStorage.setItem('accessToken', response.data.accessToken)
+  localStorage.setItem('accessToken', accessToken)
 
   storeService.saveToStore(account)
 }
