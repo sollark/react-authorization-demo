@@ -1,10 +1,9 @@
 function getHeaders(): [string, string][] {
-  const email = sessionStorage.getItem('email')
   const headers: [string, string][] = []
 
-  if (email) {
-    headers.push(['X-User-Email', email])
-  }
+  // add custom headers here
+  const accessToken = localStorage.getItem('accessToken')
+  if (accessToken) headers.push(['Authorization', `Bearer ${accessToken}`])
 
   return headers
 }

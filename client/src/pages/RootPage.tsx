@@ -22,7 +22,7 @@ const RootPage: FC = () => {
   return (
     <>
       <Header />
-      <Outlet /> {/* This is where child routes will render */}
+      <Outlet />
     </>
   )
 }

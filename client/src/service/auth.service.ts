@@ -1,7 +1,6 @@
 import { Account } from '@/models/Account'
 import { AuthCredentials } from '@/models/Auth'
 import { AuthResponse } from '../models/response/AuthResponse'
-import useUserStore from '../stores/userStore'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
@@ -10,6 +9,8 @@ async function registration(email: string, password: string) {
     'auth/registration',
     { email, password }
   )
+
+  console.log('registration response data', response)
 
   const { account, refreshToken, accessToken } = response as any
 
@@ -21,12 +22,12 @@ async function registration(email: string, password: string) {
 }
 
 async function signIn(email: string, password: string): Promise<Account> {
-  const response = await httpService.post<AuthCredentials, Account>(
+  const response = await httpService.post<AuthCredentials, AuthResponse>(
     'auth/signin',
     { email, password }
   )
 
-  console.log('response data', response)
+  console.log('signIn response data', response)
 
   const { account, refreshToken, accessToken } = response as any
 
@@ -49,4 +50,19 @@ async function signOut() {
   localStorage.removeItem('accessToken')
 }
 
-export const authService = { signIn, signOut, registration }
+async function refreshTokens() {
+  const response = await httpService.get<null, AuthResponse>(
+    `auth/refresh`,
+    null
+  )
+
+  console.log('refresh response data', response)
+
+  const { account, refreshToken, accessToken } = response as any
+
+  localStorage.setItem('accessToken', response.data.accessToken)
+
+  storeService.saveToStore(account)
+}
+
+export const authService = { signIn, signOut, registration, refreshTokens }
