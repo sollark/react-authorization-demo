@@ -52,7 +52,7 @@ const signIn = async (credentials: Credentials) => {
   const auth = await authModel.findOne({ email }).select('+password')
   if (!auth) {
     logger.warn(`auth.service - attempt to sign in with wrong email: ${email}`)
-    throw new BadRequestError('Invalid credentials', email)
+    throw new UnauthorizedError('Invalid credentials', email)
   }
 
   // check if password is valid
@@ -61,11 +61,8 @@ const signIn = async (credentials: Credentials) => {
     logger.warn(
       `auth.service - attempt to sign in with wrong password: ${email}`
     )
-    throw new BadRequestError('Invalid credentials', email)
+    throw new UnauthorizedError('Invalid credentials', email)
   }
-
-  // fetch user
-  const user = await userService.getUserByIdentifier(auth._id)
 
   // fetch account
   const account = await accountService.getAccount(auth._id)
@@ -106,19 +103,23 @@ const refresh = async (refreshToken: string) => {
   }
 
   // find user
-  const identifier = TokenModel.findOne({ refreshToken: refreshToken }).select(
-    'identifier'
-  )
-  // TODO i send account info, not user, fix it
-  const user = await UserModel.findOne(identifier)
+  const token = await TokenModel.findOne({ refreshToken })
+    .select('identifier')
+    .lean()
+    .exec()
+
+  if (!token) throw new UnauthorizedError('Invalid refresh token')
+
+  // fetch account
+  const account = await accountService.getAccount(token.identifier)
 
   // generate tokens
   const tokens = tokenService.generateTokens(payload as string)
 
   // save refresh token to db
-  await tokenService.saveToken(user!._id, tokens.refreshToken)
+  await tokenService.saveToken(token.identifier, tokens.refreshToken)
 
-  return { ...tokens, user }
+  return { ...tokens, account }
 }
 
 export const authService = {
