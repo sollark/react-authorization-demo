@@ -36,15 +36,21 @@ api.interceptors.response.use(
     try {
       const originalRequest: InternalAxiosRequestConfig = error?.config
       if (error?.response?.status === 401) {
-        await authService.refreshTokens()
+        if (originalRequest.headers.Authorization) {
+          // Token is expired, refresh it
+          await authService.refreshTokens()
 
-        // add your custom headers to the request here
-        const headers = headerService.getHeaders()
-        headers.forEach(([headerName, value]) => {
-          originalRequest.headers[headerName] = value
-        })
+          // Retry the original request with the updated headers
+          const headers = headerService.getHeaders()
+          headers.forEach(([headerName, value]) => {
+            originalRequest.headers[headerName] = value
+          })
 
-        return api.request(originalRequest)
+          return api.request(originalRequest)
+        } else {
+          // No authorization header, likely wrong credentials
+          return Promise.reject(error)
+        }
       }
 
       return Promise.reject(error)
