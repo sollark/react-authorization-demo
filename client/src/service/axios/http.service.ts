@@ -1,12 +1,7 @@
-import axios, {
-  AxiosError,
-  AxiosPromise,
-  InternalAxiosRequestConfig,
-} from 'axios'
+import axios, { AxiosPromise, InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
-import { stringify } from 'querystring'
 
 const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
 
@@ -50,14 +45,11 @@ api.interceptors.response.use(
         })
 
         return api.request(originalRequest)
-      } else {
-        console.log('in interceptors, Error response:', error.response) // Log the error response
       }
 
-      return Promise.reject(error) // i have added this line
+      return Promise.reject(error)
     } catch (error) {
-      sessionStorage.clear()
-      return error
+      throw error
     }
   }
 )
@@ -90,7 +82,6 @@ async function ajax<T, R>(
       params: method === 'GET' ? data : null,
     })
 
-    console.log('res', res)
     return res.data
   } catch (error) {
     if (isDevelopment())
