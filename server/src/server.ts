@@ -21,19 +21,18 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
+const server = http.createServer(app)
 
-// middleware
+// middlewares
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'http://localhost:8080'],
+    origin: config.server.origins,
   })
 )
 app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())
-
-const server = http.createServer(app)
 
 // als middleware
 app.all('*', setupAsyncLocalStorage)
@@ -59,6 +58,7 @@ app.use(clientRoutes, (req, res, next) => {
 // error handler
 app.use(errorHandler)
 
+// start server
 server.listen(config.server.port, () =>
   console.log(`Server is up and running on port ${config.server.port}`)
 )

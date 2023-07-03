@@ -1,7 +1,12 @@
-import axios, { AxiosPromise, InternalAxiosRequestConfig } from 'axios'
+import axios, {
+  AxiosError,
+  AxiosPromise,
+  InternalAxiosRequestConfig,
+} from 'axios'
 import { authService } from '../auth.service'
 import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
+import { stringify } from 'querystring'
 
 const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
 
@@ -82,13 +87,16 @@ async function ajax<T, R>(
     })
 
     return res.data
-  } catch (error) {
+  } catch (e) {
+    const error = e as AxiosError
+
     if (isDevelopment())
       console.log(
         `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
-          data ? { ...data } : null
+          data ? JSON.stringify(data) : null
         }`
       )
+    if (!error?.response) throw new Error('Network Error')
 
     throw new Error()
   }

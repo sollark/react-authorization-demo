@@ -1,15 +1,16 @@
 import { AxiosRequestConfig } from 'axios'
 
+// add custom headers here
 function getHeaders(): [string, string][] {
   const headers: [string, string][] = []
 
-  // add custom headers here
   const accessToken = localStorage.getItem('accessToken')
   if (accessToken) headers.push(['Authorization', `Bearer ${accessToken}`])
 
   return headers
 }
 
+// add custom headers to request
 function setHeadersToRequest(request: AxiosRequestConfig) {
   const headers = getHeaders()
 
