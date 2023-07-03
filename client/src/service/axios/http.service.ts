@@ -50,7 +50,11 @@ api.interceptors.response.use(
         })
 
         return api.request(originalRequest)
+      } else {
+        console.log('in interceptors, Error response:', error.response) // Log the error response
       }
+
+      return Promise.reject(error) // i have added this line
     } catch (error) {
       sessionStorage.clear()
       return error
@@ -86,18 +90,16 @@ async function ajax<T, R>(
       params: method === 'GET' ? data : null,
     })
 
+    console.log('res', res)
     return res.data
-  } catch (e) {
-    const error = e as AxiosError
-
+  } catch (error) {
     if (isDevelopment())
       console.log(
         `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
           data ? JSON.stringify(data) : null
-        }`
+        }, error: ${error}`
       )
-    if (!error?.response) throw new Error('Network Error')
 
-    throw new Error()
+    throw error
   }
 }

@@ -5,6 +5,7 @@ import { FC } from 'react'
 import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput'
+
 interface SigninForm {
   email: string
   password: string
@@ -20,15 +21,19 @@ const SignInForm: FC = () => {
 
   const navigate = useNavigate()
 
-  async function submit(form: Object) {
+  async function submit(form: SigninForm) {
     console.log('Signin form submitted: ', form)
 
-    const { email, password } = form as SigninForm
+    const { email, password } = form
 
-    const account = await authService.signIn(email, password)
+    try {
+      const account = await authService.signIn(email, password)
 
-    if (account.isComplete) navigate({ to: '/' })
-    else navigate({ to: '/account' })
+      if (account?.isComplete) navigate({ to: '/' })
+      else navigate({ to: '/account' })
+    } catch (error) {
+      console.log('in SignInForm', error)
+    }
   }
 
   return (

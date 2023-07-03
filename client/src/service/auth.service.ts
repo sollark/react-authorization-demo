@@ -21,21 +21,28 @@ async function registration(email: string, password: string) {
   return account ? account : null
 }
 
-async function signIn(email: string, password: string): Promise<Account> {
-  const response = await httpService.post<AuthCredentials, AuthResponse>(
-    'auth/signin',
-    { email, password }
-  )
+async function signIn(
+  email: string,
+  password: string
+): Promise<Account | undefined> {
+  try {
+    const response = await httpService.post<AuthCredentials, AuthResponse>(
+      'auth/signin',
+      { email, password }
+    )
 
-  console.log('signIn response data', response)
+    console.log('signIn response data', response)
 
-  const { account, refreshToken, accessToken } = response as any
+    const { account, refreshToken, accessToken } = response as any
 
-  localStorage.setItem('accessToken', accessToken)
+    localStorage.setItem('accessToken', accessToken)
 
-  storeService.saveToStore(account)
+    storeService.saveToStore(account)
 
-  return account ? account : null
+    return account
+  } catch (error) {
+    throw error
+  }
 }
 
 async function signOut() {
