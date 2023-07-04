@@ -1,6 +1,8 @@
 import { authService } from '@/service/auth.service'
 import { useNavigate } from '@tanstack/router'
+import { useState } from 'react'
 import { z } from 'zod'
+import ErrorMessage from './ErrorMessage'
 import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput'
@@ -44,17 +46,24 @@ const RegistrationSchema = z
 const RegistrationForm = () => {
   console.log('RegistrationForm connected')
 
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
-  async function submit(form: Object) {
+  async function submit(form: RegistrationForm) {
     console.log('Registration form submitted: ', form)
 
-    const { email, password } = form as RegistrationForm
+    const { email, password } = form
+    setErrorMessage('')
 
-    const account = await authService.registration(email, password)
+    try {
+      const account = await authService.registration(email, password)
 
-    if (account.isComplete) navigate({ to: '/' })
-    else navigate({ to: '/account' })
+      if (account.isComplete) navigate({ to: '/' })
+      else navigate({ to: '/account' })
+    } catch (error: any) {
+      // console.log('in RegistrationForm', error)
+      setErrorMessage(error.response.data.errors[0].message)
+    }
   }
 
   return (
@@ -70,6 +79,7 @@ const RegistrationForm = () => {
         label='Confirm password'
         type='password'
       />
+      <ErrorMessage message={errorMessage} />
     </Form>
   )
 }

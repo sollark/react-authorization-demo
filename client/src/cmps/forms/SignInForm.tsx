@@ -1,7 +1,8 @@
 import { authService } from '@/service/auth.service'
 import { useNavigate } from '@tanstack/router'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { z } from 'zod'
+import ErrorMessage from './ErrorMessage'
 import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput'
@@ -33,32 +34,37 @@ const SignInSchema = z.object({
 const SignInForm: FC = () => {
   console.log('SignInForm connected')
 
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
   async function submit(form: SigninForm) {
     console.log('Signin form submitted: ', form)
 
     const { email, password } = form
+    setErrorMessage('')
 
     try {
       const account = await authService.signIn(email, password)
-
       if (account?.isComplete) navigate({ to: '/' })
       else navigate({ to: '/account' })
-    } catch (error) {
-      console.log('in SignInForm', error)
+    } catch (error: any) {
+      // console.log('in SignInForm', error)
+      setErrorMessage(error.response.data.errors[0].message)
     }
   }
 
   return (
-    <Form
-      schema={SignInSchema}
-      defaultValues={defaultValues}
-      submit={submit}
-      submitButton={<SubmitButton />}>
-      <Input name='email' label='Email' type='email' />
-      <Input name='password' label='Password' type='password' />
-    </Form>
+    <>
+      <Form
+        schema={SignInSchema}
+        defaultValues={defaultValues}
+        submit={submit}
+        submitButton={<SubmitButton />}>
+        <Input name='email' label='Email' type='email' />
+        <Input name='password' label='Password' type='password' />
+        <ErrorMessage message={errorMessage} />
+      </Form>
+    </>
   )
 }
 
