@@ -1,6 +1,4 @@
-import { z } from 'zod'
-import { OrganizationSchema } from './Organization'
-import { User, UserDetailsSchema } from './User'
+import { User } from './User'
 import { Workspace } from './Workspace'
 
 export interface Account {
@@ -8,8 +6,3 @@ export interface Account {
   user: User
   workspaces: Workspace[]
 }
-
-export const AccountSchema = z
-  .object({})
-  .merge(UserDetailsSchema)
-  .merge(OrganizationSchema)

@@ -1,15 +1,21 @@
-import { AccountSchema } from '@/models/Account'
+import { OrganizationSchema } from '@/models/Organization'
+import { UserDetailsSchema } from '@/models/User'
 import { accountService } from '@/service/account.service'
-import useOrganizationStore from '@/stores/organizationStore'
 import useUserStore from '@/stores/userStore'
 import { useNavigate } from '@tanstack/router'
 import { FC, ReactElement } from 'react'
+import { z } from 'zod'
 import MultistepForm from './MultistepForm'
 
 interface Props {
   children: ReactElement[]
   [key: string]: any // allow any other prop that is not explicitly defined
 }
+
+const AccountSchema = z
+  .object({})
+  .merge(UserDetailsSchema)
+  .merge(OrganizationSchema)
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
