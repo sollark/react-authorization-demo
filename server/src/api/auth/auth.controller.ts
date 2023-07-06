@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { authService } from './auth.service.js'
+import UnauthorizedError from '../../errors/UnauthorizedError.js'
 
 export async function registration(
   req: Request,

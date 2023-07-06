@@ -20,7 +20,7 @@ api.interceptors.request.use(
       config.headers[headerName] = value
     })
 
-    // console.log('config', config)
+    // console.log('config in request', config)
 
     return config
   },
@@ -33,30 +33,22 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    try {
-      const originalRequest: InternalAxiosRequestConfig = error?.config
-      if (error?.response?.status === 401) {
-        if (originalRequest.headers.Authorization) {
-          // Token is expired, refresh it
-          await authService.refreshTokens()
+    const originalRequest: InternalAxiosRequestConfig = error.config
 
-          // Retry the original request with the updated headers
-          const headers = headerService.getHeaders()
-          headers.forEach(([headerName, value]) => {
-            originalRequest.headers[headerName] = value
-          })
+    if (error.response?.status === 401) {
+      // Token is expired, refresh it
+      await authService.refreshTokens()
 
-          return api.request(originalRequest)
-        } else {
-          // No authorization header, likely wrong credentials
-          return Promise.reject(error)
-        }
-      }
+      // Retry the original request with the updated headers
+      const headers = headerService.getHeaders()
+      headers.forEach(([headerName, value]) => {
+        originalRequest.headers[headerName] = value
+      })
 
-      return Promise.reject(error)
-    } catch (error) {
-      throw error
+      return api(originalRequest)
     }
+
+    return Promise.reject(error)
   }
 )
 

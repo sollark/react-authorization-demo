@@ -3,6 +3,8 @@ import { AuthCredentials } from '@/models/Auth'
 import { AuthResponse } from '../models/response/AuthResponse'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
+import useAuthStore from '@/stores/authStore'
+import { stat } from 'fs'
 
 async function registration(email: string, password: string) {
   const response = await httpService.post<AuthCredentials, AuthResponse>(
@@ -14,7 +16,7 @@ async function registration(email: string, password: string) {
 
   const { account, refreshToken, accessToken } = response as any
 
-  localStorage.setItem('accessToken', accessToken)
+  useAuthStore.getState().setToken(accessToken)
 
   storeService.saveToStore(account)
 
@@ -34,7 +36,7 @@ async function signIn(
 
   const { account, refreshToken, accessToken } = response as any
 
-  localStorage.setItem('accessToken', accessToken)
+  useAuthStore.getState().setToken(accessToken)
 
   storeService.saveToStore(account)
 
@@ -47,7 +49,6 @@ async function signOut() {
   await httpService.put('auth/signout', null)
 
   storeService.clearStoreStates()
-  localStorage.removeItem('accessToken')
 }
 
 async function refreshTokens() {
@@ -60,7 +61,7 @@ async function refreshTokens() {
 
   const { account, refreshToken, accessToken } = response as any
 
-  localStorage.setItem('accessToken', accessToken)
+  useAuthStore.getState().setToken(accessToken)
 
   storeService.saveToStore(account)
 }

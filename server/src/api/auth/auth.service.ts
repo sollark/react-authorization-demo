@@ -3,13 +3,12 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import TokenModel from '../../mongodb/models/token.model.js'
-import UserModel from '../../mongodb/models/user.model.js'
 import logger from '../../service/logger.service.js'
 import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
+import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from '../account/account.service.js'
-import { userService } from '../../service/user.service.js'
 
 async function registration(credentials: Credentials) {
   // check if email is already taken
