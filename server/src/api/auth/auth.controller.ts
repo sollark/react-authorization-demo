@@ -47,17 +47,19 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function refresh(req: Request, res: Response, next: NextFunction) {
-  console.log('refresh controller')
+  const { refreshToken: expiredRefreshToken } = req.cookies
 
-  const { refreshToken } = req.cookies
-
-  const userData = await authService.refresh(refreshToken)
+  const {
+    account,
+    accessToken,
+    refreshToken: newRefreshToken,
+  } = await authService.refresh(expiredRefreshToken)
 
   // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', userData.refreshToken, {
+  res.cookie('refreshToken', newRefreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.status(200).json(userData)
+  res.status(200).json({ account, accessToken })
 }
