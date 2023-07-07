@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { authService } from './auth.service.js'
-import UnauthorizedError from '../../errors/UnauthorizedError.js'
 
 export async function registration(
   req: Request,
@@ -8,34 +7,40 @@ export async function registration(
   next: NextFunction
 ) {
   const credentials = req.body
-  const userData = await authService.registration(credentials)
+  const { account, accessToken, refreshToken } = await authService.registration(
+    credentials
+  )
 
   // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', userData.refreshToken, {
+  res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.status(200).json(userData)
+  // send account and access token to the client
+  res.status(200).json({ account, accessToken })
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
   const credentials = req.body
 
-  const userData = await authService.signIn(credentials)
+  const { account, accessToken, refreshToken } = await authService.signIn(
+    credentials
+  )
 
   // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', userData.refreshToken, {
+  res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.status(200).json(userData)
+  // send account and access token to the client
+  res.status(200).json({ account, accessToken })
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
   const { refreshToken } = req.cookies
-  await authService.signOut(refreshToken)
+  const result = await authService.signOut(refreshToken)
 
   // delete refresh token from cookie
   res.clearCookie('refreshToken').status(200).json({ message: 'success' })

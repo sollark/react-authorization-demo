@@ -84,11 +84,11 @@ const signIn = async (credentials: Credentials) => {
 }
 
 const signOut = async (refreshToken: string) => {
-  const token = await tokenService.removeToken(refreshToken)
+  const result = await tokenService.removeToken(refreshToken)
 
-  logger.info(`auth.service - user signed out`)
+  logger.info(`auth.service - user signed out`, result)
 
-  return token
+  return result
 }
 
 const refresh = async (refreshToken: string) => {

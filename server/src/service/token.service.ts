@@ -38,9 +38,9 @@ async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
 }
 
 async function removeToken(refreshToken: string) {
-  const tokenData = await TokenModel.deleteOne({ refreshToken })
+  const result = await TokenModel.deleteOne({ refreshToken })
 
-  return tokenData
+  return result
 }
 
 async function getToken(refreshToken: string): Promise<Token | null> {
