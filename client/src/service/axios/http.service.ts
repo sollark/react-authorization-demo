@@ -35,17 +35,19 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest: InternalAxiosRequestConfig = error.config
 
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !error.response?._retry) {
       // Token is expired, refresh it
-      await authService.refreshTokens()
+      if (originalRequest.headers.Authorization) {
+        await authService.refreshTokens()
 
-      // Retry the original request with the updated headers
-      const headers = headerService.getHeaders()
-      headers.forEach(([headerName, value]) => {
-        originalRequest.headers[headerName] = value
-      })
+        // Retry the original request with the updated headers
+        const headers = headerService.getHeaders()
+        headers.forEach(([headerName, value]) => {
+          originalRequest.headers[headerName] = value
+        })
 
-      return api(originalRequest)
+        return api.request(originalRequest)
+      }
     }
 
     return Promise.reject(error)
