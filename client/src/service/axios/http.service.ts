@@ -11,7 +11,7 @@ var api = axios.create({
   baseURL: API_URL,
 })
 
-// set headers to the request
+// set access token  to the request header
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // add your custom headers to the request here
@@ -36,6 +36,8 @@ api.interceptors.response.use(
     const originalRequest: InternalAxiosRequestConfig = error.config
 
     if (error.response?.status === 401 && !error.response?._retry) {
+      originalRequest._retry = true
+
       // Token is expired, refresh it
       if (originalRequest.headers.Authorization) {
         await authService.refreshTokens()

@@ -46,9 +46,9 @@ const SignInForm: FC = () => {
     try {
       const account = await authService.signIn(email, password)
       if (account?.isComplete) navigate({ to: '/' })
-      else navigate({ to: '/account' })
+      else navigate({ to: '/account-edit' })
     } catch (error: any) {
-      console.log('in SignInForm', error)
+      // console.log('in SignInForm', error)
       setErrorMessage(error.response?.data?.errors[0]?.message)
     }
   }
