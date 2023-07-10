@@ -5,6 +5,21 @@ import { AuthResponse } from '../models/response/AuthResponse'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
+async function getAccess() {
+  const currentAccessToken = useAuthStore.getState().token
+  if (currentAccessToken) return
+
+  const response = await httpService.get<null, AuthResponse | undefined>(
+    'auth/access',
+    null
+  )
+
+  const { account, accessToken } = response as any
+
+  useAuthStore.getState().setToken(accessToken)
+  storeService.saveToStore(account)
+}
+
 async function registration(email: string, password: string) {
   const response = await httpService.post<AuthCredentials, AuthResponse>(
     'auth/registration',
@@ -16,7 +31,6 @@ async function registration(email: string, password: string) {
   const { account, accessToken } = response as any
 
   useAuthStore.getState().setToken(accessToken)
-
   storeService.saveToStore(account)
 
   return account
@@ -31,12 +45,11 @@ async function signIn(
     { email, password }
   )
 
-  console.log('signIn response data', response)
+  // console.log('signIn response data', response)
 
   const { account, accessToken } = response as any
 
   useAuthStore.getState().setToken(accessToken)
-
   storeService.saveToStore(account)
 
   return account
@@ -51,18 +64,25 @@ async function signOut() {
 }
 
 async function refreshTokens() {
+  console.log('refreshTokens')
+
   const response = await httpService.get<null, AuthResponse>(
     `auth/refresh`,
     null
   )
 
-  console.log('refresh response data', response)
+  // console.log('refreshTokens response data', response)
 
   const { account, accessToken } = response as any
 
   useAuthStore.getState().setToken(accessToken)
-
   storeService.saveToStore(account)
 }
 
-export const authService = { signIn, signOut, registration, refreshTokens }
+export const authService = {
+  getAccess,
+  signIn,
+  signOut,
+  registration,
+  refreshTokens,
+}

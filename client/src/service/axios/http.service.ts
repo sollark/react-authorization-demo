@@ -38,9 +38,12 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !error.response?._retry) {
       originalRequest._retry = true
 
-      // Token is expired, refresh it
       if (originalRequest.headers.Authorization) {
-        await authService.refreshTokens()
+        try {
+          await authService.refreshTokens()
+        } catch (error) {
+          return Promise.reject(error)
+        }
 
         // Retry the original request with the updated headers
         const headers = headerService.getHeaders()

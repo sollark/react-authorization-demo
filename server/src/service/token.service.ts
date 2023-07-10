@@ -39,6 +39,7 @@ async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
 
 async function removeToken(refreshToken: string) {
   const result = await TokenModel.deleteOne({ refreshToken })
+  console.log('removeToken result', result)
 
   return result
 }

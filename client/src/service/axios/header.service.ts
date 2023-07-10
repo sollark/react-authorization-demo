@@ -5,7 +5,6 @@ import { AxiosRequestConfig } from 'axios'
 function getHeaders(): [string, string][] {
   const headers: [string, string][] = []
 
-  // const accessToken = localStorage.getItem('accessToken')
   const accessToken = useAuthStore.getState().token
   if (accessToken) headers.push(['Authorization', `Bearer ${accessToken}`])
 

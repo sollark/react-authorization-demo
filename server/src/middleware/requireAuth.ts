@@ -9,6 +9,7 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
     // check if authorization header is present
     const authorizationKey = req.headers.authorization
     if (!authorizationKey) {
+      // console.log('headers', req.headers)
       return next(
         new UnauthorizedError(
           'You are not authorized to access this resource. Error code 1'

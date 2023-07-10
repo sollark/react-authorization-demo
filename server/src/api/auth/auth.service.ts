@@ -102,21 +102,51 @@ const refresh = async (refreshToken: string) => {
   }
 
   // find user
-  const token = await TokenModel.findOne({ refreshToken })
+  const tokenData = await TokenModel.findOne({ refreshToken })
     .select('identifier')
     .lean()
     .exec()
 
-  if (!token) throw new UnauthorizedError('Invalid refresh token')
+  if (!tokenData) throw new UnauthorizedError('Invalid refresh token')
 
   // fetch account
-  const account = await accountService.getAccount(token.identifier)
+  const account = await accountService.getAccount(tokenData.identifier)
 
   // generate tokens
   const tokens = tokenService.generateTokens(payload as string)
 
   // save refresh token to db
-  await tokenService.saveToken(token.identifier, tokens.refreshToken)
+  await tokenService.saveToken(tokenData.identifier, tokens.refreshToken)
+
+  return { ...tokens, account }
+}
+
+const getAccess = async (refreshToken: string) => {
+  if (!refreshToken) return
+
+  const payload = await tokenService.validateRefreshToken(refreshToken)
+  const tokenFromDb = await tokenService.getToken(refreshToken)
+
+  if (!payload || !tokenFromDb) {
+    return
+  }
+
+  // find user
+  const tokenData = await TokenModel.findOne({ refreshToken })
+    .select('identifier')
+    .lean()
+    .exec()
+
+  if (!tokenData) return
+
+  // fetch account
+  const account = await accountService.getAccount(tokenData.identifier)
+
+  // generate tokens
+  const tokens = tokenService.generateTokens(payload as string)
+
+  // save refresh token to db
+  await tokenService.saveToken(tokenData.identifier, tokens.refreshToken)
 
   return { ...tokens, account }
 }
@@ -126,6 +156,7 @@ export const authService = {
   signIn,
   signOut,
   refresh,
+  getAccess,
 }
 
 const isEmailTaken = async (email: String) => {

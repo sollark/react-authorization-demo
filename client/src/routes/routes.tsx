@@ -1,24 +1,29 @@
 import { USER_ROLE } from '@/models/Role'
+import AccountEditPage from '@/pages/AccountEditPage'
 import AccountPage from '@/pages/AccountPage'
 import RootPage from '@/pages/RootPage'
+import useAuthStore from '@/stores/authStore'
 import { RootRoute, Route } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import Missing from '../pages/MissingPage'
 import Registration from '../pages/RegistrationPage'
 import Role from '../pages/RolePage'
-import Shift from '../pages/ShiftPage'
 import Signin from '../pages/SigninPage'
 import Unauthorized from '../pages/UnauthorizedPage'
 import ProtectedRoute from './ProtectedRoute'
-import AccountEditPage from '@/pages/AccountEditPage'
 
 export const rootRoute = new RootRoute({
   component: RootPage,
+  async loader() {
+    const getAccess = useAuthStore.getState().getAccess
+    getAccess()
+  },
 })
 
 export const homeRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
+
   component: () => (
     <ProtectedRoute
       allowed={[
@@ -37,11 +42,13 @@ export const signinRoute = new Route({
   path: '/signin',
   component: Signin,
 })
+
 export const registrationRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/registration',
   component: Registration,
 })
+
 export const unauthorizedRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/unauthorized',
@@ -80,52 +87,42 @@ export const accountEditRoute = new Route({
   ),
 })
 
-export const shiftRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/shift',
-  component: () => (
-    <ProtectedRoute
-      allowed={[
-        USER_ROLE.Employee,
-        USER_ROLE.Manager,
-        USER_ROLE.Supervisor,
-        USER_ROLE.Admin,
-      ]}>
-      <Shift />
-    </ProtectedRoute>
-  ),
-})
-
 export const roleRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/role',
   component: Role,
 })
+
 export const guestRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/guest',
   component: () => <div>Guest</div>,
 })
+
 export const employeeRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/employee',
   component: () => <div>Employee</div>,
 })
+
 export const managerRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/manager',
   component: () => <div>Manager</div>,
 })
+
 export const superVisorRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/supervisor',
   component: () => <div>Supervisor</div>,
 })
+
 export const adminRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/admin',
   component: () => <div>Admin</div>,
 })
+
 export const missingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '*',
