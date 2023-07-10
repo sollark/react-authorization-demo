@@ -1,7 +1,7 @@
 import { Account } from '@/models/Account'
 import { AuthCredentials } from '@/models/Auth'
 import useAuthStore from '@/stores/authStore'
-import { AuthResponse } from '../models/response/AuthResponse'
+import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
@@ -14,10 +14,12 @@ async function getAccess() {
     null
   )
 
-  const { account, accessToken } = response as any
+  if (isAuthResponse(response)) {
+    const { account, accessToken } = response as any
 
-  useAuthStore.getState().setToken(accessToken)
-  storeService.saveToStore(account)
+    useAuthStore.getState().setToken(accessToken)
+    storeService.saveToStore(account)
+  }
 }
 
 async function registration(email: string, password: string) {

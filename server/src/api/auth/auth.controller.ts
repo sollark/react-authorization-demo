@@ -12,7 +12,7 @@ export async function getAccess(
   const response = await authService.getAccess(currentRefreshToken)
 
   if (!response)
-    return res.status(200).json({ message: 'User is not singed in' })
+    return res.status(200).json({ message: 'User is not signed in' })
 
   const {
     account,
