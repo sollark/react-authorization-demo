@@ -3,7 +3,7 @@ import { Link } from '@tanstack/router'
 
 const pages = [
   { key: 'Home', link: <Link to='/'>Home</Link> },
-  { key: 'Shift', link: <Link to='/shift'>Shift</Link> },
+  { key: 'Role', link: <Link to='/role'>Role</Link> },
 ]
 
 interface NavigationProps {
