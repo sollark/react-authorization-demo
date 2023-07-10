@@ -26,7 +26,7 @@ export async function getAccess(
     httpOnly: true,
   })
 
-  res.status(200).json({ account, newAccessToken })
+  res.status(200).json({ account, accessToken: newAccessToken })
 }
 
 export async function registration(
