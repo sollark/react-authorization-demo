@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import UnauthorizedError from '../../errors/UnauthorizedError.js'
+import { Account } from '../../mongodb/models/account.model.js'
 import { OrganizationCodeMap } from '../../mongodb/models/organizationCode.model.js'
-import { asyncLocalStorage } from '../../service/als.service.js'
-import logger from '../../service/logger.service.js'
+import { getIdentifierFromALS } from '../../service/als.service.js'
 import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
@@ -12,16 +11,8 @@ export async function updateAccount(
   res: Response,
   next: NextFunction
 ) {
-  const store = asyncLocalStorage.getStore()
-  const identifier = store?.userData?.identifier
-
-  if (!identifier) {
-    logger.warn(`account.controller - unauthenticated request updateAccount()`)
-
-    throw new UnauthorizedError('You are not unauthorized')
-  }
-
-  const account = req.body
+  const identifier = getIdentifierFromALS()
+  const account: Account = req.body
 
   console.log('updateAccount account', account)
 
@@ -67,15 +58,7 @@ export async function getAccount(
   res: Response,
   next: NextFunction
 ) {
-  const store = asyncLocalStorage.getStore()
-  const identifier = store?.userData?.identifier
-
-  if (!identifier) {
-    logger.warn(`account.controller - unauthenticated request getAccount()`)
-
-    throw new UnauthorizedError('You are not unauthorized')
-  }
-
+  const identifier = getIdentifierFromALS()
   const account = await accountService.getAccount(identifier)
 
   res.status(200).json({ account })

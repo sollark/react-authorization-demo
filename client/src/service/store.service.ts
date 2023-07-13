@@ -6,6 +6,8 @@ import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 
 function saveToStore(account: Account) {
+  console.log('saveToStore()')
+
   useAccountStore.getState().setIsComplete(account.isComplete)
   useUserStore.getState().setUser(account.user)
   useRoleStore.getState().setRoles(account.workspaces.pop()!.roles)
