@@ -1,16 +1,12 @@
 import { USER_ROLE } from '@/models/Role'
-import AccountEditPage from '@/pages/AccountEditPage'
-import AccountPage from '@/pages/AccountPage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
-import { RootRoute, Route } from '@tanstack/router'
+import { RootRoute, Route, lazy } from '@tanstack/router'
 import Home from '../pages/HomePage'
-import Missing from '../pages/MissingPage'
-import Registration from '../pages/RegistrationPage'
-import Role from '../pages/RolePage'
-import Signin from '../pages/SigninPage'
-import Unauthorized from '../pages/UnauthorizedPage'
 import ProtectedRoute from './ProtectedRoute'
+
+const AccountPage = lazy(() => import('../pages/AccountPage'))
+const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
 
 export const rootRoute = new RootRoute({
   component: RootPage,
@@ -40,19 +36,19 @@ export const homeRoute = new Route({
 export const signinRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/signin',
-  component: Signin,
+  component: lazy(() => import('../pages/SigninPage')),
 })
 
 export const registrationRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/registration',
-  component: Registration,
+  component: lazy(() => import('../pages/RegistrationPage')),
 })
 
 export const unauthorizedRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/unauthorized',
-  component: Unauthorized,
+  component: lazy(() => import('../pages/UnauthorizedPage')),
 })
 
 export const accountRoute = new Route({
@@ -90,7 +86,7 @@ export const accountEditRoute = new Route({
 export const roleRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/role',
-  component: Role,
+  component: lazy(() => import('../pages/RolePage')),
 })
 
 export const guestRoute = new Route({
@@ -126,5 +122,5 @@ export const adminRoute = new Route({
 export const missingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '*',
-  component: Missing,
+  component: lazy(() => import('../pages/MissingPage')),
 })
