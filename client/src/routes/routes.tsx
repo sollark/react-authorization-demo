@@ -7,6 +7,11 @@ import ProtectedRoute from './ProtectedRoute'
 
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
+const SigninPage = lazy(() => import('../pages/SigninPage'))
+const RegistrationPage = lazy(() => import('../pages/RegistrationPage'))
+const RolePage = lazy(() => import('../pages/RolePage'))
+const UnauthorizedPage = lazy(() => import('../pages/UnauthorizedPage'))
+const MissingPage = lazy(() => import('../pages/MissingPage'))
 
 export const rootRoute = new RootRoute({
   component: RootPage,
@@ -36,19 +41,19 @@ export const homeRoute = new Route({
 export const signinRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/signin',
-  component: lazy(() => import('../pages/SigninPage')),
+  component: SigninPage,
 })
 
 export const registrationRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/registration',
-  component: lazy(() => import('../pages/RegistrationPage')),
+  component: RegistrationPage,
 })
 
 export const unauthorizedRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/unauthorized',
-  component: lazy(() => import('../pages/UnauthorizedPage')),
+  component: UnauthorizedPage,
 })
 
 export const accountRoute = new Route({
@@ -86,7 +91,7 @@ export const accountEditRoute = new Route({
 export const roleRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/role',
-  component: lazy(() => import('../pages/RolePage')),
+  component: RolePage,
 })
 
 export const guestRoute = new Route({
@@ -122,5 +127,5 @@ export const adminRoute = new Route({
 export const missingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '*',
-  component: lazy(() => import('../pages/MissingPage')),
+  component: MissingPage,
 })
