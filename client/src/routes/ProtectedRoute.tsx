@@ -16,7 +16,7 @@ const ProtectedRoute = ({
 
   const userRoles = useRoleStore((state) => state.roles)
   const isAccessAllowed = allowed.some((role) => userRoles?.includes(role))
-
+  console.log('isAccessAllowed', isAccessAllowed)
   return <>{isAccessAllowed ? children : <UnauthorizedPage />}</>
 }
 

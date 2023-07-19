@@ -8,12 +8,16 @@ import useUserStore from '@/stores/userStore'
 function saveToStore(account: Account) {
   console.log('saveToStore()')
 
-  useAccountStore.getState().setIsComplete(account.isComplete)
-  useUserStore.getState().setUser(account.user)
-  useRoleStore.getState().setRoles(account.workspaces.pop()!.roles)
-  useOrganizationStore
-    .getState()
-    .setOrganization(account.workspaces.pop()!.organization)
+  const { isComplete, user, workspaces } = account
+  const workspace = workspaces.pop()
+
+  useAccountStore.getState().setIsComplete(isComplete)
+  useUserStore.getState().setUser(user)
+  if (workspace) {
+    console.log('saveToStore workspace', workspace)
+    useRoleStore.getState().setRoles(workspace.roles)
+    useOrganizationStore.getState().setOrganization(workspace.organization)
+  }
 }
 
 function clearStoreStates() {
