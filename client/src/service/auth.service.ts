@@ -5,6 +5,7 @@ import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
+// renew tokens when access token is gone on page reload
 async function getAccess() {
   const currentAccessToken = useAuthStore.getState().token
   if (currentAccessToken) return
@@ -23,16 +24,21 @@ async function getAccess() {
 }
 
 async function registration(email: string, password: string) {
-  const response = await httpService.post<AuthCredentials, AuthResponse>(
-    'auth/registration',
-    { email, password }
-  )
+  const registrationResponse = await httpService.post<
+    AuthCredentials,
+    AuthResponse
+  >('auth/registration', { email, password })
+  console.log('registration-registrationResponse: ', registrationResponse)
 
-  console.log('registration response data', response)
-
-  const { account, accessToken } = response as any
-
+  const { account, accessToken } = registrationResponse as any
   useAuthStore.getState().setToken(accessToken)
+
+  const accountResponse = await httpService.get<null, Account>(
+    'account/get',
+    null
+  )
+  console.log('registration-accountResponse: ', accountResponse)
+
   storeService.saveToStore(account)
 
   return account
