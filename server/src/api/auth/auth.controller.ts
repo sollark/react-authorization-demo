@@ -2,33 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { authService } from './auth.service.js'
 
-export async function getAccess(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const { refreshToken: currentRefreshToken } = req.cookies
-
-  const response = await authService.getAccess(currentRefreshToken)
-
-  if (!response)
-    return res.status(200).json({ message: 'User is not signed in' })
-
-  const {
-    account,
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
-  } = response
-
-  // save refresh token in cookie for 30 days
-  res.cookie('refreshToken', newRefreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-  })
-
-  res.status(200).json({ account, accessToken: newAccessToken })
-}
-
 export async function registration(
   req: Request,
   res: Response,
@@ -76,6 +49,7 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
   else throw new BadRequestError('No refresh token found')
 }
 
+// renew access token when it is expired
 export async function refresh(req: Request, res: Response, next: NextFunction) {
   const { refreshToken: expiredRefreshToken } = req.cookies
 
@@ -92,4 +66,32 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
   })
 
   res.status(200).json({ account, accessToken })
+}
+
+// renew tokens when access token is gone on page reload
+export async function getAccess(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { refreshToken: currentRefreshToken } = req.cookies
+
+  const response = await authService.getAccess(currentRefreshToken)
+
+  if (!response)
+    return res.status(200).json({ message: 'User is not signed in' })
+
+  const {
+    account,
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
+  } = response
+
+  // save refresh token in cookie for 30 days
+  res.cookie('refreshToken', newRefreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  })
+
+  res.status(200).json({ account, accessToken: newAccessToken })
 }
