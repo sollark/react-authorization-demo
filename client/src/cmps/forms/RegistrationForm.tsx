@@ -59,9 +59,8 @@ const RegistrationForm = () => {
       const account = await authService.registration(email, password)
 
       if (account.isComplete) navigate({ to: '/' })
-      else navigate({ to: '/account-edit' })
+      else navigate({ to: '/account/edit' })
     } catch (error: any) {
-      // console.log('in RegistrationForm', error)
       setErrorMessage(error.response.data.errors[0].message)
     }
   }

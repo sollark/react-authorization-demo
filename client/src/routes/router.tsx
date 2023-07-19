@@ -41,8 +41,7 @@ const routeTree = rootRoute.addChildren([
   homeRoute,
   signinRoute,
   registrationRoute,
-  accountRoute,
-  accountEditRoute,
+  accountRoute.addChildren([accountEditRoute]),
   roleRoute.addChildren([
     guestRoute,
     employeeRoute,

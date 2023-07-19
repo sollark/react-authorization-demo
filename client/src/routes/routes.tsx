@@ -73,8 +73,8 @@ export const accountRoute = new Route({
 })
 
 export const accountEditRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/account-edit',
+  getParentRoute: () => accountRoute,
+  path: '/edit',
   component: () => (
     <ProtectedRoute
       allowed={[
