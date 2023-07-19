@@ -45,13 +45,22 @@ const User = (props: UserProps) => {
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
 
   const user = useUserStore((state) => state.user)
+  let initials = 'Guest'
 
   // build user menu
   useEffect(() => {
+    // Avatar menu
     menu.length = 0
 
     if (user) menu.push(...userMenu)
     else menu.push(...guestMenu)
+
+    // Avatar initials
+    if (user && user.firstName.length && user.lastName.length)
+      initials =
+        user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()
+    else if (user) initials = ''
+    else initials = 'Guest'
   }, [user])
 
   return (
@@ -67,9 +76,7 @@ const User = (props: UserProps) => {
               width: 56,
               height: 56,
             }}>
-            {user
-              ? (user?.firstName[0] + user?.lastName[0]).toUpperCase()
-              : 'Guest'}
+            {initials}
           </Avatar>
         </IconButton>
       </Tooltip>
