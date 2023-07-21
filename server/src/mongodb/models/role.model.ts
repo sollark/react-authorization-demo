@@ -1,44 +1,48 @@
-import { model, Schema } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
-export type RoleCode = '0000' | '1001' | '1010' | '1100' | '1110'
-export type Role = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
+console.log('ddddd')
+export type Role =
+  | 'Guest'
+  | 'NoRole'
+  | 'Employee'
+  | 'Manager'
+  | 'Supervisor'
+  | 'Admin'
 
-export const ROLE_CODE_MAPPING = {
-  Guest: '0000' as RoleCode,
-  Employee: '1001' as RoleCode,
-  Manager: '1010' as RoleCode,
-  Supervisor: '1100' as RoleCode,
-  Admin: '1110' as RoleCode,
+export const USER_ROLE: Record<Role, Role> = {
+  Guest: 'Guest',
+  NoRole: 'NoRole',
+  Employee: 'Employee',
+  Manager: 'Manager',
+  Supervisor: 'Supervisor',
+  Admin: 'Admin',
 }
 
-export interface RoleMap {
-  name: Role
-  code: RoleCode
-}
-
-const RoleMapSchema = new Schema({
-  name: { type: String, required: true, unique: true, immutable: true },
-  code: { type: String, required: true, unique: true, immutable: true },
+const RoleSchema = new Schema({
+  role: { type: String, required: true, unique: true, immutable: true },
 })
 
-const RoleMapModel = model('RoleMap', RoleMapSchema)
-export default RoleMapModel
+const RoleModel = model('Roles', RoleSchema)
+export default RoleModel
 
-// Call the populateRoles function to initiate the population process
-const populateRoles = async () => {
+const populateRole = async () => {
+  console.log('populateRole roles')
+
   try {
     // Clear existing roles (optional, depending on your requirements)
-    await RoleMapModel.deleteMany({})
+    await RoleModel.deleteMany({})
 
-    // Iterate over the ROLE_CODE_MAPPING object and create RoleMap documents
-    const roles = Object.entries(ROLE_CODE_MAPPING).map(([name, code]) => ({
-      name,
-      code,
+    // Iterate over the USER_ROLE object and create Role documents
+    const roles = Object.entries(USER_ROLE).map(([role]) => ({
+      role,
     }))
+    console.log('populateRole roles', roles)
 
     // Insert the roles into the database
-    await RoleMapModel.insertMany(roles)
-  } catch (error) {}
+    await RoleModel.insertMany(roles)
+  } catch (error) {
+    console.error('Error populating roles:', error)
+  }
 }
 
-populateRoles()
+populateRole()

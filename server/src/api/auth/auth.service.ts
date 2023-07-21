@@ -29,7 +29,7 @@ async function registration(credentials: Credentials) {
   logger.info(`auth.service - new authentication created: ${auth.email}`)
 
   // generate tokens
-  const payload: string = payloadService.generateTokenPayload([])
+  const payload: string = await payloadService.generateTokenPayload([])
   const { accessToken, refreshToken } = tokenService.generateTokens(payload)
 
   // save refresh token to db
@@ -71,7 +71,9 @@ const signIn = async (credentials: Credentials) => {
   const workspaces =
     workspaceIds && (await workspaceService.getWorkspaces(workspaceIds))
 
-  const payload: string = payloadService.generateTokenPayload(workspaces || [])
+  const payload: string = await payloadService.generateTokenPayload(
+    workspaces || []
+  )
 
   const { accessToken, refreshToken } = tokenService.generateTokens(payload)
 

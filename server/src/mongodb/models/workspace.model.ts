@@ -17,7 +17,12 @@ const WorkspaceSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Organization',
   },
-  roles: [{ type: String }],
+  roles: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+    },
+  ],
 })
 
 const WorkspaceRefModel = model<WorkspaceRef>('Workspace', WorkspaceSchema)

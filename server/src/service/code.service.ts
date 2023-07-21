@@ -1,23 +1,36 @@
-import OrganizationModel from '../mongodb/models/organization.model.js'
-import RoleMapModel, {
-  Role,
-  ROLE_CODE_MAPPING,
-} from '../mongodb/models/role.model.js'
+import OrganizationModel, {
+  Organization,
+} from '../mongodb/models/organization.model.js'
+import { Role } from '../mongodb/models/role.model.js'
+
+import RoleCodeModel, { RoleCode } from '../mongodb/models/roleCode.model.js'
 import { Workspace } from '../mongodb/models/workspace.model.js'
 import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
 
-function castToCode(workspaces: Workspace[]): WorkspaceCode[] {
-  const codes = workspaces.map((workspace) => {
-    return {
-      organization: workspace.organization.organizationCode,
-      roles: workspace.roles.map((role) => ROLE_CODE_MAPPING[role as Role]),
-    }
-  })
+async function incodeWorkspace(
+  workspaces: Workspace[]
+): Promise<WorkspaceCode[]> {
+  const inCodedWorkspaces = await Promise.all(
+    workspaces.map(async (workspace) => {
+      const organizationCode = workspace.organization.organizationCode
+      const roles = await Promise.all(
+        workspace.roles.map(async (role) => {
+          const roleMap = await RoleCodeModel.findOne({ role })
+          return roleMap ? (roleMap.code as RoleCode) : ''
+        })
+      )
 
-  return codes
+      return {
+        organization: organizationCode,
+        roles: roles as RoleCode[],
+      }
+    })
+  )
+
+  return inCodedWorkspaces
 }
 
-async function castToWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
+async function decodeWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
   const workspaces = await Promise.all(
     codes.map(async (code) => {
       const organization = await OrganizationModel.findOne({
@@ -25,13 +38,16 @@ async function castToWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
       })
 
       const roles = await Promise.all(
-        code.roles.map(async (role) => {
-          const roleMap = await RoleMapModel.findOne({ code: role })
-          return roleMap!.name
+        code.roles.map(async (roleCode) => {
+          const roleMap = await RoleCodeModel.findOne({ code: roleCode })
+          return roleMap ? (roleMap.role as Role) : ''
         })
       )
 
-      return { organization, roles } as Workspace
+      return {
+        organization: organization as Organization,
+        roles: roles as Role[],
+      }
     })
   )
 
@@ -39,6 +55,6 @@ async function castToWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
 }
 
 export const codeService = {
-  castToCode,
-  castToWorkspace,
+  incodeWorkspace,
+  decodeWorkspace,
 }

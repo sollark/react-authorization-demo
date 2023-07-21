@@ -1,14 +1,14 @@
-import { RoleCode } from '../mongodb/models/role.model.js'
+import { RoleCode } from '../mongodb/models/roleCode.model.js'
 import { Workspace } from '../mongodb/models/workspace.model.js'
 import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
 import { codeService } from './code.service.js'
 
-function generateTokenPayload(workspaces: Workspace[]): string {
+async function generateTokenPayload(workspaces: Workspace[]): Promise<string> {
   if (workspaces.length === 0) {
     return '0000'
   }
 
-  const workspacesCodes = codeService.castToCode(workspaces)
+  const workspacesCodes = await codeService.incodeWorkspace(workspaces)
   const payloadParts: string[] = []
 
   for (const workspace of workspacesCodes) {
@@ -40,7 +40,7 @@ async function decodeTokenPayload(tokenPayload: string) {
     workspacesCode.push(workspace)
   }
 
-  const workspaces: Workspace[] = await codeService.castToWorkspace(
+  const workspaces: Workspace[] = await codeService.decodeWorkspace(
     workspacesCode
   )
 
