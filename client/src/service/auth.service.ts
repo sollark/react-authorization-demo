@@ -28,7 +28,7 @@ async function registration(email: string, password: string) {
     AuthCredentials,
     AuthResponse
   >('auth/registration', { email, password })
-  console.log('registration-registrationResponse: ', registrationResponse)
+  console.log('registration, registrationResponse: ', registrationResponse)
 
   const { account, accessToken } = registrationResponse as any
   useAuthStore.getState().setToken(accessToken)
@@ -73,7 +73,7 @@ async function refreshTokens() {
     null
   )
 
-  // console.log('refreshTokens response data', response)
+  // console.log('refreshTokens, response data', response)
 
   const { account, accessToken } = response as any
 
