@@ -14,14 +14,17 @@ export async function updateAccount(
   const identifier = getIdentifierFromALS()
   const account: Account = req.body
 
-  console.log('updateAccount account', account)
+  console.log('updateAccount account, account: ', account)
 
   const [updatedUserData, updatedWorkspaceData, updatedOrganizationData] =
     accountService.sortAccountData(account)
 
-  console.log('updateAccount updatedUserData', updatedUserData)
-  console.log('updateAccount updatedWorkspaceData', updatedWorkspaceData)
-  console.log('updateAccount updatedOrganizationData', updatedOrganizationData)
+  console.log('updateAccount, updatedUserData: ', updatedUserData)
+  console.log('updateAccount, updatedWorkspaceData: ', updatedWorkspaceData)
+  console.log(
+    'updateAccount, updatedOrganizationData: ',
+    updatedOrganizationData
+  )
 
   const updatedUser = await userService.updateUser(identifier, updatedUserData)
   const updatedWorkspace = await workspaceService.updateWorkspace(

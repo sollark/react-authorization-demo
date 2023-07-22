@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
@@ -28,9 +29,8 @@ async function registration(credentials: Credentials) {
   const auth = await authModel.create(credentials)
   logger.info(`auth.service - new authentication created: ${auth.email}`)
 
-  // generate tokens
-  const payload: string = await payloadService.generateTokenPayload([])
-  const { accessToken, refreshToken } = tokenService.generateTokens(payload)
+  // // generate token
+  const { accessToken, refreshToken } = await getTokens([])
 
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
@@ -68,14 +68,7 @@ const signIn = async (credentials: Credentials) => {
 
   // generate tokens
   const workspaceIds = account.workspaces
-  const workspaces =
-    workspaceIds && (await workspaceService.getWorkspaces(workspaceIds))
-
-  const payload: string = await payloadService.generateTokenPayload(
-    workspaces || []
-  )
-
-  const { accessToken, refreshToken } = tokenService.generateTokens(payload)
+  const { accessToken, refreshToken } = await getTokens(workspaceIds)
 
   // save refresh token with identifier to db
   await tokenService.saveToken(auth._id, refreshToken)
@@ -168,4 +161,11 @@ const isEmailTaken = async (email: String) => {
   } catch (error) {
     throw error
   }
+}
+
+async function getTokens(workspaceIds: Types.ObjectId[]) {
+  const workspaces = await workspaceService.getWorkspaces(workspaceIds)
+  const payload: string = await payloadService.generateTokenPayload(workspaces)
+
+  return tokenService.generateTokens(payload)
 }

@@ -2,7 +2,7 @@ import { Account } from '@/models/Account'
 import { Organization } from '@/models/Organization'
 import { User } from '@/models/User'
 import { httpService } from './axios/http.service'
-import useAccountStore from '@/stores/accountStore'
+import { storeService } from './store.service'
 
 async function update(
   firstName: string,
@@ -23,9 +23,10 @@ async function update(
 
   console.log('accountService - update, response data', response)
 
-  const { account } = response as any
+  const { account, accessToken } = response as any
 
-  if (account?.isComplete) useAccountStore.getState().setIsComplete(false)
+  if (account) storeService.saveAccount(account)
+  if (accessToken) storeService.saveAccessToken(accessToken)
 
   return account ? account : null
 }

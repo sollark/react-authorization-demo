@@ -77,8 +77,8 @@ async function refreshTokens() {
 
   const { account, accessToken } = response as any
 
-  useAuthStore.getState().setToken(accessToken)
-  storeService.saveAccount(account)
+  if (accessToken) storeService.saveAccessToken(accessToken)
+  if (account) storeService.saveAccount(account)
 }
 
 export const authService = {
