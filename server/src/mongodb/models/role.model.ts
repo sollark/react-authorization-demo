@@ -1,17 +1,9 @@
 import { Schema, model } from 'mongoose'
 
-console.log('ddddd')
-export type Role =
-  | 'Guest'
-  | 'NoRole'
-  | 'Employee'
-  | 'Manager'
-  | 'Supervisor'
-  | 'Admin'
+export type Role = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
 
 export const USER_ROLE: Record<Role, Role> = {
   Guest: 'Guest',
-  NoRole: 'NoRole',
   Employee: 'Employee',
   Manager: 'Manager',
   Supervisor: 'Supervisor',
@@ -26,7 +18,7 @@ const RoleModel = model('Roles', RoleSchema)
 export default RoleModel
 
 const populateRole = async () => {
-  console.log('populateRole roles')
+  console.log('populateRole')
 
   try {
     // Clear existing roles (optional, depending on your requirements)
@@ -36,7 +28,7 @@ const populateRole = async () => {
     const roles = Object.entries(USER_ROLE).map(([role]) => ({
       role,
     }))
-    console.log('populateRole roles', roles)
+    console.log('populateRole, roles', roles)
 
     // Insert the roles into the database
     await RoleModel.insertMany(roles)

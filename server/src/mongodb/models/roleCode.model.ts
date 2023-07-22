@@ -1,11 +1,10 @@
 import { Schema, model } from 'mongoose'
 import { Role } from './role.model.js'
 
-export type RoleCode = '0000' | '0001' | '1001' | '1010' | '1100' | '1110'
+export type RoleCode = '0000' | '1001' | '1010' | '1100' | '1110'
 
 export const ROLE_CODE_MAP: Readonly<Record<Role, RoleCode>> = {
   Guest: '0000',
-  NoRole: '0001',
   Employee: '1001',
   Manager: '1010',
   Supervisor: '1100',
