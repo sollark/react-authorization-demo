@@ -33,12 +33,6 @@ async function registration(email: string, password: string) {
   const { account, accessToken } = registrationResponse as any
   useAuthStore.getState().setToken(accessToken)
 
-  const accountResponse = await httpService.get<null, Account>(
-    'account/get',
-    null
-  )
-  console.log('registration-accountResponse: ', accountResponse)
-
   storeService.saveToStore(account)
 
   return account
