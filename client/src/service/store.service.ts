@@ -5,8 +5,8 @@ import useOrganizationStore from '@/stores/organizationStore'
 import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 
-function saveToStore(account: Account) {
-  console.log('saveToStore()')
+function saveAccount(account: Account) {
+  console.log('saveAccount()')
 
   const { isComplete, user, workspaces } = account
   const workspace = workspaces.pop()
@@ -14,10 +14,14 @@ function saveToStore(account: Account) {
   useAccountStore.getState().setIsComplete(isComplete)
   useUserStore.getState().setUser(user)
   if (workspace) {
-    console.log('saveToStore workspace', workspace)
+    console.log('storeService - saveAccount, workspace :', workspace)
     useRoleStore.getState().setRoles(workspace.roles)
     useOrganizationStore.getState().setOrganization(workspace.organization)
   }
+}
+
+function saveAccessToken(accessToken: string) {
+  useAuthStore.getState().setToken(accessToken)
 }
 
 function clearStoreStates() {
@@ -30,4 +34,4 @@ function clearStoreStates() {
   useAuthStore.getState().clearToken()
 }
 
-export const storeService = { saveToStore, clearStoreStates }
+export const storeService = { saveAccount, saveAccessToken, clearStoreStates }

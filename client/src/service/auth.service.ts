@@ -18,8 +18,8 @@ async function getAccess() {
   if (isAuthResponse(response)) {
     const { account, accessToken } = response as any
 
-    useAuthStore.getState().setToken(accessToken)
-    storeService.saveToStore(account)
+    storeService.saveAccessToken(accessToken)
+    storeService.saveAccount(account)
   }
 }
 
@@ -33,7 +33,7 @@ async function registration(email: string, password: string) {
   const { account, accessToken } = registrationResponse as any
   useAuthStore.getState().setToken(accessToken)
 
-  storeService.saveToStore(account)
+  storeService.saveAccount(account)
 
   return account
 }
@@ -52,7 +52,7 @@ async function signIn(
   const { account, accessToken } = response as any
 
   useAuthStore.getState().setToken(accessToken)
-  storeService.saveToStore(account)
+  storeService.saveAccount(account)
 
   return account
 }
@@ -78,7 +78,7 @@ async function refreshTokens() {
   const { account, accessToken } = response as any
 
   useAuthStore.getState().setToken(accessToken)
-  storeService.saveToStore(account)
+  storeService.saveAccount(account)
 }
 
 export const authService = {

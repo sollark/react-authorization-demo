@@ -21,7 +21,7 @@ async function update(
     organizationCode,
   })
 
-  console.log('response data', response)
+  console.log('accountService - update, response data', response)
 
   const { account } = response as any
 
