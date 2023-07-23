@@ -19,6 +19,7 @@ async function getAccess() {
     const { account, accessToken } = response as any
 
     storeService.saveAccessToken(accessToken)
+    storeService.setUserAsAuthorized()
     storeService.saveAccount(account)
   }
 }
@@ -30,31 +31,36 @@ async function registration(email: string, password: string) {
   >('auth/registration', { email, password })
   console.log('registration, registrationResponse: ', registrationResponse)
 
-  const { account, accessToken } = registrationResponse as any
-  useAuthStore.getState().setToken(accessToken)
+  if (isAuthResponse(registrationResponse)) {
+    const { account, accessToken } = registrationResponse as any
 
-  storeService.saveAccount(account)
+    useAuthStore.getState().setToken(accessToken)
+    storeService.setUserAsAuthorized()
+    storeService.saveAccount(account)
 
-  return account
+    return account
+  }
 }
 
 async function signIn(
   email: string,
   password: string
 ): Promise<Account | undefined> {
-  const response = await httpService.post<AuthCredentials, AuthResponse>(
+  const signInResponse = await httpService.post<AuthCredentials, AuthResponse>(
     'auth/signin',
     { email, password }
   )
 
-  // console.log('signIn response data', response)
+  // console.log('signIn, response data: ', signInResponse)
 
-  const { account, accessToken } = response as any
+  if (isAuthResponse(signInResponse)) {
+    const { account, accessToken } = signInResponse as any
 
-  useAuthStore.getState().setToken(accessToken)
-  storeService.saveAccount(account)
+    useAuthStore.getState().setToken(accessToken)
+    storeService.saveAccount(account)
 
-  return account
+    return account
+  }
 }
 
 async function signOut() {
@@ -75,10 +81,13 @@ async function refreshTokens() {
 
   // console.log('refreshTokens, response data', response)
 
-  const { account, accessToken } = response as any
+  if (isAuthResponse(response)) {
+    const { account, accessToken } = response as any
 
-  if (accessToken) storeService.saveAccessToken(accessToken)
-  if (account) storeService.saveAccount(account)
+    storeService.saveAccessToken(accessToken)
+    storeService.setUserAsAuthorized()
+    storeService.saveAccount(account)
+  }
 }
 
 export const authService = {

@@ -24,6 +24,14 @@ function saveAccessToken(accessToken: string) {
   useAuthStore.getState().setToken(accessToken)
 }
 
+function setUserAsAuthorized() {
+  useAuthStore.getState().setAsAuthorized()
+}
+
+function setUserAsUnauthorized() {
+  useAuthStore.getState().setAsUnauthorized()
+}
+
 function clearStoreStates() {
   console.log('clearStoreStates()')
 
@@ -32,6 +40,13 @@ function clearStoreStates() {
   useRoleStore.getState().clearRoles()
   useOrganizationStore.getState().clearOrganization()
   useAuthStore.getState().clearToken()
+  useAuthStore.getState().setAsUnauthorized()
 }
 
-export const storeService = { saveAccount, saveAccessToken, clearStoreStates }
+export const storeService = {
+  saveAccount,
+  saveAccessToken,
+  setUserAsAuthorized,
+  setUserAsUnauthorized,
+  clearStoreStates,
+}
