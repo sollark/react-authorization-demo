@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
@@ -8,7 +7,6 @@ import logger from '../../service/logger.service.js'
 import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { userService } from '../../service/user.service.js'
-import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from '../account/account.service.js'
 
 async function registration(credentials: Credentials) {
@@ -29,8 +27,8 @@ async function registration(credentials: Credentials) {
   const auth = await authModel.create(credentials)
   logger.info(`auth.service - new authentication created: ${auth.email}`)
 
-  // // generate token
-  const { accessToken, refreshToken } = await getTokens([])
+  // // generate tokens
+  const { accessToken, refreshToken } = await generateTokens(auth.uuid)
 
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
@@ -67,8 +65,7 @@ const signIn = async (credentials: Credentials) => {
   const account = await accountService.getAccount(auth._id)
 
   // generate tokens
-  const workspaceIds = account.workspaces
-  const { accessToken, refreshToken } = await getTokens(workspaceIds)
+  const { accessToken, refreshToken } = await generateTokens(auth.uuid)
 
   // save refresh token with identifier to db
   await tokenService.saveToken(auth._id, refreshToken)
@@ -154,7 +151,7 @@ export const authService = {
   getAccess,
 }
 
-const isEmailTaken = async (email: String) => {
+const isEmailTaken = async (email: string) => {
   try {
     const existingAuthUser = await authModel.findOne({ email })
     return existingAuthUser ? true : false
@@ -163,9 +160,8 @@ const isEmailTaken = async (email: String) => {
   }
 }
 
-async function getTokens(workspaceIds: Types.ObjectId[]) {
-  const workspaces = await workspaceService.getWorkspaces(workspaceIds)
-  const payload: string = await payloadService.generateTokenPayload(workspaces)
+async function generateTokens(uuid: string) {
+  const payload: string = await payloadService.generateTokenPayload(uuid)
 
   return tokenService.generateTokens(payload)
 }
