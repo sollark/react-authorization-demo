@@ -1,9 +1,9 @@
-import { USER_ROLE } from '@/models/Role'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
 import { RootRoute, Route, lazy } from '@tanstack/router'
 import Home from '../pages/HomePage'
-import ProtectedRoute from './ProtectedRoute'
+import AuthProtectedRoute from './AuthProtectedRoute'
+import AccountDetailsPage from '@/pages/AccountDetailsPage'
 
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
@@ -26,15 +26,9 @@ export const homeRoute = new Route({
   path: '/',
 
   component: () => (
-    <ProtectedRoute
-      allowed={[
-        USER_ROLE.Employee,
-        USER_ROLE.Manager,
-        USER_ROLE.Supervisor,
-        USER_ROLE.Admin,
-      ]}>
+    <AuthProtectedRoute>
       <Home />
-    </ProtectedRoute>
+    </AuthProtectedRoute>
   ),
 })
 
@@ -60,38 +54,32 @@ export const accountRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/account',
   component: () => (
-    <ProtectedRoute
-      allowed={[
-        USER_ROLE.Employee,
-        USER_ROLE.Manager,
-        USER_ROLE.Supervisor,
-        USER_ROLE.Admin,
-      ]}>
+    <AuthProtectedRoute>
       <AccountPage />
-    </ProtectedRoute>
+    </AuthProtectedRoute>
   ),
+})
+
+export const accountDetailsRoute = new Route({
+  getParentRoute: () => accountRoute,
+  path: '/details',
+  component: AccountDetailsPage,
 })
 
 export const accountEditRoute = new Route({
   getParentRoute: () => accountRoute,
   path: '/edit',
-  component: () => (
-    <ProtectedRoute
-      allowed={[
-        USER_ROLE.Employee,
-        USER_ROLE.Manager,
-        USER_ROLE.Supervisor,
-        USER_ROLE.Admin,
-      ]}>
-      <AccountEditPage />
-    </ProtectedRoute>
-  ),
+  component: AccountEditPage,
 })
 
 export const roleRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/role',
-  component: RolePage,
+  component: () => (
+    <AuthProtectedRoute>
+      <RolePage />
+    </AuthProtectedRoute>
+  ),
 })
 
 export const guestRoute = new Route({
