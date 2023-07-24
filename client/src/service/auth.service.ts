@@ -2,6 +2,7 @@ import { Account } from '@/models/Account'
 import { AuthCredentials } from '@/models/Auth'
 import useAuthStore from '@/stores/authStore'
 import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
+import { accountService } from './account.service'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
@@ -31,15 +32,18 @@ async function registration(email: string, password: string) {
   >('auth/registration', { email, password })
   console.log('registration, registrationResponse: ', registrationResponse)
 
-  if (isAuthResponse(registrationResponse)) {
-    const { account, accessToken } = registrationResponse as any
+  if (!isAuthResponse(registrationResponse)) return null
 
+  const { accessToken } = registrationResponse as any
+  if (accessToken) {
     useAuthStore.getState().setToken(accessToken)
     storeService.setUserAsAuthorized()
-    storeService.saveAccount(account)
-
-    return account
   }
+
+  const account = await accountService.getAccount()
+  if (account) storeService.saveAccount(account)
+
+  return account ? account : null
 }
 
 async function signIn(
