@@ -36,14 +36,14 @@ const AccountForm: FC<Props> = (props: Props) => {
     let account = null
     // if organization input is not a number, create a new organization
     if (isNaN(form.organization))
-      account = await accountService.update(
+      account = await accountService.updateAccount(
         form.firstName,
         form.lastName,
         form.organization
       )
     // else it is an existing organization code
     else
-      account = await accountService.update(
+      account = await accountService.updateAccount(
         form.firstName,
         form.lastName,
         undefined,
