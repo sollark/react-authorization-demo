@@ -1,17 +1,12 @@
-import useOrganizationStore from '@/stores/organizationStore'
-import useUserStore from '@/stores/userStore'
+import { Outlet } from '@tanstack/router'
 
 const AccountPage = () => {
-  const user = useUserStore((state) => state.user)
-  const organization = useOrganizationStore((state) => state.organization)
+  console.log('AccountPage connected')
+
   return (
     <div>
       <h1>Account Page</h1>
-      <ul>
-        <li>First Name: {user?.firstName}</li>
-        <li>Last Name: {user?.lastName}</li>
-        <li>Organization: {organization?.organizationName}</li>
-      </ul>
+      <Outlet />
     </div>
   )
 }

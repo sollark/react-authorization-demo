@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const AccountEditPage: FC = () => {
-  console.log('AccountEdit connected')
+  console.log('AccountEditPage connected')
 
   return (
     <>
