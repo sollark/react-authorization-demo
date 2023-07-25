@@ -1,21 +1,38 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
-import UserModel from '../../mongodb/models/user.model.js'
-import logger from '../../service/logger.service.js'
-import WorkspaceRefModel from '../../mongodb/models/workspace.model.js'
 import OrganizationModel from '../../mongodb/models/organization.model.js'
+import UserModel from '../../mongodb/models/user.model.js'
+import WorkspaceRefModel from '../../mongodb/models/workspace.model.js'
+import logger from '../../service/logger.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
-  user: Types.ObjectId,
+  userId: Types.ObjectId,
   isComplete: boolean = false
 ): Promise<Account> {
-  const account = await (
-    await AccountModel.create({ identifier, user, isComplete })
-  ).populate('user')
+  const accountRef = await AccountModel.create({
+    identifier,
+    userId,
+    isComplete,
+  })
 
-  logger.info(`account.service - account added: ${account}`)
+  if (!accountRef) {
+    logger.warn(`accountService - cannot create account: ${identifier}`)
+    throw new BadRequestError('Cannot create account')
+  }
+
+  const account = await AccountModel.findById(accountRef._id)
+    .populate('user')
+    .lean()
+    .exec()
+
+  if (!account) {
+    logger.warn(`accountService - account is not found: ${identifier}`)
+    throw new BadRequestError('Account is not found')
+  }
+
+  logger.info(`accountService - account added: ${account}`)
 
   return account
 }
@@ -25,15 +42,17 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     .populate('user')
     .populate({
       path: 'workspaces',
-      populate: { path: 'organization' },
+      populate: [{ path: 'organization' }, { path: 'roles' }],
     })
+    .lean()
+    .exec()
 
   if (!account) {
-    logger.warn(`account.service - account is not found: ${identifier}`)
+    logger.warn(`accountService - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
 
-  logger.info(`account.service - account fetched: ${account}`)
+  logger.info(`accountService - account fetched: ${account}`)
 
   return account
 }
@@ -56,6 +75,7 @@ async function addWorkspace(
       path: 'workspaces',
       populate: { path: 'organization' },
     })
+    .lean()
     .exec()
 
   return account
@@ -105,6 +125,7 @@ async function completeAccount(accountId: Types.ObjectId) {
       path: 'workspaces',
       populate: { path: 'organization' },
     })
+    .lean()
     .exec()
 
   return updatedAccount

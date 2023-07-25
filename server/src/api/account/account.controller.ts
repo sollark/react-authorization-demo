@@ -50,6 +50,7 @@ export async function updateAccount(
 
   if (updatedAccount) {
     updatedAccount = await accountService.completeAccount(updatedAccount._id)
+
     console.log('updateAccount, set complete updatedAccount', updatedAccount)
   }
 
