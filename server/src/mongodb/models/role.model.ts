@@ -1,40 +1,38 @@
 import { Schema, model } from 'mongoose'
 
-export type Role = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
-
-export const USER_ROLE: Record<Role, Role> = {
-  Guest: 'Guest',
-  Employee: 'Employee',
-  Manager: 'Manager',
-  Supervisor: 'Supervisor',
-  Admin: 'Admin',
+export interface Role {
+  value: string
 }
 
 const RoleSchema = new Schema({
   role: { type: String, required: true, unique: true, immutable: true },
 })
 
-const RoleModel = model('Roles', RoleSchema)
+const RoleModel = model<Role>('Roles', RoleSchema)
 export default RoleModel
 
-const populateRole = async () => {
-  console.log('populateRole')
+// Define a variable to hold the user roles
+export let USER_ROLE: Record<string, string> = {}
 
+// Function to fetch roles from the database and create USER_ROLE
+const createUserRoleFromDB = async (): Promise<void> => {
   try {
-    // Clear existing roles (optional, depending on your requirements)
-    await RoleModel.deleteMany({})
+    const rolesFromDB: Role[] = await RoleModel.find({}, { _id: 0, role: 1 })
 
-    // Iterate over the USER_ROLE object and create Role documents
-    const roles = Object.entries(USER_ROLE).map(([role]) => ({
-      role,
-    }))
-    console.log('populateRole, roles', roles)
-
-    // Insert the roles into the database
-    await RoleModel.insertMany(roles)
+    USER_ROLE = rolesFromDB.reduce(
+      (userRole: Record<string, string>, { value }) => {
+        userRole[value] = value
+        return userRole
+      },
+      {}
+    )
   } catch (error) {
-    console.error('Error populating roles:', error)
+    console.error('Error creating USER_ROLE from DB:', error)
+    throw error
   }
 }
 
-populateRole()
+// Call the function to populate USER_ROLE when the app starts
+createUserRoleFromDB().catch((error) => {
+  console.error('Error populating USER_ROLE:', error)
+})

@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose'
 import { config } from '../config/config.js'
+import populateRole from './populate.js'
 
 export const connectMongo = async () => {
   if (!config.mongo.url) {
@@ -13,4 +14,6 @@ export const connectMongo = async () => {
   } catch (error) {
     console.log(error)
   }
+
+  populateRole()
 }

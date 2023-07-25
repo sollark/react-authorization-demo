@@ -1,5 +1,5 @@
 import { Types } from 'mongoose'
-import { Role } from '../mongodb/models/role.model.js'
+import { Role, USER_ROLE } from '../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../mongodb/models/workspace.model.js'
@@ -90,7 +90,7 @@ async function joinExistingOrganization(organizationCode: OrganizationCode) {
 
 async function joinNewOrganization(name: string) {
   const organization = await organizationService.addOrganization(name)
-  const workspace = await addWorkspace(organization._id, ['Manager'])
+  const workspace = await addWorkspace(organization._id, [USER_ROLE.Manager])
 
   return workspace
 }
