@@ -6,8 +6,8 @@ async function populateRole() {
   console.log('Populating roles in the database...')
 
   try {
-    // Clear existing roles (optional, depending on your requirements)
-    await RoleModel.deleteMany({})
+    const existingRoles = await RoleModel.find({})
+    if (existingRoles.length !== 0) return
 
     // Define roles to be inserted into the database
     const rolesToInsert = Object.keys(USER_ROLE) as Role[]
@@ -18,7 +18,7 @@ async function populateRole() {
     )
 
     console.log('Role populated successfully.')
-    // console.log('Roles inserted:', insertedRoles)
+    console.log('Roles inserted:', insertedRoles)
   } catch (error) {
     console.error('Error populating roles:', error)
     throw error
@@ -29,8 +29,8 @@ async function populateRoleCode() {
   console.log('Populating role codes in the database...')
 
   try {
-    // Clear existing role codes (optional, depending on your requirements)
-    await RoleCodeModel.deleteMany({})
+    const existingRolesCodes = await RoleCodeModel.find({})
+    if (existingRolesCodes.length !== 0) return
 
     // Get all roles from the RoleModel
     const roles = await RoleModel.find({})
@@ -47,7 +47,7 @@ async function populateRoleCode() {
     // Insert the role codes into the database
     const insertedRoleCodes = await RoleCodeModel.insertMany(roleCodeDocuments)
     console.log('Role codes populated successfully.')
-    // console.log('Role codes inserted:', insertedRoleCodes)
+    console.log('Role codes inserted:', insertedRoleCodes)
   } catch (error) {
     console.error('Error populating role codes:', error)
   }

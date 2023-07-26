@@ -20,7 +20,7 @@ const WorkspaceSchema = new Schema({
   roles: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Role',
+      ref: 'Roles',
     },
   ],
 })
