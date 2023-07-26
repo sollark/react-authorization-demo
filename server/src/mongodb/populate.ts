@@ -1,4 +1,5 @@
-import RoleModel from './models/role.model.js'
+import RoleModel, { Role, USER_ROLE } from './models/role.model.js'
+import RoleCodeModel, { ROLE_CODE_MAP } from './models/roleCode.model.js'
 
 // Function to populate roles in the database
 async function populateRole() {
@@ -9,13 +10,7 @@ async function populateRole() {
     await RoleModel.deleteMany({})
 
     // Define roles to be inserted into the database
-    const rolesToInsert = [
-      'Guest',
-      'Employee',
-      'Manager',
-      'Supervisor',
-      'Admin',
-    ]
+    const rolesToInsert = Object.keys(USER_ROLE) as Role[]
 
     // Insert the roles into the database
     const insertedRoles = await RoleModel.insertMany(
@@ -29,4 +24,28 @@ async function populateRole() {
   }
 }
 
-export default populateRole
+async function populateRoleCode() {
+  try {
+    // Clear existing role codes (optional, depending on your requirements)
+    await RoleCodeModel.deleteMany({})
+
+    // Get all roles from the RoleModel
+    const roles = await RoleModel.find({})
+
+    // Map each role to its corresponding role code and create RoleCode documents
+    const roleCodeDocuments = roles.map((role) => {
+      const roleCode = ROLE_CODE_MAP[role.role as Role]
+      return {
+        role: role._id, // Use the ObjectId of the role
+        code: roleCode,
+      }
+    })
+
+    // Insert the role codes into the database
+    await RoleCodeModel.insertMany(roleCodeDocuments)
+    console.log('Role codes populated successfully.')
+  } catch (error) {
+    console.error('Error populating role codes:', error)
+  }
+}
+export const populate = { populateRole, populateRoleCode }

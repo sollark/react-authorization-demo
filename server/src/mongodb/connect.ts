@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose'
 import { config } from '../config/config.js'
-import populateRole from './populate.js'
+import { populate } from './populate.js'
 
 export const connectMongo = async () => {
   if (!config.mongo.url) {
@@ -15,5 +15,6 @@ export const connectMongo = async () => {
     console.log(error)
   }
 
-  populateRole()
+  await populate.populateRole()
+  await populate.populateRoleCode()
 }
