@@ -1,7 +1,7 @@
-import { OrganizationCode } from './organizationCode.model.js'
-import { RoleCode } from './role.model.js'
+import { Organization } from './organization.model.js'
+import { RoleCode } from './roleCode.model.js'
 
-export interface WorkspaceCode {
-  organization: OrganizationCode
+export interface enCodedWorkspace {
+  organization: Organization
   roles: RoleCode[]
 }

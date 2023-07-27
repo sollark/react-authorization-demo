@@ -1,18 +1,14 @@
-import OrganizationModel, {
-  Organization,
-} from '../mongodb/models/organization.model.js'
 import { Role } from '../mongodb/models/role.model.js'
-
 import RoleCodeModel, { RoleCode } from '../mongodb/models/roleCode.model.js'
 import { Workspace } from '../mongodb/models/workspace.model.js'
-import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
+import { enCodedWorkspace } from '../mongodb/models/workspaceCode.model.js'
 
 async function encodeWorkspace(
   workspaces: Workspace[]
-): Promise<WorkspaceCode[]> {
+): Promise<enCodedWorkspace[]> {
   const enCodedWorkspaces = await Promise.all(
     workspaces.map(async (workspace) => {
-      const organizationCode = workspace.organization.organizationCode
+      const organization = workspace.organization
       const roles = await Promise.all(
         workspace.roles.map(async (role) => {
           const roleMap = await RoleCodeModel.findOne({ role })
@@ -21,7 +17,7 @@ async function encodeWorkspace(
       )
 
       return {
-        organization: organizationCode,
+        organization,
         roles: roles as RoleCode[],
       }
     })
@@ -30,22 +26,22 @@ async function encodeWorkspace(
   return enCodedWorkspaces
 }
 
-async function decodeWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
+async function decodeWorkspace(
+  enCodedWorkspace: enCodedWorkspace[]
+): Promise<Workspace[]> {
   const workspaces = await Promise.all(
-    codes.map(async (code) => {
-      const organization = await OrganizationModel.findOne({
-        code: code.organization,
-      })
+    enCodedWorkspace.map(async (workspace) => {
+      const organization = workspace.organization
 
       const roles = await Promise.all(
-        code.roles.map(async (roleCode) => {
+        workspace.roles.map(async (roleCode) => {
           const roleMap = await RoleCodeModel.findOne({ code: roleCode })
           return roleMap ? (roleMap.role as Role) : ''
         })
       )
 
       return {
-        organization: organization as Organization,
+        organization,
         roles: roles as Role[],
       }
     })
