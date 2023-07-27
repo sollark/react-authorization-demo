@@ -1,14 +1,12 @@
 import OrganizationModel, {
   Organization,
-} from '../mongodb/models/organization.model.js'
-import OrganizationCodeModel, {
   OrganizationCode,
-} from '../mongodb/models/organizationCode.model.js'
+} from '../mongodb/models/organization.model.js'
 import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
 const addOrganization = async (name: string) => {
-  const code = await generateOrganizationCode(name)
+  const code = await generateOrganizationCode()
 
   const organization = await OrganizationModel.create({
     organizationCode: code,
@@ -25,8 +23,8 @@ const addOrganization = async (name: string) => {
 const isOrganizationCodeExists = async (organization: string) => {
   if (!utilService.convertToNumber(organization)) return false
 
-  const organizationCode = await OrganizationCodeModel.findOne({
-    code: +organization,
+  const organizationCode = await OrganizationModel.findOne({
+    organizationCode: +organization,
   })
 
   if (!organizationCode) return false
@@ -61,8 +59,8 @@ const updateOrganization = async (
   return organization
 }
 
-const deleteOrganization = async (code: number): Promise<void> => {
-  await OrganizationModel.deleteOne({ code })
+const deleteOrganization = async (organizationCode: string): Promise<void> => {
+  await OrganizationModel.deleteOne({ organizationCode })
 }
 
 export const organizationService = {
@@ -73,24 +71,17 @@ export const organizationService = {
   deleteOrganization,
 }
 
-async function generateOrganizationCode(
-  organizationName: string
-): Promise<OrganizationCode> {
+async function generateOrganizationCode(): Promise<OrganizationCode> {
   let code = utilService.getRandomInt(1000, 9999)
 
-  const existingCode = await OrganizationCodeModel.findOne({
+  const existingCode = await OrganizationModel.findOne({
     organizationCode: code.toString(),
   })
 
   if (existingCode) {
     // Code already exists, generate a new one recursively
-    return generateOrganizationCode(organizationName)
+    return generateOrganizationCode()
   }
-
-  const organizationCodeMap = await OrganizationCodeModel.create({
-    organizationName,
-    organizationCode: code.toString(),
-  })
 
   return code.toString() as OrganizationCode
 }

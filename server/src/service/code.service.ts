@@ -7,10 +7,10 @@ import RoleCodeModel, { RoleCode } from '../mongodb/models/roleCode.model.js'
 import { Workspace } from '../mongodb/models/workspace.model.js'
 import { WorkspaceCode } from '../mongodb/models/workspaceCode.model.js'
 
-async function incodeWorkspace(
+async function encodeWorkspace(
   workspaces: Workspace[]
 ): Promise<WorkspaceCode[]> {
-  const inCodedWorkspaces = await Promise.all(
+  const enCodedWorkspaces = await Promise.all(
     workspaces.map(async (workspace) => {
       const organizationCode = workspace.organization.organizationCode
       const roles = await Promise.all(
@@ -27,7 +27,7 @@ async function incodeWorkspace(
     })
   )
 
-  return inCodedWorkspaces
+  return enCodedWorkspaces
 }
 
 async function decodeWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
@@ -55,6 +55,6 @@ async function decodeWorkspace(codes: WorkspaceCode[]): Promise<Workspace[]> {
 }
 
 export const codeService = {
-  incodeWorkspace,
+  encodeWorkspace,
   decodeWorkspace,
 }

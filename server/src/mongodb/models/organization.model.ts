@@ -1,10 +1,11 @@
 import { model, Schema } from 'mongoose'
-import { OrganizationCode } from './organizationCode.model.js'
 
 export interface Organization {
   organizationName: string
   organizationCode: OrganizationCode
 }
+
+export type OrganizationCode = string
 
 const OrganizationSchema = new Schema({
   organizationName: { type: String, required: true },
