@@ -1,14 +1,14 @@
-import { Document, Schema, Types, model } from 'mongoose'
+import { Schema, Types, model } from 'mongoose'
 
 export interface Account {
+  identifier: Types.ObjectId
   user: Types.ObjectId
   workspaces: Types.ObjectId[]
   isComplete: boolean
 }
 
-interface AccountDocument extends Document, Account {}
-
-const AccountSchema = new Schema<AccountDocument>({
+const AccountSchema = new Schema({
+  identifier: { type: Types.ObjectId, required: true, unique: true },
   isComplete: {
     type: Boolean,
     default: false,
@@ -26,5 +26,5 @@ const AccountSchema = new Schema<AccountDocument>({
   ],
 })
 
-const accountModel = model<AccountDocument>('Account', AccountSchema)
+const accountModel = model<Account>('Account', AccountSchema)
 export default accountModel

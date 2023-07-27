@@ -6,9 +6,7 @@ export interface AuthResponse {
 }
 
 export function isAuthResponse(obj: any): obj is AuthResponse {
-  return (
-    obj && typeof obj === 'object' && 'account' in obj && 'accessToken' in obj
-  )
+  return obj && typeof obj === 'object' && 'accessToken' in obj
 }
 
 // export const AuthResponseSchema = z.object({

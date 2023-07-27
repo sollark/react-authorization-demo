@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { yellow } from '@mui/material/colors'
 import { Link } from '@tanstack/router'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 
 interface UserProps {
   anchorElUser: null | HTMLElement
@@ -43,9 +43,9 @@ const User = (props: UserProps) => {
   console.log('User connected')
 
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
+  const [initials, setInitials] = useState('Guest') // State to hold the initials
 
   const user = useUserStore((state) => state.user)
-  let initials = 'Guest'
 
   // build user menu
   useEffect(() => {
@@ -57,10 +57,13 @@ const User = (props: UserProps) => {
 
     // Avatar initials
     if (user && user.firstName.length && user.lastName.length)
-      initials =
+      setInitials(
         user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()
-    else if (user) initials = ''
-    else initials = 'Guest'
+      )
+    else if (user) setInitials('')
+    else setInitials('Guest')
+
+    console.log('User component - useEffect, initials: ', initials)
   }, [user])
 
   return (

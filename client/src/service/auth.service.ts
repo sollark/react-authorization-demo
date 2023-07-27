@@ -1,5 +1,6 @@
 import { Account } from '@/models/Account'
 import { AuthCredentials } from '@/models/Auth'
+import { isAccountResponse } from '@/models/response/AccountResponse'
 import useAuthStore from '@/stores/authStore'
 import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
 import { accountService } from './account.service'
@@ -11,18 +12,26 @@ async function getAccess() {
   const currentAccessToken = useAuthStore.getState().token
   if (currentAccessToken) return
 
-  const response = await httpService.get<null, AuthResponse | undefined>(
-    'auth/access',
-    null
-  )
+  const getAccessResponse = await httpService.get<
+    null,
+    AuthResponse | undefined
+  >('auth/access', null)
 
-  if (isAuthResponse(response)) {
-    const { account, accessToken } = response as any
+  if (!isAuthResponse(getAccessResponse)) return
 
-    storeService.saveAccessToken(accessToken)
-    storeService.setUserAsAuthorized()
-    storeService.saveAccount(account)
-  }
+  const { accessToken } = getAccessResponse as any
+  storeService.saveAccessToken(accessToken)
+
+  const getAccountResponse = await httpService.get<
+    null,
+    AuthResponse | undefined
+  >('account/get', null)
+  if (!isAccountResponse(getAccountResponse)) return
+
+  const { account } = getAccountResponse as any
+
+  storeService.setUserAsAuthorized()
+  storeService.saveAccount(account)
 }
 
 async function registration(email: string, password: string) {

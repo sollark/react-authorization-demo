@@ -23,10 +23,9 @@ async function updateAccount(
 
   console.log('accountService - update, response data', response)
 
-  const { account, accessToken } = response as any
+  const { account } = response as any
 
   if (account) storeService.saveAccount(account)
-  if (accessToken) storeService.saveAccessToken(accessToken)
 
   return account ? account : null
 }

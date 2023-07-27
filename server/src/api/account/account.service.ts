@@ -13,7 +13,7 @@ async function createAccount(
 ): Promise<Account> {
   const accountRef = await AccountModel.create({
     identifier,
-    userId,
+    user: userId,
     isComplete,
   })
 
@@ -52,7 +52,13 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     throw new BadRequestError('Account is not found')
   }
 
-  logger.info(`accountService - account fetched: ${account}`)
+  logger.info(
+    `accountService - account fetched: ${JSON.stringify(
+      account,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return account
 }

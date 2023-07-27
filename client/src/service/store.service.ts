@@ -6,7 +6,7 @@ import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 
 function saveAccount(account: Account) {
-  console.log('saveAccount()')
+  console.log('storeService - saveAccount, account :', account)
 
   const { isComplete, user, workspaces } = account
   const workspace = workspaces.pop()
