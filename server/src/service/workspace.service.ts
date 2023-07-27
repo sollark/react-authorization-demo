@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
-import { OrganizationCode } from '../mongodb/models/organizationCode.model.js'
+import { OrganizationCode } from '../mongodb/models/organization.model.js'
 import RoleModel, { Role, USER_ROLE } from '../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { Account } from '../../mongodb/models/account.model.js'
-import { OrganizationCodeMap } from '../../mongodb/models/organizationCode.model.js'
+import { Organization } from '../../mongodb/models/organization.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
@@ -32,7 +32,7 @@ export async function updateAccount(
   )
 
   const { organizationName, organizationCode } =
-    updatedOrganizationData as Partial<OrganizationCodeMap>
+    updatedOrganizationData as Partial<Organization>
 
   let workspace: any = null
   if (organizationCode)

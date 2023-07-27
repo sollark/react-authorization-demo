@@ -37,7 +37,6 @@ async function createAccount(
   return account
 }
 
-// TODO Role is returned as ids, need turn it to codes and send to client !!!!
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
     .populate('user')
