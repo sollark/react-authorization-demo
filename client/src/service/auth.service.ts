@@ -1,4 +1,3 @@
-import { Account } from '@/models/Account'
 import { AuthCredentials } from '@/models/Auth'
 import { isAccountResponse } from '@/models/response/AccountResponse'
 import useAuthStore from '@/stores/authStore'
@@ -55,10 +54,7 @@ async function registration(email: string, password: string) {
   return account ? account : null
 }
 
-async function signIn(
-  email: string,
-  password: string
-): Promise<Account | undefined> {
+async function signIn(email: string, password: string) {
   const signInResponse = await httpService.post<AuthCredentials, AuthResponse>(
     'auth/signin',
     { email, password }
@@ -66,14 +62,18 @@ async function signIn(
 
   // console.log('signIn, response data: ', signInResponse)
 
-  if (isAuthResponse(signInResponse)) {
-    const { account, accessToken } = signInResponse as any
+  if (!isAuthResponse(signInResponse)) return null
+  const { accessToken } = signInResponse as any
 
+  if (accessToken) {
     useAuthStore.getState().setToken(accessToken)
-    storeService.saveAccount(account)
-
-    return account
+    storeService.setUserAsAuthorized()
   }
+
+  const account = await accountService.getAccount()
+  if (account) storeService.saveAccount(account)
+
+  return account ? account : null
 }
 
 async function signOut() {

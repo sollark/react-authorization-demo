@@ -3,8 +3,11 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import OrganizationModel from '../../mongodb/models/organization.model.js'
 import UserModel from '../../mongodb/models/user.model.js'
-import WorkspaceRefModel from '../../mongodb/models/workspace.model.js'
+import WorkspaceRefModel, {
+  Workspace,
+} from '../../mongodb/models/workspace.model.js'
 import logger from '../../service/logger.service.js'
+import { codeService } from '../../service/code.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
@@ -51,6 +54,9 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     logger.warn(`accountService - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
+
+  const workspaces = account.workspaces
+  // const encodedWorkspaces = codeService.encodeWorkspace(workspaces)
 
   logger.info(
     `accountService - account fetched: ${JSON.stringify(

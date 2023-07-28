@@ -48,11 +48,8 @@ export async function updateAccount(
     workspace._id
   )
 
-  if (updatedAccount) {
+  if (updatedAccount)
     updatedAccount = await accountService.completeAccount(updatedAccount._id)
-
-    console.log('updateAccount, set complete updatedAccount', updatedAccount)
-  }
 
   res.status(200).json({ account: updatedAccount })
 }
