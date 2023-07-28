@@ -19,7 +19,7 @@ interface UserProps {
 }
 
 const userMenu = [
-  { key: 'Account', link: <Link to='/account'>Account</Link> },
+  { key: 'Account', link: <Link to='/account/details'>Account</Link> },
   {
     key: 'SignOut',
     link: (
@@ -62,8 +62,6 @@ const User = (props: UserProps) => {
       )
     else if (user) setInitials('')
     else setInitials('Guest')
-
-    console.log('User component - useEffect, initials: ', initials)
   }, [user])
 
   return (
