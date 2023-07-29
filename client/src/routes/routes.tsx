@@ -4,6 +4,7 @@ import { RootRoute, Route, lazy } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
+import RoleProtectedRoute from './RoleProtectedRoute'
 
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
@@ -91,25 +92,41 @@ export const guestRoute = new Route({
 export const employeeRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/employee',
-  component: () => <div>Employee</div>,
+  component: () => (
+    <RoleProtectedRoute allowed={['Employee']}>
+      <div>Employee</div>
+    </RoleProtectedRoute>
+  ),
 })
 
 export const managerRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/manager',
-  component: () => <div>Manager</div>,
+  component: () => (
+    <RoleProtectedRoute allowed={['Manager']}>
+      <div>Manager</div>
+    </RoleProtectedRoute>
+  ),
 })
 
 export const superVisorRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/supervisor',
-  component: () => <div>Supervisor</div>,
+  component: () => (
+    <RoleProtectedRoute allowed={['Supervisor']}>
+      <div>Supervisor</div>
+    </RoleProtectedRoute>
+  ),
 })
 
 export const adminRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/admin',
-  component: () => <div>Admin</div>,
+  component: () => (
+    <RoleProtectedRoute allowed={['Admin']}>
+      <div>Admin</div>
+    </RoleProtectedRoute>
+  ),
 })
 
 export const missingRoute = new Route({
