@@ -2,7 +2,6 @@ import { Account } from '../Account'
 
 export interface AuthResponse {
   accessToken: string
-  account: Account
 }
 
 export function isAuthResponse(obj: any): obj is AuthResponse {

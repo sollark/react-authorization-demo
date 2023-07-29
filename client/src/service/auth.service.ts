@@ -1,5 +1,4 @@
 import { AuthCredentials } from '@/models/Auth'
-import { isAccountResponse } from '@/models/response/AccountResponse'
 import useAuthStore from '@/stores/authStore'
 import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
 import { accountService } from './account.service'
@@ -20,17 +19,7 @@ async function getAccess() {
 
   const { accessToken } = getAccessResponse as any
   storeService.saveAccessToken(accessToken)
-
-  const getAccountResponse = await httpService.get<
-    null,
-    AuthResponse | undefined
-  >('account/get', null)
-  if (!isAccountResponse(getAccountResponse)) return
-
-  const { account } = getAccountResponse as any
-
-  storeService.setUserAsAuthorized()
-  storeService.saveAccount(account)
+  storeService.setUserAsAuthenticated()
 }
 
 async function registration(email: string, password: string) {
@@ -44,8 +33,8 @@ async function registration(email: string, password: string) {
 
   const { accessToken } = registrationResponse as any
   if (accessToken) {
-    useAuthStore.getState().setToken(accessToken)
-    storeService.setUserAsAuthorized()
+    storeService.saveAccessToken(accessToken)
+    storeService.setUserAsAuthenticated()
   }
 
   const account = await accountService.getAccount()
@@ -63,11 +52,12 @@ async function signIn(email: string, password: string) {
   // console.log('signIn, response data: ', signInResponse)
 
   if (!isAuthResponse(signInResponse)) return null
+
   const { accessToken } = signInResponse as any
 
   if (accessToken) {
-    useAuthStore.getState().setToken(accessToken)
-    storeService.setUserAsAuthorized()
+    storeService.saveAccessToken(accessToken)
+    storeService.setUserAsAuthenticated()
   }
 
   const account = await accountService.getAccount()
@@ -98,7 +88,7 @@ async function refreshTokens() {
     const { account, accessToken } = response as any
 
     storeService.saveAccessToken(accessToken)
-    storeService.setUserAsAuthorized()
+    storeService.setUserAsAuthenticated()
     storeService.saveAccount(account)
   }
 }

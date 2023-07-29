@@ -1,4 +1,4 @@
-import { ROLE_CODE_MAP, Role, RoleCode } from '@/models/Role'
+import { ROLE_CODE_MAP, RoleCode } from '@/models/Role'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -6,7 +6,7 @@ import { zustandLogger } from './zustandLogger'
 
 interface RoleState {
   roles: RoleCode[]
-  setRoles: (roles: Role[]) => void
+  setRoles: (roles: RoleCode[]) => void
   clearRoles: () => void
 }
 

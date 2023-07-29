@@ -1,7 +1,6 @@
 import { Account } from '../Account'
 
 export interface AccountResponse {
-  accessToken: string
   account: Account
 }
 

@@ -13,7 +13,6 @@ const SigninPage: FC = () => {
         sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
         <h1>Sign In</h1>
         <SignInForm />
-        {''}
         <p>
           Don't have an account? <Link to='/registration'>Registration</Link>
         </p>

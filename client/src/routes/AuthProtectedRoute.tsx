@@ -9,8 +9,8 @@ interface AuthProtectedRouteProps {
 const AuthProtectedRoute = ({
   children,
 }: AuthProtectedRouteProps): JSX.Element => {
-  const isAuthorized = useAuthStore((state) => state.isAuthorized)
-  const isAccessAllowed = isAuthorized
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const isAccessAllowed = isAuthenticated
 
   console.log('AuthProtectedRoute, isAccessAllowed: ', isAccessAllowed)
   return <>{isAccessAllowed ? children : <UnauthorizedPage />}</>

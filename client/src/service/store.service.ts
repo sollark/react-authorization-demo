@@ -1,4 +1,5 @@
 import { Account } from '@/models/Account'
+import { RoleCode } from '@/models/Role'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
 import useOrganizationStore from '@/stores/organizationStore'
@@ -15,7 +16,7 @@ function saveAccount(account: Account) {
   useUserStore.getState().setUser(user)
   if (workspace) {
     console.log('storeService - saveAccount, workspace :', workspace)
-    useRoleStore.getState().setRoles(workspace.roles)
+    useRoleStore.getState().setRoles(workspace.roles as RoleCode[])
     useOrganizationStore.getState().setOrganization(workspace.organization)
   }
 }
@@ -24,12 +25,12 @@ function saveAccessToken(accessToken: string) {
   useAuthStore.getState().setToken(accessToken)
 }
 
-function setUserAsAuthorized() {
-  useAuthStore.getState().setAsAuthorized()
+function setUserAsAuthenticated() {
+  useAuthStore.getState().setAsAuthenticated()
 }
 
-function setUserAsUnauthorized() {
-  useAuthStore.getState().setAsUnauthorized()
+function setUserAsUnauthenticated() {
+  useAuthStore.getState().setAsUnauthenticated()
 }
 
 function clearStoreStates() {
@@ -40,13 +41,13 @@ function clearStoreStates() {
   useRoleStore.getState().clearRoles()
   useOrganizationStore.getState().clearOrganization()
   useAuthStore.getState().clearToken()
-  useAuthStore.getState().setAsUnauthorized()
+  useAuthStore.getState().setAsUnauthenticated()
 }
 
 export const storeService = {
   saveAccount,
   saveAccessToken,
-  setUserAsAuthorized,
-  setUserAsUnauthorized,
+  setUserAsAuthenticated,
+  setUserAsUnauthenticated,
   clearStoreStates,
 }

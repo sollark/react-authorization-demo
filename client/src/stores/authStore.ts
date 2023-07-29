@@ -5,9 +5,9 @@ import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
 interface AuthState {
-  isAuthorized: boolean
-  setAsAuthorized: () => void
-  setAsUnauthorized: () => void
+  isAuthenticated: boolean
+  setAsAuthenticated: () => void
+  setAsUnauthenticated: () => void
   token: string | null
   setToken: (token: string) => void
   clearToken: () => void
@@ -19,9 +19,9 @@ const useAuthStore = create<AuthState>()(
   zustandLogger(
     devtools(
       immer((set) => ({
-        isAuthorized: false,
-        setAsAuthorized: () => set(() => ({ isAuthorized: true })),
-        setAsUnauthorized: () => set(() => ({ isAuthorized: false })),
+        isAuthenticated: false,
+        setAsAuthenticated: () => set(() => ({ isAuthenticated: true })),
+        setAsUnauthenticated: () => set(() => ({ isAuthenticated: false })),
         token: null,
         setToken: (token) => set(() => ({ token })),
         clearToken: () => set(() => ({ token: null })),

@@ -7,7 +7,6 @@ import {
   accountRoute,
   adminRoute,
   employeeRoute,
-  guestRoute,
   homeRoute,
   managerRoute,
   missingRoute,
@@ -44,7 +43,6 @@ const routeTree = rootRoute.addChildren([
   registrationRoute,
   accountRoute.addChildren([accountDetailsRoute, accountEditRoute]),
   roleRoute.addChildren([
-    guestRoute,
     employeeRoute,
     managerRoute,
     superVisorRoute,
