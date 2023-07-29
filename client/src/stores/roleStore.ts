@@ -1,11 +1,11 @@
-import { Role, USER_ROLE } from '@/models/Role'
+import { ROLE_CODE_MAP, Role, RoleCode } from '@/models/Role'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
 interface RoleState {
-  roles: Role[]
+  roles: RoleCode[]
   setRoles: (roles: Role[]) => void
   clearRoles: () => void
 }
@@ -16,9 +16,9 @@ const useRoleStore = create<RoleState>()(
     persist(
       devtools(
         immer((set) => ({
-          roles: [USER_ROLE.Guest],
+          roles: [ROLE_CODE_MAP.Guest],
           setRoles: (roles) => set(() => ({ roles })),
-          clearRoles: () => set(() => ({ roles: [USER_ROLE.Guest] })),
+          clearRoles: () => set(() => ({ roles: [ROLE_CODE_MAP.Guest] })),
         }))
       ),
       { name: 'role-storage' }

@@ -3,6 +3,7 @@ import { Organization } from '@/models/Organization'
 import { User } from '@/models/User'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
+import { codeService } from './code.service'
 
 async function updateAccount(
   firstName: string,
@@ -30,15 +31,16 @@ async function updateAccount(
   return account ? account : null
 }
 
-async function getAccount(): Promise<Account> {
+async function getAccount(): Promise<Account | null> {
   const response = await httpService.get<null, Account>('account/get', null)
 
   console.log('accountService - getAccount, response data', response)
 
   const { account } = response as any
-  if (account) storeService.saveAccount(account)
+  if (!account) return null
 
-  return account ? account : null
+  storeService.saveAccount(account)
+  return account
 }
 
 export const accountService = { updateAccount, getAccount }

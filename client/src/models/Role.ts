@@ -1,13 +1,7 @@
 import { z } from 'zod'
 
-export type RoleCode = '0000' | '0001' | '1001' | '1010' | '1100' | '1110'
-export type Role =
-  | 'Guest'
-  | 'NoRole'
-  | 'Employee'
-  | 'Manager'
-  | 'Supervisor'
-  | 'Admin'
+export type RoleCode = '0000' | '1001' | '1010' | '1100' | '1110'
+export type Role = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
 
 export const userRoleSchema = z.enum([
   'Guest',
@@ -29,9 +23,16 @@ export const USER_ROLE = {
 
 export const CODE_ROLE_MAP: Readonly<Record<RoleCode, Role>> = {
   '0000': 'Guest',
-  '0001': 'NoRole',
   '1001': 'Employee',
   '1010': 'Manager',
   '1100': 'Supervisor',
   '1110': 'Admin',
+}
+
+export const ROLE_CODE_MAP: Readonly<Record<Role, RoleCode>> = {
+  Guest: '0000',
+  Employee: '1001',
+  Manager: '1010',
+  Supervisor: '1100',
+  Admin: '1110',
 }

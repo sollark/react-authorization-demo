@@ -1,10 +1,16 @@
 import { Schema, Types, model } from 'mongoose'
 import { Organization } from './organization.model.js'
 import { Role } from './role.model.js'
+import { RoleCode } from './roleCode.model.js'
 
 export interface Workspace {
   organization: Organization
   roles: Role[]
+}
+
+export interface EncodedWorkspace {
+  organization: Organization
+  roles: RoleCode[]
 }
 
 export interface WorkspaceRef {

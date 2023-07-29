@@ -1,11 +1,13 @@
 import { Role } from '../mongodb/models/role.model.js'
 import RoleCodeModel, { RoleCode } from '../mongodb/models/roleCode.model.js'
-import { Workspace } from '../mongodb/models/workspace.model.js'
-import { enCodedWorkspace } from '../mongodb/models/workspaceCode.model.js'
+import {
+  EncodedWorkspace,
+  Workspace,
+} from '../mongodb/models/workspace.model.js'
 
 async function encodeWorkspace(
   workspaces: Workspace[]
-): Promise<enCodedWorkspace[]> {
+): Promise<EncodedWorkspace[]> {
   const enCodedWorkspaces = await Promise.all(
     workspaces.map(async (workspace) => {
       const organization = workspace.organization
@@ -27,7 +29,7 @@ async function encodeWorkspace(
 }
 
 async function decodeWorkspace(
-  enCodedWorkspace: enCodedWorkspace[]
+  enCodedWorkspace: EncodedWorkspace[]
 ): Promise<Workspace[]> {
   const workspaces = await Promise.all(
     enCodedWorkspace.map(async (workspace) => {

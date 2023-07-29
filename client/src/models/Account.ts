@@ -1,8 +1,8 @@
 import { User } from './User'
-import { Workspace } from './Workspace'
+import { EncodedWorkspace, Workspace } from './Workspace'
 
 export interface Account {
   isComplete: boolean
   user: User
-  workspaces: Workspace[]
+  workspaces: Workspace[] | EncodedWorkspace[]
 }

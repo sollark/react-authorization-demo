@@ -55,8 +55,8 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     throw new BadRequestError('Account is not found')
   }
 
-  const workspaces = account.workspaces
-  // const encodedWorkspaces = codeService.encodeWorkspace(workspaces)
+  const workspaces = account.workspaces as any as Workspace[]
+  const encodedWorkspaces = await codeService.encodeWorkspace(workspaces)
 
   logger.info(
     `accountService - account fetched: ${JSON.stringify(
@@ -66,7 +66,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     )}`
   )
 
-  return account
+  return { ...account, workspaces: encodedWorkspaces }
 }
 
 async function deleteAccount(identifier: Types.ObjectId) {

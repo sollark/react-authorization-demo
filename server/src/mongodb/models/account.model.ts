@@ -1,9 +1,10 @@
 import { Schema, Types, model } from 'mongoose'
+import { EncodedWorkspace } from './workspace.model.js'
 
 export interface Account {
   identifier: Types.ObjectId
   user: Types.ObjectId
-  workspaces: Types.ObjectId[]
+  workspaces: Types.ObjectId[] | EncodedWorkspace[]
   isComplete: boolean
 }
 
