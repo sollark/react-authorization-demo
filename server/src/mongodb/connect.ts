@@ -13,6 +13,7 @@ export const connectMongo = async () => {
     console.log('Connected to MongoDB')
   } catch (error) {
     console.log(error)
+    throw new Error('Failed to connect to MongoDB')
   }
 
   await populate.populateRole()

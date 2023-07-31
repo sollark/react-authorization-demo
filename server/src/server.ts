@@ -64,4 +64,8 @@ server.listen(config.server.port, () =>
 )
 
 // connect to MongoDB
-connectMongo()
+try {
+  await connectMongo()
+} catch (error) {
+  process.exit(1)
+}
