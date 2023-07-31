@@ -77,20 +77,23 @@ async function signOut() {
 async function refreshTokens() {
   console.log('refreshTokens')
 
-  const response = await httpService.get<null, AuthResponse>(
+  const refreshResponse = await httpService.get<null, AuthResponse>(
     `auth/refresh`,
     null
   )
 
   // console.log('refreshTokens, response data', response)
 
-  if (isAuthResponse(response)) {
-    const { account, accessToken } = response as any
+  if (!isAuthResponse(refreshResponse)) return null
 
+  const { accessToken } = refreshResponse as any
+  if (accessToken) {
     storeService.saveAccessToken(accessToken)
     storeService.setUserAsAuthenticated()
-    storeService.saveAccount(account)
   }
+
+  const account = await accountService.getAccount()
+  if (account) storeService.saveAccount(account)
 }
 
 export const authService = {

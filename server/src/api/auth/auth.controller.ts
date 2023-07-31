@@ -8,35 +8,33 @@ export async function registration(
   next: NextFunction
 ) {
   const credentials = req.body
-  const { account, accessToken, refreshToken } = await authService.registration(
+  const { accessToken, refreshToken } = await authService.registration(
     credentials
   )
 
-  // save refresh token in cookie for 30 days
+  // save refresh token in cookie for 7 days
   res.cookie('refreshToken', refreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
   // send account and access token to the client
-  res.status(200).json({ account, accessToken })
+  res.status(200).json({ accessToken })
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
   const credentials = req.body
 
-  const { account, accessToken, refreshToken } = await authService.signIn(
-    credentials
-  )
+  const { accessToken, refreshToken } = await authService.signIn(credentials)
 
-  // save refresh token in cookie for 30 days
+  // save refresh token in cookie for 7 days
   res.cookie('refreshToken', refreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
   // send account and access token to the client
-  res.status(200).json({ account, accessToken })
+  res.status(200).json({ accessToken })
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
@@ -53,19 +51,16 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
 export async function refresh(req: Request, res: Response, next: NextFunction) {
   const { refreshToken: expiredRefreshToken } = req.cookies
 
-  const {
-    account,
-    accessToken,
-    refreshToken: newRefreshToken,
-  } = await authService.refresh(expiredRefreshToken)
+  const { accessToken, refreshToken: newRefreshToken } =
+    await authService.refresh(expiredRefreshToken)
 
-  // save refresh token in cookie for 30 days
+  // save refresh token in cookie for 7 days
   res.cookie('refreshToken', newRefreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.status(200).json({ account, accessToken })
+  res.status(200).json({ accessToken })
 }
 
 // renew tokens when access token is gone on page reload
@@ -79,19 +74,16 @@ export async function getAccess(
   const response = await authService.getAccess(currentRefreshToken)
 
   if (!response)
-    return res.status(200).json({ message: 'User is not signed in' })
+    return res.status(200).json({ message: 'User is not authenticated' })
 
-  const {
-    account,
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
-  } = response
+  const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+    response
 
-  // save refresh token in cookie for 30 days
+  // save refresh token in cookie for 7 days
   res.cookie('refreshToken', newRefreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   })
 
-  res.status(200).json({ account, accessToken: newAccessToken })
+  res.status(200).json({ accessToken: newAccessToken })
 }

@@ -33,13 +33,11 @@ async function registration(credentials: Credentials) {
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
 
-  //create new user
+  //create new user and account
   const user = await userService.addUser(auth._id)
-
-  //create new account for user
   const account = await accountService.createAccount(auth._id, user._id)
 
-  return { accessToken, refreshToken, account }
+  return { accessToken, refreshToken }
 }
 
 const signIn = async (credentials: Credentials) => {
@@ -61,9 +59,6 @@ const signIn = async (credentials: Credentials) => {
     throw new UnauthorizedError('Invalid credentials', email)
   }
 
-  // fetch account
-  const account = await accountService.getAccount(auth._id)
-
   // generate tokens
   const { accessToken, refreshToken } = await generateTokens(auth.uuid)
 
@@ -72,7 +67,7 @@ const signIn = async (credentials: Credentials) => {
 
   logger.info(`auth.service - user signed in: ${email}`)
 
-  return { accessToken, refreshToken, account }
+  return { accessToken, refreshToken }
 }
 
 const signOut = async (refreshToken: string) => {
@@ -101,16 +96,13 @@ const refresh = async (refreshToken: string) => {
 
   if (!tokenData) throw new UnauthorizedError('Invalid refresh token')
 
-  // fetch account
-  const account = await accountService.getAccount(tokenData.identifier)
-
   // generate tokens
   const tokens = tokenService.generateTokens(payload as string)
 
   // save refresh token to db
   await tokenService.saveToken(tokenData.identifier, tokens.refreshToken)
 
-  return { ...tokens, account }
+  return { ...tokens }
 }
 
 const getAccess = async (refreshToken: string) => {
@@ -131,16 +123,13 @@ const getAccess = async (refreshToken: string) => {
 
   if (!tokenData) return
 
-  // fetch account
-  const account = await accountService.getAccount(tokenData.identifier)
-
   // generate tokens
   const tokens = tokenService.generateTokens(payload as string)
 
   // save refresh token to db
   await tokenService.saveToken(tokenData.identifier, tokens.refreshToken)
 
-  return { ...tokens, account }
+  return { ...tokens }
 }
 
 export const authService = {
