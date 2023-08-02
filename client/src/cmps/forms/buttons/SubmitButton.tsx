@@ -10,7 +10,7 @@ const SubmitButton: FC<Props> = (props: Props) => {
   const { children } = props
 
   return (
-    <Button variant='contained' type='submit' sx={buttonStyle}>
+    <Button color='primary' variant='contained' type='submit' sx={buttonStyle}>
       {children ? children : 'Submit'}
     </Button>
   )

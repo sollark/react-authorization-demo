@@ -1,10 +1,32 @@
+import { useMediaQuery } from '@mui/material'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { RouterProvider } from '@tanstack/router'
+import React, { useMemo, useState } from 'react'
 import { TanStackRouterDevtools, router } from './routes/router'
+import getDesignTokens from './ui/theme/theme'
 
 function App() {
+  const [mode, setMode] = useState<'light' | 'dark'>('dark')
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+      },
+    }),
+    []
+  )
+
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode])
+  const ColorModeContext = React.createContext(colorMode)
+
   return (
     <>
-      <RouterProvider router={router} />
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </ColorModeContext.Provider>
       <TanStackRouterDevtools router={router} />
     </>
   )
