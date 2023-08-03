@@ -29,8 +29,8 @@ const Header: FC = () => {
 
   return (
     <header className='app-header'>
-      <AppBar position='static'>
-        <Container maxWidth='xl'>
+      <AppBar color='primary' enableColorOnDark position='static'>
+        <Container color='primary' maxWidth='xl'>
           <Toolbar disableGutters>
             {/* Large screen logo */}
             <Logo
