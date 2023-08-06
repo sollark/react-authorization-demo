@@ -19,7 +19,7 @@ const SiteNavigation = (props: SiteNavigationProps) => {
         <Button
           key={page.key}
           onClick={handleCloseNavMenu}
-          sx={{ my: 2, color: 'white', display: 'block' }}>
+          sx={{ my: 2, color: 'primary.contrastText', display: 'block' }}>
           {page.link}
         </Button>
       ))}

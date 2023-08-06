@@ -1,21 +1,16 @@
-import { alpha } from '@mui/material'
-
 type PaletteMode = 'light' | 'dark'
 
-const cyanBase = '#54f2f2'
-const cyan = alpha(cyanBase, 0.7)
-const cyanLight = alpha(cyanBase, 0.5)
-const cyanDark = alpha(cyanBase, 0.9)
+const cyan = 'hsl(180, 86%, 67%)'
+const cyanLight = 'hsl(180, 86%, 90%)'
+const cyanDark = 'hsl(180, 86%, 25%)'
 
-const moonstoneBase = '#5eb1bf'
-const moonstone = alpha(moonstoneBase, 0.7)
-const moonstoneLight = alpha(moonstoneBase, 0.5)
-const moonstoneDark = alpha(moonstoneBase, 0.9)
+const moonstone = 'hsl(189, 43%, 56%)'
+const moonstoneLight = 'hsl(189, 41%, 85%)'
+const moonstoneDark = 'hsl(189, 43%, 25%)'
 
-const orangeBase = '#f0a202'
-const orange = alpha(orangeBase, 0.7)
-const orangeLight = alpha(orangeBase, 0.5)
-const orangeDark = alpha(orangeBase, 0.9)
+const yellow = 'hsl(40, 98%, 47%)'
+const yellowLight = 'hsl(40, 98%, 65%)'
+const yellowDark = 'hsl(40, 98%, 47%)'
 
 const getDesignTokens = (mode: PaletteMode) => {
   return {
@@ -24,24 +19,40 @@ const getDesignTokens = (mode: PaletteMode) => {
       ...(mode === 'light'
         ? {
             primary: {
-              main: moonstoneLight,
+              main: cyanLight,
+              light: cyanLight,
+              dark: cyanDark,
+              divider: cyanDark,
+              contrastText: 'black',
             },
             secondary: {
-              main: cyanLight,
+              main: moonstoneLight,
+              light: moonstoneLight,
+              dark: moonstoneDark,
+              divider: moonstoneDark,
+              contrastText: 'black',
             },
             accent: {
-              main: orangeLight,
+              main: yellowLight,
             },
           }
         : {
             primary: {
-              main: moonstoneDark,
+              main: cyanDark,
+              light: cyanLight,
+              dark: cyanDark,
+              divider: cyanLight,
+              contrastText: 'white',
             },
             secondary: {
-              main: cyanDark,
+              main: moonstoneDark,
+              light: moonstoneLight,
+              dark: moonstoneDark,
+              divider: moonstoneLight,
+              contrastText: 'white',
             },
             accent: {
-              main: orangeDark,
+              main: yellowDark,
             },
           }),
     },

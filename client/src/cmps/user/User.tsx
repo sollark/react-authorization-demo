@@ -8,7 +8,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { yellow } from '@mui/material/colors'
 import { Link } from '@tanstack/router'
 import React, { ReactNode, useEffect, useState } from 'react'
 
@@ -72,10 +71,10 @@ const User = (props: UserProps) => {
             alt='Avatar'
             src=''
             sx={{
-              bgcolor: yellow[600],
-              color: 'black',
-              width: 56,
-              height: 56,
+              bgcolor: 'secondary.main',
+              color: 'secondary.contrastText',
+              width: 60,
+              height: 60,
             }}>
             {initials}
           </Avatar>
