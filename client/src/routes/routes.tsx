@@ -5,6 +5,7 @@ import { RootRoute, Route, lazy, redirect } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
+import useAccountStore from '@/stores/accountStore'
 
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
@@ -18,11 +19,6 @@ export const rootRoute = new RootRoute({
   component: RootPage,
   beforeLoad: async () => {
     await useAuthStore.getState().getAccess()
-    if (!useAuthStore.getState().isAuthenticated) {
-      throw redirect({
-        to: '/signin',
-      })
-    }
   },
 })
 
