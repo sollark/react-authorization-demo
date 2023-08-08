@@ -95,7 +95,8 @@ export const employeeRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/employee',
   component: () => (
-    <RoleProtectedRoute allowed={['Employee']}>
+    <RoleProtectedRoute
+      allowed={['Employee', 'Manager', 'Supervisor', 'Admin']}>
       <div>Employee page</div>
     </RoleProtectedRoute>
   ),
@@ -105,7 +106,7 @@ export const managerRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/manager',
   component: () => (
-    <RoleProtectedRoute allowed={['Manager']}>
+    <RoleProtectedRoute allowed={['Manager', 'Supervisor', 'Admin']}>
       <div>Manager page</div>
     </RoleProtectedRoute>
   ),
@@ -115,7 +116,7 @@ export const superVisorRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/supervisor',
   component: () => (
-    <RoleProtectedRoute allowed={['Supervisor']}>
+    <RoleProtectedRoute allowed={['Supervisor', 'Admin']}>
       <div>Supervisor page</div>
     </RoleProtectedRoute>
   ),
