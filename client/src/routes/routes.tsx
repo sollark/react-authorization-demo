@@ -1,11 +1,10 @@
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
-import { RootRoute, Route, lazy, redirect } from '@tanstack/router'
+import { RootRoute, Route, lazy } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
-import useAccountStore from '@/stores/accountStore'
 
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
@@ -97,7 +96,9 @@ export const employeeRoute = new Route({
   component: () => (
     <RoleProtectedRoute
       allowed={['Employee', 'Manager', 'Supervisor', 'Admin']}>
-      <div>Employee page</div>
+      <div>
+        <h1>Employee page</h1>
+      </div>
     </RoleProtectedRoute>
   ),
 })
@@ -107,7 +108,9 @@ export const managerRoute = new Route({
   path: '/manager',
   component: () => (
     <RoleProtectedRoute allowed={['Manager', 'Supervisor', 'Admin']}>
-      <div>Manager page</div>
+      <div>
+        <h1>Manager page</h1>
+      </div>
     </RoleProtectedRoute>
   ),
 })
@@ -117,7 +120,9 @@ export const superVisorRoute = new Route({
   path: '/supervisor',
   component: () => (
     <RoleProtectedRoute allowed={['Supervisor', 'Admin']}>
-      <div>Supervisor page</div>
+      <div>
+        <h1>Supervisor page</h1>
+      </div>
     </RoleProtectedRoute>
   ),
 })
@@ -127,7 +132,9 @@ export const adminRoute = new Route({
   path: '/admin',
   component: () => (
     <RoleProtectedRoute allowed={['Admin']}>
-      <div>Admin page</div>
+      <div>
+        <h1>Admin page</h1>
+      </div>
     </RoleProtectedRoute>
   ),
 })

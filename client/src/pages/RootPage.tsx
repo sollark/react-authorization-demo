@@ -13,11 +13,9 @@ const RootPage: FC = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log('isAuthenticated :', isAuthenticated)
       navigate({ to: '/signin' } as unknown as MakeLinkOptions)
     } else if (!isComplete)
       navigate({ to: '/account/edit' } as unknown as MakeLinkOptions)
-    else if (isComplete) navigate({ to: '/' })
   }, [])
 
   return (

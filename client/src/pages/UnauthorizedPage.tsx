@@ -5,7 +5,7 @@ const UnauthorizedPage: FC = () => {
 
   return (
     <div>
-      <h1>Unauthorized</h1>
+      <h1>You are not authorized</h1>
     </div>
   )
 }

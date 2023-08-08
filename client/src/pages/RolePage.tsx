@@ -8,6 +8,7 @@ const RolePage: FC = () => {
     <>
       <div>
         <h1>Role page</h1>
+        <h3>Role navigation</h3>
         <Link to='/role/employee'>Employee</Link>
         {'  '}
         <Link to='/role/manager'>Manager</Link>
