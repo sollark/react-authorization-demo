@@ -12,7 +12,6 @@ const RootPage: FC = () => {
   const isComplete = useAccountStore((state) => state.isComplete)
 
   useEffect(() => {
-    console.log('I DONT SEE THIS CONSOLE LOG')
     if (!isAuthenticated) {
       console.log('isAuthenticated :', isAuthenticated)
       navigate({ to: '/signin' } as unknown as MakeLinkOptions)

@@ -1,7 +1,7 @@
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
-import { RootRoute, Route, lazy } from '@tanstack/router'
+import { RootRoute, Route, lazy, redirect } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
@@ -16,9 +16,13 @@ const MissingPage = lazy(() => import('../pages/MissingPage'))
 
 export const rootRoute = new RootRoute({
   component: RootPage,
-  async loader() {
-    const getAccess = useAuthStore.getState().getAccess
-    getAccess()
+  beforeLoad: async () => {
+    await useAuthStore.getState().getAccess()
+    if (!useAuthStore.getState().isAuthenticated) {
+      throw redirect({
+        to: '/signin',
+      })
+    }
   },
 })
 
@@ -96,7 +100,7 @@ export const employeeRoute = new Route({
   path: '/employee',
   component: () => (
     <RoleProtectedRoute allowed={['Employee']}>
-      <div>Employee</div>
+      <div>Employee page</div>
     </RoleProtectedRoute>
   ),
 })
@@ -106,7 +110,7 @@ export const managerRoute = new Route({
   path: '/manager',
   component: () => (
     <RoleProtectedRoute allowed={['Manager']}>
-      <div>Manager</div>
+      <div>Manager page</div>
     </RoleProtectedRoute>
   ),
 })
@@ -116,7 +120,7 @@ export const superVisorRoute = new Route({
   path: '/supervisor',
   component: () => (
     <RoleProtectedRoute allowed={['Supervisor']}>
-      <div>Supervisor</div>
+      <div>Supervisor page</div>
     </RoleProtectedRoute>
   ),
 })
@@ -126,7 +130,7 @@ export const adminRoute = new Route({
   path: '/admin',
   component: () => (
     <RoleProtectedRoute allowed={['Admin']}>
-      <div>Admin</div>
+      <div>Admin page</div>
     </RoleProtectedRoute>
   ),
 })

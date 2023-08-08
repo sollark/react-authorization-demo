@@ -26,7 +26,7 @@ const useAuthStore = create<AuthState>()(
         setToken: (token) => set(() => ({ token })),
         clearToken: () => set(() => ({ token: null })),
         getAccess: async () => {
-          const response = await authService.getAccess()
+          await authService.getAccess()
         },
       }))
     )
