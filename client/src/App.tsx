@@ -24,7 +24,7 @@ function App() {
     <>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
-          <CssBaseline enableColorScheme />
+          {/* <CssBaseline enableColorScheme /> */}
           <RouterProvider router={router} />
         </ThemeProvider>
       </ColorModeContext.Provider>

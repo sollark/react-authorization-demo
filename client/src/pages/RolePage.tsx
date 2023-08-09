@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import { Link, Outlet } from '@tanstack/router'
 import { FC } from 'react'
 
@@ -5,7 +6,10 @@ const RolePage: FC = () => {
   console.log('Role connected')
 
   return (
-    <>
+    <Box
+      sx={{
+        p: 4,
+      }}>
       <div>
         <h1>Role page</h1>
         <h3>Role navigation</h3>
@@ -19,7 +23,7 @@ const RolePage: FC = () => {
         {'  '}
       </div>
       <Outlet />
-    </>
+    </Box>
   )
 }
 

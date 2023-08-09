@@ -2,9 +2,9 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 /* ======= LINKS, LIST ====== */
@@ -12,15 +12,15 @@ a,
 a:visited,
 a:hover,
 a:active {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 /* ========== POINTER ======== */
 label,
 button,
 .btn {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* ========== MEDIA ========== */
@@ -28,31 +28,31 @@ img,
 embed,
 video,
 object {
-    max-width: 100%;
-    display: block;
+  max-width: 100%;
+  display: block;
 }
 
 /* ======= BUTTONS INPUT ====== */
 button,
 .btn,
 input {
-    border: none;
-    background-color: transparent;
-    font: inherit;
-    color: inherit;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  color: inherit;
 }
 
 /*======== PARAGRAPH ========*/
 p.paragraph {
-    max-width: 70ch;
-    line-height: 2;
+  max-width: 70ch;
+  line-height: 2;
 }
 
 /* ======== HTML BODY ======== */
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-    min-height: 100vh;
+  min-height: 100vh;
 }
