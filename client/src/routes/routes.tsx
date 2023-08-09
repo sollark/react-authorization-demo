@@ -119,7 +119,17 @@ export const managerRoute = new Route({
   path: '/manager',
   component: () => (
     <RoleProtectedRoute allowed={['Manager', 'Supervisor', 'Admin']}>
-      <Box>
+      <Box
+        sx={{
+          m: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          maxHeight: '100vh',
+          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
+          backgroundColor: 'primary.light',
+        }}>
         <h1>Manager page</h1>
       </Box>
     </RoleProtectedRoute>
@@ -131,7 +141,17 @@ export const superVisorRoute = new Route({
   path: '/supervisor',
   component: () => (
     <RoleProtectedRoute allowed={['Supervisor', 'Admin']}>
-      <Box>
+      <Box
+        sx={{
+          m: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          maxHeight: '100vh',
+          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
+          backgroundColor: 'primary.light',
+        }}>
         <h1>Supervisor page</h1>
       </Box>
     </RoleProtectedRoute>
@@ -143,7 +163,17 @@ export const adminRoute = new Route({
   path: '/admin',
   component: () => (
     <RoleProtectedRoute allowed={['Admin']}>
-      <Box>
+      <Box
+        sx={{
+          m: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          maxHeight: '100vh',
+          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
+          backgroundColor: 'primary.light',
+        }}>
         <h1>Admin page</h1>
       </Box>
     </RoleProtectedRoute>

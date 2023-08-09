@@ -7,17 +7,13 @@ const RegistrationPage: FC = () => {
   console.log('Registration connected')
 
   return (
-    <>
-      <Box
-        component='article'
-        sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
-        <h1>Registration</h1>
-        <RegistrationForm />
-        <p>
-          Already have an account? <Link to='signin'>Sign in</Link>
-        </p>
-      </Box>
-    </>
+    <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
+      <h1>Registration</h1>
+      <RegistrationForm />
+      <p>
+        Already have an account? <Link to='signin'>Sign in</Link>
+      </p>
+    </Box>
   )
 }
 
