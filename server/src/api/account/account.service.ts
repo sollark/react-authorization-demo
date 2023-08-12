@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import OrganizationModel from '../../mongodb/models/organization.model.js'
-import UserModel from '../../mongodb/models/user.model.js'
+import UserModel, { User } from '../../mongodb/models/user.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../../mongodb/models/workspace.model.js'
@@ -13,7 +13,7 @@ async function createAccount(
   identifier: Types.ObjectId,
   userId: Types.ObjectId,
   isComplete: boolean = false
-): Promise<Account> {
+) {
   const accountRef = await AccountModel.create({
     identifier,
     user: userId,
@@ -35,15 +35,21 @@ async function createAccount(
     throw new BadRequestError('Account is not found')
   }
 
-  logger.info(`accountService - account added: ${account}`)
+  logger.info(
+    `accountService - account added:  ${JSON.stringify(
+      account,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return account
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
-    .populate('user')
-    .populate({
+    .populate<{ user: User }>('user')
+    .populate<{ workspaces: Workspace[] }>({
       path: 'workspaces',
       populate: [{ path: 'organization' }, { path: 'roles' }],
     })
@@ -55,8 +61,9 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     throw new BadRequestError('Account is not found')
   }
 
-  const workspaces = account.workspaces as any as Workspace[]
-  const encodedWorkspaces = await codeService.encodeWorkspace(workspaces)
+  const encodedWorkspaces = await codeService.encodeWorkspace(
+    account.workspaces
+  )
 
   logger.info(
     `accountService - account fetched: ${JSON.stringify(
@@ -76,21 +83,38 @@ async function deleteAccount(identifier: Types.ObjectId) {
 async function addWorkspace(
   identifier: Types.ObjectId,
   workspaceId: Types.ObjectId
-) {
+): Promise<Account> {
   const account = await AccountModel.findOneAndUpdate(
     { identifier },
     { $push: { workspaces: workspaceId } },
     { new: true }
   )
-    .populate('user')
-    .populate({
+    .populate<{ user: User }>('user')
+    .populate<{ workspaces: Workspace[] }>({
       path: 'workspaces',
-      populate: { path: 'organization' },
+      populate: [{ path: 'organization' }, { path: 'roles' }],
     })
     .lean()
     .exec()
 
-  return account
+  return account as Account
+}
+
+async function completeAccount(accountId: Types.ObjectId): Promise<Account> {
+  const updatedAccount = await AccountModel.findByIdAndUpdate(
+    accountId,
+    { isComplete: true },
+    { new: true }
+  )
+    .populate<{ user: User }>('user')
+    .populate<{ workspaces: Workspace[] }>({
+      path: 'workspaces',
+      populate: [{ path: 'organization' }, { path: 'roles' }],
+    })
+    .lean()
+    .exec()
+
+  return updatedAccount as Account
 }
 
 function sortAccountData(
@@ -124,23 +148,6 @@ function sortAccountData(
     )
 
   return [updatedUserData, updatedWorkspaceData, updatedOrganizationData]
-}
-
-async function completeAccount(accountId: Types.ObjectId) {
-  const updatedAccount = await AccountModel.findByIdAndUpdate(
-    accountId,
-    { isComplete: true },
-    { new: true }
-  )
-    .populate('user')
-    .populate({
-      path: 'workspaces',
-      populate: { path: 'organization' },
-    })
-    .lean()
-    .exec()
-
-  return updatedAccount
 }
 
 export const accountService = {

@@ -11,7 +11,13 @@ import { organizationService } from './organization.service.js'
 async function updateWorkspace(
   identifier: Types.ObjectId,
   updatedWorkspaceData: Partial<Workspace>
-) {}
+) {
+  console.log(
+    'workspace.service - updateWorkspace, identifier: ',
+    identifier,
+    'under construction'
+  )
+}
 
 async function addWorkspace(
   identifier: Types.ObjectId,

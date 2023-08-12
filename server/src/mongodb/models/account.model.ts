@@ -1,10 +1,19 @@
 import { Schema, Types, model } from 'mongoose'
-import { EncodedWorkspace } from './workspace.model.js'
+import { EncodedWorkspace, Workspace } from './workspace.model.js'
+import { User } from './user.model.js'
 
 export interface Account {
   identifier: Types.ObjectId
+  user: User
+  // workspaces: Types.ObjectId[] | EncodedWorkspace[]
+  workspaces: Workspace[] | EncodedWorkspace[]
+  isComplete: boolean
+}
+
+export interface AccountRef {
+  identifier: Types.ObjectId
   user: Types.ObjectId
-  workspaces: Types.ObjectId[] | EncodedWorkspace[]
+  workspaces: Types.ObjectId[]
   isComplete: boolean
 }
 
@@ -27,5 +36,5 @@ const AccountSchema = new Schema({
   ],
 })
 
-const accountModel = model<Account>('Account', AccountSchema)
+const accountModel = model<AccountRef>('Account', AccountSchema)
 export default accountModel
