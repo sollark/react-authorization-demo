@@ -6,8 +6,8 @@ import UserModel, { User } from '../../mongodb/models/user.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../../mongodb/models/workspace.model.js'
-import logger from '../../service/logger.service.js'
 import { codeService } from '../../service/code.service.js'
+import logger from '../../service/logger.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
@@ -83,7 +83,7 @@ async function deleteAccount(identifier: Types.ObjectId) {
 async function addWorkspace(
   identifier: Types.ObjectId,
   workspaceId: Types.ObjectId
-): Promise<Account> {
+): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOneAndUpdate(
     { identifier },
     { $push: { workspaces: workspaceId } },
@@ -97,10 +97,12 @@ async function addWorkspace(
     .lean()
     .exec()
 
-  return account as Account
+  return account
 }
 
-async function completeAccount(accountId: Types.ObjectId): Promise<Account> {
+async function completeAccount(
+  accountId: Types.ObjectId
+): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const updatedAccount = await AccountModel.findByIdAndUpdate(
     accountId,
     { isComplete: true },
@@ -114,7 +116,7 @@ async function completeAccount(accountId: Types.ObjectId): Promise<Account> {
     .lean()
     .exec()
 
-  return updatedAccount as Account
+  return updatedAccount
 }
 
 function sortAccountData(

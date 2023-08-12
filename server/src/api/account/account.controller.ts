@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
 import { Organization } from '../../mongodb/models/organization.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
@@ -50,15 +51,20 @@ export async function updateAccount(
       organizationName
     )
 
-  let updatedAccount = await accountService.addWorkspace(
+  const updatedAccount = await accountService.addWorkspace(
     identifier,
     workspace._id
   )
 
-  if (updatedAccount)
-    updatedAccount = await accountService.completeAccount(updatedAccount._id)
+  if (!updatedAccount) {
+    throw new BadRequestError('Cannot update account')
+  }
 
-  res.status(200).json({ account: updatedAccount })
+  const completedAccount = await accountService.completeAccount(
+    updatedAccount._id
+  )
+
+  res.status(200).json({ account: completedAccount })
 }
 
 export async function getAccount(
