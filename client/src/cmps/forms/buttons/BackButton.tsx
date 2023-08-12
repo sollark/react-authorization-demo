@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import SecondaryButton from '@/cmps/button/SecondaryButton'
 import { FC } from 'react'
 import { buttonStyle } from '../style/formStyle'
 
@@ -11,13 +11,13 @@ const BackButton: FC<Props> = (props: Props) => {
   const { children, onClick } = props
 
   return (
-    <Button
+    <SecondaryButton
       variant='contained'
       type='button'
       sx={buttonStyle}
       onClick={onClick}>
       {children ? children : 'Back'}
-    </Button>
+    </SecondaryButton>
   )
 }
 

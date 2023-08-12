@@ -1,3 +1,4 @@
+import SecondaryButton from '@/cmps/button/SecondaryButton'
 import useOrganizationStore from '@/stores/organizationStore'
 import useUserStore from '@/stores/userStore'
 
@@ -8,13 +9,16 @@ const AccountDetailsPage = () => {
   const organization = useOrganizationStore((state) => state.organization)
 
   return (
-    <div>
-      <ul>
-        <li>First Name: {user?.firstName}</li>
-        <li>Last Name: {user?.lastName}</li>
-        <li>Organization: {organization?.organizationName}</li>
-      </ul>
-    </div>
+    <>
+      <div>
+        <ul>
+          <li>First Name: {user?.firstName}</li>
+          <li>Last Name: {user?.lastName}</li>
+          <li>Organization: {organization?.organizationName}</li>
+        </ul>
+      </div>
+      <SecondaryButton href='/account/edit'>Edit</SecondaryButton>
+    </>
   )
 }
 

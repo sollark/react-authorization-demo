@@ -1,5 +1,3 @@
-import { blue, red } from '@mui/material/colors'
-
 type PaletteMode = 'light' | 'dark'
 
 const cyan = 'hsl(180, 86%, 67%)'
@@ -36,6 +34,10 @@ const getDesignTokens = (mode: PaletteMode) => {
             },
             accent: {
               main: yellowLight,
+              light: yellowLight,
+              dark: yellowDark,
+              divider: yellowDark,
+              contrastText: 'black',
             },
           }
         : {
@@ -55,6 +57,10 @@ const getDesignTokens = (mode: PaletteMode) => {
             },
             accent: {
               main: yellowDark,
+              light: yellowLight,
+              dark: yellowDark,
+              divider: yellowLight,
+              contrastText: 'black',
             },
           }),
     },

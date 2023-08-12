@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import AccentButton from '@/cmps/button/AccentButton'
 import { FC } from 'react'
 import { buttonStyle } from '../style/formStyle'
 
@@ -10,9 +10,9 @@ const SubmitButton: FC<Props> = (props: Props) => {
   const { children } = props
 
   return (
-    <Button color='accent' variant='contained' type='submit' sx={buttonStyle}>
+    <AccentButton variant='contained' type='submit' sx={buttonStyle}>
       {children ? children : 'Submit'}
-    </Button>
+    </AccentButton>
   )
 }
 
