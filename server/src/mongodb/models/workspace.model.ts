@@ -14,11 +14,13 @@ export interface EncodedWorkspace {
 }
 
 export interface WorkspaceRef {
+  identifier: Types.ObjectId
   organization: Types.ObjectId
   roles: Role[]
 }
 
 const WorkspaceSchema = new Schema({
+  identifier: { type: Types.ObjectId, required: true },
   organization: {
     type: Schema.Types.ObjectId,
     ref: 'Organization',

@@ -8,9 +8,16 @@ import WorkspaceRefModel, {
 import loggerService from './logger.service.js'
 import { organizationService } from './organization.service.js'
 
-async function updateWorkspace(updatedWorkspaceData: any) {}
+async function updateWorkspace(
+  identifier: Types.ObjectId,
+  updatedWorkspaceData: Partial<Workspace>
+) {}
 
-async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
+async function addWorkspace(
+  identifier: Types.ObjectId,
+  organizationId: Types.ObjectId,
+  roles: Role[]
+) {
   try {
     console.log('workspace.service - addWorkspace, roles: ', roles)
     // Convert role names to role ObjectIds
@@ -25,6 +32,7 @@ async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
 
     // Check if a matching workspace already exists
     const existingWorkspace = await WorkspaceRefModel.findOne({
+      identifier,
       organization: organizationId,
       roles: { $all: roleIds },
     })
@@ -42,11 +50,15 @@ async function addWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
 
     // Create a new workspace if no match is found
     const workspaceRef = await WorkspaceRefModel.create({
+      identifier,
       organization: organizationId,
       roles: roleIds,
     })
 
-    const newWorkspace = await WorkspaceRefModel.findById(workspaceRef._id)
+    const newWorkspace = await WorkspaceRefModel.findById(
+      identifier,
+      workspaceRef._id
+    )
       .populate('organization')
       .populate('roles') // Populate the roles field
       .lean()
@@ -93,7 +105,10 @@ async function getWorkspaces(workspaceIds: Types.ObjectId[]) {
   })
 }
 
-async function joinExistingOrganization(organizationCode: OrganizationCode) {
+async function joinExistingOrganization(
+  identifier: Types.ObjectId,
+  organizationCode: OrganizationCode
+) {
   const organization = await organizationService.getOrganization(
     organizationCode
   )
@@ -105,18 +120,19 @@ async function joinExistingOrganization(organizationCode: OrganizationCode) {
     )
 
   // at first sign in user gets employee role at chosen organization, later it can be changed by manager
-  const workspace = await getWorkspace(organization._id, ['Employee'])
-  if (workspace) return workspace
+  const workspace = await addWorkspace(identifier, organization._id, [
+    USER_ROLE.Employee,
+  ])
 
-  // if user workspace is not exist, create it
-  const newWorkspace = await addWorkspace(organization._id, ['Employee'])
-
-  return newWorkspace
+  return workspace
 }
 
-async function joinNewOrganization(name: string) {
+async function joinNewOrganization(identifier: Types.ObjectId, name: string) {
+  // Create a new organization
   const organization = await organizationService.addOrganization(name)
-  const workspace = await addWorkspace(organization._id, [USER_ROLE.Manager])
+  const workspace = await addWorkspace(identifier, organization._id, [
+    USER_ROLE.Manager,
+  ])
 
   return workspace
 }

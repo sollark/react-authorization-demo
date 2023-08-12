@@ -28,8 +28,11 @@ export async function updateAccount(
 
   const updatedUser = await userService.updateUser(identifier, updatedUserData)
   const updatedWorkspace = await workspaceService.updateWorkspace(
+    identifier,
     updatedWorkspaceData
   )
+
+  console.log('updateAccount, updatedWorkspace: ', updatedWorkspace)
 
   const { organizationName, organizationCode } =
     updatedOrganizationData as Partial<Organization>
@@ -37,11 +40,15 @@ export async function updateAccount(
   let workspace: any = null
   if (organizationCode)
     workspace = await workspaceService.joinExistingOrganization(
+      identifier,
       organizationCode
     )
 
   if (organizationName)
-    workspace = await workspaceService.joinNewOrganization(organizationName)
+    workspace = await workspaceService.joinNewOrganization(
+      identifier,
+      organizationName
+    )
 
   let updatedAccount = await accountService.addWorkspace(
     identifier,
