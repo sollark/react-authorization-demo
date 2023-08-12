@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from 'mongoose'
 import { Role } from './role.model.js'
 
 export type RoleCode = '0000' | '1001' | '1010' | '1100' | '1110'
@@ -15,10 +15,15 @@ interface RoleCodeMap {
   code: string
 }
 
+interface RoleCodeMapRef {
+  role: Types.ObjectId
+  code: Types.ObjectId
+}
+
 const RoleCodeSchema = new Schema({
   role: { type: Schema.Types.ObjectId, ref: 'Roles' },
   code: { type: String, required: true, unique: true, immutable: true },
 })
 
-const RoleCodeModel = model<RoleCodeMap>('RoleCodes', RoleCodeSchema)
+const RoleCodeModel = model<RoleCodeMapRef>('RoleCodes', RoleCodeSchema)
 export default RoleCodeModel

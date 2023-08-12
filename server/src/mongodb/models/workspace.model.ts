@@ -16,7 +16,7 @@ export interface EncodedWorkspace {
 export interface WorkspaceRef {
   identifier: Types.ObjectId
   organization: Types.ObjectId
-  roles: Role[]
+  roles: Types.ObjectId[]
 }
 
 const WorkspaceSchema = new Schema({

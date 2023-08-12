@@ -1,7 +1,6 @@
 import { model, Schema, Types } from 'mongoose'
 
 export interface Token {
-  identifier: Types.ObjectId
   refreshToken: string
 }
 
