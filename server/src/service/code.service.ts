@@ -38,7 +38,10 @@ async function decodeWorkspace(
       const roles = await Promise.all(
         workspace.roles.map(async (roleCode) => {
           const roleMap = await RoleCodeModel.findOne({ code: roleCode })
-          return roleMap ? (roleMap.role as Role) : ''
+            .populate<{ role: Role }>({ path: 'role' })
+            .lean()
+            .exec()
+          return roleMap ? roleMap.role : ''
         })
       )
 

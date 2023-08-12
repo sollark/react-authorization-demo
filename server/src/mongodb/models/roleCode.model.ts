@@ -17,7 +17,7 @@ interface RoleCodeMap {
 
 interface RoleCodeMapRef {
   role: Types.ObjectId
-  code: Types.ObjectId
+  code: RoleCode
 }
 
 const RoleCodeSchema = new Schema({
