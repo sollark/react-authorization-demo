@@ -1,3 +1,5 @@
+import { blue, red } from '@mui/material/colors'
+
 type PaletteMode = 'light' | 'dark'
 
 const cyan = 'hsl(180, 86%, 67%)'

@@ -1,8 +1,8 @@
 import { ErrorMessage } from '@hookform/error-message'
-import { TextField } from '@mui/material'
 import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { textInputStyle } from '../style/formStyle'
+import { textInputStyle } from '../../style/formStyle'
+import CustomTextInput from './StyledTextInput'
 
 interface Props {
   name: string
@@ -28,31 +28,29 @@ const Input: FC<Props> = (props: Props) => {
   }
 
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            type={type}
-            label={label}
-            id={name}
-            placeholder={label}
-            onChange={handleChange}
-            error={!!errors[name]}
-            helperText={
-              <ErrorMessage
-                name={name}
-                message={('* ' + errors[name]?.message) as string}
-              />
-            }
-            {...textInputStyle}
-            {...rest}
-          />
-        )}
-      />
-    </>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <CustomTextInput
+          {...field}
+          type={type}
+          label={label}
+          id={name}
+          placeholder={label}
+          onChange={handleChange}
+          error={!!errors[name]}
+          helperText={
+            <ErrorMessage
+              name={name}
+              message={('* ' + errors[name]?.message) as string}
+            />
+          }
+          {...textInputStyle}
+          {...rest}
+        />
+      )}
+    />
   )
 }
 

@@ -5,7 +5,6 @@ interface FormStyleProps {
 
 export const textInputStyle: FormStyleProps = {
   fullWidth: true,
-  margin: 'normal',
 }
 
 export const buttonStyle = {

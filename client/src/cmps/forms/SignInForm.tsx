@@ -5,7 +5,7 @@ import { z } from 'zod'
 import ErrorMessage from './ErrorMessage'
 import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
-import Input from './inputs/TextInput'
+import Input from './inputs/TextInput/TextInput'
 
 interface SigninForm {
   email: string
