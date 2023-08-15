@@ -36,35 +36,32 @@ async function addWorkspace(
 
     console.log('workspace.service - addWorkspace, roleIds: ', roleIds)
 
-    // Check if a matching workspace already exists
-    const existingWorkspace = await WorkspaceRefModel.findOne({
-      identifier,
-      organization: organizationId,
-      roles: { $all: roleIds },
-    })
-      .populate('organization')
-      .populate('roles') // Populate the roles field
-      .lean()
-      .exec()
+    // // Check if a matching workspace already exists
+    // const existingWorkspace = await WorkspaceRefModel.findOne({
+    //   identifier,
+    //   organization: organizationId,
+    //   roles: { $all: roleIds },
+    // })
+    //   .populate('organization')
+    //   .populate('roles') // Populate the roles field
+    //   .lean()
+    //   .exec()
 
-    if (existingWorkspace) {
-      loggerService.info(
-        `workspace.service - existing workspace found: ${existingWorkspace}`
-      )
-      return existingWorkspace
-    }
+    // if (existingWorkspace) {
+    //   loggerService.info(
+    //     `workspace.service - existing workspace found: ${existingWorkspace}`
+    //   )
+    //   return existingWorkspace
+    // }
 
-    // Create a new workspace if no match is found
+    // Create a new workspace
     const workspaceRef = await WorkspaceRefModel.create({
       identifier,
       organization: organizationId,
       roles: roleIds,
     })
 
-    const newWorkspace = await WorkspaceRefModel.findById(
-      identifier,
-      workspaceRef._id
-    )
+    const newWorkspace = await WorkspaceRefModel.findById(workspaceRef._id)
       .populate('organization')
       .populate('roles') // Populate the roles field
       .lean()

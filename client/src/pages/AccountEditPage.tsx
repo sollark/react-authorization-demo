@@ -1,6 +1,6 @@
-import AccountForm from '@/cmps/forms/AccountForm'
-import OrganizationDetailsFields from '@/cmps/forms/OrganizationDetailsFields'
-import UserDetailsFields from '@/cmps/forms/UserDetailsFields'
+import AccountForm from '@/cmps/forms/accountForm/AccountForm'
+import OrganizationDetailsFields from '@/cmps/forms/accountForm/OrganizationDetailsFields'
+import UserDetailsFields from '@/cmps/forms/accountForm/UserDetailsFields'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 

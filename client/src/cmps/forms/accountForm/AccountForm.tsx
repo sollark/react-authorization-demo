@@ -5,7 +5,7 @@ import useUserStore from '@/stores/userStore'
 import { useNavigate } from '@tanstack/router'
 import { FC, ReactElement } from 'react'
 import { z } from 'zod'
-import MultistepForm from './MultistepForm'
+import MultistepForm from '../MultistepForm'
 import useOrganizationStore from '@/stores/organizationStore'
 
 interface Props {
@@ -23,12 +23,11 @@ const AccountForm: FC<Props> = (props: Props) => {
   const navigate = useNavigate()
 
   const user = useUserStore((state) => state.user)
-  const organization = useOrganizationStore((state) => state.organization)
 
   const defaultValues = {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
-    organization: organization?.organizationCode || '',
+    organization: '',
   }
 
   async function submit(form: any) {

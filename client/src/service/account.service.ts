@@ -3,7 +3,6 @@ import { Organization } from '@/models/Organization'
 import { User } from '@/models/User'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
-import { codeService } from './code.service'
 
 async function updateAccount(
   firstName: string,
