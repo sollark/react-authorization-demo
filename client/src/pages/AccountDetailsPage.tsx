@@ -1,8 +1,9 @@
 import SecondaryButton from '@/cmps/button/SecondaryButton'
 import useOrganizationStore from '@/stores/organizationStore'
 import useUserStore from '@/stores/userStore'
+import { FC } from 'react'
 
-const AccountDetailsPage = () => {
+const AccountDetailsPage: FC = () => {
   console.log('AccountDetailsPage connected')
 
   const user = useUserStore((state) => state.user)

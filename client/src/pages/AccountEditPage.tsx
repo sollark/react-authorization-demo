@@ -8,16 +8,12 @@ const AccountEditPage: FC = () => {
   console.log('AccountEditPage connected')
 
   return (
-    <>
-      <Box
-        component='article'
-        sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
-        <AccountForm>
-          <UserDetailsFields />
-          <OrganizationDetailsFields />
-        </AccountForm>
-      </Box>
-    </>
+    <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
+      <AccountForm>
+        <UserDetailsFields />
+        <OrganizationDetailsFields />
+      </AccountForm>
+    </Box>
   )
 }
 
