@@ -1,35 +1,38 @@
+import useWorkspaceStore from '@/stores/workspaceStore'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
-import useOrganizationStore from '@/stores/organizationStore'
-import useWorkspaceStore from '@/stores/workspaceStore'
 
 const OrganizationDetailsFields: FC = () => {
   console.log('OrganizationDetailsFields connected')
 
   const workspaces = useWorkspaceStore((state) => state.workspaces)
+  console.log('workspaces', workspaces)
 
   return (
-    <>
-      <h2>Organization details</h2>
-      <h3>Join existing organization or create new one</h3>
+    <div>
+      <h2>Organization Details</h2>
+      <h3>Join Existing Organization or Create a New One</h3>
       <Input name='organization' label='Organization' type='text' />
 
-      {workspaces && (
-        <>
-          <h3>List:</h3>
+      {workspaces !== null && workspaces.length > 0 && (
+        <div>
+          <h3>Workspace List:</h3>
           <ul>
-            {workspaces.map((workplace, index) => (
+            {workspaces.map((workspace, index) => (
               <li key={index}>
-                Name: {workplace.organization.organizationName}, Code:
-                {workplace.organization.organizationCode}
-                Roles: {workplace.roles}
-                Edit Delete
+                <strong>Name:</strong> {workspace.organization.organizationName}
+                , <strong>Code:</strong>{' '}
+                {workspace.organization.organizationCode},{' '}
+                <strong>Roles:</strong>{' '}
+                {/* TODO fix it, server sends array of objects, not strings */}
+                {workspace.roles.map((roleObj) => roleObj.role).join(', ')}
+                {/* Edit and Delete buttons */}
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
-    </>
+    </div>
   )
 }
 

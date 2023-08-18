@@ -33,8 +33,6 @@ export async function updateAccount(
     updatedWorkspaceData
   )
 
-  console.log('updateAccount, updatedWorkspace: ', updatedWorkspace)
-
   const { organizationName, organizationCode } =
     updatedOrganizationData as Partial<Organization>
 

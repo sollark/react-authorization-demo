@@ -26,7 +26,7 @@ async function createAccount(
   }
 
   const account = await AccountModel.findById(accountRef._id)
-    .populate('user')
+    .populate<{ user: User }>('user')
     .lean()
     .exec()
 
@@ -116,7 +116,24 @@ async function completeAccount(
     .lean()
     .exec()
 
-  return updatedAccount
+  if (!updatedAccount) {
+    logger.warn(`accountService - cannot update account: ${accountId}`)
+    throw new BadRequestError('Account cannot be updated')
+  }
+
+  const encodedWorkspaces = await codeService.encodeWorkspace(
+    updatedAccount.workspaces
+  )
+
+  logger.info(
+    `accountService - complete account: ${JSON.stringify(
+      updatedAccount,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
+
+  return { ...updatedAccount, workspaces: encodedWorkspaces }
 }
 
 function sortAccountData(
