@@ -1,4 +1,4 @@
-import { Role } from '@/models/Role'
+import { RoleName } from '@/models/Role'
 import UnauthorizedPage from '@/pages/UnauthorizedPage'
 import { codeService } from '@/service/code.service'
 import useRoleStore from '@/stores/roleStore'
@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 
 interface RoleProtectedRouteProps {
   children: ReactNode
-  allowed: Role[]
+  allowed: RoleName[]
 }
 
 const RoleProtectedRoute = ({

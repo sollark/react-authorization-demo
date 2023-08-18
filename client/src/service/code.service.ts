@@ -1,4 +1,4 @@
-import { CODE_ROLE_MAP, ROLE_CODE_MAP, Role, RoleCode } from '@/models/Role'
+import { CODE_ROLE_MAP, ROLE_CODE_MAP, RoleCode, RoleName } from '@/models/Role'
 import { EncodedWorkspace, Workspace } from '@/models/Workspace'
 
 export function encodeWorkspace(workspaces: Workspace[]): EncodedWorkspace[] {
@@ -6,7 +6,7 @@ export function encodeWorkspace(workspaces: Workspace[]): EncodedWorkspace[] {
     const organization = workspace.organization
     const roles = workspace.roles.map((role) => {
       const roleCode = Object.entries(CODE_ROLE_MAP).find(
-        ([code, r]) => r === role
+        ([code, r]) => r === role.role
       )?.[0]
       return roleCode as RoleCode
     })
@@ -26,7 +26,7 @@ export function decodeWorkspace(
   const workspaces: Workspace[] = encodedWorkspaces.map((encodedWorkspace) => {
     const organization = encodedWorkspace.organization
     const roles = encodedWorkspace.roles.map((roleCode) => {
-      return CODE_ROLE_MAP[roleCode] || ''
+      return { role: CODE_ROLE_MAP[roleCode] } || ''
     })
 
     return {
@@ -38,15 +38,15 @@ export function decodeWorkspace(
   return workspaces
 }
 
-export function decodeRoles(encodedRoles: RoleCode[]): Role[] {
-  const decodedRoles: Role[] = encodedRoles.map((roleCode) => {
+export function decodeRoles(encodedRoles: RoleCode[]): RoleName[] {
+  const decodedRoles: RoleName[] = encodedRoles.map((roleCode) => {
     return CODE_ROLE_MAP[roleCode] || ''
   })
 
   return decodedRoles
 }
 
-export function encodeRoles(decodedRoles: Role[]): RoleCode[] {
+export function encodeRoles(decodedRoles: RoleName[]): RoleCode[] {
   const encodedRoles: RoleCode[] = decodedRoles.map((role) => {
     return ROLE_CODE_MAP[role] || ''
   })
