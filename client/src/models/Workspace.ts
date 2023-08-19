@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { Organization, OrganizationSchema } from './Organization'
-import { Role, RoleCode } from './Role'
+import { RoleCode, RoleName } from './Role'
 
 export interface Workspace {
   organization: Organization
-  roles: Role[]
+  roles: RoleName[]
 }
 
 export interface EncodedWorkspace {

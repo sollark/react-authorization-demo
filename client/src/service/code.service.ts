@@ -6,7 +6,7 @@ export function encodeWorkspace(workspaces: Workspace[]): EncodedWorkspace[] {
     const organization = workspace.organization
     const roles = workspace.roles.map((role) => {
       const roleCode = Object.entries(CODE_ROLE_MAP).find(
-        ([code, r]) => r === role.role
+        ([code, r]) => r === role
       )?.[0]
       return roleCode as RoleCode
     })
@@ -26,7 +26,7 @@ export function decodeWorkspace(
   const workspaces: Workspace[] = encodedWorkspaces.map((encodedWorkspace) => {
     const organization = encodedWorkspace.organization
     const roles = encodedWorkspace.roles.map((roleCode) => {
-      return { role: CODE_ROLE_MAP[roleCode] } || ''
+      return CODE_ROLE_MAP[roleCode] || ''
     })
 
     return {

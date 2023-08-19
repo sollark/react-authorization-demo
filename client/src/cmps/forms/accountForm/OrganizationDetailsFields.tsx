@@ -10,8 +10,8 @@ const OrganizationDetailsFields: FC = () => {
 
   return (
     <div>
-      <h2>Organization Details</h2>
-      <h3>Join Existing Organization or Create a New One</h3>
+      <h2>Organization details</h2>
+      <h3>Join existing organization or create a new one</h3>
       <Input name='organization' label='Organization' type='text' />
 
       {workspaces !== null && workspaces.length > 0 && (
@@ -24,8 +24,7 @@ const OrganizationDetailsFields: FC = () => {
                 , <strong>Code:</strong>{' '}
                 {workspace.organization.organizationCode},{' '}
                 <strong>Roles:</strong>{' '}
-                {/* TODO fix it, server sends array of objects, not strings */}
-                {workspace.roles.map((roleObj) => roleObj.role).join(', ')}
+                {workspace.roles.map((role) => role).join(', ')}
                 {/* Edit and Delete buttons */}
               </li>
             ))}

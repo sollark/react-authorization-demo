@@ -24,7 +24,6 @@ async function updateAccount(
   console.log('accountService - update, response data', response)
 
   const { account } = response as any
-
   if (account) storeService.saveAccount(account)
 
   return account ? account : null
@@ -36,10 +35,9 @@ async function getAccount(): Promise<Account | null> {
   console.log('accountService - getAccount, response data', response)
 
   const { account } = response as any
-  if (!account) return null
+  if (account) storeService.saveAccount(account)
 
-  storeService.saveAccount(account)
-  return account
+  return account ? account : null
 }
 
 export const accountService = { updateAccount, getAccount }

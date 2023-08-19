@@ -18,9 +18,13 @@ const AccountDetailsPage: FC = () => {
         <ul>
           <li>First Name: {user?.firstName}</li>
           <li>Last Name: {user?.lastName}</li>
-          <li>Organization: {organization?.organizationName}</li>
+          <li>
+            Organization: {organization?.organizationName} ({' '}
+            {organization?.organizationCode})
+          </li>
         </ul>
       </div>
+      {/* using href forces a page reload */}
       <SecondaryButton onClick={() => navigate({ to: '/account/edit' })}>
         Edit
       </SecondaryButton>

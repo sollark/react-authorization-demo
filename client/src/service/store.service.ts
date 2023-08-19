@@ -1,12 +1,10 @@
 import { Account } from '@/models/Account'
-import { RoleCode } from '@/models/Role'
-import { Workspace } from '@/models/Workspace'
+import { EncodedWorkspace, Workspace } from '@/models/Workspace'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
-import useOrganizationStore from '@/stores/organizationStore'
-import useRoleStore from '@/stores/roleStore'
 import useUserStore from '@/stores/userStore'
 import useWorkspaceStore from '@/stores/workspaceStore'
+import { codeService } from './code.service'
 
 function saveAccount(account: Account) {
   console.log('storeService - saveAccount, account :', account)
@@ -18,13 +16,16 @@ function saveAccount(account: Account) {
   if (workspaces) {
     console.log('storeService - saveAccount, workspaces :', workspaces)
 
-    // pick the first workspace as active
-    const workspace = workspaces[0]
-    useWorkspaceStore.getState().setWorkspaces(workspaces as Workspace[])
-    useWorkspaceStore.getState().setActiveWorkspace(workspace as Workspace)
+    const decodedWorkspace = codeService.decodeWorkspace(
+      workspaces as EncodedWorkspace[]
+    )
 
-    useOrganizationStore.getState().setOrganization(workspace.organization)
-    useRoleStore.getState().setRoles(workspace.roles as RoleCode[])
+    // pick the first workspace as active
+    const activeWorkspace = decodedWorkspace[0]
+    useWorkspaceStore.getState().setWorkspaces(decodedWorkspace as Workspace[])
+    useWorkspaceStore
+      .getState()
+      .setActiveWorkspace(activeWorkspace as Workspace)
   }
 }
 
@@ -46,8 +47,6 @@ function clearStoreStates() {
   useAccountStore.getState().resetIsComplete()
   useUserStore.getState().clearUser()
   useWorkspaceStore.getState().clearWorkspaces()
-  useRoleStore.getState().clearRoles()
-  useOrganizationStore.getState().clearOrganization()
   useAuthStore.getState().clearToken()
   useAuthStore.getState().setAsUnauthenticated()
 }
