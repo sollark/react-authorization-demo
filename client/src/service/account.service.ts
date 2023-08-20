@@ -10,7 +10,6 @@ async function updateAccount(
   organizationName?: string,
   organizationCode?: string
 ) {
-  //  :Promise<Account>
   const response = await httpService.post<
     User & Partial<Organization>,
     Account
