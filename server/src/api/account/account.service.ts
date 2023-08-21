@@ -11,22 +11,24 @@ import logger from '../../service/logger.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
-  userId: Types.ObjectId,
-  isComplete: boolean = false
-) {
+  userId: Types.ObjectId
+): Promise<Account> {
   const accountRef = await AccountModel.create({
     identifier,
     user: userId,
-    isComplete,
   })
 
   if (!accountRef) {
     logger.warn(`accountService - cannot create account: ${identifier}`)
-    throw new BadRequestError('Cannot create account')
+    throw new BadRequestError('Account creation failed')
   }
 
   const account = await AccountModel.findById(accountRef._id)
     .populate<{ user: User }>('user')
+    .populate<{ workspaces: Workspace[] }>({
+      path: 'workspaces',
+      populate: [{ path: 'organization' }, { path: 'roles' }],
+    })
     .lean()
     .exec()
 

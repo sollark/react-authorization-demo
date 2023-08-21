@@ -1,13 +1,19 @@
 import { Schema, Types, model } from 'mongoose'
-import { EncodedWorkspace, Workspace } from './workspace.model.js'
 import { User } from './user.model.js'
+import { EncodedWorkspace, Workspace } from './workspace.model.js'
+
+const statusList = ['pending', 'active', 'inactive', 'deleted'] as const
+type Status = ArrayElement<typeof statusList>
+
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never
 
 export interface Account {
   identifier: Types.ObjectId
   user: User
-  // workspaces: Types.ObjectId[] | EncodedWorkspace[]
   workspaces: Workspace[] | EncodedWorkspace[]
   isComplete: boolean
+  status: Status
 }
 
 export interface AccountRef {
@@ -15,6 +21,7 @@ export interface AccountRef {
   user: Types.ObjectId
   workspaces: Types.ObjectId[]
   isComplete: boolean
+  status: Status
 }
 
 const AccountSchema = new Schema({
@@ -34,6 +41,12 @@ const AccountSchema = new Schema({
       ref: 'Workspace',
     },
   ],
+  status: {
+    type: String,
+    enum: statusList,
+    default: 'pending',
+    required: true,
+  },
 })
 
 const accountModel = model<AccountRef>('Account', AccountSchema)
