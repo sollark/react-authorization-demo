@@ -1,12 +1,14 @@
 import { useMultistepForm } from '@/hooks/useMultistepForm'
+import { router } from '@/routes/router'
+import { isEmptyObject } from '@/service/utils.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { MultistepFormProvider } from './context/MultistepFormContext'
 import BackButton from './buttons/BackButton'
-import SubmitButton from './buttons/SubmitButton'
+import CancelButton from './buttons/CancelButton'
 import NextButton from './buttons/NextButton'
-import { isEmptyObject } from '@/service/utils.service'
+import SubmitButton from './buttons/SubmitButton'
+import { MultistepFormProvider } from './context/MultistepFormContext'
 
 interface Props {
   children: ReactElement[]
@@ -18,6 +20,8 @@ interface Props {
 
 const MultistepForm: FC<Props> = (props: Props) => {
   console.log('MultistepForm connected')
+
+  const navigateBack = router.history.back
 
   const { children, schema, defaultValues, submit, ...rest } = props
 
@@ -49,6 +53,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
           {step}
           <div>
             {isFirstStep ? null : <BackButton onClick={back} />}
+            {<CancelButton onClick={navigateBack} />}
             {isLastStep ? (
               <SubmitButton />
             ) : (
