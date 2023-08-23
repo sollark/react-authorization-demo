@@ -16,7 +16,7 @@ const AccountDetailsPage: FC = () => {
   return (
     <>
       <div>
-        <ul>
+        <ul className='clean-list'>
           <li>First Name: {user?.firstName}</li>
           <li>Last Name: {user?.lastName}</li>
           {workspaces?.map((workspace, index) => {

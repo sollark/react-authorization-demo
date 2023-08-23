@@ -17,7 +17,7 @@ const OrganizationDetailsFields: FC = () => {
       {workspaces !== null && workspaces.length > 0 && (
         <div>
           <h3>Workspace List:</h3>
-          <ul>
+          <ul className='clean-list'>
             {workspaces.map((workspace, index) => (
               <li key={index}>
                 <strong>Name:</strong> {workspace.organization.organizationName}

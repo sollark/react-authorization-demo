@@ -51,7 +51,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
         <form onSubmit={handleSubmit(onSubmit)} {...rest}>
           {currentStepIndex + 1} / {steps.length}
           {step}
-          <div>
+          <div className='flex space-between'>
             {isFirstStep ? null : <BackButton onClick={back} />}
             {<CancelButton onClick={navigateBack} />}
             {isLastStep ? (
