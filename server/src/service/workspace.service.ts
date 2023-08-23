@@ -19,22 +19,25 @@ async function updateWorkspace(
   )
 }
 
-async function addWorkspace(
+async function createWorkspace(
   identifier: Types.ObjectId,
   organizationId: Types.ObjectId,
   roles: Role[]
 ) {
   try {
-    console.log('workspace.service - addWorkspace, roles: ', roles)
+    console.log('workspace.service - createWorkspace, roles: ', roles)
     // Convert role names to role ObjectIds
     const roleObjects = await RoleModel.find({ role: { $in: roles } }).lean()
 
-    console.log('workspace.service - addWorkspace, roleObjects: ', roleObjects)
+    console.log(
+      'workspace.service - createWorkspace, roleObjects: ',
+      roleObjects
+    )
 
     // Extract the role ObjectIds from the found role documents
     const roleIds = roleObjects.map((role) => role._id)
 
-    console.log('workspace.service - addWorkspace, roleIds: ', roleIds)
+    console.log('workspace.service - createWorkspace, roleIds: ', roleIds)
 
     // Create a new workspace
     const workspaceRef = await WorkspaceRefModel.create({
@@ -105,7 +108,7 @@ async function joinExistingOrganization(
     )
 
   // at first sign in user gets employee role at chosen organization, later it can be changed by manager
-  const workspace = await addWorkspace(identifier, organization._id, [
+  const workspace = await createWorkspace(identifier, organization._id, [
     USER_ROLE.Employee,
   ])
 
@@ -114,8 +117,8 @@ async function joinExistingOrganization(
 
 async function joinNewOrganization(identifier: Types.ObjectId, name: string) {
   // Create a new organization
-  const organization = await organizationService.addOrganization(name)
-  const workspace = await addWorkspace(identifier, organization._id, [
+  const organization = await organizationService.createOrganization(name)
+  const workspace = await createWorkspace(identifier, organization._id, [
     USER_ROLE.Manager,
   ])
 
@@ -123,7 +126,7 @@ async function joinNewOrganization(identifier: Types.ObjectId, name: string) {
 }
 
 export const workspaceService = {
-  addWorkspace,
+  createWorkspace,
   updateWorkspace,
   getWorkspace,
   getWorkspaces,

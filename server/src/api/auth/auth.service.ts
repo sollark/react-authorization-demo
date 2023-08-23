@@ -10,22 +10,22 @@ import { userService } from '../../service/user.service.js'
 import { accountService } from '../account/account.service.js'
 
 async function registration(credentials: Credentials) {
-  // check if email is already taken
-  const isEmailExist = await isEmailTaken(credentials.email)
-  if (isEmailExist) {
+  const { email, password } = credentials
+
+  const isTaken = await isEmailTaken(email)
+  if (isTaken) {
     logger.warn(
-      `auth.service - attempt to create new authentication with existing email: ${credentials.email}`
+      `auth.service - attempt to create new authentication with existing email: ${email}`
     )
-    throw new BadRequestError('Email already taken', credentials.email)
+    throw new BadRequestError('Email already taken', email)
   }
 
   // hash password
-  const hashPassword = await bcrypt.hash(credentials.password, 10)
-  credentials.password = hashPassword
+  const hashPassword = await bcrypt.hash(password, 10)
 
   // create new authentication
-  const auth = await authModel.create(credentials)
-  logger.info(`auth.service - new authentication created: ${auth.email}`)
+  const auth = await authModel.create({ email, password: hashPassword })
+  logger.info(`auth.service - new authentication created: ${email}`)
 
   // // generate tokens
   const { accessToken, refreshToken } = await generateTokens(auth.uuid)

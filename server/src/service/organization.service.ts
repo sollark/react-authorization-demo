@@ -5,7 +5,7 @@ import OrganizationModel, {
 import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
-const addOrganization = async (name: string) => {
+const createOrganization = async (name: string) => {
   const code = await generateOrganizationCode()
 
   const organization = await OrganizationModel.create({
@@ -65,7 +65,7 @@ const deleteOrganization = async (organizationCode: string): Promise<void> => {
 
 export const organizationService = {
   isOrganizationCodeExists,
-  addOrganization,
+  createOrganization,
   getOrganization,
   updateOrganization,
   deleteOrganization,

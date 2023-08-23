@@ -1,3 +1,5 @@
+import { authService } from '../api/auth/auth.service.js'
+import { organizationService } from '../service/organization.service.js'
 import RoleModel, { Role, USER_ROLE } from './models/role.model.js'
 import RoleCodeModel, { ROLE_CODE_MAP } from './models/roleCode.model.js'
 
@@ -52,4 +54,20 @@ async function populateRoleCode() {
     console.error('Error populating role codes:', error)
   }
 }
+
+async function populateTestData() {
+  console.log('Populating users in the database...')
+
+  authService.registration({
+    email: 'employee',
+    password: 'employee',
+  })
+  console.log('Populating test organization in the database...')
+
+  const organization =
+    organizationService.createOrganization('TestOrganization')
+
+  // const workspaces = workspaceService.createWorkspace()
+}
+
 export const populate = { populateRole, populateRoleCode }
