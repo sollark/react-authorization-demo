@@ -1,15 +1,15 @@
 import { z } from 'zod'
 
-export interface Organization {
-  organizationName: string
-  organizationCode: string
+export interface Company {
+  companyName: string
+  companyCode: string
 }
 
-export const OrganizationSchema = z.object({
-  organization: z
+export const CompanySchema = z.object({
+  company: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()
-    .min(2, { message: 'Organization must be at least 3 characters' })
-    .max(20, { message: 'Organization must be less than 20 characters' }),
+    .min(2, { message: 'Company must be at least 3 characters' })
+    .max(20, { message: 'Company must be less than 20 characters' }),
 })

@@ -1,5 +1,5 @@
 import { authService } from '../api/auth/auth.service.js'
-import { organizationService } from '../service/organization.service.js'
+import { companyService } from '../service/company.service.js'
 import RoleModel, { Role, USER_ROLE } from './models/role.model.js'
 import RoleCodeModel, { ROLE_CODE_MAP } from './models/roleCode.model.js'
 
@@ -62,10 +62,9 @@ async function populateTestData() {
     email: 'employee',
     password: 'employee',
   })
-  console.log('Populating test organization in the database...')
+  console.log('Populating test company in the database...')
 
-  const organization =
-    organizationService.createOrganization('TestOrganization')
+  const company = companyService.createOrganization('TestOrganization')
 
   // const workspaces = workspaceService.createWorkspace()
 }

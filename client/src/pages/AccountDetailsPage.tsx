@@ -10,7 +10,7 @@ const AccountDetailsPage: FC = () => {
   const navigate = useNavigate({ from: '/account/edit' })
 
   const user = useUserStore((state) => state.user)
-  // const organization = useOrganizationStore((state) => state.organization)
+  // const company = useOrganizationStore((state) => state.company)
   const workspaces = useWorkspaceStore((state) => state.workspaces)
 
   return (
@@ -22,9 +22,8 @@ const AccountDetailsPage: FC = () => {
           {workspaces?.map((workspace, index) => {
             return (
               <li key={index}>
-                Workspace: {workspace.organization.organizationName} (
-                {workspace.organization.organizationCode}) (
-                {workspace.roles.join(', ')})
+                Workspace: {workspace.company.companyName} (
+                {workspace.company.companyCode}) ({workspace.roles.join(', ')})
               </li>
             )
           })}

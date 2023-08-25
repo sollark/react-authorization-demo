@@ -1,4 +1,4 @@
-import { OrganizationSchema } from '@/models/Organization'
+import { CompanySchema } from '@/models/Company'
 import { UserDetailsSchema } from '@/models/User'
 import { accountService } from '@/service/account.service'
 import useUserStore from '@/stores/userStore'
@@ -6,17 +6,13 @@ import { useNavigate } from '@tanstack/router'
 import { FC, ReactElement } from 'react'
 import { z } from 'zod'
 import MultistepForm from '../MultistepForm'
-import useOrganizationStore from '@/stores/organizationStore'
 
 interface Props {
   children: ReactElement[]
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
-const AccountSchema = z
-  .object({})
-  .merge(UserDetailsSchema)
-  .merge(OrganizationSchema)
+const AccountSchema = z.object({}).merge(UserDetailsSchema).merge(CompanySchema)
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
@@ -27,27 +23,27 @@ const AccountForm: FC<Props> = (props: Props) => {
   const defaultValues = {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
-    organization: '',
+    company: '',
   }
 
   async function submit(form: any) {
     console.log('Account form submitted: ', form)
 
     let account = null
-    // if organization input is not a number, create a new organization
-    if (isNaN(form.organization))
+    // if company input is not a number, create a new company
+    if (isNaN(form.company))
       account = await accountService.updateAccount(
         form.firstName,
         form.lastName,
-        form.organization
+        form.company
       )
-    // else it is an existing organization code
+    // else it is an existing company code
     else
       account = await accountService.updateAccount(
         form.firstName,
         form.lastName,
         undefined,
-        form.organization
+        form.company
       )
 
     console.log('Account form account: ', account)

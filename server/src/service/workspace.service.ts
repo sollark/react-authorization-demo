@@ -1,12 +1,12 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
-import { OrganizationCode } from '../mongodb/models/organization.model.js'
+import { CompanyCode } from '../mongodb/models/company.model.js'
 import RoleModel, { Role, USER_ROLE } from '../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../mongodb/models/workspace.model.js'
 import loggerService from './logger.service.js'
-import { organizationService } from './organization.service.js'
+import { companyService } from './company.service.js'
 
 async function updateWorkspace(
   identifier: Types.ObjectId,
@@ -21,7 +21,7 @@ async function updateWorkspace(
 
 async function createWorkspace(
   identifier: Types.ObjectId,
-  organizationId: Types.ObjectId,
+  companyId: Types.ObjectId,
   roles: Role[]
 ) {
   try {
@@ -42,12 +42,12 @@ async function createWorkspace(
     // Create a new workspace
     const workspaceRef = await WorkspaceRefModel.create({
       identifier,
-      organization: organizationId,
+      company: companyId,
       roles: roleIds,
     })
 
     const newWorkspace = await WorkspaceRefModel.findById(workspaceRef._id)
-      .populate('organization')
+      .populate('company')
       .populate('roles') // Populate the roles field
       .lean()
       .exec()
@@ -67,12 +67,12 @@ async function createWorkspace(
   }
 }
 
-async function getWorkspace(organizationId: Types.ObjectId, roles: Role[]) {
+async function getWorkspace(companyId: Types.ObjectId, roles: Role[]) {
   const workspace = await WorkspaceRefModel.findOne({
-    organization: organizationId,
+    company: companyId,
     roles: { $all: roles },
   })
-    .populate('organization')
+    .populate('company')
     .exec()
 
   return workspace
@@ -82,43 +82,38 @@ async function getWorkspaces(workspaceIds: Types.ObjectId[]) {
   const workspaces = await WorkspaceRefModel.find({
     _id: { $in: workspaceIds },
   })
-    .populate('organization')
+    .populate('company')
     .exec()
 
   return workspaces.map((workspace) => {
     return {
       ...workspace.toObject(),
-      organization: workspace.organization,
+      company: workspace.company,
     } as unknown as Workspace
   })
 }
 
-async function joinExistingOrganization(
+async function joinExistingCompany(
   identifier: Types.ObjectId,
-  organizationCode: OrganizationCode
+  companyCode: CompanyCode
 ) {
-  const organization = await organizationService.getOrganization(
-    organizationCode
-  )
+  const company = await companyService.getCompany(companyCode)
 
-  if (!organization)
-    throw new BadRequestError(
-      'Organization not found',
-      organizationCode.toString()
-    )
+  if (!company)
+    throw new BadRequestError('Company not found', companyCode.toString())
 
-  // at first sign in user gets employee role at chosen organization, later it can be changed by manager
-  const workspace = await createWorkspace(identifier, organization._id, [
+  // at first sign in user gets employee role at chosen company, later it can be changed by manager
+  const workspace = await createWorkspace(identifier, company._id, [
     USER_ROLE.Employee,
   ])
 
   return workspace
 }
 
-async function joinNewOrganization(identifier: Types.ObjectId, name: string) {
-  // Create a new organization
-  const organization = await organizationService.createOrganization(name)
-  const workspace = await createWorkspace(identifier, organization._id, [
+async function joinNewCompany(identifier: Types.ObjectId, name: string) {
+  // Create a new company
+  const company = await companyService.createCompany(name)
+  const workspace = await createWorkspace(identifier, company._id, [
     USER_ROLE.Manager,
   ])
 
@@ -130,6 +125,6 @@ export const workspaceService = {
   updateWorkspace,
   getWorkspace,
   getWorkspaces,
-  joinExistingOrganization,
-  joinNewOrganization,
+  joinExistingCompany,
+  joinNewCompany,
 }

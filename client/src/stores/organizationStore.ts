@@ -1,29 +1,29 @@
-import { Organization } from '@/models/Organization'
+import { Company } from '@/models/Company'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-interface OrganizationState {
-  organization: Organization | null
-  setOrganization: (organization: Organization | null) => void
-  clearOrganization: () => void
+interface CompanyState {
+  company: Company | null
+  setCompany: (company: Company | null) => void
+  clearCompany: () => void
 }
 
 // Create a store with initial state
-const useOrganizationStore = create<OrganizationState>()(
+const useCompanyStore = create<CompanyState>()(
   zustandLogger(
     persist(
       devtools(
         immer((set) => ({
-          organization: null,
-          setOrganization: (organization) => set(() => ({ organization })),
-          clearOrganization: () => set(() => ({ organization: null })),
+          company: null,
+          setCompany: (company) => set(() => ({ company })),
+          clearCompany: () => set(() => ({ company: null })),
         }))
       ),
-      { name: 'organization-storage' }
+      { name: 'company-storage' }
     )
   )
 )
 
-export default useOrganizationStore
+export default useCompanyStore

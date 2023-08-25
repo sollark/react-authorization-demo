@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
-import { Organization } from '../../mongodb/models/organization.model.js'
+import { Company } from '../../mongodb/models/company.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
@@ -17,15 +17,12 @@ export async function updateAccount(
 
   console.log('updateAccount account, account: ', account)
 
-  const [updatedUserData, updatedWorkspaceData, updatedOrganizationData] =
+  const [updatedUserData, updatedWorkspaceData, updatedCompanyData] =
     accountService.sortAccountData(account)
 
   console.log('updateAccount, updatedUserData: ', updatedUserData)
   console.log('updateAccount, updatedWorkspaceData: ', updatedWorkspaceData)
-  console.log(
-    'updateAccount, updatedOrganizationData: ',
-    updatedOrganizationData
-  )
+  console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
 
   const updatedUser = await userService.updateUser(identifier, updatedUserData)
   const updatedWorkspace = await workspaceService.updateWorkspace(
@@ -33,21 +30,17 @@ export async function updateAccount(
     updatedWorkspaceData
   )
 
-  const { organizationName, organizationCode } =
-    updatedOrganizationData as Partial<Organization>
+  const { companyName, companyCode } = updatedCompanyData as Partial<Company>
 
   let workspace: any = null
-  if (organizationCode)
-    workspace = await workspaceService.joinExistingOrganization(
+  if (companyCode)
+    workspace = await workspaceService.joinExistingCompany(
       identifier,
-      organizationCode
+      companyCode
     )
 
-  if (organizationName)
-    workspace = await workspaceService.joinNewOrganization(
-      identifier,
-      organizationName
-    )
+  if (companyName)
+    workspace = await workspaceService.joinNewCompany(identifier, companyName)
 
   const updatedAccount = await accountService.addWorkspace(
     identifier,

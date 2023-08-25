@@ -1,18 +1,18 @@
 import { z } from 'zod'
-import { Organization, OrganizationSchema } from './Organization'
+import { Company, CompanySchema } from './Company'
 import { RoleCode, RoleName } from './Role'
 
 export interface Workspace {
-  organization: Organization
+  company: Company
   roles: RoleName[]
 }
 
 export interface EncodedWorkspace {
-  organization: Organization
+  company: Company
   roles: RoleCode[]
 }
 
 export const WorkspaceSchema = z.object({
-  organization: OrganizationSchema,
+  company: CompanySchema,
   // role: z.array(userRoleSchema),
 })

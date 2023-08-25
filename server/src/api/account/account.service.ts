@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
-import OrganizationModel from '../../mongodb/models/organization.model.js'
+import CompanyModel from '../../mongodb/models/company.model.js'
 import UserModel, { User } from '../../mongodb/models/user.model.js'
 import WorkspaceRefModel, {
   Workspace,
@@ -27,7 +27,7 @@ async function createAccount(
     .populate<{ user: User }>('user')
     .populate<{ workspaces: Workspace[] }>({
       path: 'workspaces',
-      populate: [{ path: 'organization' }, { path: 'roles' }],
+      populate: [{ path: 'company' }, { path: 'roles' }],
     })
     .lean()
     .exec()
@@ -53,7 +53,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     .populate<{ user: User }>('user')
     .populate<{ workspaces: Workspace[] }>({
       path: 'workspaces',
-      populate: [{ path: 'organization' }, { path: 'roles' }],
+      populate: [{ path: 'company' }, { path: 'roles' }],
     })
     .lean()
     .exec()
@@ -94,7 +94,7 @@ async function addWorkspace(
     .populate<{ user: User }>('user')
     .populate<{ workspaces: Workspace[] }>({
       path: 'workspaces',
-      populate: [{ path: 'organization' }, { path: 'roles' }],
+      populate: [{ path: 'company' }, { path: 'roles' }],
     })
     .lean()
     .exec()
@@ -113,7 +113,7 @@ async function completeAccount(
     .populate<{ user: User }>('user')
     .populate<{ workspaces: Workspace[] }>({
       path: 'workspaces',
-      populate: [{ path: 'organization' }, { path: 'roles' }],
+      populate: [{ path: 'company' }, { path: 'roles' }],
     })
     .lean()
     .exec()
@@ -143,32 +143,32 @@ function sortAccountData(
 ): [
   updatedUserData: Object,
   updatedWorkspaceData: Object,
-  updatedOrganizationData: Object
+  updatedCompanyData: Object
 ] {
   const userSchemaKeys = Object.keys(UserModel.schema.paths)
   const workspaceSchemaKeys = Object.keys(WorkspaceRefModel.schema.paths)
-  const organizationSchemaKeys = Object.keys(OrganizationModel.schema.paths)
+  const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
 
-  const { updatedUserData, updatedWorkspaceData, updatedOrganizationData } =
+  const { updatedUserData, updatedWorkspaceData, updatedCompanyData } =
     Object.entries(accountData).reduce(
       (accumulator: any, [key, value]) => {
         if (userSchemaKeys.includes(key)) {
           accumulator.updatedUserData[key] = value
         } else if (workspaceSchemaKeys.includes(key)) {
           accumulator.updatedWorkspaceData[key] = value
-        } else if (organizationSchemaKeys.includes(key)) {
-          accumulator.updatedOrganizationData[key] = value
+        } else if (companySchemaKeys.includes(key)) {
+          accumulator.updatedCompanyData[key] = value
         }
         return accumulator
       },
       {
         updatedUserData: {},
         updatedWorkspaceData: {},
-        updatedOrganizationData: {},
+        updatedCompanyData: {},
       }
     )
 
-  return [updatedUserData, updatedWorkspaceData, updatedOrganizationData]
+  return [updatedUserData, updatedWorkspaceData, updatedCompanyData]
 }
 
 export const accountService = {
