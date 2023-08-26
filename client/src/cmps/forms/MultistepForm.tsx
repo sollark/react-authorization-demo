@@ -1,6 +1,5 @@
 import { useMultistepForm } from '@/hooks/useMultistepForm'
 import { router } from '@/routes/router'
-import { isEmptyObject } from '@/service/utils.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -33,14 +32,8 @@ const MultistepForm: FC<Props> = (props: Props) => {
     reValidateMode: 'onBlur',
   })
 
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods
-
-  const onSubmit = (data: any) => {
-    submit(data)
-  }
+  const { handleSubmit } = methods
+  const onSubmit = (data: any) => submit(data)
 
   const { step, steps, back, next, currentStepIndex, isFirstStep, isLastStep } =
     useMultistepForm([...children])
@@ -54,15 +47,7 @@ const MultistepForm: FC<Props> = (props: Props) => {
           <div className='flex space-between'>
             {isFirstStep ? null : <BackButton onClick={back} />}
             {<CancelButton onClick={navigateBack} />}
-            {isLastStep ? (
-              <SubmitButton />
-            ) : (
-              <NextButton
-                onClick={() => {
-                  if (isEmptyObject(errors)) next()
-                }}
-              />
-            )}
+            {isLastStep ? <SubmitButton /> : <NextButton onClick={next} />}
           </div>
         </form>
       </MultistepFormProvider>

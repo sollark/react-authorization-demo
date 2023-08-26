@@ -11,6 +11,7 @@ async function encodeWorkspace(
   const enCodedWorkspaces = await Promise.all(
     workspaces.map(async (workspace) => {
       const company = workspace.company
+      const department = workspace.department
       const roles = await Promise.all(
         workspace.roles.map(async (role) => {
           const roleMap = await RoleCodeModel.findOne({ role })
@@ -20,6 +21,7 @@ async function encodeWorkspace(
 
       return {
         company,
+        department,
         roles: roles as RoleCode[],
       }
     })
@@ -34,6 +36,7 @@ async function decodeWorkspace(
   const workspaces = await Promise.all(
     enCodedWorkspace.map(async (workspace) => {
       const company = workspace.company
+      const department = workspace.department
 
       const roles = await Promise.all(
         workspace.roles.map(async (roleCode) => {
@@ -47,6 +50,7 @@ async function decodeWorkspace(
 
       return {
         company,
+        department,
         roles: roles as Role[],
       }
     })

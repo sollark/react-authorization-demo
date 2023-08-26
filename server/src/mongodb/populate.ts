@@ -64,7 +64,7 @@ async function populateTestData() {
   })
   console.log('Populating test company in the database...')
 
-  const company = companyService.createOrganization('TestOrganization')
+  const company = companyService.createCompany('TestCompany')
 
   // const workspaces = workspaceService.createWorkspace()
 }
