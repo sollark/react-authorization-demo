@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
-import UserModel, { User } from '../mongodb/models/user.model.js'
+import UserModel, { User } from '../mongodb/models/profile.model.js'
 import loggerService from './logger.service.js'
 
 async function addUser(identifier: Types.ObjectId) {

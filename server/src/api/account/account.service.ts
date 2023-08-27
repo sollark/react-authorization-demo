@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, { Account } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
-import UserModel, { User } from '../../mongodb/models/user.model.js'
+import UserModel, { User } from '../../mongodb/models/profile.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../../mongodb/models/workspace.model.js'

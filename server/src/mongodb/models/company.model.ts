@@ -1,11 +1,12 @@
 import { model, Schema } from 'mongoose'
 import { Department } from './department.model.js'
+import { Employee } from './employee.model.js'
 
 export interface Company {
   companyName: string
   companyCode: CompanyCode
   departments?: Department[]
-  workers?: Worker[]
+  employees?: Employee[]
 }
 
 export type CompanyCode = string

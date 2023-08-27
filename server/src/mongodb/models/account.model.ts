@@ -1,5 +1,5 @@
 import { Schema, Types, model } from 'mongoose'
-import { User } from './user.model.js'
+import { Profile } from './profile.model.js'
 import { EncodedWorkspace, Workspace } from './workspace.model.js'
 
 const statusList = ['pending', 'active', 'inactive', 'deleted'] as const
@@ -10,7 +10,7 @@ type ArrayElement<ArrayType extends readonly unknown[]> =
 
 export interface Account {
   identifier: Types.ObjectId
-  user: User
+  user: Profile
   workspaces: Workspace[] | EncodedWorkspace[]
   isComplete: boolean
   status: Status
@@ -33,7 +33,7 @@ const AccountSchema = new Schema({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Profile',
   },
   workspaces: [
     {
