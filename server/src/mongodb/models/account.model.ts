@@ -1,24 +1,29 @@
 import { Schema, Types, model } from 'mongoose'
 import { Profile } from './profile.model.js'
-import { EncodedWorkspace, Workspace } from './workspace.model.js'
+import { Role } from './role.model.js'
+import { Workspace } from './workspace.model.js'
 
-const statusList = ['pending', 'active', 'inactive', 'deleted'] as const
-type Status = ArrayElement<typeof statusList>
+export const ACCOUNT_STATUS = {
+  pending: 'pending',
+  active: 'active',
+  inactive: 'inactive',
+  deleted: 'deleted',
+} as const
+type Status = keyof typeof ACCOUNT_STATUS
 
-type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never
-
-export interface Account {
+export type Account = {
   identifier: Types.ObjectId
   user: Profile
-  workspaces: Workspace[] | EncodedWorkspace[]
+  role: Role
+  workspaces: Workspace[]
   isComplete: boolean
   status: Status
 }
 
-export interface AccountRef {
+export type AccountRef = {
   identifier: Types.ObjectId
   user: Types.ObjectId
+  role: Types.ObjectId
   workspaces: Types.ObjectId[]
   isComplete: boolean
   status: Status
@@ -35,6 +40,10 @@ const AccountSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Profile',
   },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: 'Role',
+  },
   workspaces: [
     {
       type: Schema.Types.ObjectId,
@@ -43,8 +52,8 @@ const AccountSchema = new Schema({
   ],
   status: {
     type: String,
-    enum: statusList,
-    default: 'pending',
+    enum: Object.values(ACCOUNT_STATUS),
+    default: ACCOUNT_STATUS.pending,
     required: true,
   },
 })

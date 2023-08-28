@@ -2,30 +2,21 @@ import { Schema, Types, model } from 'mongoose'
 import { Company } from './company.model.js'
 import { Department } from './department.model.js'
 import { Employee } from './employee.model.js'
-import { Role } from './role.model.js'
-import { RoleCode } from './roleCode.model.js'
 
-export interface Workspace {
+export type Workspace = {
   company: Company
   department: Department
   position: string
   supervisor?: Employee
   subordinates?: Employee[]
-  roles: Role[]
 }
 
-export interface EncodedWorkspace {
-  company: Company
-  department: Department
-  position: string
-  roles: RoleCode[]
-}
-
-export interface WorkspaceRef {
+export type WorkspaceRef = {
   company: Types.ObjectId
   department: Types.ObjectId
   position: string
-  roles: Types.ObjectId[]
+  supervisor?: Types.ObjectId
+  subordinates?: Types.ObjectId[]
 }
 
 const WorkspaceSchema = new Schema({
@@ -37,11 +28,15 @@ const WorkspaceSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Department',
   },
-  jobPosition: { type: String, required: true },
-  roles: [
+  position: { type: String, required: true },
+  supervisor: {
+    type: Schema.Types.ObjectId,
+    ref: 'Employee',
+  },
+  subordinates: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Roles',
+      ref: 'Employee',
     },
   ],
 })

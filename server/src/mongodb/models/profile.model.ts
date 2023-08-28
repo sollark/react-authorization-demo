@@ -1,6 +1,6 @@
 import { model, Schema, Types } from 'mongoose'
 
-export interface Profile {
+export type Profile = {
   firstName?: string
   lastName?: string
 }

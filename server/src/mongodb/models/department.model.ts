@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-export interface Department {
+export type Department = {
   departmentName: string
 }
 

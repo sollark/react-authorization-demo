@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose'
 import { Profile } from './profile.model.js'
 import { Workspace } from './workspace.model.js'
 
-export interface Employee {
+export type Employee = {
   profile: Profile
   workspace: Workspace
 }
