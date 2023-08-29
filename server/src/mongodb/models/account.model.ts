@@ -9,13 +9,13 @@ export const ACCOUNT_STATUS = {
   inactive: 'inactive',
   deleted: 'deleted',
 } as const
-type Status = keyof typeof ACCOUNT_STATUS
+export type Status = keyof typeof ACCOUNT_STATUS
 
 export type Account = {
   identifier: Types.ObjectId
   user: Profile
-  role: Role
-  workspaces: Workspace[]
+  role?: Role
+  workspace: Workspace
   isComplete: boolean
   status: Status
 }
@@ -23,8 +23,8 @@ export type Account = {
 export type AccountRef = {
   identifier: Types.ObjectId
   user: Types.ObjectId
-  role: Types.ObjectId
-  workspaces: Types.ObjectId[]
+  role?: Types.ObjectId
+  workspace?: Types.ObjectId
   isComplete: boolean
   status: Status
 }
@@ -39,17 +39,16 @@ const AccountSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'Profile',
+    required: true,
   },
   role: {
     type: Schema.Types.ObjectId,
     ref: 'Role',
   },
-  workspaces: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Workspace',
-    },
-  ],
+  workspace: {
+    type: Schema.Types.ObjectId,
+    ref: 'Workspace',
+  },
   status: {
     type: String,
     enum: Object.values(ACCOUNT_STATUS),

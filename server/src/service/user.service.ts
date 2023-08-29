@@ -1,10 +1,10 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
-import UserModel, { User } from '../mongodb/models/profile.model.js'
+import ProfileModel, { Profile } from '../mongodb/models/profile.model.js'
 import loggerService from './logger.service.js'
 
-async function addUser(identifier: Types.ObjectId) {
-  const user = await UserModel.create({
+async function createUser(identifier: Types.ObjectId) {
+  const user = await ProfileModel.create({
     identifier,
   })
 
@@ -15,8 +15,8 @@ async function addUser(identifier: Types.ObjectId) {
 
 async function getUserByIdentifier(
   identifier: Types.ObjectId
-): Promise<User | null> {
-  const user = await UserModel.findOne({ identifier })
+): Promise<Profile | null> {
+  const user = await ProfileModel.findOne({ identifier })
 
   loggerService.info(`user.service - user fetched ${user}`)
 
@@ -25,9 +25,9 @@ async function getUserByIdentifier(
 
 async function updateUser(
   identifier: Types.ObjectId,
-  updatedUserData: Partial<User>
-): Promise<User | null> {
-  const user = await UserModel.findOneAndUpdate(
+  updatedUserData: Partial<Profile>
+): Promise<Profile | null> {
+  const user = await ProfileModel.findOneAndUpdate(
     { identifier },
     updatedUserData,
     { new: true }
@@ -39,13 +39,13 @@ async function updateUser(
 }
 
 async function deleteUser(identifier: Types.ObjectId): Promise<void> {
-  await UserModel.deleteOne({ identifier })
+  await ProfileModel.deleteOne({ identifier })
 }
 
 const getUserId = async (
   identifier: Types.ObjectId
 ): Promise<Types.ObjectId> => {
-  const user = await UserModel.findOne({ identifier })
+  const user = await ProfileModel.findOne({ identifier })
   if (!user) {
     loggerService.warn(`user.service - user is not found: ${identifier}`)
     throw new BadRequestError('User is not found')
@@ -55,7 +55,7 @@ const getUserId = async (
 }
 
 export const userService = {
-  addUser,
+  createUser,
   getUserByIdentifier,
   updateUser,
   deleteUser,

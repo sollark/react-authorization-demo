@@ -1,18 +1,21 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
-import AccountModel, { Account } from '../../mongodb/models/account.model.js'
+import AccountModel, {
+  Account,
+  Status,
+} from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
-import UserModel, { User } from '../../mongodb/models/profile.model.js'
+import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
+import { Role } from '../../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../../mongodb/models/workspace.model.js'
-import { codeService } from '../../service/code.service.js'
 import logger from '../../service/logger.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
   userId: Types.ObjectId
-): Promise<Account> {
+): Promise<Partial<Account>> {
   const accountRef = await AccountModel.create({
     identifier,
     user: userId,
@@ -24,11 +27,10 @@ async function createAccount(
   }
 
   const account = await AccountModel.findById(accountRef._id)
-    .populate<{ user: User }>('user')
-    .populate<{ workspaces: Workspace[] }>({
-      path: 'workspaces',
-      populate: [{ path: 'company' }, { path: 'roles' }],
-    })
+    .populate<{ user: Profile }>('user')
+    .populate<{ role: Role }>('role')
+    .populate<{ workspace: Workspace }>('workspace')
+    .populate<{ status: Status }>('status')
     .lean()
     .exec()
 
@@ -38,7 +40,7 @@ async function createAccount(
   }
 
   logger.info(
-    `accountService - account added:  ${JSON.stringify(
+    `accountService - account is created:  ${JSON.stringify(
       account,
       null,
       2 // Indentation level, adjust as needed
@@ -50,11 +52,18 @@ async function createAccount(
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
-    .populate<{ user: User }>('user')
-    .populate<{ workspaces: Workspace[] }>({
-      path: 'workspaces',
-      populate: [{ path: 'company' }, { path: 'roles' }],
+    .populate<{ user: Profile }>('user')
+    .populate<{ role: Role }>('role')
+    .populate<{ workspace: Workspace }>({
+      path: 'workspace',
+      populate: [
+        { path: 'company' },
+        { path: 'department' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
+      ],
     })
+    .populate<{ status: Status }>('status')
     .lean()
     .exec()
 
@@ -62,10 +71,6 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     logger.warn(`accountService - account is not found: ${identifier}`)
     throw new BadRequestError('Account is not found')
   }
-
-  const encodedWorkspaces = await codeService.encodeWorkspace(
-    account.workspaces
-  )
 
   logger.info(
     `accountService - account fetched: ${JSON.stringify(
@@ -75,7 +80,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     )}`
   )
 
-  return { ...account, workspaces: encodedWorkspaces }
+  return account
 }
 
 async function deleteAccount(identifier: Types.ObjectId) {
@@ -91,11 +96,18 @@ async function addWorkspace(
     { $push: { workspaces: workspaceId } },
     { new: true }
   )
-    .populate<{ user: User }>('user')
-    .populate<{ workspaces: Workspace[] }>({
-      path: 'workspaces',
-      populate: [{ path: 'company' }, { path: 'roles' }],
+    .populate<{ user: Profile }>('user')
+    .populate<{ role: Role }>('role')
+    .populate<{ workspace: Workspace }>({
+      path: 'workspace',
+      populate: [
+        { path: 'company' },
+        { path: 'department' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
+      ],
     })
+    .populate<{ status: Status }>('status')
     .lean()
     .exec()
 
@@ -110,11 +122,18 @@ async function completeAccount(
     { isComplete: true },
     { new: true }
   )
-    .populate<{ user: User }>('user')
-    .populate<{ workspaces: Workspace[] }>({
-      path: 'workspaces',
-      populate: [{ path: 'company' }, { path: 'roles' }],
+    .populate<{ user: Profile }>('user')
+    .populate<{ role: Role }>('role')
+    .populate<{ workspace: Workspace }>({
+      path: 'workspace',
+      populate: [
+        { path: 'company' },
+        { path: 'department' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
+      ],
     })
+    .populate<{ status: Status }>('status')
     .lean()
     .exec()
 
@@ -123,19 +142,15 @@ async function completeAccount(
     throw new BadRequestError('Account cannot be updated')
   }
 
-  const encodedWorkspaces = await codeService.encodeWorkspace(
-    updatedAccount.workspaces
-  )
-
   logger.info(
-    `accountService - complete account: ${JSON.stringify(
+    `accountService - account is completed: ${JSON.stringify(
       updatedAccount,
       null,
       2 // Indentation level, adjust as needed
     )}`
   )
 
-  return { ...updatedAccount, workspaces: encodedWorkspaces }
+  return updatedAccount
 }
 
 function sortAccountData(
@@ -145,7 +160,7 @@ function sortAccountData(
   updatedWorkspaceData: Object,
   updatedCompanyData: Object
 ] {
-  const userSchemaKeys = Object.keys(UserModel.schema.paths)
+  const userSchemaKeys = Object.keys(ProfileModel.schema.paths)
   const workspaceSchemaKeys = Object.keys(WorkspaceRefModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
 

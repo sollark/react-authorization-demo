@@ -1,12 +1,11 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
 import { CompanyCode } from '../mongodb/models/company.model.js'
-import RoleModel, { Role, USER_ROLE } from '../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../mongodb/models/workspace.model.js'
-import loggerService from './logger.service.js'
 import { companyService } from './company.service.js'
+import loggerService from './logger.service.js'
 
 async function updateWorkspace(
   identifier: Types.ObjectId,
@@ -21,34 +20,17 @@ async function updateWorkspace(
 
 async function createWorkspace(
   identifier: Types.ObjectId,
-  companyId: Types.ObjectId,
-  roles: Role[]
+  companyId: Types.ObjectId
 ) {
   try {
-    console.log('workspace.service - createWorkspace, roles: ', roles)
-    // Convert role names to role ObjectIds
-    const roleObjects = await RoleModel.find({ role: { $in: roles } }).lean()
-
-    console.log(
-      'workspace.service - createWorkspace, roleObjects: ',
-      roleObjects
-    )
-
-    // Extract the role ObjectIds from the found role documents
-    const roleIds = roleObjects.map((role) => role._id)
-
-    console.log('workspace.service - createWorkspace, roleIds: ', roleIds)
-
     // Create a new workspace
     const workspaceRef = await WorkspaceRefModel.create({
       identifier,
       company: companyId,
-      roles: roleIds,
     })
 
     const newWorkspace = await WorkspaceRefModel.findById(workspaceRef._id)
       .populate('company')
-      .populate('roles') // Populate the roles field
       .lean()
       .exec()
 
@@ -67,10 +49,9 @@ async function createWorkspace(
   }
 }
 
-async function getWorkspace(companyId: Types.ObjectId, roles: Role[]) {
+async function getWorkspace(companyId: Types.ObjectId) {
   const workspace = await WorkspaceRefModel.findOne({
     company: companyId,
-    roles: { $all: roles },
   })
     .populate('company')
     .exec()
@@ -103,9 +84,7 @@ async function joinExistingCompany(
     throw new BadRequestError('Company not found', companyCode.toString())
 
   // at first sign in user gets employee role at chosen company, later it can be changed by manager
-  const workspace = await createWorkspace(identifier, company._id, [
-    USER_ROLE.Employee,
-  ])
+  const workspace = await createWorkspace(identifier, company._id)
 
   return workspace
 }
@@ -113,9 +92,7 @@ async function joinExistingCompany(
 async function joinNewCompany(identifier: Types.ObjectId, name: string) {
   // Create a new company
   const company = await companyService.createCompany(name)
-  const workspace = await createWorkspace(identifier, company._id, [
-    USER_ROLE.Manager,
-  ])
+  const workspace = await createWorkspace(identifier, company._id)
 
   return workspace
 }

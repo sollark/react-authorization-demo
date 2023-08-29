@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Types } from 'mongoose'
 import { config } from '../config/config.js'
-import TokenModel, { Token } from '../mongodb/models/token.model.js'
+import TokenModel, { RefreshToken } from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
@@ -44,7 +44,7 @@ async function removeToken(refreshToken: string) {
   return result
 }
 
-async function getToken(refreshToken: string): Promise<Token | null> {
+async function getToken(refreshToken: string): Promise<RefreshToken | null> {
   const tokenData = await TokenModel.findOne({ refreshToken })
 
   return tokenData
