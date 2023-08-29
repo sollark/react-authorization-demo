@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose'
 import { config } from '../config/config.js'
 import { populate } from './populate.js'
+import { deleteDatabase } from './delete.js'
 
 export const connectMongo = async () => {
   if (!config.mongo.url) {
@@ -17,5 +18,8 @@ export const connectMongo = async () => {
   }
 
   await populate.populateRole()
-  await populate.populateRoleCode()
+
+  // Uncomment this lines to delete the database
+  // await deleteDatabase(mongoose.connections[0])
+  // await mongoose.connection.close()
 }

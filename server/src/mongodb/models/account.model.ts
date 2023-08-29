@@ -54,6 +54,7 @@ const AccountSchema = new Schema({
     enum: Object.values(ACCOUNT_STATUS),
     default: ACCOUNT_STATUS.pending,
     required: true,
+    immutable: true,
   },
 })
 

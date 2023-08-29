@@ -14,7 +14,12 @@ type UserRole = {
 }
 
 const RoleSchema = new Schema({
-  role: { type: String, required: true, unique: true, immutable: true },
+  role: {
+    type: String,
+    enum: Object.values(USER_ROLE),
+    required: true,
+    immutable: true,
+  },
 })
 
 const RoleModel = model<UserRole>('Role', RoleSchema)
