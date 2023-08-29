@@ -6,7 +6,7 @@ import { Employee } from './employee.model.js'
 export type Workspace = {
   company: Company
   department: Department
-  position: string
+  position?: string
   supervisor?: Employee
   subordinates?: Employee[]
 }
@@ -14,7 +14,7 @@ export type Workspace = {
 export type WorkspaceRef = {
   company: Types.ObjectId
   department: Types.ObjectId
-  position: string
+  position?: string
   supervisor?: Types.ObjectId
   subordinates?: Types.ObjectId[]
 }
@@ -28,7 +28,7 @@ const WorkspaceSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Department',
   },
-  position: { type: String, required: true },
+  position: { type: String },
   supervisor: {
     type: Schema.Types.ObjectId,
     ref: 'Employee',

@@ -7,6 +7,7 @@ import { userService } from '../../service/user.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
 
+// TODO updateAccount does not return workspace
 export async function updateAccount(
   req: Request,
   res: Response,
