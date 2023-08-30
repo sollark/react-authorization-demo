@@ -13,7 +13,7 @@ export type Status = keyof typeof ACCOUNT_STATUS
 
 export type Account = {
   identifier: Types.ObjectId
-  user: Profile
+  profile: Profile
   role?: Role
   workspace?: Workspace
   isComplete: boolean
@@ -22,7 +22,7 @@ export type Account = {
 
 export type AccountRef = {
   identifier: Types.ObjectId
-  user: Types.ObjectId
+  profile: Types.ObjectId
   role?: Types.ObjectId
   workspace?: Types.ObjectId
   isComplete: boolean
@@ -36,7 +36,7 @@ const AccountSchema = new Schema({
     default: false,
     required: true,
   },
-  user: {
+  profile: {
     type: Schema.Types.ObjectId,
     ref: 'Profile',
     required: true,

@@ -27,7 +27,7 @@ async function createAccount(
   }
 
   const account = await AccountModel.findById(accountRef._id)
-    .populate<{ user: Profile }>('user')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
     .populate<{ workspace: Workspace }>('workspace')
     .populate<{ status: Status }>('status')
@@ -52,7 +52,7 @@ async function createAccount(
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
-    .populate<{ user: Profile }>('user')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
     .populate<{ workspace: Workspace }>({
       path: 'workspace',
@@ -96,7 +96,7 @@ async function addWorkspace(
     { $push: { workspace: workspaceId } },
     { new: true }
   )
-    .populate<{ user: Profile }>('user')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
     .populate<{ workspace: Workspace }>({
       path: 'workspace',
@@ -122,7 +122,7 @@ async function completeAccount(
     { isComplete: true },
     { new: true }
   )
-    .populate<{ user: Profile }>('user')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
     .populate<{ workspace: Workspace }>({
       path: 'workspace',
