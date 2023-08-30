@@ -1,15 +1,13 @@
 import { Workspace } from '@/models/Workspace'
 import { create } from 'zustand'
-import { zustandLogger } from './zustandLogger'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
+import { zustandLogger } from './zustandLogger'
 
 interface WorkspaceState {
-  workspaces: Workspace[] | null
-  activeWorkspace: Workspace | null
-  setWorkspaces: (workspaces: Workspace[]) => void
-  setActiveWorkspace: (workspace: Workspace) => void
-  clearWorkspaces: () => void
+  workspace: Workspace | null
+  setWorkspace: (workspace: Workspace) => void
+  clearWorkspace: () => void
 }
 
 const useWorkspaceStore = create<WorkspaceState>()(
@@ -17,13 +15,9 @@ const useWorkspaceStore = create<WorkspaceState>()(
     persist(
       devtools(
         immer((set) => ({
-          workspaces: null,
-          activeWorkspace: null,
-          setWorkspaces: (workspaces) => set(() => ({ workspaces })),
-          setActiveWorkspace: (workspace) =>
-            set(() => ({ activeWorkspace: workspace })),
-          clearWorkspaces: () =>
-            set(() => ({ workspaces: null, activeWorkspace: null })),
+          workspace: null,
+          setWorkspace: (workspace) => set(() => ({ workspace })),
+          clearWorkspace: () => set(() => ({ workspace: null })),
         }))
       ),
       { name: 'workspace-storage' }

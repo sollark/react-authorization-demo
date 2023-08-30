@@ -11,7 +11,7 @@ const AccountDetailsPage: FC = () => {
 
   const user = useUserStore((state) => state.user)
   // const company = useOrganizationStore((state) => state.company)
-  const workspaces = useWorkspaceStore((state) => state.workspaces)
+  const workspace = useWorkspaceStore((state) => state.workspace)
 
   return (
     <>
@@ -19,14 +19,12 @@ const AccountDetailsPage: FC = () => {
         <ul className='clean-list'>
           <li>First Name: {user?.firstName}</li>
           <li>Last Name: {user?.lastName}</li>
-          {workspaces?.map((workspace, index) => {
-            return (
-              <li key={index}>
-                Workspace: {workspace.company.companyName} (
-                {workspace.company.companyCode}) ({workspace.roles.join(', ')})
-              </li>
-            )
-          })}
+          <li>
+            Workspace:{' '}
+            {workspace
+              ? `${workspace.company.companyName} ${workspace.company.companyCode} `
+              : ''}
+          </li>
         </ul>
       </div>
       {/* using href forces a page reload */}

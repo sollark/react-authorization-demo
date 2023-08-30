@@ -22,7 +22,7 @@ async function populateRole() {
     )
 
     console.log('Role populated successfully.')
-    console.log('Roles inserted:', insertedRoles)
+    // console.log('Roles inserted:', insertedRoles)
   } catch (error) {
     console.error('Error populating roles:', error)
     throw error

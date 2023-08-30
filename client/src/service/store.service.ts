@@ -1,31 +1,21 @@
 import { Account } from '@/models/Account'
-import { EncodedWorkspace, Workspace } from '@/models/Workspace'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
 import useUserStore from '@/stores/userStore'
 import useWorkspaceStore from '@/stores/workspaceStore'
-import { codeService } from './code.service'
 
 function saveAccount(account: Account) {
   console.log('storeService - saveAccount, account :', account)
 
-  const { isComplete, user, workspaces } = account
+  const { isComplete, user, workspace } = account
 
   useAccountStore.getState().setIsComplete(isComplete)
   useUserStore.getState().setUser(user)
-  if (workspaces) {
-    console.log('storeService - saveAccount, workspaces :', workspaces)
 
-    const decodedWorkspace = codeService.decodeWorkspace(
-      workspaces as EncodedWorkspace[]
-    )
+  if (workspace) {
+    console.log('storeService - saveAccount, workspace :', workspace)
 
-    // pick the first workspace as active
-    const activeWorkspace = decodedWorkspace[0]
-    useWorkspaceStore.getState().setWorkspaces(decodedWorkspace as Workspace[])
-    useWorkspaceStore
-      .getState()
-      .setActiveWorkspace(activeWorkspace as Workspace)
+    useWorkspaceStore.getState().setWorkspace(workspace)
   }
 }
 
@@ -46,7 +36,7 @@ function clearStoreStates() {
 
   useAccountStore.getState().resetIsComplete()
   useUserStore.getState().clearUser()
-  useWorkspaceStore.getState().clearWorkspaces()
+  useWorkspaceStore.getState().clearWorkspace()
   useAuthStore.getState().clearToken()
   useAuthStore.getState().setAsUnauthenticated()
 }
