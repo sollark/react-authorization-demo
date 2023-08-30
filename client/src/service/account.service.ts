@@ -1,6 +1,6 @@
 import { Account } from '@/models/Account'
 import { Company } from '@/models/Company'
-import { User } from '@/models/User'
+import { User } from '@/models/Profile'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 

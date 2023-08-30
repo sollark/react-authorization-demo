@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { Company, CompanySchema } from './Company'
 
-export interface Workspace {
+export type Workspace = {
   company: Company
 }
 

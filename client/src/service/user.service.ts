@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 import { httpService } from './axios/http.service'
-import { User } from '../models/User'
+import { User } from '../models/Profile'
 
 export const userService = {
   getAccounts,

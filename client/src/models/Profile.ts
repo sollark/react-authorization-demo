@@ -1,12 +1,11 @@
-import { REGEX } from '@/config/regex'
 import { z } from 'zod'
 
-export interface User {
+export type Profile = {
   firstName: string
   lastName: string
 }
 
-export const UserDetailsSchema = z.object({
+export const ProfileDetailsSchema = z.object({
   firstName: z
     .string()
     .trim()

@@ -1,8 +1,12 @@
 import { z } from 'zod'
+import { Department } from './Departament'
+import { Employee } from './Employee'
 
-export interface Company {
+export type Company = {
   companyName: string
   companyCode: string
+  departments?: Department[]
+  employees?: Employee[]
 }
 
 export const CompanySchema = z.object({
