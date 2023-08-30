@@ -1,18 +1,13 @@
 import { z } from 'zod'
 
-export type RoleCode = '0000' | '1001' | '1010' | '1100' | '1110'
-export type RoleName = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
-
-export type Role = {
-  role: RoleName
-}
+export type Role = 'Guest' | 'Employee' | 'Manager' | 'Supervisor' | 'Admin'
 
 export const USER_ROLE = {
-  Guest: 'Guest' as RoleName,
-  Employee: 'Employee' as RoleName,
-  Manager: 'Manager' as RoleName,
-  Supervisor: 'Supervisor' as RoleName,
-  Admin: 'Admin' as RoleName,
+  Guest: 'Guest' as Role,
+  Employee: 'Employee' as Role,
+  Manager: 'Manager' as Role,
+  Supervisor: 'Supervisor' as Role,
+  Admin: 'Admin' as Role,
 }
 
 export const userRoleSchema = z.enum([

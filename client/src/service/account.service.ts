@@ -1,6 +1,6 @@
 import { Account } from '@/models/Account'
 import { Company } from '@/models/Company'
-import { User } from '@/models/Profile'
+import { Profile } from '@/models/Profile'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
@@ -10,7 +10,7 @@ async function updateAccount(
   companyName?: string,
   companyCode?: string
 ) {
-  const response = await httpService.post<User & Partial<Company>, Account>(
+  const response = await httpService.post<Profile & Partial<Company>, Account>(
     'account/update',
     {
       firstName,

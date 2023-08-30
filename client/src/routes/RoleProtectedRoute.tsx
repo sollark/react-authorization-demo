@@ -1,12 +1,11 @@
-import { RoleName } from '@/models/Role'
+import { Role } from '@/models/Role'
 import UnauthorizedPage from '@/pages/UnauthorizedPage'
-import { codeService } from '@/service/code.service'
 import useRoleStore from '@/stores/roleStore'
 import { ReactNode } from 'react'
 
 interface RoleProtectedRouteProps {
   children: ReactNode
-  allowed: RoleName[]
+  allowed: Role[]
 }
 
 const RoleProtectedRoute = ({
@@ -15,10 +14,11 @@ const RoleProtectedRoute = ({
 }: RoleProtectedRouteProps): JSX.Element => {
   console.log('RoleProtectedRoute, allowed: ', allowed)
 
-  const encodedRoles = useRoleStore((state) => state.roles)
-  const decodedRoles = codeService.decodeRoles(encodedRoles)
+  const userRole = useRoleStore((state) => state.role)
 
-  const isAccessAllowed = allowed.some((role) => decodedRoles?.includes(role))
+  const isAccessAllowed = allowed.some(
+    (allowedRole) => allowedRole === userRole
+  )
   console.log('RoleProtectedRoute, isAccessAllowed: ', isAccessAllowed)
   return <>{isAccessAllowed ? children : <UnauthorizedPage />}</>
 }

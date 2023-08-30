@@ -1,7 +1,7 @@
 import { CompanySchema } from '@/models/Company'
 import { UserDetailsSchema } from '@/models/Profile'
 import { accountService } from '@/service/account.service'
-import useUserStore from '@/stores/userStore'
+import useUserStore from '@/stores/profileStore'
 import { useNavigate } from '@tanstack/router'
 import { FC, ReactElement } from 'react'
 import { z } from 'zod'

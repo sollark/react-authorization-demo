@@ -4,7 +4,7 @@ import Logo from './logo/Logo'
 import MenuIcon from './menu/MenuIcon'
 import MobileMenu from './menu/MobileMenu'
 import SiteNavigation from './menu/SiteNavigation'
-import User from './user/User'
+import User from './user/Profile'
 
 const Header: FC = () => {
   console.log('Header connected')

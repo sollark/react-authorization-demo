@@ -19,7 +19,7 @@ async function getAccess() {
 
   const { accessToken } = getAccessResponse as any
   storeService.saveAccessToken(accessToken)
-  storeService.setUserAsAuthenticated()
+  storeService.setProfileAsAuthenticated()
 }
 
 async function registration(email: string, password: string) {
@@ -34,7 +34,7 @@ async function registration(email: string, password: string) {
   const { accessToken } = registrationResponse as any
   if (accessToken) {
     storeService.saveAccessToken(accessToken)
-    storeService.setUserAsAuthenticated()
+    storeService.setProfileAsAuthenticated()
   }
 
   const account = await accountService.getAccount()
@@ -57,7 +57,7 @@ async function signIn(email: string, password: string) {
 
   if (accessToken) {
     storeService.saveAccessToken(accessToken)
-    storeService.setUserAsAuthenticated()
+    storeService.setProfileAsAuthenticated()
   }
 
   const account = await accountService.getAccount()
@@ -89,7 +89,7 @@ async function refreshTokens() {
   const { accessToken } = refreshResponse as any
   if (accessToken) {
     storeService.saveAccessToken(accessToken)
-    storeService.setUserAsAuthenticated()
+    storeService.setProfileAsAuthenticated()
   }
 
   const account = await accountService.getAccount()
