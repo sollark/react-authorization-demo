@@ -2,6 +2,8 @@ import CompanyModel, {
   Company,
   CompanyCode,
 } from '../mongodb/models/company.model.js'
+import { Department } from '../mongodb/models/department.model.js'
+import { Employee } from '../mongodb/models/employee.model.js'
 import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
@@ -47,6 +49,10 @@ const updateCompany = async (
     { name },
     { new: true }
   )
+    .populate<{ departments: Department[] }>('departments')
+    .populate<{ employees: Employee[] }>('employees')
+    .lean()
+    .exec()
 
   loggerService.info(`company.service - company updated ${company}`)
 

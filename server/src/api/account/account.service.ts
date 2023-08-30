@@ -59,8 +59,8 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
       populate: [
         { path: 'company' },
         { path: 'department' },
-        { path: 'supervisor' },
-        { path: 'subordinates' },
+        // { path: 'supervisor' },
+        // { path: 'subordinates' },
       ],
     })
     .populate<{ status: Status }>('status')
@@ -93,7 +93,7 @@ async function addWorkspace(
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOneAndUpdate(
     { identifier },
-    { $push: { workspaces: workspaceId } },
+    { $push: { workspace: workspaceId } },
     { new: true }
   )
     .populate<{ user: Profile }>('user')
@@ -103,8 +103,8 @@ async function addWorkspace(
       populate: [
         { path: 'company' },
         { path: 'department' },
-        { path: 'supervisor' },
-        { path: 'subordinates' },
+        // { path: 'supervisor' },
+        // { path: 'subordinates' },
       ],
     })
     .populate<{ status: Status }>('status')
@@ -129,8 +129,8 @@ async function completeAccount(
       populate: [
         { path: 'company' },
         { path: 'department' },
-        { path: 'supervisor' },
-        { path: 'subordinates' },
+        // { path: 'supervisor' },
+        // { path: 'subordinates' },
       ],
     })
     .populate<{ status: Status }>('status')

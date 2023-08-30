@@ -16,7 +16,7 @@ export async function updateAccount(
   const identifier = getIdentifierFromALS()
   const account: Account = req.body
 
-  console.log('updateAccount account, account: ', account)
+  console.log('updateAccount, account: ', account)
 
   const [updatedUserData, updatedWorkspaceData, updatedCompanyData] =
     accountService.sortAccountData(account)

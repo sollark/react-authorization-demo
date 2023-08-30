@@ -15,7 +15,7 @@ export type Account = {
   identifier: Types.ObjectId
   user: Profile
   role?: Role
-  workspace: Workspace
+  workspace?: Workspace
   isComplete: boolean
   status: Status
 }
