@@ -27,13 +27,13 @@ async function registration(credentials: Credentials) {
   const auth = await authModel.create({ email, password: hashPassword })
   logger.info(`auth.service - new authentication created: ${email}`)
 
-  // // generate tokens
+  // generate tokens
   const { accessToken, refreshToken } = await generateTokens(auth.uuid)
 
   // save refresh token to db
   await tokenService.saveToken(auth._id, refreshToken)
 
-  //create new user and account
+  // create new user and new account
   const user = await userService.createUser(auth._id)
   const account = await accountService.createAccount(auth._id, user._id)
 
@@ -88,7 +88,7 @@ const refresh = async (refreshToken: string) => {
     throw new UnauthorizedError('Invalid refresh token')
   }
 
-  // find user
+  // find token
   const tokenData = await TokenModel.findOne({ refreshToken })
     .select('identifier')
     .lean()
@@ -111,9 +111,7 @@ const getAccess = async (refreshToken: string) => {
   const payload = await tokenService.validateRefreshToken(refreshToken)
   const tokenFromDb = await tokenService.getToken(refreshToken)
 
-  if (!payload || !tokenFromDb) {
-    return
-  }
+  if (!payload || !tokenFromDb) return
 
   // find user
   const tokenData = await TokenModel.findOne({ refreshToken })

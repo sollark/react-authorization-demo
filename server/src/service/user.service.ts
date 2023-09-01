@@ -4,9 +4,7 @@ import ProfileModel, { Profile } from '../mongodb/models/profile.model.js'
 import loggerService from './logger.service.js'
 
 async function createUser(identifier: Types.ObjectId) {
-  const user = await ProfileModel.create({
-    identifier,
-  })
+  const user = await ProfileModel.create({ identifier })
 
   loggerService.info(`user.service - user added: ${user}`)
 
