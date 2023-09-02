@@ -1,5 +1,5 @@
 import { Profile } from './Profile'
-import { Role } from './Role'
+import { UserRole } from './Role'
 import { Workspace } from './Workspace'
 
 export const ACCOUNT_STATUS = {
@@ -14,6 +14,6 @@ export type Account = {
   profile: Profile
   workspace?: Workspace
   isComplete: boolean
-  role?: Role
+  role: UserRole
   status: Status
 }

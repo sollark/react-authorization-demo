@@ -10,6 +10,10 @@ export const USER_ROLE = {
   Admin: 'Admin' as Role,
 }
 
+export type UserRole = {
+  role: Role
+}
+
 export const userRoleSchema = z.enum([
   'Guest',
   'User',

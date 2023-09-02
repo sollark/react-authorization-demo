@@ -2,15 +2,17 @@ import { Account } from '@/models/Account'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
 import useProfileStore from '@/stores/profileStore'
+import useRoleStore from '@/stores/roleStore'
 import useWorkspaceStore from '@/stores/workspaceStore'
 
 function saveAccount(account: Account) {
   console.log('storeService - saveAccount, account :', account)
 
-  const { isComplete, profile, workspace } = account
+  const { isComplete, profile, workspace, role } = account
 
   useAccountStore.getState().setIsComplete(isComplete)
   useProfileStore.getState().setProfile(profile)
+  useRoleStore.getState().setRole(role.role)
 
   if (workspace) {
     console.log('storeService - saveAccount, workspace :', workspace)
