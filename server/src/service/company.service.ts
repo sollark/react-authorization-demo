@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import CompanyModel, {
   Company,
   CompanyCode,
@@ -7,7 +8,7 @@ import { Profile } from '../mongodb/models/profile.model.js'
 import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
-const createCompany = async (name: string) => {
+async function createCompany(name: string) {
   const code = await generateCompanyCode()
 
   const company = await CompanyModel.create({
@@ -20,7 +21,7 @@ const createCompany = async (name: string) => {
   return company
 }
 
-const isCompanyCodeExists = async (company: string) => {
+async function isCompanyCodeExists(company: string) {
   if (!utilService.convertToNumber(company)) return false
 
   const companyCode = await CompanyModel.findOne({
@@ -32,18 +33,63 @@ const isCompanyCodeExists = async (company: string) => {
   return true
 }
 
-const getCompany = async (code: CompanyCode) => {
+async function getBasicCompanyDetails(code: CompanyCode) {
   const company = await CompanyModel.findOne({ code })
+    .select('companyName companyCode')
+    .lean()
+    .exec()
 
   loggerService.info(`company.service - company fetched ${company}`)
 
   return company
 }
 
-const updateCompany = async (
+async function getCompany(code: CompanyCode) {
+  const company = await CompanyModel.findOne({ code }).lean().exec()
+
+  loggerService.info(`company.service - company fetched ${company}`)
+
+  return company
+}
+
+async function addDepartment(
+  code: CompanyCode,
+  departmentId: Types.ObjectId
+): Promise<Company | null> {
+  const company = await CompanyModel.findOneAndUpdate(
+    { code },
+    { $push: { departments: departmentId } },
+    { new: true }
+  )
+    .populate<{ departments: Department[] }>('departments')
+    .populate<{ employees: Profile[] }>('employees')
+    .lean()
+    .exec()
+
+  return company
+}
+
+async function addEmployee(
+  code: CompanyCode,
+  employeeId: Types.ObjectId
+): Promise<Company | null> {
+  const company = await CompanyModel.findOneAndUpdate(
+    { code },
+    { $push: { employees: employeeId } },
+    { new: true }
+  )
+    .populate<{ departments: Department[] }>('departments')
+    .populate<{ employees: Profile[] }>('employees')
+    .lean()
+    .exec()
+
+  return company
+}
+
+async function updateCompany(
   code: number,
   name: string
-): Promise<Company | null> => {
+): Promise<Company | null> {
   const company = await CompanyModel.findOneAndUpdate(
     { code },
     { name },
@@ -59,14 +105,17 @@ const updateCompany = async (
   return company
 }
 
-const deleteCompany = async (companyCode: string): Promise<void> => {
-  await CompanyModel.deleteOne({ companyCode })
+async function deleteCompany(companyCode: string): Promise<void> {
+  await CompanyModel.deleteOne({ companyCode }).exec()
 }
 
 export const companyService = {
   isCompanyCodeExists,
   createCompany,
+  getBasicCompanyDetails,
   getCompany,
+  addDepartment,
+  addEmployee,
   updateCompany,
   deleteCompany,
 }
