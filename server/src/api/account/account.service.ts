@@ -14,11 +14,11 @@ import logger from '../../service/logger.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
-  userId: Types.ObjectId
+  profileId: Types.ObjectId
 ): Promise<Partial<Account>> {
   const accountRef = await AccountModel.create({
     identifier,
-    user: userId,
+    profile: profileId,
   })
 
   if (!accountRef) {
@@ -52,15 +52,16 @@ async function createAccount(
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
-    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ workspace: Workspace }>({
       path: 'workspace',
       populate: [
         { path: 'company' },
         { path: 'department' },
-        // { path: 'supervisor' },
-        // { path: 'subordinates' },
+        { path: 'employee' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
       ],
     })
     .populate<{ status: Status }>('status')
@@ -96,15 +97,16 @@ async function addWorkspace(
     { $push: { workspace: workspaceId } },
     { new: true }
   )
-    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ workspace: Workspace }>({
       path: 'workspace',
       populate: [
         { path: 'company' },
         { path: 'department' },
-        // { path: 'supervisor' },
-        // { path: 'subordinates' },
+        { path: 'employee' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
       ],
     })
     .populate<{ status: Status }>('status')
@@ -122,15 +124,16 @@ async function completeAccount(
     { isComplete: true },
     { new: true }
   )
-    .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ workspace: Workspace }>({
       path: 'workspace',
       populate: [
         { path: 'company' },
         { path: 'department' },
-        // { path: 'supervisor' },
-        // { path: 'subordinates' },
+        { path: 'employee' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
       ],
     })
     .populate<{ status: Status }>('status')
@@ -156,19 +159,19 @@ async function completeAccount(
 function sortAccountData(
   accountData: any
 ): [
-  updatedUserData: Object,
+  updatedProfileData: Object,
   updatedWorkspaceData: Object,
   updatedCompanyData: Object
 ] {
-  const userSchemaKeys = Object.keys(ProfileModel.schema.paths)
+  const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
   const workspaceSchemaKeys = Object.keys(WorkspaceRefModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
 
-  const { updatedUserData, updatedWorkspaceData, updatedCompanyData } =
+  const { updatedProfileData, updatedWorkspaceData, updatedCompanyData } =
     Object.entries(accountData).reduce(
       (accumulator: any, [key, value]) => {
-        if (userSchemaKeys.includes(key)) {
-          accumulator.updatedUserData[key] = value
+        if (profileSchemaKeys.includes(key)) {
+          accumulator.updatedProfileData[key] = value
         } else if (workspaceSchemaKeys.includes(key)) {
           accumulator.updatedWorkspaceData[key] = value
         } else if (companySchemaKeys.includes(key)) {
@@ -177,13 +180,13 @@ function sortAccountData(
         return accumulator
       },
       {
-        updatedUserData: {},
+        updatedProfileData: {},
         updatedWorkspaceData: {},
         updatedCompanyData: {},
       }
     )
 
-  return [updatedUserData, updatedWorkspaceData, updatedCompanyData]
+  return [updatedProfileData, updatedWorkspaceData, updatedCompanyData]
 }
 
 export const accountService = {
