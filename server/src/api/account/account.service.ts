@@ -6,7 +6,7 @@ import AccountModel, {
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
-import { Role } from '../../mongodb/models/role.model.js'
+import RoleModel, { Role } from '../../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../../mongodb/models/workspace.model.js'
@@ -48,6 +48,16 @@ async function createAccount(
   )
 
   return account
+}
+
+async function setRole(identifier: Types.ObjectId, role: Role) {
+  const roleDoc = await RoleModel.findOne({ role }).exec()
+
+  const account = await AccountModel.findOneAndUpdate(
+    { identifier },
+    { role: roleDoc?._id },
+    { new: true }
+  ).exec()
 }
 
 async function getAccount(identifier: Types.ObjectId): Promise<Account> {
@@ -191,6 +201,7 @@ function sortAccountData(
 
 export const accountService = {
   createAccount,
+  setRole,
   getAccount,
   deleteAccount,
   addWorkspace,

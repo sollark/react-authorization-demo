@@ -43,7 +43,7 @@ async function createWorkspace(
   }
 
   logger.info(
-    `workspace.service - new workspace added: ${JSON.stringify(
+    `workspaceService - new workspace added: ${JSON.stringify(
       workspace,
       null,
       2 // Indentation level, adjust as needed

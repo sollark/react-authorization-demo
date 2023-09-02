@@ -6,6 +6,7 @@ import { getIdentifierFromALS } from '../../service/als.service.js'
 import { profileService } from '../../service/profile.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
+import { USER_ROLE } from '../../mongodb/models/role.model.js'
 
 // TODO updateAccount does not return workspace
 export async function updateAccount(
@@ -37,14 +38,22 @@ export async function updateAccount(
   const { companyName, companyCode } = updatedCompanyData as Partial<Company>
 
   let workspace: any = null
-  if (companyCode)
+  if (companyCode) {
     workspace = await workspaceService.joinExistingCompany(
       identifier,
       companyCode
     )
 
-  if (companyName)
+    // when joining existing company, set role to user
+    await accountService.setRole(identifier, USER_ROLE.User)
+  }
+
+  if (companyName) {
     workspace = await workspaceService.joinNewCompany(identifier, companyName)
+
+    // when joining new company, set role to manager
+    await accountService.setRole(identifier, USER_ROLE.Manager)
+  }
 
   const updatedAccount = await accountService.addWorkspace(
     identifier,
