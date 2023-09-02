@@ -40,9 +40,9 @@ async function deleteProfile(identifier: Types.ObjectId): Promise<void> {
   await ProfileModel.deleteOne({ identifier })
 }
 
-const getProfileId = async (
+async function getProfileId(
   identifier: Types.ObjectId
-): Promise<Types.ObjectId> => {
+): Promise<Types.ObjectId> {
   const profile = await ProfileModel.findOne({ identifier })
   if (!profile) {
     loggerService.warn(`profile.service - profile is not found: ${identifier}`)

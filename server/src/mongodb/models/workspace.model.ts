@@ -7,6 +7,7 @@ export type Workspace = {
   company: Company
   department?: Department
   position?: string
+  employee: Profile
   supervisor?: Profile
   subordinates?: Profile[]
 }
@@ -15,6 +16,7 @@ export type WorkspaceRef = {
   company: Types.ObjectId
   department?: Types.ObjectId
   position?: string
+  employee: Types.ObjectId
   supervisor?: Types.ObjectId
   subordinates?: Types.ObjectId[]
 }
@@ -29,6 +31,11 @@ const WorkspaceSchema = new Schema({
     ref: 'Department',
   },
   position: { type: String },
+  employee: {
+    type: Schema.Types.ObjectId,
+    ref: 'Profile',
+    required: true,
+  },
   supervisor: {
     type: Schema.Types.ObjectId,
     ref: 'Profile',
@@ -41,5 +48,5 @@ const WorkspaceSchema = new Schema({
   ],
 })
 
-const WorkspaceRefModel = model<WorkspaceRef>('Workspace', WorkspaceSchema)
-export default WorkspaceRefModel
+const WorkspaceModel = model<WorkspaceRef>('Workspace', WorkspaceSchema)
+export default WorkspaceModel
