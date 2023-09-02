@@ -1,19 +1,19 @@
 import { Schema, Types, model } from 'mongoose'
 import { Company } from './company.model.js'
 import { Department } from './department.model.js'
-import { Employee } from './employee.model.js'
+import { Profile } from './profile.model.js'
 
 export type Workspace = {
   company: Company
-  department: Department
+  department?: Department
   position?: string
-  supervisor?: Employee
-  subordinates?: Employee[]
+  supervisor?: Profile
+  subordinates?: Profile[]
 }
 
 export type WorkspaceRef = {
   company: Types.ObjectId
-  department: Types.ObjectId
+  department?: Types.ObjectId
   position?: string
   supervisor?: Types.ObjectId
   subordinates?: Types.ObjectId[]
@@ -31,12 +31,12 @@ const WorkspaceSchema = new Schema({
   position: { type: String },
   supervisor: {
     type: Schema.Types.ObjectId,
-    ref: 'Employee',
+    ref: 'Profile',
   },
   subordinates: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Employee',
+      ref: 'Profile',
     },
   ],
 })

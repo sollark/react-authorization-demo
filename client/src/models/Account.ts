@@ -12,8 +12,8 @@ export type Status = keyof typeof ACCOUNT_STATUS
 
 export type Account = {
   profile: Profile
-  role?: Role
   workspace?: Workspace
   isComplete: boolean
+  role?: Role
   status: Status
 }

@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { Department } from './Departament'
-import { Employee } from './Employee'
+import { Department } from './Department'
+import { Profile } from './Profile'
 
 export type Company = {
   companyName: string
   companyCode: string
   departments?: Department[]
-  employees?: Employee[]
+  employees?: Profile[]
 }
 
 export const CompanySchema = z.object({
