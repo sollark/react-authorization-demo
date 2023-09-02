@@ -173,6 +173,7 @@ async function updateWorkspace(
 }
 export const workspaceService = {
   createWorkspace,
+  getBasicWorkspaceDetails,
   getWorkspace,
   joinExistingCompany,
   joinNewCompany,
