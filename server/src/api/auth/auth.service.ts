@@ -6,7 +6,7 @@ import TokenModel from '../../mongodb/models/token.model.js'
 import logger from '../../service/logger.service.js'
 import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
-import { userService } from '../../service/user.service.js'
+import { userService } from '../../service/profile.service.js'
 import { accountService } from '../account/account.service.js'
 
 async function registration(credentials: Credentials) {

@@ -3,7 +3,7 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
-import { userService } from '../../service/user.service.js'
+import { profileService } from '../../service/profile.service.js'
 import { workspaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
 
@@ -18,14 +18,17 @@ export async function updateAccount(
 
   console.log('updateAccount, account: ', account)
 
-  const [updatedUserData, updatedWorkspaceData, updatedCompanyData] =
+  const [updatedProfileData, updatedWorkspaceData, updatedCompanyData] =
     accountService.sortAccountData(account)
 
-  console.log('updateAccount, updatedUserData: ', updatedUserData)
+  console.log('updateAccount, updatedProfileData: ', updatedProfileData)
   console.log('updateAccount, updatedWorkspaceData: ', updatedWorkspaceData)
   console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
 
-  const updatedUser = await userService.updateUser(identifier, updatedUserData)
+  const updatedProfile = await profileService.updateProfile(
+    identifier,
+    updatedProfileData
+  )
   const updatedWorkspace = await workspaceService.updateWorkspace(
     identifier,
     updatedWorkspaceData
