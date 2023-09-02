@@ -18,7 +18,7 @@ export async function registration(
     httpOnly: true,
   })
 
-  // send account and access token to the client
+  // send access token to the client
   res.status(200).json({ accessToken })
 }
 
@@ -33,7 +33,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     httpOnly: true,
   })
 
-  // send account and access token to the client
+  // send access token to the client
   res.status(200).json({ accessToken })
 }
 
