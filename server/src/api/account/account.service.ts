@@ -6,7 +6,7 @@ import AccountModel, {
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
-import RoleModel, { Role } from '../../mongodb/models/role.model.js'
+import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import WorkspaceRefModel, {
   Workspace,
 } from '../../mongodb/models/workspace.model.js'
@@ -16,9 +16,13 @@ async function createAccount(
   identifier: Types.ObjectId,
   profileId: Types.ObjectId
 ): Promise<Partial<Account>> {
+  const role = USER_ROLE.User
+  const roleDoc = await RoleModel.findOne({ role }).exec()
+
   const accountRef = await AccountModel.create({
     identifier,
     profile: profileId,
+    role: roleDoc?._id,
   })
 
   if (!accountRef) {
@@ -104,7 +108,7 @@ async function addWorkspace(
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOneAndUpdate(
     { identifier },
-    { $push: { workspace: workspaceId } },
+    { $set: { workspace: workspaceId } },
     { new: true }
   )
     .populate<{ role: Role }>('role')

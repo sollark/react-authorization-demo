@@ -12,6 +12,7 @@ function saveAccount(account: Account) {
 
   useAccountStore.getState().setIsComplete(isComplete)
   useProfileStore.getState().setProfile(profile)
+  // useRoleStore.getState().setRole(role?.role ?? USER_ROLE.User)
   useRoleStore.getState().setRole(role.role)
 
   if (workspace) {

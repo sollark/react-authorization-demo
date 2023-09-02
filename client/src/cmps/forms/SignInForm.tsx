@@ -48,7 +48,7 @@ const SignInForm: FC = () => {
       if (account?.isComplete) navigate({ to: '/' })
       else navigate({ to: '/account/edit' })
     } catch (error: any) {
-      // console.log('in SignInForm', error)
+      console.log('in SignInForm', error)
       setErrorMessage(error.response?.data?.errors[0]?.message)
     }
   }

@@ -61,6 +61,7 @@ const RegistrationForm = () => {
       if (account?.isComplete) navigate({ to: '/' })
       else navigate({ to: '/account/edit' })
     } catch (error: any) {
+      console.log(error)
       setErrorMessage(error.response.data.errors[0].message)
     }
   }
