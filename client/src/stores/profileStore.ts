@@ -4,14 +4,14 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-type ProfileState = {
+type UserState = {
   profile: Profile | null
   setProfile: (profile: Profile) => void
   clearProfile: () => void
 }
 
 // Create a store with initial state
-const useProfileStore = create<ProfileState>()(
+const useUserStore = create<UserState>()(
   zustandLogger(
     persist(
       devtools(
@@ -21,12 +21,12 @@ const useProfileStore = create<ProfileState>()(
           clearProfile: () => set(() => ({ profile: null })),
         }))
       ),
-      { name: 'profile-storage' }
+      { name: 'user-storage' }
     )
   )
 )
 
-export default useProfileStore
+export default useUserStore
 
 // getter:
 // const { profile } = useProfileStore()

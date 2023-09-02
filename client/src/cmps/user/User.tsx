@@ -1,5 +1,5 @@
 import { authService } from '@/service/auth.service'
-import useUserStore from '@/stores/userStore'
+import useUserStore from '@/stores/profileStore'
 import {
   Avatar,
   IconButton,
@@ -44,24 +44,24 @@ const User = (props: UserProps) => {
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
   const [initials, setInitials] = useState('Guest') // State to hold the initials
 
-  const user = useUserStore((state) => state.user)
+  const profile = useUserStore((state) => state.profile)
 
-  // build user menu
+  // build profile menu
   useEffect(() => {
     // Avatar menu
     menu.length = 0
 
-    if (user) menu.push(...userMenu)
+    if (profile) menu.push(...userMenu)
     else menu.push(...guestMenu)
 
     // Avatar initials
-    if (user && user.firstName.length && user.lastName.length)
+    if (profile && profile.firstName.length && profile.lastName.length)
       setInitials(
-        user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()
+        profile.firstName[0].toUpperCase() + profile.lastName[0].toUpperCase()
       )
-    else if (user) setInitials('')
+    else if (profile) setInitials('')
     else setInitials('Guest')
-  }, [user])
+  }, [profile])
 
   return (
     <>

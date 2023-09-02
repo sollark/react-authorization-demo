@@ -4,7 +4,7 @@ import Logo from './logo/Logo'
 import MenuIcon from './menu/MenuIcon'
 import MobileMenu from './menu/MobileMenu'
 import SiteNavigation from './menu/SiteNavigation'
-import User from './user/Profile'
+import User from './user/User'
 
 const Header: FC = () => {
   console.log('Header connected')
@@ -58,7 +58,7 @@ const Header: FC = () => {
               <SiteNavigation handleCloseNavMenu={handleCloseNavMenu} />
             </Box>
 
-            {/* User section  */}
+            {/* Profile section  */}
             <Box sx={{ flexGrow: 0 }}>
               <User
                 handleOpenUserMenu={handleOpenUserMenu}

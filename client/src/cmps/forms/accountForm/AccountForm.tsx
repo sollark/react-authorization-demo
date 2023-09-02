@@ -1,5 +1,5 @@
 import { CompanySchema } from '@/models/Company'
-import { UserDetailsSchema } from '@/models/Profile'
+import { ProfileDetailsSchema } from '@/models/Profile'
 import { accountService } from '@/service/account.service'
 import useUserStore from '@/stores/profileStore'
 import { useNavigate } from '@tanstack/router'
@@ -12,17 +12,20 @@ interface Props {
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
-const AccountSchema = z.object({}).merge(UserDetailsSchema).merge(CompanySchema)
+const AccountSchema = z
+  .object({})
+  .merge(ProfileDetailsSchema)
+  .merge(CompanySchema)
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
   const navigate = useNavigate()
 
-  const user = useUserStore((state) => state.user)
+  const profile = useUserStore((state) => state.profile)
 
   const defaultValues = {
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
+    firstName: profile?.firstName || '',
+    lastName: profile?.lastName || '',
     company: '',
   }
 
