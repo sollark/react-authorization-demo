@@ -16,7 +16,7 @@ async function createCompany(name: string) {
     companyName: name,
   })
 
-  loggerService.info(`company.service - company added: ${company}`)
+  loggerService.info(`companyService - company added: ${company}`)
 
   return company
 }
@@ -39,7 +39,7 @@ async function getBasicCompanyDetails(code: CompanyCode) {
     .lean()
     .exec()
 
-  loggerService.info(`company.service - company fetched ${company}`)
+  loggerService.info(`companyService - company fetched ${company}`)
 
   return company
 }
@@ -47,7 +47,7 @@ async function getBasicCompanyDetails(code: CompanyCode) {
 async function getCompany(code: CompanyCode) {
   const company = await CompanyModel.findOne({ code }).lean().exec()
 
-  loggerService.info(`company.service - company fetched ${company}`)
+  loggerService.info(`companyService - company fetched ${company}`)
 
   return company
 }
@@ -100,7 +100,7 @@ async function updateCompany(
     .lean()
     .exec()
 
-  loggerService.info(`company.service - company updated ${company}`)
+  loggerService.info(`companyService - company updated ${company}`)
 
   return company
 }

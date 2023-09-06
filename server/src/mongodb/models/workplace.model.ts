@@ -39,16 +39,12 @@ const WorkplaceSchema = new Schema({
     ref: 'Profile',
     required: true,
   },
-  supervisor: {
-    type: Schema.Types.ObjectId,
-    ref: 'Workplace',
-  },
-  subordinates: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Workplace',
-    },
-  ],
+})
+
+// it cant be inside WorkplaceSchema because it will cause circular dependency, so it has to be defined outside
+WorkplaceSchema.add({
+  supervisor: WorkplaceSchema,
+  subordinates: [WorkplaceSchema],
 })
 
 const WorkplaceModel = model<WorkplaceRef>('workplace', WorkplaceSchema)

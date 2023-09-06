@@ -3,11 +3,7 @@ import BadRequestError from '../errors/BadRequestError.js'
 import { Company, CompanyCode } from '../mongodb/models/company.model.js'
 import { Department } from '../mongodb/models/department.model.js'
 import { Profile } from '../mongodb/models/profile.model.js'
-import {
-  Workplace,
-  default as WorkplaceModel,
-  default as WorkplaceRefModel,
-} from '../mongodb/models/workplace.model.js'
+import WorkplaceModel, { Workplace } from '../mongodb/models/workplace.model.js'
 import { companyService } from './company.service.js'
 import logger from './logger.service.js'
 
@@ -16,7 +12,7 @@ async function createWorkplace(
   companyId: Types.ObjectId
 ): Promise<Workplace | null> {
   // Create a new workplace
-  const workplaceRef = await WorkplaceRefModel.create({
+  const workplaceRef = await WorkplaceModel.create({
     employee: employeeId,
     company: companyId,
   })
@@ -26,7 +22,8 @@ async function createWorkplace(
     throw new BadRequestError('workplace creation failed')
   }
 
-  const workplace = await WorkplaceRefModel.findById(workplaceRef._id)
+  console.log('22222', workplaceRef)
+  const workplace = await WorkplaceModel.findById(workplaceRef._id)
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
@@ -34,6 +31,8 @@ async function createWorkplace(
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
+
+  console.log('333333')
 
   if (!workplace) {
     logger.warn(
@@ -72,7 +71,7 @@ async function getBasicWorkplaceDetails(
 async function getWorkplace(
   companyId: Types.ObjectId
 ): Promise<Workplace | null> {
-  const workplace = await WorkplaceRefModel.findOne({
+  const workplace = await WorkplaceModel.findOne({
     company: companyId,
   })
     .populate<{ company: Company }>('company')
