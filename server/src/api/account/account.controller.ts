@@ -60,8 +60,6 @@ export async function updateAccount(
     workplace._id
   )
 
-  console.log('111111')
-
   if (!updatedAccount) {
     throw new BadRequestError('Cannot update account')
   }
