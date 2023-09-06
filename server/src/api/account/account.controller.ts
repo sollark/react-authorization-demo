@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
+import { USER_ROLE } from '../../mongodb/models/role.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { profileService } from '../../service/profile.service.js'
-import { workplaceService } from '../../service/workplace.service.js'
+import { workplaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
-import { USER_ROLE } from '../../mongodb/models/role.model.js'
 
 // TODO updateAccount does not return workplace
 export async function updateAccount(
