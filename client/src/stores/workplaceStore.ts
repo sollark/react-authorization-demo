@@ -1,4 +1,4 @@
-import { workplace } from '@/models/workplace'
+import { workplace } from '@/models/Workplace'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
