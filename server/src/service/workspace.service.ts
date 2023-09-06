@@ -4,7 +4,7 @@ import { Company, CompanyCode } from '../mongodb/models/company.model.js'
 import { Department } from '../mongodb/models/department.model.js'
 import { Profile } from '../mongodb/models/profile.model.js'
 import {
-  workplace,
+  Workplace,
   default as WorkplaceModel,
   default as WorkplaceRefModel,
 } from '../mongodb/models/workplace.model.js'
@@ -14,7 +14,7 @@ import logger from './logger.service.js'
 async function createWorkplace(
   employeeId: Types.ObjectId,
   companyId: Types.ObjectId
-): Promise<workplace | null> {
+): Promise<Workplace | null> {
   // Create a new workplace
   const workplaceRef = await WorkplaceRefModel.create({
     employee: employeeId,
@@ -30,8 +30,8 @@ async function createWorkplace(
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
-    .populate<{ supervisor: Profile }>('supervisor')
-    .populate<{ subordinates: Profile[] }>('subordinates')
+    .populate<{ supervisor: Workplace }>('supervisor')
+    .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
 
@@ -55,14 +55,14 @@ async function createWorkplace(
 
 async function getBasicWorkplaceDetails(
   workplaceId: Types.ObjectId
-): Promise<Partial<workplace> | null> {
+): Promise<Partial<Workplace> | null> {
   const workplace = await WorkplaceModel.findById(workplaceId)
     .select('company department position')
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
-    .populate<{ supervisor: Profile }>('supervisor')
-    .populate<{ subordinates: Profile[] }>('subordinates')
+    .populate<{ supervisor: Workplace }>('supervisor')
+    .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
 
@@ -71,15 +71,15 @@ async function getBasicWorkplaceDetails(
 
 async function getWorkplace(
   companyId: Types.ObjectId
-): Promise<workplace | null> {
+): Promise<Workplace | null> {
   const workplace = await WorkplaceRefModel.findOne({
     company: companyId,
   })
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
-    .populate<{ supervisor: Profile }>('supervisor')
-    .populate<{ subordinates: Profile[] }>('subordinates')
+    .populate<{ supervisor: Workplace }>('supervisor')
+    .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
 
@@ -112,7 +112,7 @@ async function joinNewCompany(identifier: Types.ObjectId, name: string) {
 async function setSupervisor(
   employeeId: Types.ObjectId,
   supervisorId: Types.ObjectId
-): Promise<workplace | null> {
+): Promise<Workplace | null> {
   const employeeWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: employeeId },
     { supervisor: supervisorId },
@@ -121,8 +121,8 @@ async function setSupervisor(
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
-    .populate<{ supervisor: Profile }>('supervisor')
-    .populate<{ subordinates: Profile[] }>('subordinates')
+    .populate<{ supervisor: Workplace }>('supervisor')
+    .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
 
@@ -138,7 +138,7 @@ async function setSupervisor(
 async function addSubordinate(
   employeeId: Types.ObjectId,
   subordinateId: Types.ObjectId
-): Promise<workplace | null> {
+): Promise<Workplace | null> {
   const employeeWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: employeeId },
     { $push: { subordinates: subordinateId } },
@@ -147,8 +147,8 @@ async function addSubordinate(
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
-    .populate<{ supervisor: Profile }>('supervisor')
-    .populate<{ subordinates: Profile[] }>('subordinates')
+    .populate<{ supervisor: Workplace }>('supervisor')
+    .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
 
@@ -163,7 +163,7 @@ async function addSubordinate(
 
 async function updateWorkplace(
   identifier: Types.ObjectId,
-  updatedWorkplaceData: Partial<workplace>
+  updatedWorkplaceData: Partial<Workplace>
 ) {
   console.log(
     'workplace.service - updateWorkplace, identifier: ',

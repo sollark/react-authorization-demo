@@ -1,7 +1,7 @@
 import { Schema, Types, model } from 'mongoose'
 import { Profile } from './profile.model.js'
 import { Role } from './role.model.js'
-import { workplace } from './workplace.model.js'
+import { Workplace } from './workplace.model.js'
 
 export const ACCOUNT_STATUS = {
   pending: 'pending',
@@ -15,7 +15,7 @@ export type Account = {
   identifier: Types.ObjectId
   role?: Role
   profile: Profile
-  workplace?: workplace
+  workplace?: Workplace
   isComplete: boolean
   status: Status
 }

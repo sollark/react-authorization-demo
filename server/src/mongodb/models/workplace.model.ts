@@ -3,18 +3,20 @@ import { Company } from './company.model.js'
 import { Department } from './department.model.js'
 import { Profile } from './profile.model.js'
 
-export type workplace = {
+export type Workplace = {
   company: Company
   department?: Department
+  employeeNumber?: string
   position?: string
   employee: Profile
-  supervisor?: Profile
-  subordinates?: Profile[]
+  supervisor?: Workplace
+  subordinates?: Workplace[]
 }
 
 export type WorkplaceRef = {
   company: Types.ObjectId
   department?: Types.ObjectId
+  employeeNumber?: string
   position?: string
   employee: Types.ObjectId
   supervisor?: Types.ObjectId
@@ -30,6 +32,7 @@ const WorkplaceSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Department',
   },
+  employeeNumber: { type: String },
   position: { type: String },
   employee: {
     type: Schema.Types.ObjectId,
@@ -38,12 +41,12 @@ const WorkplaceSchema = new Schema({
   },
   supervisor: {
     type: Schema.Types.ObjectId,
-    ref: 'Profile',
+    ref: 'Workplace',
   },
   subordinates: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Profile',
+      ref: 'Workplace',
     },
   ],
 })
