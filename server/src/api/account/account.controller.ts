@@ -51,11 +51,10 @@ export async function updateAccount(
   if (companyName) {
     workplace = await workplaceService.joinNewCompany(identifier, companyName)
 
-    console.log('ddddddddddddddddd')
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.Manager)
   }
-  console.log('fdsfdsf')
+
   const updatedAccount = await accountService.addWorkplace(
     identifier,
     workplace._id

@@ -22,7 +22,6 @@ async function createWorkplace(
     throw new BadRequestError('workplace creation failed')
   }
 
-  console.log('22222', workplaceRef)
   const workplace = await WorkplaceModel.findById(workplaceRef._id)
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
@@ -31,8 +30,6 @@ async function createWorkplace(
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
     .exec()
-
-  console.log('333333')
 
   if (!workplace) {
     logger.warn(
