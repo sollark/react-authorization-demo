@@ -3,7 +3,7 @@ import { Company, CompanySchema } from './Company'
 import { Department } from './Department'
 import { Profile } from './Profile'
 
-export type Workspace = {
+export type workplace = {
   company: Company
   department?: Department
   employee: Profile
@@ -12,7 +12,7 @@ export type Workspace = {
   subordinates?: Profile[]
 }
 
-export const WorkspaceSchema = z.object({
+export const WorkplaceSchema = z.object({
   company: CompanySchema,
   // role: z.array(userRoleSchema),
 })

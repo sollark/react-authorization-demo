@@ -1,6 +1,6 @@
 import SecondaryButton from '@/cmps/button/SecondaryButton'
 import useProfileStore from '@/stores/profileStore'
-import useWorkspaceStore from '@/stores/workspaceStore'
+import useWorkplaceStore from '@/stores/workplaceStore'
 import { useNavigate } from '@tanstack/router'
 import { FC } from 'react'
 
@@ -11,7 +11,7 @@ const AccountDetailsPage: FC = () => {
 
   const profile = useProfileStore((state) => state.profile)
   // const company = useOrganizationStore((state) => state.company)
-  const workspace = useWorkspaceStore((state) => state.workspace)
+  const workplace = useWorkplaceStore((state) => state.workplace)
 
   return (
     <>
@@ -20,9 +20,9 @@ const AccountDetailsPage: FC = () => {
           <li>First Name: {profile?.firstName}</li>
           <li>Last Name: {profile?.lastName}</li>
           <li>
-            Workspace:{' '}
-            {workspace
-              ? `${workspace.company.companyName} ${workspace.company.companyCode} `
+            workplace:{' '}
+            {workplace
+              ? `${workplace.company.companyName} ${workplace.company.companyCode} `
               : ''}
           </li>
         </ul>

@@ -4,11 +4,11 @@ import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { profileService } from '../../service/profile.service.js'
-import { workspaceService } from '../../service/workspace.service.js'
+import { workplaceService } from '../../service/workplace.service.js'
 import { accountService } from './account.service.js'
 import { USER_ROLE } from '../../mongodb/models/role.model.js'
 
-// TODO updateAccount does not return workspace
+// TODO updateAccount does not return workplace
 export async function updateAccount(
   req: Request,
   res: Response,
@@ -19,27 +19,27 @@ export async function updateAccount(
 
   console.log('updateAccount, account: ', account)
 
-  const [updatedProfileData, updatedWorkspaceData, updatedCompanyData] =
+  const [updatedProfileData, updatedWorkplaceData, updatedCompanyData] =
     accountService.sortAccountData(account)
 
   console.log('updateAccount, updatedProfileData: ', updatedProfileData)
-  console.log('updateAccount, updatedWorkspaceData: ', updatedWorkspaceData)
+  console.log('updateAccount, updatedWorkplaceData: ', updatedWorkplaceData)
   console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
 
   const updatedProfile = await profileService.updateProfile(
     identifier,
     updatedProfileData
   )
-  const updatedWorkspace = await workspaceService.updateWorkspace(
+  const updatedWorkplace = await workplaceService.updateWorkplace(
     identifier,
-    updatedWorkspaceData
+    updatedWorkplaceData
   )
 
   const { companyName, companyCode } = updatedCompanyData as Partial<Company>
 
-  let workspace: any = null
+  let workplace: any = null
   if (companyCode) {
-    workspace = await workspaceService.joinExistingCompany(
+    workplace = await workplaceService.joinExistingCompany(
       identifier,
       companyCode
     )
@@ -49,15 +49,15 @@ export async function updateAccount(
   }
 
   if (companyName) {
-    workspace = await workspaceService.joinNewCompany(identifier, companyName)
+    workplace = await workplaceService.joinNewCompany(identifier, companyName)
 
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.Manager)
   }
 
-  const updatedAccount = await accountService.addWorkspace(
+  const updatedAccount = await accountService.addWorkplace(
     identifier,
-    workspace._id
+    workplace._id
   )
 
   if (!updatedAccount) {

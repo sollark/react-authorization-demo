@@ -4,29 +4,29 @@ import { Company, CompanyCode } from '../mongodb/models/company.model.js'
 import { Department } from '../mongodb/models/department.model.js'
 import { Profile } from '../mongodb/models/profile.model.js'
 import {
-  Workspace,
-  default as WorkspaceModel,
-  default as WorkspaceRefModel,
-} from '../mongodb/models/workspace.model.js'
+  workplace,
+  default as WorkplaceModel,
+  default as WorkplaceRefModel,
+} from '../mongodb/models/workplace.model.js'
 import { companyService } from './company.service.js'
 import logger from './logger.service.js'
 
-async function createWorkspace(
+async function createWorkplace(
   employeeId: Types.ObjectId,
   companyId: Types.ObjectId
-): Promise<Workspace | null> {
-  // Create a new workspace
-  const workspaceRef = await WorkspaceRefModel.create({
+): Promise<workplace | null> {
+  // Create a new workplace
+  const workplaceRef = await WorkplaceRefModel.create({
     employee: employeeId,
     company: companyId,
   })
 
-  if (!workspaceRef) {
-    logger.warn(`workspaceService - cannot create workspace: ${employeeId}`)
-    throw new BadRequestError('Workspace creation failed')
+  if (!workplaceRef) {
+    logger.warn(`workplaceService - cannot create workplace: ${employeeId}`)
+    throw new BadRequestError('workplace creation failed')
   }
 
-  const workspace = await WorkspaceRefModel.findById(workspaceRef._id)
+  const workplace = await WorkplaceRefModel.findById(workplaceRef._id)
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ employee: Profile }>('employee')
@@ -35,28 +35,28 @@ async function createWorkspace(
     .lean()
     .exec()
 
-  if (!workspace) {
+  if (!workplace) {
     logger.warn(
-      `workspaceService - workspace is not found: ${workspaceRef._id}`
+      `workplaceService - workplace is not found: ${workplaceRef._id}`
     )
-    throw new BadRequestError('Workspace is not found')
+    throw new BadRequestError('workplace is not found')
   }
 
   logger.info(
-    `workspaceService - new workspace added: ${JSON.stringify(
-      workspace,
+    `workplaceService - new workplace added: ${JSON.stringify(
+      workplace,
       null,
       2 // Indentation level, adjust as needed
     )}`
   )
 
-  return workspace
+  return workplace
 }
 
-async function getBasicWorkspaceDetails(
-  workspaceId: Types.ObjectId
-): Promise<Partial<Workspace> | null> {
-  const workspace = await WorkspaceModel.findById(workspaceId)
+async function getBasicWorkplaceDetails(
+  workplaceId: Types.ObjectId
+): Promise<Partial<workplace> | null> {
+  const workplace = await WorkplaceModel.findById(workplaceId)
     .select('company department position')
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
@@ -66,13 +66,13 @@ async function getBasicWorkspaceDetails(
     .lean()
     .exec()
 
-  return workspace
+  return workplace
 }
 
-async function getWorkspace(
+async function getWorkplace(
   companyId: Types.ObjectId
-): Promise<Workspace | null> {
-  const workspace = await WorkspaceRefModel.findOne({
+): Promise<workplace | null> {
+  const workplace = await WorkplaceRefModel.findOne({
     company: companyId,
   })
     .populate<{ company: Company }>('company')
@@ -83,7 +83,7 @@ async function getWorkspace(
     .lean()
     .exec()
 
-  return workspace
+  return workplace
 }
 
 async function joinExistingCompany(
@@ -96,24 +96,24 @@ async function joinExistingCompany(
     throw new BadRequestError('Company not found', companyCode.toString())
 
   // at first sign in user gets employee role at chosen company, later it can be changed by manager
-  const workspace = await createWorkspace(identifier, company._id)
+  const workplace = await createWorkplace(identifier, company._id)
 
-  return workspace
+  return workplace
 }
 
 async function joinNewCompany(identifier: Types.ObjectId, name: string) {
   // Create a new company
   const company = await companyService.createCompany(name)
-  const workspace = await createWorkspace(identifier, company._id)
+  const workplace = await createWorkplace(identifier, company._id)
 
-  return workspace
+  return workplace
 }
 
 async function setSupervisor(
   employeeId: Types.ObjectId,
   supervisorId: Types.ObjectId
-): Promise<Workspace | null> {
-  const employeeWorkspace = await WorkspaceModel.findOneAndUpdate(
+): Promise<workplace | null> {
+  const employeeWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: employeeId },
     { supervisor: supervisorId },
     { new: true }
@@ -126,20 +126,20 @@ async function setSupervisor(
     .lean()
     .exec()
 
-  const supervisorWorkspace = await WorkspaceModel.findOneAndUpdate(
+  const supervisorWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: supervisorId },
     { $push: { subordinates: employeeId } },
     { new: true }
   ).exec()
 
-  return employeeWorkspace
+  return employeeWorkplace
 }
 
 async function addSubordinate(
   employeeId: Types.ObjectId,
   subordinateId: Types.ObjectId
-): Promise<Workspace | null> {
-  const employeeWorkspace = await WorkspaceModel.findOneAndUpdate(
+): Promise<workplace | null> {
+  const employeeWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: employeeId },
     { $push: { subordinates: subordinateId } },
     { new: true }
@@ -152,32 +152,32 @@ async function addSubordinate(
     .lean()
     .exec()
 
-  const subordinateWorkspace = await WorkspaceModel.findOneAndUpdate(
+  const subordinateWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: subordinateId },
     { supervisor: employeeId },
     { new: true }
   ).exec()
 
-  return employeeWorkspace
+  return employeeWorkplace
 }
 
-async function updateWorkspace(
+async function updateWorkplace(
   identifier: Types.ObjectId,
-  updatedWorkspaceData: Partial<Workspace>
+  updatedWorkplaceData: Partial<workplace>
 ) {
   console.log(
-    'workspace.service - updateWorkspace, identifier: ',
+    'workplace.service - updateWorkplace, identifier: ',
     identifier,
     'under construction'
   )
 }
-export const workspaceService = {
-  createWorkspace,
-  getBasicWorkspaceDetails,
-  getWorkspace,
+export const workplaceService = {
+  createWorkplace,
+  getBasicWorkplaceDetails,
+  getWorkplace,
   joinExistingCompany,
   joinNewCompany,
   setSupervisor,
   addSubordinate,
-  updateWorkspace,
+  updateWorkplace,
 }

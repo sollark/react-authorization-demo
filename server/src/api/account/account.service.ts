@@ -7,9 +7,9 @@ import AccountModel, {
 import CompanyModel from '../../mongodb/models/company.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
-import WorkspaceRefModel, {
-  Workspace,
-} from '../../mongodb/models/workspace.model.js'
+import WorkplaceRefModel, {
+  workplace,
+} from '../../mongodb/models/workplace.model.js'
 import logger from '../../service/logger.service.js'
 
 async function createAccount(
@@ -33,7 +33,7 @@ async function createAccount(
   const account = await AccountModel.findById(accountRef._id)
     .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
-    .populate<{ workspace: Workspace }>('workspace')
+    .populate<{ workplace: workplace }>('workplace')
     .populate<{ status: Status }>('status')
     .lean()
     .exec()
@@ -68,8 +68,8 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workspace: Workspace }>({
-      path: 'workspace',
+    .populate<{ workplace: workplace }>({
+      path: 'workplace',
       populate: [
         { path: 'company' },
         { path: 'department' },
@@ -102,19 +102,19 @@ async function deleteAccount(identifier: Types.ObjectId) {
   await AccountModel.findOneAndDelete({ identifier })
 }
 
-async function addWorkspace(
+async function addWorkplace(
   identifier: Types.ObjectId,
-  workspaceId: Types.ObjectId
+  workplaceId: Types.ObjectId
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOneAndUpdate(
     { identifier },
-    { $set: { workspace: workspaceId } },
+    { $set: { workplace: workplaceId } },
     { new: true }
   )
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workspace: Workspace }>({
-      path: 'workspace',
+    .populate<{ workplace: workplace }>({
+      path: 'workplace',
       populate: [
         { path: 'company' },
         { path: 'department' },
@@ -140,8 +140,8 @@ async function completeAccount(
   )
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workspace: Workspace }>({
-      path: 'workspace',
+    .populate<{ workplace: workplace }>({
+      path: 'workplace',
       populate: [
         { path: 'company' },
         { path: 'department' },
@@ -174,20 +174,20 @@ function sortAccountData(
   accountData: any
 ): [
   updatedProfileData: Object,
-  updatedWorkspaceData: Object,
+  updatedWorkplaceData: Object,
   updatedCompanyData: Object
 ] {
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
-  const workspaceSchemaKeys = Object.keys(WorkspaceRefModel.schema.paths)
+  const workplaceSchemaKeys = Object.keys(WorkplaceRefModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
 
-  const { updatedProfileData, updatedWorkspaceData, updatedCompanyData } =
+  const { updatedProfileData, updatedWorkplaceData, updatedCompanyData } =
     Object.entries(accountData).reduce(
       (accumulator: any, [key, value]) => {
         if (profileSchemaKeys.includes(key)) {
           accumulator.updatedProfileData[key] = value
-        } else if (workspaceSchemaKeys.includes(key)) {
-          accumulator.updatedWorkspaceData[key] = value
+        } else if (workplaceSchemaKeys.includes(key)) {
+          accumulator.updatedWorkplaceData[key] = value
         } else if (companySchemaKeys.includes(key)) {
           accumulator.updatedCompanyData[key] = value
         }
@@ -195,12 +195,12 @@ function sortAccountData(
       },
       {
         updatedProfileData: {},
-        updatedWorkspaceData: {},
+        updatedWorkplaceData: {},
         updatedCompanyData: {},
       }
     )
 
-  return [updatedProfileData, updatedWorkspaceData, updatedCompanyData]
+  return [updatedProfileData, updatedWorkplaceData, updatedCompanyData]
 }
 
 export const accountService = {
@@ -208,7 +208,7 @@ export const accountService = {
   setRole,
   getAccount,
   deleteAccount,
-  addWorkspace,
+  addWorkplace,
   sortAccountData,
   completeAccount,
 }

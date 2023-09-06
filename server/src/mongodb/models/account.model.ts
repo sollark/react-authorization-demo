@@ -1,7 +1,7 @@
 import { Schema, Types, model } from 'mongoose'
 import { Profile } from './profile.model.js'
 import { Role } from './role.model.js'
-import { Workspace } from './workspace.model.js'
+import { workplace } from './workplace.model.js'
 
 export const ACCOUNT_STATUS = {
   pending: 'pending',
@@ -15,7 +15,7 @@ export type Account = {
   identifier: Types.ObjectId
   role?: Role
   profile: Profile
-  workspace?: Workspace
+  workplace?: workplace
   isComplete: boolean
   status: Status
 }
@@ -24,7 +24,7 @@ export type AccountRef = {
   identifier: Types.ObjectId
   role?: Types.ObjectId
   profile: Types.ObjectId
-  workspace?: Types.ObjectId
+  workplace?: Types.ObjectId
   isComplete: boolean
   status: Status
 }
@@ -40,9 +40,9 @@ const AccountSchema = new Schema({
     ref: 'Profile',
     required: true,
   },
-  workspace: {
+  workplace: {
     type: Schema.Types.ObjectId,
-    ref: 'Workspace',
+    ref: 'workplace',
   },
   isComplete: {
     type: Boolean,

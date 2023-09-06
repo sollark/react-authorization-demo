@@ -40,7 +40,7 @@ async function populateTestData() {
 
   const company = companyService.createCompany('TestCompany')
 
-  // const workspaces = workspaceService.createWorkspace()
+  // const workplaces = workplaceService.createWorkplace()
 }
 
 export const populate = { populateRole }

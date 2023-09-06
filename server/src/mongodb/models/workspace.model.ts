@@ -3,7 +3,7 @@ import { Company } from './company.model.js'
 import { Department } from './department.model.js'
 import { Profile } from './profile.model.js'
 
-export type Workspace = {
+export type workplace = {
   company: Company
   department?: Department
   position?: string
@@ -12,7 +12,7 @@ export type Workspace = {
   subordinates?: Profile[]
 }
 
-export type WorkspaceRef = {
+export type WorkplaceRef = {
   company: Types.ObjectId
   department?: Types.ObjectId
   position?: string
@@ -21,7 +21,7 @@ export type WorkspaceRef = {
   subordinates?: Types.ObjectId[]
 }
 
-const WorkspaceSchema = new Schema({
+const WorkplaceSchema = new Schema({
   company: {
     type: Schema.Types.ObjectId,
     ref: 'Company',
@@ -48,5 +48,5 @@ const WorkspaceSchema = new Schema({
   ],
 })
 
-const WorkspaceModel = model<WorkspaceRef>('Workspace', WorkspaceSchema)
-export default WorkspaceModel
+const WorkplaceModel = model<WorkplaceRef>('workplace', WorkplaceSchema)
+export default WorkplaceModel

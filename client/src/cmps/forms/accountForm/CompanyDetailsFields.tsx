@@ -1,11 +1,11 @@
-import useWorkspaceStore from '@/stores/workspaceStore'
+import useWorkplaceStore from '@/stores/workplaceStore'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
 
 const CompanyDetailsFields: FC = () => {
   console.log('CompanyDetailsFields connected')
 
-  const workspace = useWorkspaceStore((state) => state.workspace)
+  const workplace = useWorkplaceStore((state) => state.workplace)
 
   return (
     <div>
@@ -13,17 +13,11 @@ const CompanyDetailsFields: FC = () => {
       <h3>Join existing company or create a new one</h3>
       <Input name='company' label='Company' type='text' />
 
-      {workspace !== null && (
+      {workplace !== null && (
         <div>
-          <h3>Workspace List:</h3>
-          <ul className='clean-list'>
-            <li>
-              Workspace:{' '}
-              {workspace
-                ? `${workspace.company.companyName} ${workspace.company.companyCode} `
-                : ''}
-            </li>
-          </ul>
+          <h3>Workplace:</h3>
+          {workplace &&
+            `${workplace.company.companyName} ${workplace.company.companyCode} `}
         </div>
       )}
     </div>
