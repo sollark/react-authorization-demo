@@ -4,7 +4,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-interface RoleState {
+type RoleState = {
   role: Role
   setRole: (role: Role) => void
   clearRole: () => void

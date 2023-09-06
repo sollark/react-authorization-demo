@@ -1,6 +1,6 @@
-import useWorkplaceStore from '@/stores/workplaceStore'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
+import useWorkplaceStore from '@/stores/workplaceStore'
 
 const CompanyDetailsFields: FC = () => {
   console.log('CompanyDetailsFields connected')

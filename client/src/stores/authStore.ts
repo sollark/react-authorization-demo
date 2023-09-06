@@ -4,7 +4,7 @@ import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-interface AuthState {
+type AuthState = {
   isAuthenticated: boolean
   setAsAuthenticated: () => void
   setAsUnauthenticated: () => void

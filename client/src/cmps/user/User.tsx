@@ -1,5 +1,5 @@
 import { authService } from '@/service/auth.service'
-import useUserStore from '@/stores/profileStore'
+import useUserStore from '@/stores/userStore'
 import {
   Avatar,
   IconButton,

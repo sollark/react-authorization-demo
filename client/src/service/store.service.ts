@@ -1,7 +1,7 @@
 import { Account } from '@/models/Account'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
-import useProfileStore from '@/stores/profileStore'
+import useProfileStore from '@/stores/userStore'
 import useRoleStore from '@/stores/roleStore'
 import useWorkplaceStore from '@/stores/workplaceStore'
 

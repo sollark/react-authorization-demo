@@ -1,12 +1,12 @@
-import { workplace } from '@/models/Workplace'
+import { Workplace } from '@/models/Workplace'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-interface WorkplaceState {
-  workplace: workplace | null
-  setWorkplace: (workplace: workplace) => void
+type WorkplaceState = {
+  workplace: Workplace | null
+  setWorkplace: (workplace: Workplace) => void
   clearWorkplace: () => void
 }
 

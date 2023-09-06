@@ -3,13 +3,13 @@ import { Company, CompanySchema } from './Company'
 import { Department } from './Department'
 import { Profile } from './Profile'
 
-export type workplace = {
+export type Workplace = {
   company: Company
   department?: Department
   employee: Profile
   position?: string
-  supervisor?: Profile
-  subordinates?: Profile[]
+  supervisor?: Workplace
+  subordinates?: Workplace[]
 }
 
 export const WorkplaceSchema = z.object({

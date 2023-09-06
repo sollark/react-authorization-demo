@@ -3,7 +3,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-interface AccountState {
+type AccountState = {
   isComplete: boolean
   setIsComplete: (isComplete: boolean) => void
   resetIsComplete: () => void

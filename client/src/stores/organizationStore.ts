@@ -4,7 +4,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
-interface CompanyState {
+type CompanyState = {
   company: Company | null
   setCompany: (company: Company | null) => void
   clearCompany: () => void
