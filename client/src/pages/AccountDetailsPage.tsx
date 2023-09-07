@@ -26,7 +26,7 @@ const AccountDetailsPage: FC = () => {
         <br />
         {workplace && `Company code: ${workplace.company.companyId}`}
         <br />
-        {workplace && `Employee number: ${workplace.employeeNumber}`}
+        {workplace && `Employee number: ${workplace.employeeId}`}
         <br />
       </div>
       {/* using href forces a page reload */}
