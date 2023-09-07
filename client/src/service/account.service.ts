@@ -8,7 +8,7 @@ async function updateAccount(
   firstName: string,
   lastName: string,
   companyName?: string,
-  companyCode?: string
+  companyId?: string
 ) {
   const response = await httpService.post<Profile & Partial<Company>, Account>(
     'account/update',
@@ -16,7 +16,7 @@ async function updateAccount(
       firstName,
       lastName,
       companyName,
-      companyCode,
+      companyId,
     }
   )
 

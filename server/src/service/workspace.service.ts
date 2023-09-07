@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
-import { Company, CompanyCode } from '../mongodb/models/company.model.js'
+import { Company, CompanyId } from '../mongodb/models/company.model.js'
 import { Department } from '../mongodb/models/department.model.js'
 import { Profile } from '../mongodb/models/profile.model.js'
 import WorkplaceModel, { Workplace } from '../mongodb/models/workplace.model.js'
@@ -84,12 +84,12 @@ async function getWorkplace(
 
 async function joinExistingCompany(
   identifier: Types.ObjectId,
-  companyCode: CompanyCode
+  companyId: CompanyId
 ) {
-  const company = await companyService.getCompany(companyCode)
+  const company = await companyService.getCompany(companyId)
 
   if (!company)
-    throw new BadRequestError('Company not found', companyCode.toString())
+    throw new BadRequestError('Company not found', companyId.toString())
 
   // at first sign in user gets employee role at chosen company, later it can be changed by manager
   const workplace = await createWorkplace(identifier, company._id)

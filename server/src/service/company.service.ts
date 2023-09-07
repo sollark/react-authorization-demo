@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import CompanyModel, {
   Company,
-  CompanyCode,
+  CompanyId,
 } from '../mongodb/models/company.model.js'
 import { Department } from '../mongodb/models/department.model.js'
 import { Profile } from '../mongodb/models/profile.model.js'
@@ -9,10 +9,10 @@ import { utilService } from '../utils/utils.js'
 import loggerService from './logger.service.js'
 
 async function createCompany(name: string) {
-  const code = await generateCompanyCode()
+  const id = await generateCompanyId()
 
   const company = await CompanyModel.create({
-    companyCode: code,
+    companyId: id,
     companyName: name,
   })
 
@@ -21,21 +21,21 @@ async function createCompany(name: string) {
   return company
 }
 
-async function isCompanyCodeExists(company: string) {
+async function isCompanyIdExists(company: string) {
   if (!utilService.convertToNumber(company)) return false
 
-  const companyCode = await CompanyModel.findOne({
-    companyCode: +company,
+  const companyId = await CompanyModel.findOne({
+    companyId: +company,
   })
 
-  if (!companyCode) return false
+  if (!companyId) return false
 
   return true
 }
 
-async function getBasicCompanyDetails(code: CompanyCode) {
-  const company = await CompanyModel.findOne({ code })
-    .select('companyName companyCode')
+async function getBasicCompanyDetails(id: CompanyId) {
+  const company = await CompanyModel.findOne({ id })
+    .select('companyName companyId')
     .lean()
     .exec()
 
@@ -44,8 +44,8 @@ async function getBasicCompanyDetails(code: CompanyCode) {
   return company
 }
 
-async function getCompany(code: CompanyCode) {
-  const company = await CompanyModel.findOne({ code }).lean().exec()
+async function getCompany(id: CompanyId) {
+  const company = await CompanyModel.findOne({ id }).lean().exec()
 
   loggerService.info(`companyService - company fetched ${company}`)
 
@@ -53,11 +53,11 @@ async function getCompany(code: CompanyCode) {
 }
 
 async function addDepartment(
-  code: CompanyCode,
+  id: CompanyId,
   departmentId: Types.ObjectId
 ): Promise<Company | null> {
   const company = await CompanyModel.findOneAndUpdate(
-    { code },
+    { id },
     { $push: { departments: departmentId } },
     { new: true }
   )
@@ -70,11 +70,11 @@ async function addDepartment(
 }
 
 async function addEmployee(
-  code: CompanyCode,
+  id: CompanyId,
   employeeId: Types.ObjectId
 ): Promise<Company | null> {
   const company = await CompanyModel.findOneAndUpdate(
-    { code },
+    { id },
     { $push: { employees: employeeId } },
     { new: true }
   )
@@ -87,11 +87,11 @@ async function addEmployee(
 }
 
 async function updateCompany(
-  code: number,
+  id: number,
   name: string
 ): Promise<Company | null> {
   const company = await CompanyModel.findOneAndUpdate(
-    { code },
+    { id },
     { name },
     { new: true }
   )
@@ -105,12 +105,12 @@ async function updateCompany(
   return company
 }
 
-async function deleteCompany(companyCode: string): Promise<void> {
-  await CompanyModel.deleteOne({ companyCode }).exec()
+async function deleteCompany(companyId: string): Promise<void> {
+  await CompanyModel.deleteOne({ companyId }).exec()
 }
 
 export const companyService = {
-  isCompanyCodeExists,
+  isCompanyIdExists,
   createCompany,
   getBasicCompanyDetails,
   getCompany,
@@ -120,17 +120,17 @@ export const companyService = {
   deleteCompany,
 }
 
-async function generateCompanyCode(): Promise<CompanyCode> {
-  let code = utilService.getRandomInt(1000, 9999)
+async function generateCompanyId(): Promise<CompanyId> {
+  let id = utilService.getRandomInt(1000, 9999)
 
   const existingCode = await CompanyModel.findOne({
-    companyCode: code.toString(),
+    companyId: id.toString(),
   })
 
   if (existingCode) {
     // Code already exists, generate a new one recursively
-    return generateCompanyCode()
+    return generateCompanyId()
   }
 
-  return code.toString() as CompanyCode
+  return id.toString() as CompanyId
 }

@@ -24,7 +24,7 @@ const AccountDetailsPage: FC = () => {
         <h2>Workplace</h2>
         {workplace && `Company: ${workplace.company.companyName}`}
         <br />
-        {workplace && `Company code: ${workplace.company.companyCode}`}
+        {workplace && `Company code: ${workplace.company.companyId}`}
         <br />
         {workplace && `Employee number: ${workplace.employeeNumber}`}
         <br />

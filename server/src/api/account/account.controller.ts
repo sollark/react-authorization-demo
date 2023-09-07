@@ -35,13 +35,13 @@ export async function updateAccount(
     updatedWorkplaceData
   )
 
-  const { companyName, companyCode } = updatedCompanyData as Partial<Company>
+  const { companyName, companyId } = updatedCompanyData as Partial<Company>
 
   let workplace: any = null
-  if (companyCode) {
+  if (companyId) {
     workplace = await workplaceService.joinExistingCompany(
       identifier,
-      companyCode
+      companyId
     )
 
     // when joining existing company, set role to user

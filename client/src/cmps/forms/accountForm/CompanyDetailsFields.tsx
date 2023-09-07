@@ -17,7 +17,7 @@ const CompanyDetailsFields: FC = () => {
         <div>
           <h3>Workplace:</h3>
           {workplace &&
-            `${workplace.company.companyName} ${workplace.company.companyCode} `}
+            `${workplace.company.companyName} ${workplace.company.companyId} `}
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import { Profile } from './Profile'
 
 export type Company = {
   companyName: string
-  companyCode: string
+  companyId: string
   departments?: Department[]
   employees?: Profile[]
 }
