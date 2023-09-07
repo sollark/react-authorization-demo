@@ -16,16 +16,18 @@ const AccountDetailsPage: FC = () => {
   return (
     <>
       <div>
-        <ul className='clean-list'>
-          <li>First Name: {profile?.firstName}</li>
-          <li>Last Name: {profile?.lastName}</li>
-          <li>
-            workplace:{' '}
-            {workplace
-              ? `${workplace.company.companyName} ${workplace.company.companyCode} `
-              : ''}
-          </li>
-        </ul>
+        <h2>Profile</h2>
+        First Name: {profile?.firstName}
+        <br />
+        Last Name: {profile?.lastName}
+        <br />
+        <h2>Workplace</h2>
+        {workplace && `Company: ${workplace.company.companyName}`}
+        <br />
+        {workplace && `Company code: ${workplace.company.companyCode}`}
+        <br />
+        {workplace && `Employee number: ${workplace.employeeNumber}`}
+        <br />
       </div>
       {/* using href forces a page reload */}
       <SecondaryButton onClick={() => navigate({ to: '/account/edit' })}>

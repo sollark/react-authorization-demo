@@ -6,6 +6,7 @@ import { Profile } from './Profile'
 export type Workplace = {
   company: Company
   department?: Department
+  employeeNumber?: string
   employee: Profile
   position?: string
   supervisor?: Workplace
