@@ -24,7 +24,7 @@ async function getProfileByIdentifier(
 async function updateProfile(
   identifier: Types.ObjectId,
   updatedProfileData: Partial<Profile>
-): Promise<Profile | null> {
+): Promise<(Profile & { _id: Types.ObjectId }) | null> {
   const profile = await ProfileModel.findOneAndUpdate(
     { identifier },
     updatedProfileData,

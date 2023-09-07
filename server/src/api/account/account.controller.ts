@@ -35,12 +35,17 @@ export async function updateAccount(
     updatedWorkplaceData
   )
 
+  // TODO add updateWorkplace
+  if (!updatedProfile || !updatedCompanyData) {
+    throw new BadRequestError('Cannot update profile')
+  }
+
   const { companyName, companyId } = updatedCompanyData as Partial<Company>
 
   let workplace: any = null
   if (companyId) {
     workplace = await workplaceService.joinExistingCompany(
-      identifier,
+      updatedProfile._id,
       companyId
     )
 
@@ -49,7 +54,10 @@ export async function updateAccount(
   }
 
   if (companyName) {
-    workplace = await workplaceService.joinNewCompany(identifier, companyName)
+    workplace = await workplaceService.joinNewCompany(
+      updatedProfile._id,
+      companyName
+    )
 
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.Manager)
