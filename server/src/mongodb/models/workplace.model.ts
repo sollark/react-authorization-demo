@@ -6,7 +6,7 @@ import { Profile } from './profile.model.js'
 export type Workplace = {
   company: Company
   department?: Department
-  employeeId?: string
+  employeeId: string
   position?: string
   employee: Profile
   supervisor?: Workplace
@@ -16,7 +16,7 @@ export type Workplace = {
 export type WorkplaceRef = {
   company: Types.ObjectId
   department?: Types.ObjectId
-  employeeId?: string
+  employeeId: string
   position?: string
   employee: Types.ObjectId
   supervisor?: Types.ObjectId

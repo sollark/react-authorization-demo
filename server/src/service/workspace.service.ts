@@ -6,15 +6,21 @@ import { Profile } from '../mongodb/models/profile.model.js'
 import WorkplaceModel, { Workplace } from '../mongodb/models/workplace.model.js'
 import { companyService } from './company.service.js'
 import logger from './logger.service.js'
+import { utilService } from '../utils/utils.js'
+
+export type EmployeeId = string
 
 async function createWorkplace(
   employeeId: Types.ObjectId,
   companyId: Types.ObjectId
 ): Promise<Workplace | null> {
+  const id = await generateEmployeeId()
+
   // Create a new workplace
   const workplaceRef = await WorkplaceModel.create({
     employee: employeeId,
     company: companyId,
+    employeeId: id,
   })
 
   if (!workplaceRef) {
@@ -176,4 +182,19 @@ export const workplaceService = {
   setSupervisor,
   addSubordinate,
   updateWorkplace,
+}
+
+async function generateEmployeeId(): Promise<EmployeeId> {
+  let id = utilService.getRandomInt(1000, 9999)
+
+  const existingCode = await WorkplaceModel.findOne({
+    employeeId: id.toString(),
+  })
+
+  if (existingCode) {
+    // Code already exists, generate a new one recursively
+    return generateEmployeeId()
+  }
+
+  return id.toString() as EmployeeId
 }
