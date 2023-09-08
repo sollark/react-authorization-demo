@@ -6,6 +6,7 @@ import { useNavigate } from '@tanstack/router'
 import { FC, ReactElement } from 'react'
 import { z } from 'zod'
 import MultistepForm from '../MultistepForm'
+import useWorkplaceStore from '@/stores/workplaceStore'
 
 interface Props {
   children: ReactElement[]
@@ -22,11 +23,12 @@ const AccountForm: FC<Props> = (props: Props) => {
   const navigate = useNavigate()
 
   const profile = useUserStore((state) => state.profile)
+  const workplace = useWorkplaceStore((state) => state.workplace)
 
   const defaultValues = {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
-    company: '',
+    company: workplace?.company.companyId || '',
   }
 
   async function submit(form: any) {

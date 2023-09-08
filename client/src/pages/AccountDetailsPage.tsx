@@ -10,7 +10,6 @@ const AccountDetailsPage: FC = () => {
   const navigate = useNavigate({ from: '/account/edit' })
 
   const profile = useProfileStore((state) => state.profile)
-  // const company = useOrganizationStore((state) => state.company)
   const workplace = useWorkplaceStore((state) => state.workplace)
 
   return (

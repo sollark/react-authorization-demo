@@ -7,7 +7,7 @@ import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput/TextInput'
 
-interface RegistrationForm {
+type RegistrationForm = {
   email: string
   password: string
 }
