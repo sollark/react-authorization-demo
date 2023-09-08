@@ -1,14 +1,14 @@
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
+import { Box } from '@mui/material'
 import { RootRoute, Route, lazy } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
-import { Box } from '@mui/material'
-
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
+const CompanyAccessPage = lazy(() => import('../pages/CompanyAccessPage'))
 const SigninPage = lazy(() => import('../pages/SigninPage'))
 const RegistrationPage = lazy(() => import('../pages/RegistrationPage'))
 const RolePage = lazy(() => import('../pages/RolePage'))
@@ -81,6 +81,16 @@ export const accountEditRoute = new Route({
   ),
 })
 
+export const companyAccessRoute = new Route({
+  getParentRoute: () => accountRoute,
+  path: '/join',
+  component: () => (
+    <AuthProtectedRoute>
+      <CompanyAccessPage />
+    </AuthProtectedRoute>
+  ),
+})
+
 export const roleRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/role',
@@ -95,8 +105,7 @@ export const employeeRoute = new Route({
   getParentRoute: () => roleRoute,
   path: '/employee',
   component: () => (
-    <RoleProtectedRoute
-      allowed={['Employee', 'Manager', 'Supervisor', 'Admin']}>
+    <RoleProtectedRoute allowed={['User', 'Manager', 'Supervisor', 'Admin']}>
       <Box
         sx={{
           m: 'auto',

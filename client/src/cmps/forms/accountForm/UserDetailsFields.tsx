@@ -6,7 +6,7 @@ const UserDetailsFields: FC = () => {
 
   return (
     <>
-      <h2>User details</h2>
+      <h2>Profile</h2>
       <Input name='firstName' label='First name' type='text' />
       <Input name='lastName' label='Last name' type='text' />
       {/* <Input name='email' label='Email' type='email' /> */}

@@ -6,12 +6,12 @@ import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput/TextInput'
 
-type AccessCompanyForm = {
+type CompanyAccessForm = {
   companyId: string
   employeeId: string
 }
 
-const AccessCompanySchema = z
+const CompanyAccessSchema = z
   .object({})
   .merge(employeeIdSchema)
   .merge(CompanyIdSchema)
@@ -21,14 +21,14 @@ const defaultValues = {
   employeeId: '',
 }
 
-const AccessCompanyForm: FC = () => {
-  console.log('AccessCompanyForm connected')
+const CompanyAccessForm: FC = () => {
+  console.log('CompanyAccessForm connected')
 
-  async function submit(form: AccessCompanyForm) {}
+  async function submit(form: CompanyAccessForm) {}
 
   return (
     <Form
-      schema={AccessCompanySchema}
+      schema={CompanyAccessSchema}
       defaultValue={defaultValues}
       submit={submit}
       submitButton={<SubmitButton />}>
@@ -38,4 +38,4 @@ const AccessCompanyForm: FC = () => {
   )
 }
 
-export default AccessCompanyForm
+export default CompanyAccessForm
