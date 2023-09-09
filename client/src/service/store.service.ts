@@ -37,6 +37,7 @@ function setProfileAsUnauthenticated() {
 function clearStoreStates() {
   console.log('clearStoreStates()')
 
+  useRoleStore.getState().clearRole()
   useAccountStore.getState().resetIsComplete()
   useProfileStore.getState().clearProfile()
   useWorkplaceStore.getState().clearWorkplace()
