@@ -15,11 +15,14 @@ async function getAccess() {
     AuthResponse | undefined
   >('auth/access', null)
 
-  if (!isAuthResponse(getAccessResponse)) return
+  // if (!isAuthResponse(getAccessResponse)) return
 
   const { accessToken } = getAccessResponse as any
-  storeService.saveAccessToken(accessToken)
-  storeService.setProfileAsAuthenticated()
+  if (accessToken) {
+    storeService.saveAccessToken(accessToken)
+    storeService.setProfileAsAuthenticated()
+  }
+  storeService.clearStoreStates()
 }
 
 async function registration(email: string, password: string) {
