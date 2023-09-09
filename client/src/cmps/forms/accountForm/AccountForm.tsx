@@ -30,29 +30,19 @@ const AccountForm: FC<Props> = (props: Props) => {
   const defaultValues = {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
-    company: workplace?.company.companyId || '',
+    company: workplace?.company.companyName || '',
     department: workplace?.department || '',
   }
 
   async function submit(form: any) {
     console.log('Account form submitted: ', form)
 
-    let account = null
-    // if company input is not a number, create a new company
-    if (isNaN(form.company))
-      account = await accountService.updateAccount(
-        form.firstName,
-        form.lastName,
-        form.company
-      )
-    // else it is an existing company code
-    else
-      account = await accountService.updateAccount(
-        form.firstName,
-        form.lastName,
-        undefined,
-        form.company
-      )
+    const account = await accountService.updateAccount(
+      form.firstName,
+      form.lastName,
+      form.company,
+      form.department
+    )
 
     console.log('Account form account: ', account)
 
