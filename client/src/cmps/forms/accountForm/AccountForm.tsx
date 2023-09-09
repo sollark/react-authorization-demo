@@ -1,12 +1,13 @@
 import { CompanySchema } from '@/models/Company'
 import { ProfileDetailsSchema } from '@/models/Profile'
+import { WorkplaceSchema } from '@/models/Workplace'
 import { accountService } from '@/service/account.service'
 import useUserStore from '@/stores/userStore'
+import useWorkplaceStore from '@/stores/workplaceStore'
 import { useNavigate } from '@tanstack/router'
 import { FC, ReactElement } from 'react'
 import { z } from 'zod'
 import MultistepForm from '../MultistepForm'
-import useWorkplaceStore from '@/stores/workplaceStore'
 
 interface Props {
   children: ReactElement[]
@@ -17,6 +18,7 @@ const AccountSchema = z
   .object({})
   .merge(ProfileDetailsSchema)
   .merge(CompanySchema)
+  .merge(WorkplaceSchema)
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
@@ -29,6 +31,7 @@ const AccountForm: FC<Props> = (props: Props) => {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
     company: workplace?.company.companyId || '',
+    department: workplace?.department || '',
   }
 
   async function submit(form: any) {
