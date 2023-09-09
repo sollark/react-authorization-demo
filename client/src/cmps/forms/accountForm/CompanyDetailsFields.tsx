@@ -10,7 +10,7 @@ const CompanyDetailsFields: FC = () => {
   return (
     <div>
       <h2>Company</h2>
-      <Input name='company' label='Company' type='text' />
+      <Input name='companyName' label='Company' type='text' />
       <Input name='department' label='Department' type='text' />
 
       {workplace !== null && (

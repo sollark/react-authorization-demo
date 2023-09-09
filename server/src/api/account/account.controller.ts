@@ -15,6 +15,7 @@ export async function updateAccount(
   res: Response,
   next: NextFunction
 ) {
+  // TODO update workplace (department)
   const identifier = getIdentifierFromALS()
   const account: Account = req.body
 

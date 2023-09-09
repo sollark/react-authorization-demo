@@ -5,7 +5,7 @@ export type Profile = {
   lastName: string
 }
 
-export const ProfileDetailsSchema = z.object({
+export const ProfileSchema = z.object({
   firstName: z
     .string()
     .trim()

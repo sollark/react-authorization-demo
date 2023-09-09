@@ -9,14 +9,16 @@ export type Company = {
   employees?: Profile[]
 }
 
-export const CompanySchema = z.object({
-  company: z
+export const CompanyNameSchema = z.object({
+  companyName: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()
     .min(2, { message: 'Company name must be at least 3 characters' })
     .max(20, { message: 'Company name must be less than 20 characters' })
     .regex(/^[a-zA-Z0-9]*$/, { message: 'Company name must be alphanumeric' }),
+})
+export const CompanyIdSchema = z.object({
   companyId: z
     .string()
     .nonempty({ message: 'Field can not be empty' })

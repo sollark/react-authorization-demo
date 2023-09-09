@@ -109,6 +109,8 @@ const refresh = async (refreshToken: string) => {
 }
 
 const getAccess = async (refreshToken: string) => {
+  console.log('getAccess, refreshToken: ', refreshToken)
+
   if (!refreshToken) return
 
   const payload = await tokenService.validateRefreshToken(refreshToken)

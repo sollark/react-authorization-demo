@@ -1,6 +1,6 @@
-import { CompanySchema } from '@/models/Company'
-import { ProfileDetailsSchema } from '@/models/Profile'
-import { WorkplaceSchema } from '@/models/Workplace'
+import { CompanyNameSchema } from '@/models/Company'
+import { ProfileSchema } from '@/models/Profile'
+import { DepartmentNameSchema } from '@/models/Workplace'
 import { accountService } from '@/service/account.service'
 import useUserStore from '@/stores/userStore'
 import useWorkplaceStore from '@/stores/workplaceStore'
@@ -16,9 +16,9 @@ interface Props {
 
 const AccountSchema = z
   .object({})
-  .merge(ProfileDetailsSchema)
-  .merge(CompanySchema)
-  .merge(WorkplaceSchema)
+  .merge(ProfileSchema)
+  .merge(CompanyNameSchema)
+  .merge(DepartmentNameSchema)
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props
@@ -30,7 +30,7 @@ const AccountForm: FC<Props> = (props: Props) => {
   const defaultValues = {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
-    company: workplace?.company.companyName || '',
+    companyName: workplace?.company?.companyName || '',
     department: workplace?.department || '',
   }
 
@@ -40,7 +40,7 @@ const AccountForm: FC<Props> = (props: Props) => {
     const account = await accountService.updateAccount(
       form.firstName,
       form.lastName,
-      form.company,
+      form.companyName,
       form.department
     )
 
