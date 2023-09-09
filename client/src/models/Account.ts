@@ -1,6 +1,6 @@
 import { Profile } from './Profile'
 import { UserRole } from './Role'
-import { workplace } from './workplace'
+import { Workplace } from './Workplace'
 
 export const ACCOUNT_STATUS = {
   pending: 'pending',
@@ -12,7 +12,7 @@ export type Status = keyof typeof ACCOUNT_STATUS
 
 export type Account = {
   profile: Profile
-  workplace?: workplace
+  workplace?: Workplace
   isComplete: boolean
   role: UserRole
   status: Status

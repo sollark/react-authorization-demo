@@ -44,6 +44,17 @@ async function getBasicCompanyDetails(id: CompanyId) {
   return company
 }
 
+async function getBasicCompanyDetailsById(companyId: CompanyId) {
+  const company = await CompanyModel.findOne({ companyId })
+    .select('companyName companyId')
+    .lean()
+    .exec()
+
+  loggerService.info(`companyService - company fetched ${company}`)
+
+  return company
+}
+
 async function getCompany(id: CompanyId) {
   const company = await CompanyModel.findOne({ id }).lean().exec()
 
@@ -113,6 +124,7 @@ export const companyService = {
   isCompanyIdExists,
   createCompany,
   getBasicCompanyDetails,
+  getBasicCompanyDetailsById,
   getCompany,
   addDepartment,
   addEmployee,

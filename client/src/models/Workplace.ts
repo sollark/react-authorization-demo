@@ -15,7 +15,7 @@ export const employeeIdSchema = z.object({
 export type Workplace = {
   company: Company
   department?: Department
-  employeeId?: string
+  employeeId: string
   employee: Profile
   position?: string
   supervisor?: Workplace

@@ -6,7 +6,7 @@ export type Profile = {
 }
 
 const ProfileSchema = new Schema({
-  identifier: { type: Types.ObjectId, required: true, unique: true },
+  identifier: { type: Types.ObjectId, unique: true },
   firstName: { type: String, default: '' },
   lastName: { type: String, default: '' },
 })

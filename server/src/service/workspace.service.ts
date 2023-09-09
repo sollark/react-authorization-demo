@@ -2,11 +2,11 @@ import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
 import { Company, CompanyId } from '../mongodb/models/company.model.js'
 import { Department } from '../mongodb/models/department.model.js'
-import { Profile } from '../mongodb/models/profile.model.js'
+import ProfileModel, { Profile } from '../mongodb/models/profile.model.js'
 import WorkplaceModel, { Workplace } from '../mongodb/models/workplace.model.js'
+import { utilService } from '../utils/utils.js'
 import { companyService } from './company.service.js'
 import logger from './logger.service.js'
-import { utilService } from '../utils/utils.js'
 
 export type EmployeeId = string
 
@@ -90,17 +90,32 @@ async function getWorkplace(
 
 async function joinExistingCompany(
   identifier: Types.ObjectId,
-  companyId: CompanyId
+  companyId: CompanyId,
+  employeeId: EmployeeId
 ) {
-  const company = await companyService.getCompany(companyId)
+  const company = await companyService.getBasicCompanyDetailsById(companyId)
 
-  if (!company)
-    throw new BadRequestError('Company not found', companyId.toString())
+  if (!company) throw new BadRequestError('Company is not found', companyId)
 
-  // at first sign in user gets employee role at chosen company, later it can be changed by manager
-  const workplace = await createWorkplace(identifier, company._id)
+  const workplace = await WorkplaceModel.findOne({
+    company: company?._id,
+    employeeId,
+  })
+    .lean()
+    .exec()
 
-  return workplace
+  if (!workplace) throw new BadRequestError('Workplace is not found', companyId)
+
+  // add auth identifier to profile
+  await ProfileModel.findOneAndUpdate(
+    { _id: workplace.employee },
+    { identifier },
+    { new: true }
+  ).exec()
+
+  const updatedWorkplace = await getBasicWorkplaceDetails(workplace._id)
+
+  return updatedWorkplace
 }
 
 async function joinNewCompany(identifier: Types.ObjectId, name: string) {

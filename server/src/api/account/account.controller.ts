@@ -3,6 +3,7 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
 import { USER_ROLE } from '../../mongodb/models/role.model.js'
+import { Workplace } from '../../mongodb/models/workplace.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { profileService } from '../../service/profile.service.js'
 import { workplaceService } from '../../service/workspace.service.js'
@@ -41,12 +42,14 @@ export async function updateAccount(
   }
 
   const { companyName, companyId } = updatedCompanyData as Partial<Company>
+  const { employeeId } = updatedWorkplaceData as Partial<Workplace>
 
   let workplace: any = null
-  if (companyId) {
+  if (companyId && employeeId) {
     workplace = await workplaceService.joinExistingCompany(
-      updatedProfile._id,
-      companyId
+      identifier,
+      companyId,
+      employeeId
     )
 
     // when joining existing company, set role to user
@@ -77,6 +80,24 @@ export async function updateAccount(
   )
 
   res.status(200).json({ account: completedAccount })
+}
+
+export async function joinCompany(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+  const { companyId, employeeId } = req.body
+
+  const workplace = await workplaceService.joinExistingCompany(
+    identifier,
+    companyId,
+    employeeId
+  )
+
+  const account = await accountService.getAccount(identifier)
+  res.status(200).json({ account })
 }
 
 export async function getAccount(
