@@ -10,7 +10,6 @@ import { profileService } from '../../service/profile.service.js'
 import { workplaceService } from '../../service/workspace.service.js'
 import { accountService } from './account.service.js'
 
-// TODO updateAccount does not return workplace
 export async function updateAccount(
   req: Request,
   res: Response,

@@ -72,7 +72,10 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
     .populate<{ workplace: Workplace }>({
       path: 'workplace',
       populate: [
-        { path: 'company' },
+        {
+          path: 'company',
+          populate: [{ path: 'departments' }, { path: 'employees' }],
+        },
         { path: 'department' },
         { path: 'employee' },
         { path: 'supervisor' },
@@ -117,7 +120,10 @@ async function addWorkplace(
     .populate<{ workplace: Workplace }>({
       path: 'workplace',
       populate: [
-        { path: 'company' },
+        {
+          path: 'company',
+          populate: [{ path: 'departments' }, { path: 'employees' }],
+        },
         { path: 'department' },
         { path: 'employee' },
         { path: 'supervisor' },
@@ -144,7 +150,10 @@ async function completeAccount(
     .populate<{ workplace: Workplace }>({
       path: 'workplace',
       populate: [
-        { path: 'company' },
+        {
+          path: 'company',
+          populate: [{ path: 'departments' }, { path: 'employees' }],
+        },
         { path: 'department' },
         { path: 'employee' },
         { path: 'supervisor' },
