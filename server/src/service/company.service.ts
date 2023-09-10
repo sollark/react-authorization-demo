@@ -64,11 +64,11 @@ async function getCompany(id: CompanyId) {
 }
 
 async function addDepartment(
-  id: CompanyId,
+  companyId: Types.ObjectId,
   departmentId: Types.ObjectId
-): Promise<Company | null> {
+): Promise<(Company & { _id: Types.ObjectId }) | null> {
   const company = await CompanyModel.findOneAndUpdate(
-    { id },
+    { _id: companyId },
     { $push: { departments: departmentId } },
     { new: true }
   )
@@ -123,10 +123,10 @@ async function deleteCompany(companyId: string): Promise<void> {
 export const companyService = {
   isCompanyIdExists,
   createCompany,
+  addDepartment,
   getBasicCompanyDetails,
   getBasicCompanyDetailsById,
   getCompany,
-  addDepartment,
   addEmployee,
   updateCompany,
   deleteCompany,

@@ -29,7 +29,7 @@ async function updateProfile(
     { identifier },
     updatedProfileData,
     { new: true }
-  )
+  ).exec()
 
   loggerService.info(`profile.service - profile updated ${profile}`)
 

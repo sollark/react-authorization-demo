@@ -1,6 +1,6 @@
+import useWorkplaceStore from '@/stores/workplaceStore'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
-import useWorkplaceStore from '@/stores/workplaceStore'
 
 const CompanyDetailsFields: FC = () => {
   console.log('CompanyDetailsFields connected')
@@ -11,7 +11,7 @@ const CompanyDetailsFields: FC = () => {
     <div>
       <h2>Company</h2>
       <Input name='companyName' label='Company' type='text' />
-      <Input name='department' label='Department' type='text' />
+      <Input name='departmentName' label='Department' type='text' />
 
       {workplace !== null && (
         <div>

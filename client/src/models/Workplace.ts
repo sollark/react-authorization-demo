@@ -23,7 +23,7 @@ export const EmployeeIdSchema = z.object({
 })
 
 export const DepartmentNameSchema = z.object({
-  department: z
+  departmentName: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()

@@ -1,7 +1,9 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
 import { Company, CompanyId } from '../mongodb/models/company.model.js'
-import { Department } from '../mongodb/models/department.model.js'
+import DepartmentModel, {
+  Department,
+} from '../mongodb/models/department.model.js'
 import ProfileModel, { Profile } from '../mongodb/models/profile.model.js'
 import WorkplaceModel, { Workplace } from '../mongodb/models/workplace.model.js'
 import { utilService } from '../utils/utils.js'
@@ -12,7 +14,8 @@ export type EmployeeId = string
 
 async function createWorkplace(
   employeeId: Types.ObjectId,
-  companyId: Types.ObjectId
+  companyId: Types.ObjectId,
+  departmentId: Types.ObjectId
 ): Promise<Workplace | null> {
   const id = await generateEmployeeId()
 
@@ -20,6 +23,7 @@ async function createWorkplace(
   const workplaceRef = await WorkplaceModel.create({
     employee: employeeId,
     company: companyId,
+    department: departmentId,
     employeeId: id,
   })
 
@@ -118,10 +122,31 @@ async function joinExistingCompany(
   return updatedWorkplace
 }
 
-async function joinNewCompany(identifier: Types.ObjectId, name: string) {
-  // Create a new company
-  const company = await companyService.createCompany(name)
-  const workplace = await createWorkplace(identifier, company._id)
+async function joinNewCompany(
+  identifier: Types.ObjectId,
+  companyName: string,
+  departmentName: string
+) {
+  let company = null
+  company = await companyService.createCompany(companyName)
+
+  let department = null
+  department = await DepartmentModel.create({ departmentName })
+
+  company = await companyService.addDepartment(company._id, department._id)
+
+  if (!company) {
+    logger.warn(
+      `workplaceService -joinNewCompany: adding department failed: ${departmentName}`
+    )
+    throw new BadRequestError('Adding department to company failed')
+  }
+
+  const workplace = await createWorkplace(
+    identifier,
+    company._id,
+    department._id
+  )
 
   return workplace
 }
@@ -179,15 +204,27 @@ async function addSubordinate(
 }
 
 async function updateWorkplace(
-  identifier: Types.ObjectId,
+  employeeId: Types.ObjectId,
   updatedWorkplaceData: Partial<Workplace>
-) {
-  console.log(
-    'workplace.service - updateWorkplace, identifier: ',
-    identifier,
-    'under construction'
+): Promise<Workplace | null> {
+  const workplace = await WorkplaceModel.findOneAndUpdate(
+    { employee: employeeId },
+    updatedWorkplaceData,
+    { new: true }
   )
+    .populate<{ company: Company }>('company')
+    .populate<{ department: Department }>('department')
+    .populate<{ employee: Profile }>('employee')
+    .populate<{ supervisor: Workplace }>('supervisor')
+    .populate<{ subordinates: Workplace[] }>('subordinates')
+    .lean()
+    .exec()
+
+  logger.info(`workplaceService - workplace updated ${workplace}`)
+
+  return workplace
 }
+
 export const workplaceService = {
   createWorkplace,
   getBasicWorkplaceDetails,

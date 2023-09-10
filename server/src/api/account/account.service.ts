@@ -5,6 +5,7 @@ import AccountModel, {
   Status,
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
+import DepartmentModel from '../../mongodb/models/department.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import WorkplaceRefModel, {
@@ -175,32 +176,46 @@ function sortAccountData(
 ): [
   updatedProfileData: Object,
   updatedWorkplaceData: Object,
-  updatedCompanyData: Object
+  updatedCompanyData: Object,
+  updatedDepartmentData: Object
 ] {
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
   const workplaceSchemaKeys = Object.keys(WorkplaceRefModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
+  const departmentSchemaKeys = Object.keys(DepartmentModel.schema.paths)
 
-  const { updatedProfileData, updatedWorkplaceData, updatedCompanyData } =
-    Object.entries(accountData).reduce(
-      (accumulator: any, [key, value]) => {
-        if (profileSchemaKeys.includes(key)) {
-          accumulator.updatedProfileData[key] = value
-        } else if (workplaceSchemaKeys.includes(key)) {
-          accumulator.updatedWorkplaceData[key] = value
-        } else if (companySchemaKeys.includes(key)) {
-          accumulator.updatedCompanyData[key] = value
-        }
-        return accumulator
-      },
-      {
-        updatedProfileData: {},
-        updatedWorkplaceData: {},
-        updatedCompanyData: {},
+  const {
+    updatedProfileData,
+    updatedWorkplaceData,
+    updatedCompanyData,
+    updatedDepartmentData,
+  } = Object.entries(accountData).reduce(
+    (accumulator: any, [key, value]) => {
+      if (profileSchemaKeys.includes(key)) {
+        accumulator.updatedProfileData[key] = value
+      } else if (workplaceSchemaKeys.includes(key)) {
+        accumulator.updatedWorkplaceData[key] = value
+      } else if (companySchemaKeys.includes(key)) {
+        accumulator.updatedCompanyData[key] = value
+      } else if (departmentSchemaKeys.includes(key)) {
+        accumulator.updatedDepartmentData[key] = value
       }
-    )
+      return accumulator
+    },
+    {
+      updatedProfileData: {},
+      updatedWorkplaceData: {},
+      updatedCompanyData: {},
+      updatedDepartmentData: {},
+    }
+  )
 
-  return [updatedProfileData, updatedWorkplaceData, updatedCompanyData]
+  return [
+    updatedProfileData,
+    updatedWorkplaceData,
+    updatedCompanyData,
+    updatedDepartmentData,
+  ]
 }
 
 export const accountService = {

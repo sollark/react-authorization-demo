@@ -15,7 +15,7 @@ async function getAccess() {
     AuthResponse | undefined
   >('auth/access', null)
 
-  if (!isAuthResponse(getAccessResponse)) return
+  // if (!isAuthResponse(getAccessResponse)) return
 
   const { accessToken } = getAccessResponse as any
   if (accessToken) {

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
+import { Department } from '../../mongodb/models/department.model.js'
 import { USER_ROLE } from '../../mongodb/models/role.model.js'
 import { Workplace } from '../../mongodb/models/workplace.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
@@ -21,28 +22,28 @@ export async function updateAccount(
 
   console.log('updateAccount, account: ', account)
 
-  const [updatedProfileData, updatedWorkplaceData, updatedCompanyData] =
-    accountService.sortAccountData(account)
+  const [
+    updatedProfileData,
+    updatedWorkplaceData,
+    updatedCompanyData,
+    updatedDepartmentData,
+  ] = accountService.sortAccountData(account)
 
   console.log('updateAccount, updatedProfileData: ', updatedProfileData)
   console.log('updateAccount, updatedWorkplaceData: ', updatedWorkplaceData)
   console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
+  console.log('updateAccount, updatedDepartmentData: ', updatedDepartmentData)
 
   const updatedProfile = await profileService.updateProfile(
     identifier,
     updatedProfileData
   )
-  const updatedWorkplace = await workplaceService.updateWorkplace(
-    identifier,
-    updatedWorkplaceData
-  )
-
-  // TODO add updateWorkplace
-  if (!updatedProfile || !updatedCompanyData) {
+  if (!updatedProfile) {
     throw new BadRequestError('Cannot update profile')
   }
 
   const { companyName, companyId } = updatedCompanyData as Partial<Company>
+  const { departmentName } = updatedDepartmentData as Partial<Department>
   const { employeeId } = updatedWorkplaceData as Partial<Workplace>
 
   let workplace: any = null
@@ -57,10 +58,11 @@ export async function updateAccount(
     await accountService.setRole(identifier, USER_ROLE.User)
   }
 
-  if (companyName) {
+  if (companyName && departmentName) {
     workplace = await workplaceService.joinNewCompany(
       updatedProfile._id,
-      companyName
+      companyName,
+      departmentName
     )
 
     // when joining new company, set role to manager
