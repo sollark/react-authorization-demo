@@ -54,7 +54,7 @@ export async function updateAccount(
     )
 
     // when joining existing company, set role to user
-    await accountService.setRole(identifier, USER_ROLE.User)
+    await accountService.setRole(identifier, USER_ROLE.user)
   }
 
   if (companyName && departmentName) {
@@ -65,7 +65,7 @@ export async function updateAccount(
     )
 
     // when joining new company, set role to manager
-    await accountService.setRole(identifier, USER_ROLE.Manager)
+    await accountService.setRole(identifier, USER_ROLE.manager)
   }
 
   const updatedAccount = await accountService.addWorkplace(

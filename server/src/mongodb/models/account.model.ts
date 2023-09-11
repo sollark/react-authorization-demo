@@ -4,10 +4,11 @@ import { Role } from './role.model.js'
 import { Workplace } from './workplace.model.js'
 
 export const ACCOUNT_STATUS = {
-  pending: 'pending',
-  active: 'active',
-  inactive: 'inactive',
-  deleted: 'deleted',
+  unregistered: 'Unregistered',
+  pending: 'Pending',
+  active: 'Active',
+  inactive: 'Inactive',
+  deleted: 'Deleted',
 } as const
 export type Status = keyof typeof ACCOUNT_STATUS
 
@@ -52,7 +53,7 @@ const AccountSchema = new Schema({
   status: {
     type: String,
     enum: Object.values(ACCOUNT_STATUS),
-    default: ACCOUNT_STATUS.pending,
+    default: ACCOUNT_STATUS.unregistered,
     required: true,
     immutable: true,
   },

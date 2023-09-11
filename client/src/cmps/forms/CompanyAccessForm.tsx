@@ -1,5 +1,5 @@
-import { CompanySchema } from '@/models/Company'
-import { WorkplaceSchema } from '@/models/Workplace'
+import { CompanyIdSchema } from '@/models/Company'
+import { EmployeeIdSchema } from '@/models/Workplace'
 import { FC } from 'react'
 import { z } from 'zod'
 import Form from './Form'
@@ -13,8 +13,8 @@ type CompanyAccessForm = {
 
 const CompanyAccessSchema = z
   .object({})
-  .merge(CompanySchema)
-  .merge(WorkplaceSchema)
+  .merge(CompanyIdSchema)
+  .merge(EmployeeIdSchema)
 
 const defaultValues = {
   companyId: '',

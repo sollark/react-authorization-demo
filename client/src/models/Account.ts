@@ -3,10 +3,11 @@ import { UserRole } from './Role'
 import { Workplace } from './Workplace'
 
 export const ACCOUNT_STATUS = {
-  pending: 'pending',
-  active: 'active',
-  inactive: 'inactive',
-  deleted: 'deleted',
+  unregistered: 'Unregistered',
+  pending: 'Pending',
+  active: 'Active',
+  inactive: 'Inactive',
+  deleted: 'Deleted',
 } as const
 export type Status = keyof typeof ACCOUNT_STATUS
 

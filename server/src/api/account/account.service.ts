@@ -17,7 +17,7 @@ async function createAccount(
   identifier: Types.ObjectId,
   profileId: Types.ObjectId
 ): Promise<Partial<Account>> {
-  const role = USER_ROLE.User
+  const role = USER_ROLE.user
   const roleDoc = await RoleModel.findOne({ role }).exec()
 
   const accountRef = await AccountModel.create({

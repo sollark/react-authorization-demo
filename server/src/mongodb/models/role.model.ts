@@ -2,11 +2,11 @@ import { Schema, model } from 'mongoose'
 
 export type Role = 'Guest' | 'User' | 'Manager' | 'Supervisor' | 'Admin'
 export const USER_ROLE = {
-  Guest: 'Guest' as Role,
-  User: 'User' as Role,
-  Manager: 'Manager' as Role,
-  Supervisor: 'Supervisor' as Role,
-  Admin: 'Admin' as Role,
+  guest: 'Guest' as Role,
+  user: 'User' as Role,
+  manager: 'Manager' as Role,
+  supervisor: 'Supervisor' as Role,
+  admin: 'Admin' as Role,
 } as const
 
 type UserRole = {
