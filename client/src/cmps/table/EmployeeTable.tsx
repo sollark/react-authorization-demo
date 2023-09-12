@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import {
   createColumnHelper,
   flexRender,
@@ -64,6 +65,22 @@ const EmployeeTable: FC = () => {
   const data: Employee[] = useMemo(() => employeeData, [])
   const columns = useMemo(() => tableColumns, [])
 
+  // const tableHooks = (hooks) => {
+  //   hooks.visibleColumn.push((columns) => {
+  //     return [
+  //       ...columns,
+  //       {
+  //         id: 'action',
+  //         Header: 'Action',
+  //         isPlaceholder: true,
+  //         isFooter: true,
+  //         isHeader: true,
+  //         render: () => <Button>Click me</Button>,
+  //       },
+  //     ]
+  //   })
+  // }
+
   const table = useReactTable({
     data,
     columns,
@@ -73,7 +90,7 @@ const EmployeeTable: FC = () => {
   return (
     <div>
       <h2>Employee Table</h2>
-      <div className='p-2'>
+      <div>
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
