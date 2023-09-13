@@ -1,35 +1,21 @@
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { FC, useMemo } from 'react'
-import employeeData from '../../assets/mock_data/employee.json'
 
-type Employee = {
-  firstName: string
-  lastName: string
-  company: string
-  department: string
-  position: string
-  role: string
-  status: string
+type TableProps = {
+  dataRows: any
+  tableColumns: any
 }
 
-const tableColumns = [
-  { field: 'firstName', headerName: 'First name' },
-  { field: 'lastName', headerName: 'Last name' },
-  { field: 'company', headerName: 'Company' },
-  { field: 'department', headerName: 'Department' },
-  { field: 'position', headerName: 'Position' },
-  { field: 'role', headerName: 'Role' },
-  { field: 'status', headerName: 'Status' },
-]
+const Table: FC<TableProps> = (props: TableProps) => {
+  const { dataRows, tableColumns } = props
 
-const Table: FC = () => {
-  const data: Employee[] = useMemo(() => employeeData, [])
+  const data = useMemo(() => dataRows, [])
   const columns = useMemo(() => tableColumns, [])
   return (
     <Box>
       <DataGrid
-        columns={tableColumns}
+        columns={columns}
         rows={data}
         getRowId={(row) => data.indexOf(row)}></DataGrid>
     </Box>

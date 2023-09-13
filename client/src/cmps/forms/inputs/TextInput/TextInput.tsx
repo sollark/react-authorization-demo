@@ -4,14 +4,14 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { textInputStyle } from '../../style/formStyle'
 import CustomTextInput from './StyledTextInput'
 
-interface Props {
+type InputProps = {
   name: string
   type: string
   label: string
   [key: string]: any // allow any other prop that is not explicitly defined
 }
 
-const Input: FC<Props> = (props: Props) => {
+const Input: FC<InputProps> = (props: InputProps) => {
   const { type, label, name, ...rest } = props
 
   const {
