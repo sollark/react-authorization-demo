@@ -1,3 +1,4 @@
+import PeopleTable from '@/cmps/tables/PeopleTable'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 
@@ -9,6 +10,7 @@ const PeoplePage: FC = () => {
         p: 4,
       }}>
       <h1>People page</h1>
+      <PeopleTable />
     </Box>
   )
 }
