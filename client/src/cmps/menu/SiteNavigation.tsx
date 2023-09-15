@@ -3,7 +3,9 @@ import { Link } from '@tanstack/router'
 
 const pages = [
   { key: 'Home', link: <Link to='/'>Home</Link> },
-  { key: 'Role', link: <Link to='/role'>Role</Link> },
+  // { key: 'Role', link: <Link to='/role'>Role</Link> },
+  { key: 'Company', link: <Link to='/company'>Company</Link> },
+  { key: 'People', link: <Link to='/people'>People</Link> },
 ]
 
 interface SiteNavigationProps {

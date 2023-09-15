@@ -6,6 +6,7 @@ import { RootRoute, Route, lazy } from '@tanstack/router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
+import PeoplePage from '@/pages/People'
 const CompanyPage = lazy(() => import('../pages/CompanyPage'))
 const AccountPage = lazy(() => import('../pages/AccountPage'))
 const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
@@ -98,6 +99,16 @@ export const companyRoute = new Route({
   component: () => (
     <AuthProtectedRoute>
       <CompanyPage />
+    </AuthProtectedRoute>
+  ),
+})
+
+export const peopleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/people',
+  component: () => (
+    <AuthProtectedRoute>
+      <PeoplePage />
     </AuthProtectedRoute>
   ),
 })
