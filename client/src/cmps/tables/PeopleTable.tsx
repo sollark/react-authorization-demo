@@ -2,23 +2,17 @@ import { FC } from 'react'
 import employeeData from '../../assets/mock_data/employee.json'
 import Table from './Table'
 
-export type Employee = {
+export type Person = {
   firstName: string
   lastName: string
-  company: string
-  department: string
-  position: string
-  role: string
+  category: string
   status: string
 }
 
 const peopleColumns = [
   { field: 'firstName', headerName: 'First name' },
   { field: 'lastName', headerName: 'Last name' },
-  { field: 'company', headerName: 'Company' },
-  { field: 'department', headerName: 'Department' },
-  { field: 'position', headerName: 'Position' },
-  { field: 'role', headerName: 'Role' },
+  { field: 'category', headerName: 'Category' },
   { field: 'status', headerName: 'Status' },
 ]
 
