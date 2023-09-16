@@ -167,7 +167,7 @@ export const managerRoute = new Route({
   ),
 })
 
-export const superVisorRoute = new Route({
+export const supervisorRouter = new Route({
   getParentRoute: () => roleRoute,
   path: '/supervisor',
   component: () => (

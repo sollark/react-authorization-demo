@@ -7,8 +7,10 @@ import { createProfile } from './profile.controller.js'
 const router = express.Router()
 
 router.post(
-  '/createProfile',
+  '/create',
   profileSchema,
   validationHandler,
   asyncHandler(createProfile)
 )
+
+export { router as profileRoutes }

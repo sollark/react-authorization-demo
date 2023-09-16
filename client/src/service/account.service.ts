@@ -1,10 +1,9 @@
 import { Account } from '@/models/Account'
 import { Company } from '@/models/Company'
+import { Department } from '@/models/Department'
 import { Profile } from '@/models/Profile'
-import { Workplace } from '@/models/Workplace'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
-import { Department } from '@/models/Department'
 
 async function updateAccount(
   firstName: string,

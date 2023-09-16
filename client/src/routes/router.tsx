@@ -17,7 +17,7 @@ import {
   roleRoute,
   rootRoute,
   signinRoute,
-  superVisorRoute,
+  supervisorRouter,
   unauthorizedRoute,
 } from './routes'
 
@@ -54,7 +54,7 @@ const routeTree = rootRoute.addChildren([
   roleRoute.addChildren([
     employeeRoute,
     managerRoute,
-    superVisorRoute,
+    supervisorRouter,
     adminRoute,
   ]),
   unauthorizedRoute,

@@ -19,6 +19,7 @@ import { authRoutes } from './api/auth/auth.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
+import { profileRoutes } from './api/profile/profile.routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -46,6 +47,7 @@ app.use(deleteSensitiveData)
 // routes
 app.use('/api/auth', authRoutes)
 app.use('/api/account', accountRoutes)
+app.use('/api/profile', profileRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, '../public/index.html')
