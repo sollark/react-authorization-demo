@@ -5,18 +5,21 @@ import cors from 'cors'
 import express from 'express'
 import http from 'http'
 import path from 'path'
-import errorHandler from './middleware/errorHandler.js'
+import { config } from './config/config.js'
 import { connectMongo } from './mongodb/connect.js'
 
-//import routes
+// import middleware
+import setupAsyncLocalStorage from './middleware/als.js'
+import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
+import errorHandler from './middleware/errorHandler.js'
+
+// import routes
+import { accountRoutes } from './api/account/account.routes.js'
 import { authRoutes } from './api/auth/auth.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
-import { accountRoutes } from './api/account/account.routes.js'
-import { config } from './config/config.js'
-import setupAsyncLocalStorage from './middleware/als.js'
-import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -34,10 +37,10 @@ app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())
 
-// als middleware
+// async local storage
 app.all('*', setupAsyncLocalStorage)
 
-// delete sensitive data
+// delete sensitive data ('__v', '_id', 'identifier')
 app.use(deleteSensitiveData)
 
 // routes
