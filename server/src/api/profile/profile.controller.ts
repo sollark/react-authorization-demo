@@ -7,7 +7,7 @@ export async function createProfile(
   next: NextFunction
 ) {
   const profile = req.body
-  const newPerson = await profileService.createProfile(profile)
+  const newProfile = await profileService.createProfile(profile)
 
-  res.status(200).json({ newPerson })
+  res.status(200).json({ newProfile })
 }
