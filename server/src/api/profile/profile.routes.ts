@@ -7,7 +7,7 @@ import { createProfile } from './profile.controller.js'
 const router = express.Router()
 
 router.post(
-  '/newProfile',
+  '/createProfile',
   profileSchema,
   validationHandler,
   asyncHandler(createProfile)
