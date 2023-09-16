@@ -17,7 +17,7 @@ async function registration(credentials: Credentials) {
     logger.warn(
       `authService - attempt to create new authentication with existing email: ${email}`
     )
-    throw new BadRequestError('Email already taken', email)
+    throw new BadRequestError('Email is already taken', email)
   }
 
   // hash password

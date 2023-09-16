@@ -1,9 +1,9 @@
 import { model, Schema, Types } from 'mongoose'
 
 export type Profile = {
-  firstName?: string
-  lastName?: string
-  ID?: string
+  firstName: string
+  lastName: string
+  ID: string
 }
 
 const ProfileSchema = new Schema({
