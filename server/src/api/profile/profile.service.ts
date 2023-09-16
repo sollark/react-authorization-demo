@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import logger from '../../service/logger.service.js'
@@ -18,8 +19,20 @@ async function createProfile(profile: Profile) {
   return newProfile
 }
 
+async function getProfileByID(ID: string) {
+  const profile = await ProfileModel.findOne({ ID })
+  return profile
+}
+
+async function getProfileByIdentifier(identifier: Types.ObjectId) {
+  const profile = await ProfileModel.findById(identifier)
+  return profile
+}
+
 export const profileService = {
   createProfile,
+  getProfileByID,
+  getProfileByIdentifier,
 }
 
 const isIDExist = async (ID: string) => {

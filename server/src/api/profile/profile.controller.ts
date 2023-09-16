@@ -11,3 +11,14 @@ export async function createProfile(
 
   res.status(200).json({ newProfile })
 }
+
+export async function getProfileByID(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { ID } = req.body
+  const profile = await profileService.getProfileByID(ID)
+
+  res.status(200).json({ profile })
+}
