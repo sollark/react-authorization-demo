@@ -1,6 +1,6 @@
 import { body } from 'express-validator'
 
-export const userDetailsSchema = [
+export const profileSchema = [
   body('firstName')
     .exists()
     .withMessage('Name is required')
@@ -9,7 +9,7 @@ export const userDetailsSchema = [
     .withMessage('Name must be a valid text')
     .isLength({ min: 2, max: 24 })
     .withMessage('Name must be between 2 and 24 characters'),
-  body('lastname')
+  body('lastName')
     .exists()
     .withMessage('Last name is required')
     .bail()
@@ -17,15 +17,11 @@ export const userDetailsSchema = [
     .withMessage('Last name must be a valid text')
     .isLength({ min: 2, max: 24 })
     .withMessage('Last name must be between 2 and 24 characters'),
-  body('email')
+  body('ID')
     .exists()
-    .withMessage('Email is required')
+    .withMessage('ID is required')
     .bail()
-    .isEmail()
-    .withMessage('Email is not valid'),
-  body('phone')
-    .exists()
-    .withMessage('Phone is required')
-    .bail()
-    .isMobilePhone('he-IL'),
+    .isString()
+    .withMessage('ID must be a valid text')
+    .matches(/^[A-Z0-9]{8,18}$/),
 ]

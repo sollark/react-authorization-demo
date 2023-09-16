@@ -12,7 +12,6 @@ export type Person = {
 const peopleColumns = [
   { field: 'firstName', headerName: 'First name' },
   { field: 'lastName', headerName: 'Last name' },
-  { field: 'category', headerName: 'Category' },
   { field: 'status', headerName: 'Status' },
 ]
 
