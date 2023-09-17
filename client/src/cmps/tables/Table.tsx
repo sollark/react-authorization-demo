@@ -1,7 +1,13 @@
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
-import { Box, Button } from '@mui/material'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined'
+import { Box } from '@mui/material'
 import {
   DataGrid,
+  GridActionsCellItem,
+  GridColDef,
   GridEventListener,
   GridRowEditStopReasons,
   GridRowId,
@@ -17,7 +23,7 @@ import SecondaryButton from '../button/SecondaryButton'
 
 type TableProps = {
   dataRows: GridRowsProp
-  tableColumns: any
+  tableColumns: GridColDef[]
 }
 
 // tool bar
@@ -33,21 +39,19 @@ function EditToolbar(props: EditToolbarProps) {
 
   const handleClick = () => {
     const id = nanoid()
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }])
+
+    setRows((oldRows) => [
+      ...oldRows,
+      { id, firstName: '', lastName: '', status: '', isNew: true },
+    ])
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'firstName' },
     }))
   }
 
   return (
     <GridToolbarContainer>
-      <Button
-        color='primary'
-        startIcon={<AddCircleOutlineOutlinedIcon />}
-        onClick={handleClick}>
-        Add record
-      </Button>
       <SecondaryButton
         color='primary'
         startIcon={<AddCircleOutlineOutlinedIcon />}
@@ -59,10 +63,62 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 const Table: FC<TableProps> = (props: TableProps) => {
+  console.log('Table connected')
+
   const { dataRows, tableColumns } = props
 
-  const data = useMemo(() => generateKeys(dataRows), [])
-  const columns = useMemo(() => tableColumns, [])
+  const actionColumn: GridColDef[] = [
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveOutlinedIcon />}
+              label='Save'
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelOutlinedIcon />}
+              label='Cancel'
+              className='textPrimary'
+              onClick={handleCancelClick(id)}
+              color='inherit'
+            />,
+          ]
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditOutlinedIcon />}
+            label='Edit'
+            className='textPrimary'
+            onClick={handleEditClick(id)}
+            color='inherit'
+          />,
+          <GridActionsCellItem
+            icon={<DeleteOutlinedIcon />}
+            label='Delete'
+            onClick={handleDeleteClick(id)}
+            color='inherit'
+          />,
+        ]
+      },
+    },
+  ]
+
+  // const data = useMemo(() => generateKeys(dataRows), [])
+  const data = generateKeys(dataRows)
+  const columns = [...tableColumns, ...actionColumn]
 
   const [rows, setRows] = useState(data)
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
@@ -77,6 +133,7 @@ const Table: FC<TableProps> = (props: TableProps) => {
   }
 
   const handleEditClick = (id: GridRowId) => () => {
+    console.log('handleEditClick, id: ', id)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
 
@@ -113,9 +170,12 @@ const Table: FC<TableProps> = (props: TableProps) => {
     <Box>
       <DataGrid
         columns={columns}
-        rows={data}
+        rows={rows}
         editMode='row'
-        getRowId={(row) => data.indexOf(row)}
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
         slots={{
           toolbar: EditToolbar,
         }}

@@ -1,3 +1,4 @@
+import { GridColDef } from '@mui/x-data-grid'
 import { FC } from 'react'
 import employeeData from '../../assets/mock_data/employee.json'
 import Table from './Table'
@@ -9,20 +10,41 @@ export type Person = {
   status: string
 }
 
-const peopleColumns = [
-  { field: 'firstName', headerName: 'First name' },
-  { field: 'lastName', headerName: 'Last name' },
-  { field: 'status', headerName: 'Status' },
+const peopleColumns: GridColDef[] = [
+  { field: 'firstName', headerName: 'First name', width: 180, editable: true },
+  { field: 'lastName', headerName: 'Last name', width: 180, editable: true },
+  { field: 'status', headerName: 'Status', width: 180, editable: true },
+  // {
+  //   field: 'age',
+  //   headerName: 'Age',
+  //   type: 'number',
+  //   width: 80,
+  //   align: 'left',
+  //   headerAlign: 'left',
+  //   editable: true,
+  // },
+  // {
+  //   field: 'joinDate',
+  //   headerName: 'Join date',
+  //   type: 'date',
+  //   width: 180,
+  //   editable: true,
+  // },
+  // {
+  //   field: 'role',
+  //   headerName: 'Department',
+  //   width: 220,
+  //   editable: true,
+  //   type: 'singleSelect',
+  //   valueOptions: ['Market', 'Finance', 'Development'],
+  // },
 ]
 
-const peopleActionColumn = [{ field: 'action', headerName: 'Action' }]
-
 const PeopleTable: FC = () => {
-  const columns = [...peopleColumns, ...peopleActionColumn]
   return (
     <div>
       <h2>People Table</h2>
-      <Table dataRows={employeeData} tableColumns={columns} />
+      <Table dataRows={employeeData} tableColumns={peopleColumns} />
     </div>
   )
 }
