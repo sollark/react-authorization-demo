@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { Outlet } from '@tanstack/router'
+import { Outlet } from '@tanstack/react-router'
 
 const AccountPage = () => {
   console.log('AccountPage connected')

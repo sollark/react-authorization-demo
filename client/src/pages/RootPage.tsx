@@ -1,7 +1,7 @@
 import Header from '@/cmps/Header'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
-import { MakeLinkOptions, Outlet, useNavigate } from '@tanstack/router'
+import { MakeLinkOptions, Outlet, useNavigate } from '@tanstack/react-router'
 import { FC, useEffect } from 'react'
 
 const RootPage: FC = () => {

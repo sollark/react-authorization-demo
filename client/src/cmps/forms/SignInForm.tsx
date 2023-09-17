@@ -1,5 +1,5 @@
 import { authService } from '@/service/auth.service'
-import { useNavigate } from '@tanstack/router'
+import { useNavigate } from '@tanstack/react-router'
 import { FC, useState } from 'react'
 import { z } from 'zod'
 import ErrorMessage from './ErrorMessage'

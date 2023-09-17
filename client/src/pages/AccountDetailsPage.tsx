@@ -1,9 +1,9 @@
 import SecondaryButton from '@/cmps/button/SecondaryButton'
 import useProfileStore from '@/stores/userStore'
 import useWorkplaceStore from '@/stores/workplaceStore'
-import { useNavigate } from '@tanstack/router'
-import { FC } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 
+import { FC } from 'react'
 const AccountDetailsPage: FC = () => {
   console.log('AccountDetailsPage connected')
 

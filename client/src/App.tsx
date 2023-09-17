@@ -1,6 +1,6 @@
 import { CssBaseline, useMediaQuery } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { RouterProvider } from '@tanstack/router'
+import { RouterProvider } from '@tanstack/react-router'
 import React, { useMemo, useState } from 'react'
 import { TanStackRouterDevtools, router } from './routes/router'
 import getDesignTokens from './ui/theme/theme'

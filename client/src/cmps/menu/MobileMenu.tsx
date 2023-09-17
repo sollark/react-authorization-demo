@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Typography } from '@mui/material'
-import { Link } from '@tanstack/router'
+import { Link } from '@tanstack/react-router'
 
 const pages = [
   { key: 'Home', link: <Link to='/'>Home</Link> },

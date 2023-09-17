@@ -3,19 +3,27 @@ import PeoplePage from '@/pages/PeoplePage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
 import { Box } from '@mui/material'
-import { RootRoute, Route, lazy } from '@tanstack/router'
+import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
-const CompanyPage = lazy(() => import('../pages/CompanyPage'))
-const AccountPage = lazy(() => import('../pages/AccountPage'))
-const AccountEditPage = lazy(() => import('../pages/AccountEditPage'))
-const CompanyAccessPage = lazy(() => import('../pages/CompanyAccessPage'))
-const SigninPage = lazy(() => import('../pages/SigninPage'))
-const RegistrationPage = lazy(() => import('../pages/RegistrationPage'))
-const RolePage = lazy(() => import('../pages/RolePage'))
-const UnauthorizedPage = lazy(() => import('../pages/UnauthorizedPage'))
-const MissingPage = lazy(() => import('../pages/MissingPage'))
+const CompanyPage = lazyRouteComponent(() => import('../pages/CompanyPage'))
+const AccountPage = lazyRouteComponent(() => import('../pages/AccountPage'))
+const AccountEditPage = lazyRouteComponent(
+  () => import('../pages/AccountEditPage')
+)
+const CompanyAccessPage = lazyRouteComponent(
+  () => import('../pages/CompanyAccessPage')
+)
+const SigninPage = lazyRouteComponent(() => import('../pages/SigninPage'))
+const RegistrationPage = lazyRouteComponent(
+  () => import('../pages/RegistrationPage')
+)
+const RolePage = lazyRouteComponent(() => import('../pages/RolePage'))
+const UnauthorizedPage = lazyRouteComponent(
+  () => import('../pages/UnauthorizedPage')
+)
+const MissingPage = lazyRouteComponent(() => import('../pages/MissingPage'))
 
 export const rootRoute = new RootRoute({
   component: RootPage,

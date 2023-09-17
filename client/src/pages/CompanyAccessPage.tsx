@@ -1,6 +1,6 @@
 import CompanyAccessForm from '@/cmps/forms/CompanyAccessForm'
 import { Box } from '@mui/material'
-import { Link } from '@tanstack/router'
+import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 
 const CompanyAccessPage: FC = () => {

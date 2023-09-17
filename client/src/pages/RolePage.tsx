@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { Link, Outlet } from '@tanstack/router'
+import { Link, Outlet } from '@tanstack/react-router'
 import { FC } from 'react'
 
 const RolePage: FC = () => {

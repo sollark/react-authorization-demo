@@ -1,5 +1,5 @@
 import { config } from '@/config/config'
-import { Router } from '@tanstack/router'
+import { Router } from '@tanstack/react-router'
 import React from 'react'
 import {
   accountDetailsRoute,
@@ -21,7 +21,7 @@ import {
   unauthorizedRoute,
 } from './routes'
 
-declare module '@tanstack/router' {
+declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }

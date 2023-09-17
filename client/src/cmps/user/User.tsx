@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { Link } from '@tanstack/router'
+import { Link } from '@tanstack/react-router'
 import React, { ReactNode, useEffect, useState } from 'react'
 
 interface UserProps {

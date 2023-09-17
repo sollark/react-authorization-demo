@@ -2,7 +2,7 @@ import AccountForm from '@/cmps/forms/accountForm/AccountForm'
 import OrganizationDetailsFields from '@/cmps/forms/accountForm/CompanyDetailsFields'
 import UserDetailsFields from '@/cmps/forms/accountForm/UserDetailsFields'
 import { Box } from '@mui/material'
-import { Link } from '@tanstack/router'
+import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 
 const AccountEditPage: FC = () => {
