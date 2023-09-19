@@ -18,12 +18,13 @@ import {
   GridToolbarContainer,
 } from '@mui/x-data-grid'
 import { nanoid } from 'nanoid'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import SecondaryButton from '../button/SecondaryButton'
 
 type TableProps = {
   dataRows: GridRowsProp
   tableColumns: GridColDef[]
+  defaultValues: GridRowModel
 }
 
 // tool bar
@@ -32,21 +33,19 @@ type EditToolbarProps = {
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void
+  defaultValues: GridRowModel
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props
+  const { setRows, setRowModesModel, defaultValues } = props
 
   const handleClick = () => {
     const id = nanoid()
 
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, firstName: '', lastName: '', status: '', isNew: true },
-    ])
+    setRows((oldRows) => [...oldRows, { id, ...defaultValues, isNew: true }])
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'firstName' },
+      [id]: { mode: GridRowModes.Edit },
     }))
   }
 
@@ -65,7 +64,7 @@ function EditToolbar(props: EditToolbarProps) {
 const Table: FC<TableProps> = (props: TableProps) => {
   console.log('Table connected')
 
-  const { dataRows, tableColumns } = props
+  const { dataRows, defaultValues, tableColumns } = props
 
   const actionColumn: GridColDef[] = [
     {
@@ -116,7 +115,6 @@ const Table: FC<TableProps> = (props: TableProps) => {
     },
   ]
 
-  // const data = useMemo(() => generateKeys(dataRows), [])
   const data = generateKeys(dataRows)
   const columns = [...tableColumns, ...actionColumn]
 
@@ -180,7 +178,7 @@ const Table: FC<TableProps> = (props: TableProps) => {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, defaultValues },
         }}></DataGrid>
     </Box>
   )

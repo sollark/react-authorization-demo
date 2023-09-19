@@ -12,6 +12,16 @@ export type Employee = {
   status: string
 }
 
+const employeeDefaultValues: Employee = {
+  firstName: '',
+  lastName: '',
+  company: '',
+  department: '',
+  position: '',
+  role: '',
+  status: '',
+}
+
 const employeeColumns = [
   { field: 'firstName', headerName: 'First name' },
   { field: 'lastName', headerName: 'Last name' },
@@ -29,7 +39,11 @@ const EmployeeTable: FC = () => {
   return (
     <div>
       <h2>Employee Table</h2>
-      <Table dataRows={employeeData} tableColumns={columns} />
+      <Table
+        dataRows={employeeData}
+        defaultValues={employeeDefaultValues}
+        tableColumns={columns}
+      />
     </div>
   )
 }

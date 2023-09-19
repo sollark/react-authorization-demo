@@ -10,6 +10,13 @@ export type Person = {
   status: string
 }
 
+const peopleDefaultValues: Person = {
+  firstName: 'dd',
+  lastName: 'dd',
+  category: 'dd',
+  status: 'dd',
+}
+
 const peopleColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', width: 180, editable: true },
   { field: 'lastName', headerName: 'Last name', width: 180, editable: true },
@@ -44,7 +51,11 @@ const PeopleTable: FC = () => {
   return (
     <div>
       <h2>People Table</h2>
-      <Table dataRows={employeeData} tableColumns={peopleColumns} />
+      <Table
+        dataRows={employeeData}
+        defaultValues={peopleDefaultValues}
+        tableColumns={peopleColumns}
+      />
     </div>
   )
 }
