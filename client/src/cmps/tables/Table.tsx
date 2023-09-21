@@ -25,6 +25,8 @@ type TableProps = {
   dataRows: GridRowsProp
   tableColumns: GridColDef[]
   defaultValues: GridRowModel
+  updateRow: (row: GridRowModel) => void
+  deleteRow: (id: GridRowId) => void
 }
 
 // tool bar
@@ -34,10 +36,13 @@ type EditToolbarProps = {
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void
   defaultValues: GridRowModel
+  updateRow: (row: GridRowModel) => void
+  deleteRow: (id: GridRowId) => void
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, defaultValues } = props
+  const { setRows, setRowModesModel, defaultValues, updateRow, deleteRow } =
+    props
 
   const handleClick = () => {
     const id = nanoid()
@@ -64,7 +69,7 @@ function EditToolbar(props: EditToolbarProps) {
 const Table: FC<TableProps> = (props: TableProps) => {
   console.log('Table connected')
 
-  const { dataRows, defaultValues, tableColumns } = props
+  const { dataRows, defaultValues, tableColumns, updateRow, deleteRow } = props
 
   const actionColumn: GridColDef[] = [
     {
@@ -141,6 +146,8 @@ const Table: FC<TableProps> = (props: TableProps) => {
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id))
+
+    deleteRow(id)
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -158,6 +165,9 @@ const Table: FC<TableProps> = (props: TableProps) => {
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
+
+    updateRow(updatedRow)
+
     return updatedRow
   }
 

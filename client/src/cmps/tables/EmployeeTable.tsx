@@ -1,3 +1,5 @@
+import { adaptTableRowToObject } from '@/service/utils.service'
+import { GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import employeeData from '../../assets/mock_data/employee.json'
 import Table from './Table'
@@ -34,6 +36,17 @@ const employeeColumns = [
 
 const employeeActionColumn = [{ field: 'action', headerName: 'Action' }]
 
+function updateEmployee(row: GridRowModel) {
+  console.log('updateEmployee', row)
+
+  const employee = adaptTableRowToObject<Employee>(row)
+  console.log('employee', employee)
+}
+
+function deleteEmployee(id: GridRowId) {
+  console.log('deleteEmployee', id)
+}
+
 const EmployeeTable: FC = () => {
   const columns = [...employeeColumns, ...employeeActionColumn]
   return (
@@ -43,6 +56,8 @@ const EmployeeTable: FC = () => {
         dataRows={employeeData}
         defaultValues={employeeDefaultValues}
         tableColumns={columns}
+        updateRow={updateEmployee}
+        deleteRow={deleteEmployee}
       />
     </div>
   )

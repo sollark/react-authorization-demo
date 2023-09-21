@@ -1,3 +1,5 @@
+import { GridRowModel } from '@mui/x-data-grid'
+
 export function isDevelopment() {
   return process.env.NODE_ENV === 'development'
 }
@@ -13,4 +15,9 @@ export function isEmptyObject(obj: unknown): obj is EmptyObject {
 
 export function isOfType<T>(obj: any, type: { new (): T }): obj is T {
   return typeof obj === 'object' && obj instanceof type
+}
+
+export function adaptTableRowToObject<T>(row: GridRowModel): T {
+  const { isNew, id, ...rest } = row
+  return rest as T
 }

@@ -1,4 +1,4 @@
-import { GridColDef } from '@mui/x-data-grid'
+import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import employeeData from '../../assets/mock_data/employee.json'
 import Table from './Table'
@@ -15,6 +15,14 @@ const peopleDefaultValues: Person = {
   lastName: 'dd',
   category: 'dd',
   status: 'dd',
+}
+
+function updatePerson(row: GridRowModel) {
+  console.log('updatePerson', row)
+}
+
+function deletePerson(id: GridRowId) {
+  console.log('deletePerson', id)
 }
 
 const peopleColumns: GridColDef[] = [
@@ -55,6 +63,8 @@ const PeopleTable: FC = () => {
         dataRows={employeeData}
         defaultValues={peopleDefaultValues}
         tableColumns={peopleColumns}
+        updateRow={updatePerson}
+        deleteRow={deletePerson}
       />
     </div>
   )
