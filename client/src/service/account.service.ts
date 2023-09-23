@@ -8,6 +8,7 @@ import { storeService } from './store.service'
 async function updateAccount(
   firstName: string,
   lastName: string,
+  ID: string,
   companyName?: string,
   departmentName?: string
 ) {
@@ -17,6 +18,7 @@ async function updateAccount(
   >('account/update', {
     firstName,
     lastName,
+    ID,
     companyName,
     departmentName,
   })

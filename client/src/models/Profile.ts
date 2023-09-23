@@ -3,6 +3,7 @@ import { z } from 'zod'
 export type Profile = {
   firstName: string
   lastName: string
+  ID: string
 }
 
 export const ProfileSchema = z.object({
@@ -11,13 +12,19 @@ export const ProfileSchema = z.object({
     .trim()
     .nonempty({ message: 'Field can not be empty' })
     .min(2, { message: 'First name must be at least 2 characters' })
-    .max(20, { message: 'First name must be less than 20 characters' }),
+    .max(24, { message: 'First name must be less than 24 characters' }),
   lastName: z
     .string()
     .trim()
     .nonempty({ message: 'Field can not be empty' })
     .min(2, { message: 'Last name must be at least 2 characters' })
-    .max(20, { message: 'Last name must be less than 20 characters' }),
+    .max(24, { message: 'Last name must be less than 24 characters' }),
+  ID: z
+    .string()
+    .trim()
+    .nonempty({ message: 'Field can not be empty' })
+    .regex(/^[A-Z0-9]{8,18}$/, 'Invalid ID'),
+
   // phone: z
   //   .string()
   //   .trim()

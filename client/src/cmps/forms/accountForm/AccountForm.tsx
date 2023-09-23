@@ -30,6 +30,7 @@ const AccountForm: FC<Props> = (props: Props) => {
   const defaultValues = {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
+    ID: profile?.ID || '',
     companyName: workplace?.company?.companyName || '',
     departmentName: workplace?.department?.departmentName || '',
   }
@@ -40,6 +41,7 @@ const AccountForm: FC<Props> = (props: Props) => {
     const account = await accountService.updateAccount(
       form.firstName,
       form.lastName,
+      form.ID,
       form.companyName,
       form.departmentName
     )

@@ -20,6 +20,8 @@ const AccountDetailsPage: FC = () => {
         <br />
         Last Name: {profile?.lastName}
         <br />
+        ID: {profile?.ID}
+        <br />
         <h2>Workplace</h2>
         {workplace && `Company: ${workplace.company.companyName}`}
         <br />
