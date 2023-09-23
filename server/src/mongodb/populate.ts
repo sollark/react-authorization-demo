@@ -14,7 +14,7 @@ async function populateRole() {
     }
 
     // Define roles to be inserted into the database
-    const rolesToInsert = Object.keys(USER_ROLE) as Role[]
+    const rolesToInsert = Object.values(USER_ROLE) as Role[]
 
     // Insert the roles into the database
     const insertedRoles = await RoleModel.insertMany(
