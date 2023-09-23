@@ -25,7 +25,7 @@ async function getProfileByID(ID: string) {
 }
 
 async function getProfileByIdentifier(identifier: Types.ObjectId) {
-  const profile = await ProfileModel.findById(identifier)
+  const profile = await ProfileModel.findOne(identifier)
   return profile
 }
 
