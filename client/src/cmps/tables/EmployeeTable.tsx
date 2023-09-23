@@ -1,7 +1,8 @@
 import { adaptTableRowToObject } from '@/service/utils.service'
+import { workplaceService } from '@/service/workplace.service'
 import { GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
-import employeeData from '../../assets/mock_data/employee.json'
+import employeeData from './../../assets/mock_data/employee.json'
 import Table from './Table'
 
 export type Employee = {
@@ -48,6 +49,10 @@ function deleteEmployee(id: GridRowId) {
 }
 
 const EmployeeTable: FC = () => {
+  const employee = workplaceService.getAllEmployees()
+
+  console.log('employeeData from api', employee)
+
   const columns = [...employeeColumns]
   return (
     <div>

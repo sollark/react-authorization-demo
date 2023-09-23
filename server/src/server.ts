@@ -49,7 +49,7 @@ app.use(deleteSensitiveData)
 app.use('/api/auth', authRoutes)
 app.use('/api/account', accountRoutes)
 app.use('/api/profile', profileRoutes)
-app.use('/api/workspace', workplaceRoutes)
+app.use('/api/workplace', workplaceRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, '../public/index.html')
