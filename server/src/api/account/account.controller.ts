@@ -7,7 +7,7 @@ import { USER_ROLE } from '../../mongodb/models/role.model.js'
 import { Workplace } from '../../mongodb/models/workplace.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { profileService } from '../../service/profile.service.js'
-import { workplaceService } from '../../service/workspace.service.js'
+import { workplaceService } from '../workspace/workspace.service.js'
 import { accountService } from './account.service.js'
 
 export async function updateAccount(

@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 import UnauthorizedError from '../errors/UnauthorizedError.js'
 import loggerService from './logger.service.js'
 
-interface UserData {
+type UserData = {
   userData?: {
     identifier: Types.ObjectId
   }
