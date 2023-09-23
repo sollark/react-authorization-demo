@@ -27,14 +27,14 @@ const employeeDefaultValues: Employee = {
 const employeeColumns = [
   { field: 'firstName', headerName: 'First name' },
   { field: 'lastName', headerName: 'Last name' },
-  { field: 'company', headerName: 'Company' },
+  // { field: 'company', headerName: 'Company' },
   { field: 'department', headerName: 'Department' },
   { field: 'position', headerName: 'Position' },
   { field: 'role', headerName: 'Role' },
   { field: 'status', headerName: 'Status' },
 ]
 
-const employeeActionColumn = [{ field: 'action', headerName: 'Action' }]
+// const employeeActionColumn = [{ field: 'action', headerName: 'Action' }]
 
 function updateEmployee(row: GridRowModel) {
   console.log('updateEmployee', row)
@@ -48,7 +48,7 @@ function deleteEmployee(id: GridRowId) {
 }
 
 const EmployeeTable: FC = () => {
-  const columns = [...employeeColumns, ...employeeActionColumn]
+  const columns = [...employeeColumns]
   return (
     <div>
       <h2>Employee Table</h2>
