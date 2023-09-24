@@ -1,27 +1,27 @@
-import { Types } from 'mongoose'
-import BadRequestError from '../../errors/BadRequestError.js'
-import { Company, CompanyId } from '../../mongodb/models/company.model.js'
+import { Types } from 'mongoose';
+import BadRequestError from '../../errors/BadRequestError.js';
+import { Company, CompanyId } from '../../mongodb/models/company.model.js';
 import DepartmentModel, {
   Department,
-} from '../../mongodb/models/department.model.js'
-import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
+} from '../../mongodb/models/department.model.js';
+import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js';
 import WorkplaceModel, {
   Workplace,
-} from '../../mongodb/models/workplace.model.js'
-import { getIdentifierFromALS } from '../../service/als.service.js'
-import { companyService } from '../../service/company.service.js'
-import logger from '../../service/logger.service.js'
-import { utilService } from '../../utils/utils.js'
-import { accountService } from '../account/account.service.js'
+} from '../../mongodb/models/workplace.model.js';
+import { getIdentifierFromALS } from '../../service/als.service.js';
+import logger from '../../service/logger.service.js';
+import { utilService } from '../../utils/utils.js';
+import { accountService } from '../account/account.service.js';
+import { companyService } from '../company/company.service.js';
 
-export type EmployeeId = string
+export type EmployeeId = string;
 
 async function createWorkplace(
   employeeId: Types.ObjectId,
   companyId: Types.ObjectId,
   departmentId: Types.ObjectId
 ): Promise<Workplace | null> {
-  const id = await generateEmployeeId()
+  const id = await generateEmployeeId();
 
   // Create a new workplace
   const workplaceRef = await WorkplaceModel.create({
@@ -29,11 +29,11 @@ async function createWorkplace(
     company: companyId,
     department: departmentId,
     employeeId: id,
-  })
+  });
 
   if (!workplaceRef) {
-    logger.warn(`workplaceService - cannot create workplace: ${employeeId}`)
-    throw new BadRequestError('workplace creation failed')
+    logger.warn(`workplaceService - cannot create workplace: ${employeeId}`);
+    throw new BadRequestError('workplace creation failed');
   }
 
   const workplace = await WorkplaceModel.findById(workplaceRef._id)
@@ -43,13 +43,13 @@ async function createWorkplace(
     .populate<{ supervisor: Workplace }>('supervisor')
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
-    .exec()
+    .exec();
 
   if (!workplace) {
     logger.warn(
       `workplaceService - workplace is not found: ${workplaceRef._id}`
-    )
-    throw new BadRequestError('workplace is not found')
+    );
+    throw new BadRequestError('workplace is not found');
   }
 
   logger.info(
@@ -58,9 +58,9 @@ async function createWorkplace(
       null,
       2 // Indentation level, adjust as needed
     )}`
-  )
+  );
 
-  return workplace
+  return workplace;
 }
 
 async function getBasicWorkplaceDetails(
@@ -74,9 +74,9 @@ async function getBasicWorkplaceDetails(
     .populate<{ supervisor: Workplace }>('supervisor')
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
-    .exec()
+    .exec();
 
-  return workplace
+  return workplace;
 }
 
 async function getWorkplace(
@@ -91,19 +91,19 @@ async function getWorkplace(
     .populate<{ supervisor: Workplace }>('supervisor')
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
-    .exec()
+    .exec();
 
-  return workplace
+  return workplace;
 }
 
 async function getAllEmployees(): Promise<Profile[] | undefined> {
-  const identifier = getIdentifierFromALS()
-  const account = await accountService.getAccount(identifier)
-  const { workplace } = account
-  if (!workplace) throw new BadRequestError('Workplace is not found')
-  const { company } = workplace
+  const identifier = getIdentifierFromALS();
+  const account = await accountService.getAccount(identifier);
+  const { workplace } = account;
+  if (!workplace) throw new BadRequestError('Workplace is not found');
+  const { company } = workplace;
 
-  return company.employees
+  return company.employees;
 }
 
 async function joinExistingCompany(
@@ -111,29 +111,30 @@ async function joinExistingCompany(
   companyId: CompanyId,
   employeeId: EmployeeId
 ) {
-  const company = await companyService.getBasicCompanyDetailsById(companyId)
+  const company = await companyService.getBasicCompanyDetailsById(companyId);
 
-  if (!company) throw new BadRequestError('Company is not found', companyId)
+  if (!company) throw new BadRequestError('Company is not found', companyId);
 
   const workplace = await WorkplaceModel.findOne({
     company: company?._id,
     employeeId,
   })
     .lean()
-    .exec()
+    .exec();
 
-  if (!workplace) throw new BadRequestError('Workplace is not found', companyId)
+  if (!workplace)
+    throw new BadRequestError('Workplace is not found', companyId);
 
   // add auth identifier to profile
   await ProfileModel.findOneAndUpdate(
     { _id: workplace.employee },
     { identifier },
     { new: true }
-  ).exec()
+  ).exec();
 
-  const updatedWorkplace = await getBasicWorkplaceDetails(workplace._id)
+  const updatedWorkplace = await getBasicWorkplaceDetails(workplace._id);
 
-  return updatedWorkplace
+  return updatedWorkplace;
 }
 
 async function joinNewCompany(
@@ -141,28 +142,28 @@ async function joinNewCompany(
   companyName: string,
   departmentName: string
 ) {
-  let company = null
-  company = await companyService.createCompany(companyName)
+  let company = null;
+  company = await companyService.createCompany(companyName);
 
-  let department = null
-  department = await DepartmentModel.create({ departmentName })
+  let department = null;
+  department = await DepartmentModel.create({ departmentName });
 
-  company = await companyService.addDepartment(company._id, department._id)
+  company = await companyService.addDepartment(company._id, department._id);
 
   if (!company) {
     logger.warn(
       `workplaceService -joinNewCompany: adding department failed: ${departmentName}`
-    )
-    throw new BadRequestError('Adding department to company failed')
+    );
+    throw new BadRequestError('Adding department to company failed');
   }
 
   const workplace = await createWorkplace(
     identifier,
     company._id,
     department._id
-  )
+  );
 
-  return workplace
+  return workplace;
 }
 
 async function setSupervisor(
@@ -180,15 +181,15 @@ async function setSupervisor(
     .populate<{ supervisor: Workplace }>('supervisor')
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
-    .exec()
+    .exec();
 
   const supervisorWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: supervisorId },
     { $push: { subordinates: employeeId } },
     { new: true }
-  ).exec()
+  ).exec();
 
-  return employeeWorkplace
+  return employeeWorkplace;
 }
 
 async function addSubordinate(
@@ -206,15 +207,15 @@ async function addSubordinate(
     .populate<{ supervisor: Workplace }>('supervisor')
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
-    .exec()
+    .exec();
 
   const subordinateWorkplace = await WorkplaceModel.findOneAndUpdate(
     { employee: subordinateId },
     { supervisor: employeeId },
     { new: true }
-  ).exec()
+  ).exec();
 
-  return employeeWorkplace
+  return employeeWorkplace;
 }
 
 async function updateWorkplace(
@@ -232,11 +233,11 @@ async function updateWorkplace(
     .populate<{ supervisor: Workplace }>('supervisor')
     .populate<{ subordinates: Workplace[] }>('subordinates')
     .lean()
-    .exec()
+    .exec();
 
-  logger.info(`workplaceService - workplace updated ${workplace}`)
+  logger.info(`workplaceService - workplace updated ${workplace}`);
 
-  return workplace
+  return workplace;
 }
 
 export const workplaceService = {
@@ -249,19 +250,19 @@ export const workplaceService = {
   setSupervisor,
   addSubordinate,
   updateWorkplace,
-}
+};
 
 async function generateEmployeeId(): Promise<EmployeeId> {
-  let id = utilService.getRandomInt(1000, 9999)
+  let id = utilService.getRandomInt(1000, 9999);
 
   const existingCode = await WorkplaceModel.findOne({
     employeeId: id.toString(),
-  })
+  });
 
   if (existingCode) {
     // Code already exists, generate a new one recursively
-    return generateEmployeeId()
+    return generateEmployeeId();
   }
 
-  return id.toString() as EmployeeId
+  return id.toString() as EmployeeId;
 }
