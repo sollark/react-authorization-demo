@@ -28,7 +28,7 @@ async function createAccount(
 
   if (!accountRef) {
     logger.warn(`accountService - cannot create account: ${identifier}`)
-    throw new BadRequestError('Account creation failed')
+    throw new BadRequestError('Could not create account')
   }
 
   const account = await AccountModel.findById(accountRef._id)

@@ -2,15 +2,15 @@ import { AxiosResponse } from 'axios'
 import { Profile } from '../models/Profile'
 import { httpService } from './axios/http.service'
 
-async function createProfile(
+async function createBlankProfile(
   profile: Profile
 ): Promise<AxiosResponse<Profile>> {
   const response = await httpService.post<Profile, Profile>(
-    '/createProfile',
+    '/createBlankProfile',
     profile
   )
 
-  console.log('profileService - createProfile, response data', response)
+  console.log('profileService - createBlankProfile, response data', response)
 
   const { newProfile } = response.data as any
 
@@ -18,5 +18,5 @@ async function createProfile(
 }
 
 export const profileService = {
-  createProfile,
+  createBlankProfile,
 }

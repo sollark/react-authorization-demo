@@ -1,4 +1,4 @@
-import { model, Schema, Types } from 'mongoose'
+import { model, Schema } from 'mongoose'
 
 export type Profile = {
   firstName: string
@@ -7,10 +7,9 @@ export type Profile = {
 }
 
 const ProfileSchema = new Schema({
-  identifier: { type: Types.ObjectId, unique: true },
   firstName: { type: String, default: '' },
   lastName: { type: String, default: '' },
-  ID: { type: String, default: '' },
+  ID: { type: String, default: '', unique: true },
 })
 
 const ProfileModel = model<Profile>('Profile', ProfileSchema)

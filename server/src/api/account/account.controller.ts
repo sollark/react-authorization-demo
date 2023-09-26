@@ -10,12 +10,18 @@ import { profileService } from '../../service/profile.service.js'
 import { workplaceService } from '../workspace/workspace.service.js'
 import { accountService } from './account.service.js'
 
+// TODO
+// {
+//     "success": true,
+//     "message": "User logged in successfully",
+//     "data": { }
+// }
+
 export async function updateAccount(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // TODO update workplace (department)
   const identifier = getIdentifierFromALS()
   const account: Account = req.body
 
