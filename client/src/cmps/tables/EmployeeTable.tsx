@@ -1,6 +1,6 @@
 import { adaptTableRowToObject } from '@/service/utils.service'
 import { workplaceService } from '@/service/workplace.service'
-import { GridRowId, GridRowModel } from '@mui/x-data-grid'
+import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import employeeData from './../../assets/mock_data/employee.json'
 import Table from './Table'
@@ -25,17 +25,14 @@ const employeeDefaultValues: Employee = {
   status: '',
 }
 
-const employeeColumns = [
-  { field: 'firstName', headerName: 'First name' },
-  { field: 'lastName', headerName: 'Last name' },
-  // { field: 'company', headerName: 'Company' },
-  { field: 'department', headerName: 'Department' },
-  { field: 'position', headerName: 'Position' },
-  { field: 'role', headerName: 'Role' },
-  { field: 'status', headerName: 'Status' },
+const employeeColumns: GridColDef[] = [
+  { field: 'firstName', headerName: 'First name', editable: true },
+  { field: 'lastName', headerName: 'Last name', editable: true },
+  { field: 'department', headerName: 'Department', editable: true },
+  { field: 'position', headerName: 'Position', editable: true },
+  { field: 'role', headerName: 'Role', editable: true },
+  { field: 'status', headerName: 'Status', editable: true },
 ]
-
-// const employeeActionColumn = [{ field: 'action', headerName: 'Action' }]
 
 function updateEmployee(row: GridRowModel) {
   console.log('updateEmployee', row)
@@ -53,14 +50,13 @@ const EmployeeTable: FC = () => {
 
   console.log('employeeData from api', employee)
 
-  const columns = [...employeeColumns]
   return (
     <div>
       <h2>Employee Table</h2>
       <Table
         dataRows={employeeData}
         defaultValues={employeeDefaultValues}
-        tableColumns={columns}
+        tableColumns={employeeColumns}
         updateRow={updateEmployee}
         deleteRow={deleteEmployee}
       />

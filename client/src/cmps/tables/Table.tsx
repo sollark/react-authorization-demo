@@ -47,7 +47,7 @@ function EditToolbar(props: EditToolbarProps) {
   const handleClick = () => {
     const id = nanoid()
 
-    setRows((oldRows) => [...oldRows, { id, ...defaultValues, isNew: true }])
+    setRows((oldRows) => [{ id, ...defaultValues, isNew: true }, ...oldRows])
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit },
@@ -125,6 +125,7 @@ const Table: FC<TableProps> = (props: TableProps) => {
 
   const [rows, setRows] = useState(data)
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
+  const [rowsToUpdate, setRowsToUpdate] = useState<GridRowModel[]>([])
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
@@ -136,12 +137,27 @@ const Table: FC<TableProps> = (props: TableProps) => {
   }
 
   const handleEditClick = (id: GridRowId) => () => {
-    console.log('handleEditClick, id: ', id)
+    setRowsToUpdate((prev) => [...prev, rows.filter((row) => row.id === id)])
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
+
+    const editedRow = rows.filter((row) => row.id === id)
+    //TODO make fuction return boolean
+    const isSuccess = await updateRow(editedRow)
+
+    if (isSuccess) {
+      const oldVersionRow = rowsToUpdate.find((row) => row.id === id)
+      setRows(
+        rows.map((row) =>
+          row.id === id && oldVersionRow ? oldVersionRow : row
+        )
+      )
+    }
+
+    setRowsToUpdate((prev) => prev.filter((row) => row.id !== id))
   }
 
   const handleDeleteClick = (id: GridRowId) => () => {
@@ -165,8 +181,6 @@ const Table: FC<TableProps> = (props: TableProps) => {
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
-
-    updateRow(updatedRow)
 
     return updatedRow
   }
