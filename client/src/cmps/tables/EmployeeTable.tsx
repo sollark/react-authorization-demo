@@ -34,11 +34,17 @@ const employeeColumns: GridColDef[] = [
   { field: 'status', headerName: 'Status', editable: true },
 ]
 
-function updateEmployee(row: GridRowModel) {
+async function updateEmployee(row: GridRowModel): Promise<boolean> {
   console.log('updateEmployee', row)
 
   const employee = adaptTableRowToObject<Employee>(row)
   console.log('employee', employee)
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(false) // Resolves the promise after 5 seconds
+    }, 5000) // 5000 milliseconds = 5 seconds
+  })
 }
 
 function deleteEmployee(id: GridRowId) {

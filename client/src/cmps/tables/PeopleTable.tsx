@@ -19,6 +19,8 @@ const peopleDefaultValues: Person = {
 
 function updatePerson(row: GridRowModel) {
   console.log('updatePerson', row)
+
+  return Promise.resolve(true)
 }
 
 function deletePerson(id: GridRowId) {
