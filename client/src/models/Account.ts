@@ -1,20 +1,26 @@
 import { Profile } from './Profile'
-import { UserRole } from './Role'
+import { Role } from './Role'
 import { Workplace } from './Workplace'
 
+export type Status =
+  | 'Unregistered'
+  | 'Pending'
+  | 'Active'
+  | 'Inactive'
+  | 'Deleted'
+
 export const ACCOUNT_STATUS = {
-  unregistered: 'Unregistered',
-  pending: 'Pending',
-  active: 'Active',
-  inactive: 'Inactive',
-  deleted: 'Deleted',
+  unregistered: 'Unregistered' as Status,
+  pending: 'Pending' as Status,
+  active: 'Active' as Status,
+  inactive: 'Inactive' as Status,
+  deleted: 'Deleted' as Status,
 } as const
-export type Status = keyof typeof ACCOUNT_STATUS
 
 export type Account = {
   profile: Profile
   workplace?: Workplace
   isComplete: boolean
-  role: UserRole
+  role: Role
   status: Status
 }
