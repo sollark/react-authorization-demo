@@ -12,7 +12,7 @@ async function createProfile(profile: Profile) {
     logger.warn(
       `profileService - attempt to create new profile with existing ID: ${ID}`
     )
-    throw new BadRequestError('ID is already taken', ID)
+    throw new BadRequestError('Person with this ID already exists', ID)
   }
 
   const newProfile = await ProfileModel.create(profile)

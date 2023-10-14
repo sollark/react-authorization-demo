@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { getIdentifierFromALS } from '../../service/als.service.js'
-import { workplaceService } from '../workspace/workspace.service.js'
 import { profileService } from '../profile/profile.service.js'
 
 // TODO res structure
@@ -19,17 +18,15 @@ export async function addEmployee(
   const identifier = getIdentifierFromALS()
 
   const data = req.body
-  const { profile, workplace } = data
+
+  // destruct employee table rows
+  const { firstName, lastName, departmentName, position, role, status } = data
 
   // create profile
   const newProfile = await profileService.createProfile(profile)
 
   // create workplace
-
-  // TODO add company id to als
-  // TODO add company id to als
-  // TODO add company id to als
-  const companyDBId = workplaceService.getCompanyDBId()
+  // const companyDBId = workplaceService.getCompanyDBId()
 
   res.status(200).json({
     success: true,

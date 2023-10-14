@@ -1,8 +1,8 @@
 import { Account } from '@/models/Account'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
-import useProfileStore from '@/stores/userStore'
 import useRoleStore from '@/stores/roleStore'
+import useProfileStore from '@/stores/userStore'
 import useWorkplaceStore from '@/stores/workplaceStore'
 
 function saveAccount(account: Account) {
@@ -12,7 +12,7 @@ function saveAccount(account: Account) {
 
   useAccountStore.getState().setIsComplete(isComplete)
   useProfileStore.getState().setProfile(profile)
-  useRoleStore.getState().setRole(role.role)
+  useRoleStore.getState().setRole(role)
 
   if (workplace) {
     console.log('storeService - saveAccount, workplace :', workplace)

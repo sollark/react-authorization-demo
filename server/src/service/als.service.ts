@@ -16,9 +16,7 @@ export function getIdentifierFromALS() {
   const identifier = store?.userData?.identifier
 
   if (!identifier) {
-    loggerService.warn(
-      `account.controller - unauthenticated request getAccount()`
-    )
+    loggerService.warn(`ALSService- cannot get identifier from ALS`)
 
     throw new UnauthorizedError('You are not unauthorized')
   }

@@ -3,6 +3,7 @@ import { Account } from '@/models/Account'
 import { Profile } from '@/models/Profile'
 import { Workplace } from '@/models/Workplace'
 import { httpService } from './axios/http.service'
+import { storeService } from './store.service'
 
 async function updateEmployee(employee: Employee) {
   const response = await httpService.post<
