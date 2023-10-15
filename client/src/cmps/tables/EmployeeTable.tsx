@@ -10,6 +10,7 @@ import Table from './Table'
 export type Employee = {
   firstName: string
   lastName: string
+  ID: string
   departmentName: string
   position: string
   role: Role
@@ -19,6 +20,7 @@ export type Employee = {
 const employeeDefaultValues: Employee = {
   firstName: '',
   lastName: '',
+  ID: '',
   departmentName: '',
   position: '',
   role: USER_ROLE.user,
@@ -28,6 +30,7 @@ const employeeDefaultValues: Employee = {
 const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', editable: true },
   { field: 'lastName', headerName: 'Last name', editable: true },
+  { field: 'ID', headerName: 'ID', editable: true },
   { field: 'departmentName', headerName: 'Department', editable: true },
   { field: 'position', headerName: 'Position', editable: true },
   { field: 'role', headerName: 'Role', editable: true },
