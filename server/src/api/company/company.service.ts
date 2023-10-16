@@ -3,22 +3,24 @@ import CompanyModel, {
   Company,
   CompanyId,
 } from '../../mongodb/models/company.model.js'
-import { Department } from '../../mongodb/models/department.model.js'
+import DepartmentModel, {
+  Department,
+} from '../../mongodb/models/department.model.js'
 import { Profile } from '../../mongodb/models/profile.model.js'
 import { utilService } from '../../utils/utils.js'
 import logger from './../../service/logger.service.js'
 
-async function createCompany(name: string) {
-  const id = await generateCompanyId()
+async function createCompany(companyName: string) {
+  const companyId = await generateCompanyId()
 
-  const company = await CompanyModel.create({
-    companyId: id,
-    companyName: name,
+  const newCompany = await CompanyModel.create({
+    companyId,
+    companyName,
   })
 
-  logger.info(`companyService - company added: ${company}`)
+  logger.info(`companyService - company added: ${newCompany}`)
 
-  return company
+  return newCompany
 }
 
 async function isCompanyIdExists(company: string) {
@@ -78,6 +80,22 @@ async function addDepartment(
     .exec()
 
   return company
+}
+
+async function getDepartment(
+  companyId: Types.ObjectId,
+  departmentName: string
+): Promise<(Department & { _id: Types.ObjectId }) | null> {
+  // TODO look through company's departments to find . Below code is not correct
+  const department = await DepartmentModel.findOne({
+    companyId,
+    departmentName,
+  })
+    .populate<{ employees: Profile[] }>('employees')
+    .lean()
+    .exec()
+
+  return department
 }
 
 async function addEmployee(

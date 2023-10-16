@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { getIdentifierFromALS } from '../../service/als.service.js'
+import { departmentService } from '../../service/department.service.js'
 import { profileService } from '../profile/profile.service.js'
 
 // TODO res structure
@@ -20,10 +21,18 @@ export async function addEmployee(
   const data = req.body
 
   // destruct employee table rows
-  const { firstName, lastName, departmentName, position, role, status } = data
+  const { firstName, lastName, ID, departmentName, position, role, status } =
+    data
 
   // create profile
-  const newProfile = await profileService.createProfile(profile)
+  const profile = await profileService.createProfile({
+    firstName,
+    lastName,
+    ID,
+  })
+
+  // TODO find any department, should find company department
+  const department = departmentService.getDepartmentDBId(departmentName)
 
   // create workplace
   // const companyDBId = workplaceService.getCompanyDBId()
