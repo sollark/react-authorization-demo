@@ -2,6 +2,7 @@ import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, {
   Account,
+  AccountRef,
   Status,
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
@@ -98,6 +99,17 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
       2 // Indentation level, adjust as needed
     )}`
   )
+
+  return account
+}
+
+async function getAccountRef(identifier: Types.ObjectId): Promise<AccountRef> {
+  const account = await AccountModel.findOne({ identifier }).lean().exec()
+
+  if (!account) {
+    logger.warn(`accountService - account is not found: ${identifier}`)
+    throw new BadRequestError('Account is not found')
+  }
 
   return account
 }
@@ -231,6 +243,7 @@ export const accountService = {
   createAccount,
   setRole,
   getAccount,
+  getAccountRef,
   deleteAccount,
   addWorkplace,
   sortAccountData,

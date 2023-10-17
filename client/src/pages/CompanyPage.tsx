@@ -1,9 +1,21 @@
 import EmployeeTable from '@/cmps/tables/EmployeeTable'
 import { Box } from '@mui/material'
-import { FC } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
-const CompanyPage: FC = () => {
-  console.log(' Company connected')
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['employees'],
+    queryFn: () => workplaceService.getAllEmployees(),
+  })
+
+  if (isPending) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
   return (
     <Box
       sx={{

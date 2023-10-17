@@ -58,7 +58,7 @@ async function getBasicCompanyDetailsById(companyId: CompanyId) {
 }
 
 async function getCompany(id: CompanyId) {
-  const company = await CompanyModel.findOne({ id }).lean().exec()
+  const company = await CompanyModel.findById(id).lean().exec()
 
   logger.info(`companyService - company fetched ${company}`)
 
@@ -115,6 +115,20 @@ async function addEmployee(
   return company
 }
 
+async function getCompanyEmployees(
+  companyId: Types.ObjectId
+): Promise<Profile[] | null> {
+  const company = await CompanyModel.findById(companyId)
+    .select('employees')
+    .populate<{ employees: Profile[] }>('employees')
+    .lean()
+    .exec()
+
+  const employees = company?.employees
+
+  return employees ? employees : null
+}
+
 async function updateCompany(
   id: number,
   name: string
@@ -145,6 +159,7 @@ export const companyService = {
   getBasicCompanyDetails,
   getBasicCompanyDetailsById,
   getCompany,
+  getCompanyEmployees,
   addEmployee,
   updateCompany,
   deleteCompany,

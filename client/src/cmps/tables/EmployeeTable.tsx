@@ -11,6 +11,7 @@ export type Employee = {
   firstName: string
   lastName: string
   ID: string
+  companyName: string
   departmentName: string
   position: string
   role: Role
@@ -21,6 +22,7 @@ const employeeDefaultValues: Employee = {
   firstName: '',
   lastName: '',
   ID: '',
+  companyName: '',
   departmentName: '',
   position: '',
   role: USER_ROLE.user,
@@ -31,6 +33,7 @@ const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', editable: true },
   { field: 'lastName', headerName: 'Last name', editable: true },
   { field: 'ID', headerName: 'ID', editable: true },
+  { field: 'companyName', headerName: 'Company', editable: false },
   { field: 'departmentName', headerName: 'Department', editable: true },
   { field: 'position', headerName: 'Position', editable: true },
   { field: 'role', headerName: 'Role', editable: true },

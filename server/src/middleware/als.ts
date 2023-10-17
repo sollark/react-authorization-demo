@@ -11,15 +11,7 @@ async function setupAsyncLocalStorage(
 
   const storage = {}
 
-  // TODO change refresh token to access token and take it from header
-  // TODO separate refresh token from als data
   asyncLocalStorage.run(storage, async () => {
-    const authorizationHeader = req.headers['authorization']
-    if (!authorizationHeader) return next()
-    const accessToken = authorizationHeader.split(' ')[1]
-    if (!accessToken) return next()
-
-    ////////////////////////
     const refreshToken = req.cookies['refreshToken']
     if (!refreshToken) return next()
 

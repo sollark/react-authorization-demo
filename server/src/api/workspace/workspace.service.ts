@@ -7,6 +7,7 @@ import DepartmentModel, {
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import WorkplaceModel, {
   Workplace,
+  WorkplaceRef,
 } from '../../mongodb/models/workplace.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import logger from '../../service/logger.service.js'
@@ -94,6 +95,14 @@ async function getWorkplace(
     .exec()
 
   return workplace
+}
+
+async function getWorkplaceRefById(
+  workplaceId: Types.ObjectId
+): Promise<WorkplaceRef | null> {
+  const workplaceRef = await WorkplaceModel.findById(workplaceId).lean().exec()
+
+  return workplaceRef
 }
 
 async function getAllEmployees(): Promise<Profile[] | undefined> {
@@ -242,6 +251,7 @@ async function updateWorkplace(
 export const workplaceService = {
   createWorkplace,
   getBasicWorkplaceDetails,
+  getWorkplaceRefById,
   getAllEmployees,
   joinExistingCompany,
   joinNewCompany,
