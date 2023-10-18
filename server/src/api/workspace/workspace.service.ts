@@ -9,10 +9,8 @@ import WorkplaceModel, {
   Workplace,
   WorkplaceRef,
 } from '../../mongodb/models/workplace.model.js'
-import { getIdentifierFromALS } from '../../service/als.service.js'
 import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
-import { accountService } from '../account/account.service.js'
 import { companyService } from '../company/company.service.js'
 
 export type EmployeeId = string
@@ -103,16 +101,6 @@ async function getWorkplaceRefById(
   const workplaceRef = await WorkplaceModel.findById(workplaceId).lean().exec()
 
   return workplaceRef
-}
-
-async function getAllEmployees(): Promise<Profile[] | undefined> {
-  const identifier = getIdentifierFromALS()
-  const account = await accountService.getAccount(identifier)
-  const { workplace } = account
-  if (!workplace) throw new BadRequestError('Workplace is not found')
-  const { company } = workplace
-
-  return company.employees
 }
 
 async function joinExistingCompany(
@@ -252,7 +240,6 @@ export const workplaceService = {
   createWorkplace,
   getBasicWorkplaceDetails,
   getWorkplaceRefById,
-  getAllEmployees,
   joinExistingCompany,
   joinNewCompany,
   setSupervisor,

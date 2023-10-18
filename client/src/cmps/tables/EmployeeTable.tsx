@@ -7,6 +7,10 @@ import { FC } from 'react'
 import employeeData from './../../assets/mock_data/employee.json'
 import Table from './Table'
 
+type EmployeeTableProps = {
+  employees: Employee[] | null
+}
+
 export type Employee = {
   firstName: string
   lastName: string
@@ -59,7 +63,7 @@ function deleteEmployee(id: GridRowId) {
   console.log('deleteEmployee', id)
 }
 
-const EmployeeTable: FC = () => {
+const EmployeeTable: FC<EmployeeTableProps> = () => {
   const employee = workplaceService.getAllEmployees()
 
   console.log('employeeData from api', employee)

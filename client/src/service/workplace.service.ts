@@ -21,7 +21,7 @@ async function updateEmployee(employee: Employee) {
 
 async function getAllEmployees(): Promise<Profile[] | null> {
   const response = await httpService.get<null, Profile[]>(
-    'workplace/getAllEmployees',
+    'company/employees',
     null
   )
 
