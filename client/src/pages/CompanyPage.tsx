@@ -4,6 +4,9 @@ import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 
+// TODO imposable to add new employee through the table
+// need big refactor, add new employee form, etc
+// clean up the code
 const CompanyPage: FC = () => {
   console.log(' Company connected')
 

@@ -13,41 +13,28 @@ export const ACCOUNT_STATUS = {
 export type Status = keyof typeof ACCOUNT_STATUS
 
 export type Account = {
-  identifier: Types.ObjectId
-  role?: Role
+  identifier?: Types.ObjectId
   profile: Profile
-  workplace?: Workplace
-  isComplete: boolean
   status: Status
+  isComplete: boolean
+  role?: Role
+  workplace?: Workplace
 }
 
 export type AccountRef = {
-  identifier: Types.ObjectId
-  role?: Types.ObjectId
+  identifier?: Types.ObjectId
   profile: Types.ObjectId
-  workplace?: Types.ObjectId
-  isComplete: boolean
   status: Status
+  isComplete: boolean
+  role?: Types.ObjectId
+  workplace?: Types.ObjectId
 }
 
 const AccountSchema = new Schema({
-  identifier: { type: Types.ObjectId, required: true, unique: true },
-  role: {
-    type: Schema.Types.ObjectId,
-    ref: 'Role',
-  },
+  identifier: { type: Types.ObjectId, unique: true },
   profile: {
     type: Schema.Types.ObjectId,
     ref: 'Profile',
-    required: true,
-  },
-  workplace: {
-    type: Schema.Types.ObjectId,
-    ref: 'workplace',
-  },
-  isComplete: {
-    type: Boolean,
-    default: false,
     required: true,
   },
   status: {
@@ -56,6 +43,19 @@ const AccountSchema = new Schema({
     default: ACCOUNT_STATUS.unregistered,
     required: true,
     immutable: true,
+  },
+  isComplete: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: 'Role',
+  },
+  workplace: {
+    type: Schema.Types.ObjectId,
+    ref: 'workplace',
   },
 })
 

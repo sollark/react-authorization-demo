@@ -103,6 +103,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   return account
 }
 
+// TODO check if in use
 async function getAccountRef(identifier: Types.ObjectId): Promise<AccountRef> {
   const account = await AccountModel.findOne({ identifier }).lean().exec()
 

@@ -19,12 +19,13 @@ async function updateEmployee(employee: Employee) {
   return account ? account : null
 }
 
-async function getAllEmployees(): Promise<Profile[] | null> {
-  const response = await httpService.get<null, Profile[]>(
+async function getAllEmployees(): Promise<Account[] | null> {
+  const response = await httpService.get<null, Account[]>(
     'company/employees',
     null
   )
 
+  //TODO build employees from accounts
   console.log('workspaceService - getAllEmployees, response.data', response)
 
   const { employees } = response as any

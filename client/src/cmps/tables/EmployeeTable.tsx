@@ -12,14 +12,15 @@ type EmployeeTableProps = {
 }
 
 export type Employee = {
-  firstName: string
-  lastName: string
-  ID: string
-  companyName: string
-  departmentName: string
-  position: string
-  role: Role
-  status: Status
+  firstName: string // Profile
+  lastName: string // Profile
+  ID: string // Profile
+  companyName: string // Workplace
+  departmentName: string // Workplace
+  employeeId: string // Workplace
+  position: string // Workplace
+  role: Role // Account
+  status: Status // Account
 }
 
 const employeeDefaultValues: Employee = {
@@ -28,6 +29,7 @@ const employeeDefaultValues: Employee = {
   ID: '',
   companyName: '',
   departmentName: '',
+  employeeId: '',
   position: '',
   role: USER_ROLE.user,
   status: ACCOUNT_STATUS.unregistered,
@@ -39,6 +41,7 @@ const employeeColumns: GridColDef[] = [
   { field: 'ID', headerName: 'ID', editable: true },
   { field: 'companyName', headerName: 'Company', editable: false },
   { field: 'departmentName', headerName: 'Department', editable: true },
+  { field: 'employeeId', headerName: 'Employee ID', editable: false },
   { field: 'position', headerName: 'Position', editable: true },
   { field: 'role', headerName: 'Role', editable: true },
   { field: 'status', headerName: 'Status', editable: true },
