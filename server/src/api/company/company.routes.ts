@@ -6,3 +6,5 @@ import { addEmployee, getCompanyEmployees } from './company.controller.js'
 const router = express.Router()
 router.post('/addEmployee', requireAuth, asyncHandler(addEmployee))
 router.get('/employees', requireAuth, asyncHandler(getCompanyEmployees))
+
+export { router as companyRoutes }

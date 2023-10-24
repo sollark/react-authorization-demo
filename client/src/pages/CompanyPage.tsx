@@ -1,4 +1,3 @@
-import EmployeeTable from '@/cmps/tables/EmployeeTable'
 import { workplaceService } from '@/service/workplace.service'
 import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -23,13 +22,15 @@ const CompanyPage: FC = () => {
     return <span>Error: {error.message}</span>
   }
 
+  //TODO client gets empty array
   return (
     <Box
       sx={{
         p: 4,
       }}>
       <h1>Company page</h1>
-      <EmployeeTable employees={data} />
+      {JSON.stringify(data)}
+      {/* <EmployeeTable employees={data} /> */}
     </Box>
   )
 }

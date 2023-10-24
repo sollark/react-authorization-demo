@@ -46,14 +46,9 @@ export async function getCompanyEmployees(
   const profileIDsToFind = employees.map((profile) => profile.ID)
 
   // Find accounts with the specified profiles
-  const accounts = accountModel.find(
-    { profile: { $in: profileIDsToFind } },
-    (err: any) => {
-      if (err) {
-        throw new BadRequestError('Error fetching accounts')
-      }
-    }
-  )
+  const accounts = await accountModel.find({
+    profile: { $in: profileIDsToFind },
+  })
 
   res.status(200).json({
     success: true,

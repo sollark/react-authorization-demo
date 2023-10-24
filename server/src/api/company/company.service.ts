@@ -122,7 +122,6 @@ async function getCompanyEmployees(
     .select('employees')
     .populate<{ employees: Profile[] }>('employees')
     .lean()
-    .exec()
 
   const employees = company?.employees
 

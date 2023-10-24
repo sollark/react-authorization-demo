@@ -20,6 +20,7 @@ import { workplaceRoutes } from './api/workspace/workspace.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
+import { companyRoutes } from './api/company/company.routes.js'
 import { profileRoutes } from './api/profile/profile.routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -50,6 +51,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/account', accountRoutes)
 app.use('/api/profile', profileRoutes)
 app.use('/api/workplace', workplaceRoutes)
+app.use('/api/company', companyRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, '../public/index.html')
