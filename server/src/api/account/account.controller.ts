@@ -4,9 +4,11 @@ import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
 import { Department } from '../../mongodb/models/department.model.js'
 import { USER_ROLE } from '../../mongodb/models/role.model.js'
-import { Workplace } from '../../mongodb/models/workplace.model.js'
+import { Employee } from '../../mongodb/models/employee.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
+import { departmentService } from '../../service/department.service.js'
 import { profileService } from '../../service/profile.service.js'
+import { companyService } from '../company/company.service.js'
 import { workplaceService } from '../workspace/workspace.service.js'
 import { accountService } from './account.service.js'
 
@@ -49,7 +51,7 @@ export async function updateAccount(
 
   const { companyName, companyId } = updatedCompanyData as Partial<Company>
   const { departmentName } = updatedDepartmentData as Partial<Department>
-  const { employeeId } = updatedWorkplaceData as Partial<Workplace>
+  const { employeeId } = updatedWorkplaceData as Partial<Employee>
 
   let workplace: any = null
   if (companyId && employeeId) {
@@ -64,10 +66,28 @@ export async function updateAccount(
   }
 
   if (companyName && departmentName) {
-    workplace = await workplaceService.joinNewCompany(
-      updatedProfile._id,
-      companyName,
-      departmentName
+    const company = await companyService.createCompany(companyName)
+    const department = await departmentService.createDepartment(departmentName)
+
+    let updatedCompany = await companyService.addDepartment(
+      company._id,
+      department._id
+    )
+
+    if (!updatedCompany) {
+      throw new BadRequestError('Cannot update company')
+    }
+
+    // Add empoyee waits for employeeId to be set
+    updatedCompany = await companyService.addEmployee(
+      updatedCompany._id,
+      identifier
+    )
+
+    workplace = await workplaceService.createWorkplace(
+      identifier,
+      updatedCompany._id,
+      department._id
     )
 
     // when joining new company, set role to manager

@@ -1,4 +1,4 @@
-import useWorkplaceStore from '@/stores/workplaceStore'
+import useWorkplaceStore from '@/stores/employeeStore'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
 

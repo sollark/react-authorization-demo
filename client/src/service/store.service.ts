@@ -3,7 +3,7 @@ import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
 import useRoleStore from '@/stores/roleStore'
 import useProfileStore from '@/stores/userStore'
-import useWorkplaceStore from '@/stores/workplaceStore'
+import useWorkplaceStore from '@/stores/employeeStore'
 
 function saveAccount(account: Account) {
   console.log('storeService - saveAccount, account :', account)

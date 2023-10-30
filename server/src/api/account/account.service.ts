@@ -10,8 +10,8 @@ import DepartmentModel from '../../mongodb/models/department.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import WorkplaceRefModel, {
-  Workplace,
-} from '../../mongodb/models/workplace.model.js'
+  Employee,
+} from '../../mongodb/models/employee.model.js'
 import logger from '../../service/logger.service.js'
 
 async function createAccount(
@@ -35,7 +35,7 @@ async function createAccount(
   const account = await AccountModel.findById(accountRef._id)
     .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
-    .populate<{ workplace: Workplace }>('workplace')
+    .populate<{ workplace: Employee }>('workplace')
     .populate<{ status: Status }>('status')
     .lean()
     .exec()
@@ -70,7 +70,7 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workplace: Workplace }>({
+    .populate<{ workplace: Employee }>({
       path: 'workplace',
       populate: [
         {
@@ -130,7 +130,7 @@ async function addWorkplace(
   )
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workplace: Workplace }>({
+    .populate<{ workplace: Employee }>({
       path: 'workplace',
       populate: [
         {
@@ -160,7 +160,7 @@ async function completeAccount(
   )
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workplace: Workplace }>({
+    .populate<{ workplace: Employee }>({
       path: 'workplace',
       populate: [
         {

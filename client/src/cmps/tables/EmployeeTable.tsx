@@ -11,7 +11,7 @@ type EmployeeTableProps = {
   employees: Employee[] | null
 }
 
-export type Employee = {
+export type EmployeeTableColumns = {
   firstName: string // Profile
   lastName: string // Profile
   ID: string // Profile
@@ -23,7 +23,7 @@ export type Employee = {
   status: Status // Account
 }
 
-const employeeDefaultValues: Employee = {
+const employeeDefaultValues: EmployeeTableColumns = {
   firstName: '',
   lastName: '',
   ID: '',
@@ -50,7 +50,7 @@ const employeeColumns: GridColDef[] = [
 async function updateEmployee(row: GridRowModel): Promise<boolean> {
   console.log('updateEmployee', row)
 
-  const employee = adaptTableRowToObject<Employee>(row)
+  const employee = adaptTableRowToObject<EmployeeTableColumns>(row)
   console.log('employee', employee)
 
   // const res = await workplaceService.updateEmployee(employee)

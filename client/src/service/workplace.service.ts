@@ -1,13 +1,13 @@
 import { Employee } from '@/cmps/tables/EmployeeTable'
 import { Account } from '@/models/Account'
 import { Profile } from '@/models/Profile'
-import { Workplace } from '@/models/Workplace'
+import { Employee } from '@/models/Employee'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
 async function updateEmployee(employee: Employee) {
   const response = await httpService.post<
-    Partial<Account> & Partial<Workplace> & Omit<Profile, 'ID'>,
+    Partial<Account> & Partial<Employee> & Omit<Profile, 'ID'>,
     Account
   >('account/update', employee)
 

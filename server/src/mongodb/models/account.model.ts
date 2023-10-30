@@ -1,7 +1,7 @@
 import { Schema, Types, model } from 'mongoose'
 import { Profile } from './profile.model.js'
 import { Role } from './role.model.js'
-import { Workplace } from './workplace.model.js'
+import { Employee } from './employee.model.js'
 
 export const ACCOUNT_STATUS = {
   unregistered: 'Unregistered',
@@ -18,7 +18,7 @@ export type Account = {
   status: Status
   isComplete: boolean
   role?: Role
-  workplace?: Workplace
+  workplace?: Employee
 }
 
 export type AccountRef = {

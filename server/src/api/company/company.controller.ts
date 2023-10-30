@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
-import accountModel, { Status } from '../../mongodb/models/account.model.js'
-import { Role } from '../../mongodb/models/role.model.js'
+import accountModel from '../../mongodb/models/account.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { accountService } from '../account/account.service.js'
@@ -14,17 +13,18 @@ import { profileService } from '../profile/profile.service.js'
 //     "data": { }
 // }
 
-type Employee = {
-  firstName: string // Profile
-  lastName: string // Profile
-  ID: string // Profile
-  companyName: string // Workplace
-  departmentName: string // Workplace
-  employeeId: string // Workplace
-  position: string // Workplace
-  role: Role // Account
-  status: Status // Account
-}
+// Workplace will be changed to Employee
+// type Employee = {
+//   firstName: string // Profile
+//   lastName: string // Profile
+//   ID: string // Profile
+//   companyName: string // Workplace
+//   departmentName: string // Workplace
+//   employeeId: string // Workplace
+//   position: string // Workplace
+//   role: Role // Account
+//   status: Status // Account
+// }
 
 export async function getCompanyEmployees(
   req: Request,

@@ -1,6 +1,6 @@
 import SecondaryButton from '@/cmps/button/SecondaryButton'
 import useProfileStore from '@/stores/userStore'
-import useWorkplaceStore from '@/stores/workplaceStore'
+import useWorkplaceStore from '@/stores/employeeStore'
 import { useNavigate } from '@tanstack/react-router'
 
 import { FC } from 'react'

@@ -18,7 +18,7 @@ async function createCompany(companyName: string) {
     companyName,
   })
 
-  logger.info(`companyService - company added: ${newCompany}`)
+  logger.info(`companyService - company is created: ${newCompany}`)
 
   return newCompany
 }

@@ -1,5 +1,5 @@
 import { CompanyIdSchema } from '@/models/Company'
-import { EmployeeIdSchema } from '@/models/Workplace'
+import { EmployeeIdSchema } from '@/models/Employee'
 import { FC } from 'react'
 import { z } from 'zod'
 import Form from './Form'
