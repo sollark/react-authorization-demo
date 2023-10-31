@@ -1,9 +1,9 @@
 import { CompanyNameSchema } from '@/models/Company'
-import { ProfileSchema } from '@/models/Profile'
 import { DepartmentNameSchema } from '@/models/Employee'
+import { ProfileSchema } from '@/models/Profile'
 import { accountService } from '@/service/account.service'
+import useEmployeeStore from '@/stores/employeeStore'
 import useUserStore from '@/stores/userStore'
-import useWorkplaceStore from '@/stores/employeeStore'
 import { useNavigate } from '@tanstack/react-router'
 import { FC, ReactElement } from 'react'
 import { z } from 'zod'
@@ -25,14 +25,14 @@ const AccountForm: FC<Props> = (props: Props) => {
   const navigate = useNavigate()
 
   const profile = useUserStore((state) => state.profile)
-  const workplace = useWorkplaceStore((state) => state.workplace)
+  const employee = useEmployeeStore((state) => state.employee)
 
   const defaultValues = {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
     ID: profile?.ID || '',
-    companyName: workplace?.company?.companyName || '',
-    departmentName: workplace?.department?.departmentName || '',
+    companyName: employee?.company?.companyName || '',
+    departmentName: employee?.department?.departmentName || '',
   }
 
   async function submit(form: any) {

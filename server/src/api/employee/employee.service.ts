@@ -4,103 +4,101 @@ import { Company, CompanyId } from '../../mongodb/models/company.model.js'
 import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
-import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
-import WorkplaceModel, {
+import EmployeeModel, {
   Employee,
-  WorkplaceRef,
+  EmployeeRef,
 } from '../../mongodb/models/employee.model.js'
+import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
 import { companyService } from '../company/company.service.js'
 
 export type EmployeeId = string
 
-async function createWorkplace(
+async function createEmployee(
   employeeId: Types.ObjectId,
   companyId: Types.ObjectId,
   departmentId: Types.ObjectId
 ): Promise<Employee | null> {
   const id = await generateEmployeeId()
 
-  // Create a new workplace
-  const workplaceRef = await WorkplaceModel.create({
+  // Create a new employee
+  const employeeRef = await EmployeeModel.create({
     employee: employeeId,
     company: companyId,
     department: departmentId,
     employeeId: id,
   })
 
-  if (!workplaceRef) {
-    logger.warn(`workplaceService - cannot create workplace: ${employeeId}`)
-    throw new BadRequestError('workplace creation failed')
+  if (!employeeRef) {
+    logger.warn(`employeeService - cannot create employee: ${employeeId}`)
+    throw new BadRequestError('employee creation failed')
   }
 
-  const workplace = await WorkplaceModel.findById(workplaceRef._id)
+  const employee = await EmployeeModel.findById(employeeRef._id)
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ employee: Profile }>('employee')
+    .populate<{ profile: Profile }>('employee')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  if (!workplace) {
-    logger.warn(
-      `workplaceService - workplace is not found: ${workplaceRef._id}`
-    )
-    throw new BadRequestError('workplace is not found')
+  if (!employee) {
+    logger.warn(`employeeService - employee is not found: ${employeeRef._id}`)
+    throw new BadRequestError('employee is not found')
   }
 
   logger.info(
-    `workplaceService - new workplace added: ${JSON.stringify(
-      workplace,
+    `employeeService - new employee added: ${JSON.stringify(
+      employee,
       null,
       2 // Indentation level, adjust as needed
     )}`
   )
 
-  return workplace
+  return employee
 }
 
-async function getBasicWorkplaceDetails(
+async function getBasicEmployeeDetails(
   workplaceId: Types.ObjectId
 ): Promise<Partial<Employee> | null> {
-  const workplace = await WorkplaceModel.findById(workplaceId)
+  const employee = await EmployeeModel.findById(workplaceId)
     .select('company department position')
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ employee: Profile }>('employee')
+    .populate<{ profile: Profile }>('employee')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  return workplace
+  return employee
 }
 
-async function getWorkplace(
+async function getEmployee(
   companyId: Types.ObjectId
 ): Promise<Employee | null> {
-  const workplace = await WorkplaceModel.findOne({
+  const employee = await EmployeeModel.findOne({
     company: companyId,
   })
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ employee: Profile }>('employee')
+    .populate<{ profile: Profile }>('employee')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  return workplace
+  return employee
 }
 
-async function getWorkplaceRefById(
+async function getEmployeeRefById(
   workplaceId: Types.ObjectId
-): Promise<WorkplaceRef | null> {
-  const workplaceRef = await WorkplaceModel.findById(workplaceId).lean().exec()
+): Promise<EmployeeRef | null> {
+  const employeeRef = await EmployeeModel.findById(workplaceId).lean().exec()
 
-  return workplaceRef
+  return employeeRef
 }
 
 async function joinExistingCompany(
@@ -112,25 +110,25 @@ async function joinExistingCompany(
 
   if (!company) throw new BadRequestError('Company is not found', companyId)
 
-  const workplace = await WorkplaceModel.findOne({
+  const employee = await EmployeeModel.findOne({
     company: company?._id,
     employeeId,
   })
     .lean()
     .exec()
 
-  if (!workplace) throw new BadRequestError('Employee is not found', companyId)
+  if (!employee) throw new BadRequestError('Employee is not found', companyId)
 
   // add auth identifier to profile
   await ProfileModel.findOneAndUpdate(
-    { _id: workplace.employee },
+    { _id: employee.profile },
     { identifier },
     { new: true }
   ).exec()
 
-  const updatedWorkplace = await getBasicWorkplaceDetails(workplace._id)
+  const updatedEmployee = await getBasicEmployeeDetails(employee._id)
 
-  return updatedWorkplace
+  return updatedEmployee
 }
 
 async function joinNewCompany(
@@ -148,109 +146,105 @@ async function joinNewCompany(
 
   if (!company) {
     logger.warn(
-      `workplaceService -joinNewCompany: adding department failed: ${departmentName}`
+      `employeeService -joinNewCompany: adding department failed: ${departmentName}`
     )
     throw new BadRequestError('Adding department to company failed')
   }
 
-  const workplace = await createWorkplace(
-    identifier,
-    company._id,
-    department._id
-  )
+  const employee = await createEmployee(identifier, company._id, department._id)
 
-  return workplace
+  return employee
 }
 
 async function setSupervisor(
   employeeId: Types.ObjectId,
   supervisorId: Types.ObjectId
 ): Promise<Employee | null> {
-  const employeeWorkplace = await WorkplaceModel.findOneAndUpdate(
+  const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeId },
     { supervisor: supervisorId },
     { new: true }
   )
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ employee: Profile }>('employee')
+    .populate<{ profile: Profile }>('employee')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  const supervisorWorkplace = await WorkplaceModel.findOneAndUpdate(
+  const supervisorEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: supervisorId },
     { $push: { subordinates: employeeId } },
     { new: true }
   ).exec()
 
-  return employeeWorkplace
+  return employeeEmployee
 }
 
 async function addSubordinate(
   employeeId: Types.ObjectId,
   subordinateId: Types.ObjectId
 ): Promise<Employee | null> {
-  const employeeWorkplace = await WorkplaceModel.findOneAndUpdate(
+  const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeId },
     { $push: { subordinates: subordinateId } },
     { new: true }
   )
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ employee: Profile }>('employee')
+    .populate<{ profile: Profile }>('employee')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  const subordinateWorkplace = await WorkplaceModel.findOneAndUpdate(
+  const subordinateEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: subordinateId },
     { supervisor: employeeId },
     { new: true }
   ).exec()
 
-  return employeeWorkplace
+  return employeeEmployee
 }
 
-async function updateWorkplace(
+async function updateEmployee(
   employeeId: Types.ObjectId,
-  updatedWorkplaceData: Partial<Employee>
+  updatedEmployeeData: Partial<Employee>
 ): Promise<Employee | null> {
-  const workplace = await WorkplaceModel.findOneAndUpdate(
+  const employee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeId },
-    updatedWorkplaceData,
+    updatedEmployeeData,
     { new: true }
   )
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ employee: Profile }>('employee')
+    .populate<{ profile: Profile }>('employee')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  logger.info(`workplaceService - workplace updated ${workplace}`)
+  logger.info(`employeeService - employee updated ${employee}`)
 
-  return workplace
+  return employee
 }
 
-export const workplaceService = {
-  createWorkplace,
-  getBasicWorkplaceDetails,
-  getWorkplaceRefById,
+export const employeeService = {
+  createEmployee,
+  getBasicEmployeeDetails,
+  getEmployeeRefById,
   joinExistingCompany,
   joinNewCompany,
   setSupervisor,
   addSubordinate,
-  updateWorkplace,
+  updateEmployee,
 }
 
 async function generateEmployeeId(): Promise<EmployeeId> {
   let id = utilService.getRandomInt(1000, 9999)
 
-  const existingCode = await WorkplaceModel.findOne({
+  const existingCode = await EmployeeModel.findOne({
     employeeId: id.toString(),
   })
 

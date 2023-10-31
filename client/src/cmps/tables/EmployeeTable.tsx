@@ -1,7 +1,8 @@
 import { ACCOUNT_STATUS, Status } from '@/models/Account'
+import { Employee } from '@/models/Employee'
 import { Role, USER_ROLE } from '@/models/Role'
+import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
-import { workplaceService } from '@/service/workplace.service'
 import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import employeeData from './../../assets/mock_data/employee.json'
@@ -67,7 +68,7 @@ function deleteEmployee(id: GridRowId) {
 }
 
 const EmployeeTable: FC<EmployeeTableProps> = () => {
-  const employee = workplaceService.getAllEmployees()
+  const employee = employeeService.getAllEmployees()
 
   console.log('employeeData from api', employee)
 

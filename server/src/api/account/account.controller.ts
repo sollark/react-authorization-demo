@@ -9,7 +9,7 @@ import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { profileService } from '../../service/profile.service.js'
 import { companyService } from '../company/company.service.js'
-import { workplaceService } from '../workspace/workspace.service.js'
+import { workplaceService } from '../employee/employee.service.js'
 import { accountService } from './account.service.js'
 
 // TODO

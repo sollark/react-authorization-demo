@@ -1,4 +1,4 @@
-import { workplaceService } from '@/service/workplace.service'
+import { workplaceService } from '@/service/employee.service'
 import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
