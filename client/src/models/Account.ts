@@ -1,6 +1,6 @@
+import { Employee } from './Employee'
 import { Profile } from './Profile'
 import { Role } from './Role'
-import { Employee } from './Employee'
 
 export type Status =
   | 'Unregistered'
@@ -19,7 +19,7 @@ export const ACCOUNT_STATUS = {
 
 export type Account = {
   profile: Profile
-  workplace?: Employee
+  employee?: Employee
   isComplete: boolean
   role: Role
   status: Status

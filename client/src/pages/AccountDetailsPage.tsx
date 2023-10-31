@@ -1,8 +1,8 @@
 import SecondaryButton from '@/cmps/button/SecondaryButton'
 import useProfileStore from '@/stores/userStore'
-import useWorkplaceStore from '@/stores/employeeStore'
 import { useNavigate } from '@tanstack/react-router'
 
+import useEmployeeStore from '@/stores/employeeStore'
 import { FC } from 'react'
 const AccountDetailsPage: FC = () => {
   console.log('AccountDetailsPage connected')
@@ -10,7 +10,7 @@ const AccountDetailsPage: FC = () => {
   const navigate = useNavigate({ from: '/account/edit' })
 
   const profile = useProfileStore((state) => state.profile)
-  const workplace = useWorkplaceStore((state) => state.workplace)
+  const employee = useEmployeeStore((state) => state.employee)
 
   return (
     <>
@@ -23,11 +23,11 @@ const AccountDetailsPage: FC = () => {
         ID: {profile?.ID}
         <br />
         <h2>Workplace</h2>
-        {workplace && `Company: ${workplace.company.companyName}`}
+        {employee && `Company: ${employee.company.companyName}`}
         <br />
-        {workplace && `Company code: ${workplace.company.companyId}`}
+        {employee && `Company code: ${employee.company.companyId}`}
         <br />
-        {workplace && `Employee number: ${workplace.employeeId}`}
+        {employee && `Employee number: ${employee.employeeId}`}
         <br />
       </div>
       {/* using href forces a page reload */}
