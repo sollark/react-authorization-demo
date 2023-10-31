@@ -3,13 +3,13 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import { Account } from '../../mongodb/models/account.model.js'
 import { Company } from '../../mongodb/models/company.model.js'
 import { Department } from '../../mongodb/models/department.model.js'
-import { USER_ROLE } from '../../mongodb/models/role.model.js'
 import { Employee } from '../../mongodb/models/employee.model.js'
+import { USER_ROLE } from '../../mongodb/models/role.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { profileService } from '../../service/profile.service.js'
 import { companyService } from '../company/company.service.js'
-import { workplaceService } from '../employee/employee.service.js'
+import { employeeService } from '../employee/employee.service.js'
 import { accountService } from './account.service.js'
 
 // TODO
@@ -55,7 +55,7 @@ export async function updateAccount(
 
   let workplace: any = null
   if (companyId && employeeId) {
-    workplace = await workplaceService.joinExistingCompany(
+    workplace = await employeeService.joinExistingCompany(
       identifier,
       companyId,
       employeeId
@@ -84,7 +84,7 @@ export async function updateAccount(
       identifier
     )
 
-    workplace = await workplaceService.createWorkplace(
+    workplace = await employeeService.createEmployee(
       identifier,
       updatedCompany._id,
       department._id
@@ -118,7 +118,7 @@ export async function joinCompany(
   const identifier = getIdentifierFromALS()
   const { companyId, employeeId } = req.body
 
-  const workplace = await workplaceService.joinExistingCompany(
+  const employee = await employeeService.joinExistingCompany(
     identifier,
     companyId,
     employeeId
