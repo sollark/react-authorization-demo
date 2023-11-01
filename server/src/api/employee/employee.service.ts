@@ -16,23 +16,23 @@ import { companyService } from '../company/company.service.js'
 export type EmployeeId = string
 
 async function createEmployee(
-  employeeId: Types.ObjectId,
+  profileId: Types.ObjectId,
   companyId: Types.ObjectId,
   departmentId: Types.ObjectId
 ): Promise<Employee | null> {
-  const id = await generateEmployeeId()
+  const employeeNumber = await generateEmployeeNumber()
 
   // Create a new employee
   const employeeRef = await EmployeeModel.create({
-    employee: employeeId,
+    profile: profileId,
     company: companyId,
     department: departmentId,
-    employeeId: id,
+    employeeNumber,
   })
 
   if (!employeeRef) {
-    logger.warn(`employeeService - cannot create employee: ${employeeId}`)
-    throw new BadRequestError('employee creation failed')
+    logger.warn(`employeeService - cannot create employee`)
+    throw new BadRequestError('Employee creation failed')
   }
 
   const employee = await EmployeeModel.findById(employeeRef._id)
@@ -142,14 +142,11 @@ async function joinNewCompany(
   let department = null
   department = await DepartmentModel.create({ departmentName })
 
-  company = await companyService.addDepartment(company._id, department._id)
+  if (!company || !department)
+    throw new BadRequestError('Creating department to company failed')
 
-  if (!company) {
-    logger.warn(
-      `employeeService -joinNewCompany: adding department failed: ${departmentName}`
-    )
-    throw new BadRequestError('Adding department to company failed')
-  }
+  company = await companyService.addDepartment(company._id, department._id)
+  if (!company) throw new BadRequestError('Adding department to company failed')
 
   const employee = await createEmployee(identifier, company._id, department._id)
 
@@ -241,7 +238,7 @@ export const employeeService = {
   updateEmployee,
 }
 
-async function generateEmployeeId(): Promise<EmployeeId> {
+async function generateEmployeeNumber(): Promise<EmployeeId> {
   let id = utilService.getRandomInt(1000, 9999)
 
   const existingCode = await EmployeeModel.findOne({
@@ -250,7 +247,7 @@ async function generateEmployeeId(): Promise<EmployeeId> {
 
   if (existingCode) {
     // Code already exists, generate a new one recursively
-    return generateEmployeeId()
+    return generateEmployeeNumber()
   }
 
   return id.toString() as EmployeeId

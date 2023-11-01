@@ -6,7 +6,7 @@ import { Profile } from './profile.model.js'
 export type Employee = {
   company: Company
   department?: Department
-  employeeId: string
+  employeeNumber: string
   position?: string
   profile: Profile
   supervisor?: Employee
@@ -16,7 +16,7 @@ export type Employee = {
 export type EmployeeRef = {
   company: Types.ObjectId
   department?: Types.ObjectId
-  employeeId: string
+  employeeNumber: string
   position?: string
   profile: Types.ObjectId
   supervisor?: Types.ObjectId
@@ -32,7 +32,7 @@ const EmployeeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Department',
   },
-  employeeId: { type: String },
+  employeeNumber: { type: String },
   position: { type: String },
   profile: {
     type: Schema.Types.ObjectId,

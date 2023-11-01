@@ -6,21 +6,30 @@ import CompanyModel, {
 import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
+import { Employee } from '../../mongodb/models/employee.model.js'
 import { Profile } from '../../mongodb/models/profile.model.js'
 import { utilService } from '../../utils/utils.js'
 import logger from './../../service/logger.service.js'
 
-async function createCompany(companyName: string) {
+async function createCompany(
+  companyName: string
+): Promise<(Company & { _id: Types.ObjectId }) | null> {
   const companyId = await generateCompanyId()
 
-  const newCompany = await CompanyModel.create({
+  const companyRef = await CompanyModel.create({
     companyId,
     companyName,
   })
 
-  logger.info(`companyService - company is created: ${newCompany}`)
+  const company = await CompanyModel.findOne({ _id: companyRef._id })
+    .populate<{ departments: Department[] }>('departments')
+    .populate<{ employees: Employee[] }>('employees')
+    .lean()
+    .exec()
 
-  return newCompany
+  logger.info(`companyService - company is created: ${company}`)
+
+  return company
 }
 
 async function isCompanyIdExists(company: string) {
@@ -75,7 +84,7 @@ async function addDepartment(
     { new: true }
   )
     .populate<{ departments: Department[] }>('departments')
-    .populate<{ employees: Profile[] }>('employees')
+    .populate<{ employees: Employee[] }>('employees')
     .lean()
     .exec()
 
@@ -99,16 +108,16 @@ async function getDepartment(
 }
 
 async function addEmployee(
-  id: CompanyId,
+  companyId: Types.ObjectId,
   employeeId: Types.ObjectId
-): Promise<Company | null> {
-  const company = await CompanyModel.findOneAndUpdate(
-    { id },
+): Promise<(Company & { _id: Types.ObjectId }) | null> {
+  const company = await CompanyModel.findByIdAndUpdate(
+    { companyId },
     { $push: { employees: employeeId } },
     { new: true }
   )
     .populate<{ departments: Department[] }>('departments')
-    .populate<{ employees: Profile[] }>('employees')
+    .populate<{ employees: Employee[] }>('employees')
     .lean()
     .exec()
 
@@ -138,7 +147,7 @@ async function updateCompany(
     { new: true }
   )
     .populate<{ departments: Department[] }>('departments')
-    .populate<{ employees: Profile[] }>('employees')
+    .populate<{ employees: Employee[] }>('employees')
     .lean()
     .exec()
 

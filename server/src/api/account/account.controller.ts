@@ -51,14 +51,14 @@ export async function updateAccount(
 
   const { companyName, companyId } = updatedCompanyData as Partial<Company>
   const { departmentName } = updatedDepartmentData as Partial<Department>
-  const { employeeId } = updatedWorkplaceData as Partial<Employee>
+  const { employeeNumber } = updatedWorkplaceData as Partial<Employee>
 
-  let workplace: any = null
-  if (companyId && employeeId) {
-    workplace = await employeeService.joinExistingCompany(
+  let employee: any = null
+  if (companyId && employeeNumber) {
+    employee = await employeeService.joinExistingCompany(
       identifier,
       companyId,
-      employeeId
+      employeeNumber
     )
 
     // when joining existing company, set role to user
@@ -66,27 +66,20 @@ export async function updateAccount(
   }
 
   if (companyName && departmentName) {
-    const company = await companyService.createCompany(companyName)
+    let company = await companyService.createCompany(companyName)
     const department = await departmentService.createDepartment(departmentName)
+    if (!company || !department)
+      throw new BadRequestError('Cannot create company or department')
 
-    let updatedCompany = await companyService.addDepartment(
-      company._id,
-      department._id
-    )
+    company = await companyService.addDepartment(company._id, department._id)
+    if (!company) throw new BadRequestError('Cannot add department to company')
 
-    if (!updatedCompany) {
-      throw new BadRequestError('Cannot update company')
-    }
+    company = await companyService.addEmployee(company._id, identifier)
+    if (!company) throw new BadRequestError('Cannot add an employee to company')
 
-    // Add empoyee waits for employeeId to be set
-    updatedCompany = await companyService.addEmployee(
-      updatedCompany._id,
-      identifier
-    )
-
-    workplace = await employeeService.createEmployee(
+    const employee = await employeeService.createEmployee(
       identifier,
-      updatedCompany._id,
+      company._id,
       department._id
     )
 
@@ -94,6 +87,7 @@ export async function updateAccount(
     await accountService.setRole(identifier, USER_ROLE.manager)
   }
 
+  // TODO set account as employee
   const updatedAccount = await accountService.addWorkplace(
     identifier,
     workplace._id
