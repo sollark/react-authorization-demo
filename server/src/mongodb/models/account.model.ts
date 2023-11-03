@@ -1,7 +1,7 @@
 import { Schema, Types, model } from 'mongoose'
+import { Employee } from './employee.model.js'
 import { Profile } from './profile.model.js'
 import { Role } from './role.model.js'
-import { Employee } from './employee.model.js'
 
 export const ACCOUNT_STATUS = {
   unregistered: 'Unregistered',
@@ -18,7 +18,7 @@ export type Account = {
   status: Status
   isComplete: boolean
   role?: Role
-  workplace?: Employee
+  employee?: Employee
 }
 
 export type AccountRef = {
@@ -27,7 +27,7 @@ export type AccountRef = {
   status: Status
   isComplete: boolean
   role?: Types.ObjectId
-  workplace?: Types.ObjectId
+  employee?: Types.ObjectId
 }
 
 const AccountSchema = new Schema({
@@ -53,9 +53,9 @@ const AccountSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Role',
   },
-  workplace: {
+  employee: {
     type: Schema.Types.ObjectId,
-    ref: 'workplace',
+    ref: 'employee',
   },
 })
 

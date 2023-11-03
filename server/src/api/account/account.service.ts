@@ -7,11 +7,11 @@ import AccountModel, {
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
 import DepartmentModel from '../../mongodb/models/department.model.js'
-import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
-import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import WorkplaceRefModel, {
   Employee,
 } from '../../mongodb/models/employee.model.js'
+import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
+import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import logger from '../../service/logger.service.js'
 
 async function createAccount(
@@ -35,7 +35,7 @@ async function createAccount(
   const account = await AccountModel.findById(accountRef._id)
     .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
-    .populate<{ workplace: Employee }>('workplace')
+    .populate<{ employee: Employee }>('employee')
     .populate<{ status: Status }>('status')
     .lean()
     .exec()
@@ -70,8 +70,8 @@ async function getAccount(identifier: Types.ObjectId): Promise<Account> {
   const account = await AccountModel.findOne({ identifier })
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workplace: Employee }>({
-      path: 'workplace',
+    .populate<{ employee: Employee }>({
+      path: 'employee',
       populate: [
         {
           path: 'company',
@@ -119,26 +119,29 @@ async function deleteAccount(identifier: Types.ObjectId) {
   await AccountModel.findOneAndDelete({ identifier })
 }
 
-async function addWorkplace(
+async function addEmployee(
   identifier: Types.ObjectId,
-  workplaceId: Types.ObjectId
+  employeeId: Types.ObjectId
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOneAndUpdate(
     { identifier },
-    { $set: { workplace: workplaceId } },
+    { $set: { employee: employeeId } },
     { new: true }
   )
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workplace: Employee }>({
-      path: 'workplace',
+    .populate<{ employee: Employee }>({
+      path: 'employee',
       populate: [
         {
           path: 'company',
           populate: [{ path: 'departments' }, { path: 'employees' }],
         },
-        { path: 'department' },
-        { path: 'employee' },
+        {
+          path: 'department',
+          populate: [{ path: 'company' }, { path: 'employees' }],
+        },
+        { path: 'profile' },
         { path: 'supervisor' },
         { path: 'subordinates' },
       ],
@@ -160,8 +163,8 @@ async function completeAccount(
   )
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ workplace: Employee }>({
-      path: 'workplace',
+    .populate<{ employee: Employee }>({
+      path: 'employee',
       populate: [
         {
           path: 'company',
@@ -202,7 +205,7 @@ function sortAccountData(
   updatedDepartmentData: Object
 ] {
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
-  const workplaceSchemaKeys = Object.keys(WorkplaceRefModel.schema.paths)
+  const employeeSchemaKeys = Object.keys(WorkplaceRefModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
   const departmentSchemaKeys = Object.keys(DepartmentModel.schema.paths)
 
@@ -215,7 +218,7 @@ function sortAccountData(
     (accumulator: any, [key, value]) => {
       if (profileSchemaKeys.includes(key)) {
         accumulator.updatedProfileData[key] = value
-      } else if (workplaceSchemaKeys.includes(key)) {
+      } else if (employeeSchemaKeys.includes(key)) {
         accumulator.updatedWorkplaceData[key] = value
       } else if (companySchemaKeys.includes(key)) {
         accumulator.updatedCompanyData[key] = value
@@ -246,7 +249,7 @@ export const accountService = {
   getAccount,
   getAccountRef,
   deleteAccount,
-  addWorkplace,
+  addEmployee,
   sortAccountData,
   completeAccount,
 }

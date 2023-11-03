@@ -87,10 +87,9 @@ export async function updateAccount(
     await accountService.setRole(identifier, USER_ROLE.manager)
   }
 
-  // TODO set account as employee
-  const updatedAccount = await accountService.addWorkplace(
+  const updatedAccount = await accountService.addEmployee(
     identifier,
-    workplace._id
+    employee._id
   )
 
   if (!updatedAccount) {
