@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
-import accountModel from '../../mongodb/models/account.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { accountService } from '../account/account.service.js'
@@ -37,23 +36,15 @@ export async function getCompanyEmployees(
     throw new BadRequestError('Cannot find account')
   }
 
-  const employees = account.workplace?.company?.employees
+  const employees = account.employee?.company?.employees
   if (!employees) {
     throw new BadRequestError('Cannot find employees')
   }
 
-  // Convert the profile objects to an array of Types.ObjectId values
-  const profileIDsToFind = employees.map((profile) => profile.ID)
-
-  // Find accounts with the specified profiles
-  const accounts = await accountModel.find({
-    profile: { $in: profileIDsToFind },
-  })
-
   res.status(200).json({
     success: true,
     message: 'Company employees are ready to view.',
-    data: { accounts },
+    data: { employees },
   })
 }
 
@@ -81,8 +72,8 @@ export async function addEmployee(
   // TODO find any department, should find company department
   const department = departmentService.getDepartmentDBId(departmentName)
 
-  // create workplace
-  // const companyDBId = workplaceService.getCompanyDBId()
+  // create employee
+  // const companyDBId = employeeService.getCompanyDBId()
 
   res.status(200).json({
     success: true,
