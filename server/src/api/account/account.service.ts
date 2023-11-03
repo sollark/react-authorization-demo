@@ -7,9 +7,7 @@ import AccountModel, {
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
 import DepartmentModel from '../../mongodb/models/department.model.js'
-import WorkplaceRefModel, {
-  Employee,
-} from '../../mongodb/models/employee.model.js'
+import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import logger from '../../service/logger.service.js'
@@ -66,7 +64,9 @@ async function setRole(identifier: Types.ObjectId, role: Role) {
   ).exec()
 }
 
-async function getAccount(identifier: Types.ObjectId): Promise<Account> {
+async function getAccount(
+  identifier: Types.ObjectId
+): Promise<Account & { _id: Types.ObjectId }> {
   const account = await AccountModel.findOne({ identifier })
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
@@ -200,18 +200,18 @@ function sortAccountData(
   accountData: any
 ): [
   updatedProfileData: Object,
-  updatedWorkplaceData: Object,
+  updateEmployeeData: Object,
   updatedCompanyData: Object,
   updatedDepartmentData: Object
 ] {
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
-  const employeeSchemaKeys = Object.keys(WorkplaceRefModel.schema.paths)
+  const employeeSchemaKeys = Object.keys(EmployeeModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
   const departmentSchemaKeys = Object.keys(DepartmentModel.schema.paths)
 
   const {
     updatedProfileData,
-    updatedWorkplaceData,
+    updateEmployeeData,
     updatedCompanyData,
     updatedDepartmentData,
   } = Object.entries(accountData).reduce(
@@ -219,7 +219,7 @@ function sortAccountData(
       if (profileSchemaKeys.includes(key)) {
         accumulator.updatedProfileData[key] = value
       } else if (employeeSchemaKeys.includes(key)) {
-        accumulator.updatedWorkplaceData[key] = value
+        accumulator.updateEmployeeData[key] = value
       } else if (companySchemaKeys.includes(key)) {
         accumulator.updatedCompanyData[key] = value
       } else if (departmentSchemaKeys.includes(key)) {
@@ -229,7 +229,7 @@ function sortAccountData(
     },
     {
       updatedProfileData: {},
-      updatedWorkplaceData: {},
+      updateEmployeeData: {},
       updatedCompanyData: {},
       updatedDepartmentData: {},
     }
@@ -237,7 +237,7 @@ function sortAccountData(
 
   return [
     updatedProfileData,
-    updatedWorkplaceData,
+    updateEmployeeData,
     updatedCompanyData,
     updatedDepartmentData,
   ]

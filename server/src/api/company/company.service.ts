@@ -1,8 +1,5 @@
 import { Types } from 'mongoose'
-import CompanyModel, {
-  Company,
-  CompanyId,
-} from '../../mongodb/models/company.model.js'
+import CompanyModel, { Company } from '../../mongodb/models/company.model.js'
 import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
@@ -14,20 +11,26 @@ import logger from './../../service/logger.service.js'
 async function createCompany(
   companyName: string
 ): Promise<(Company & { _id: Types.ObjectId }) | null> {
-  const companyId = await generateCompanyId()
+  const companyNumber = await generateCompanyNumber()
 
   const companyRef = await CompanyModel.create({
-    companyId,
     companyName,
+    companyNumber,
   })
 
-  const company = await CompanyModel.findOne({ _id: companyRef._id })
+  const company = await CompanyModel.findById(companyRef._id)
     .populate<{ departments: Department[] }>('departments')
     .populate<{ employees: Employee[] }>('employees')
     .lean()
     .exec()
 
-  logger.info(`companyService - company is created: ${company}`)
+  logger.info(
+    `companyService - company is created:  ${JSON.stringify(
+      company,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return company
 }
@@ -44,32 +47,50 @@ async function isCompanyIdExists(company: string) {
   return true
 }
 
-async function getBasicCompanyDetails(id: CompanyId) {
-  const company = await CompanyModel.findOne({ id })
-    .select('companyName companyId')
+async function getBasicCompanyDetails(companyNumber: string) {
+  const company = await CompanyModel.findOne({ companyNumber })
+    .select('companyName companyNumber')
     .lean()
     .exec()
 
-  logger.info(`companyService - company fetched ${company}`)
+  logger.info(
+    `companyService - company fetched  ${JSON.stringify(
+      company,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return company
 }
 
-async function getBasicCompanyDetailsById(companyId: CompanyId) {
-  const company = await CompanyModel.findOne({ companyId })
-    .select('companyName companyId')
+async function getBasicCompanyDetailsById(id: Types.ObjectId) {
+  const company = await CompanyModel.findById(id)
+    .select('companyName CompanyNumber')
     .lean()
     .exec()
 
-  logger.info(`companyService - company fetched ${company}`)
+  logger.info(
+    `companyService - company fetched  ${JSON.stringify(
+      company,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return company
 }
 
-async function getCompany(id: CompanyId) {
+async function getCompany(id: Types.ObjectId) {
   const company = await CompanyModel.findById(id).lean().exec()
 
-  logger.info(`companyService - company fetched ${company}`)
+  logger.info(
+    `companyService - company fetched  ${JSON.stringify(
+      company,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return company
 }
@@ -112,7 +133,7 @@ async function addEmployee(
   employeeId: Types.ObjectId
 ): Promise<(Company & { _id: Types.ObjectId }) | null> {
   const company = await CompanyModel.findByIdAndUpdate(
-    { companyId },
+    companyId,
     { $push: { employees: employeeId } },
     { new: true }
   )
@@ -151,7 +172,13 @@ async function updateCompany(
     .lean()
     .exec()
 
-  logger.info(`companyService - company updated ${company}`)
+  logger.info(
+    `companyService - company updated  ${JSON.stringify(
+      company,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return company
 }
@@ -173,17 +200,17 @@ export const companyService = {
   deleteCompany,
 }
 
-async function generateCompanyId(): Promise<CompanyId> {
+async function generateCompanyNumber(): Promise<string> {
   let id = utilService.getRandomInt(1000, 9999)
 
   const existingCode = await CompanyModel.findOne({
-    companyId: id.toString(),
+    companyNumber: id.toString(),
   })
 
   if (existingCode) {
     // Code already exists, generate a new one recursively
-    return generateCompanyId()
+    return generateCompanyNumber()
   }
 
-  return id.toString() as CompanyId
+  return id.toString()
 }

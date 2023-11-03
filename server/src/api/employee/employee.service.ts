@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
-import { Company, CompanyId } from '../../mongodb/models/company.model.js'
+import { Company } from '../../mongodb/models/company.model.js'
 import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
@@ -13,13 +13,11 @@ import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
 import { companyService } from '../company/company.service.js'
 
-export type EmployeeId = string
-
 async function createEmployee(
   profileId: Types.ObjectId,
   companyId: Types.ObjectId,
   departmentId: Types.ObjectId
-): Promise<Employee | null> {
+): Promise<(Employee & { _id: Types.ObjectId }) | null> {
   const employeeNumber = await generateEmployeeNumber()
 
   // Create a new employee
@@ -38,7 +36,7 @@ async function createEmployee(
   const employee = await EmployeeModel.findById(employeeRef._id)
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
-    .populate<{ profile: Profile }>('employee')
+    .populate<{ profile: Profile }>('profile')
     .populate<{ supervisor: Employee }>('supervisor')
     .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
@@ -77,10 +75,10 @@ async function getBasicEmployeeDetails(
 }
 
 async function getEmployee(
-  companyId: Types.ObjectId
+  companyNumber: Types.ObjectId
 ): Promise<Employee | null> {
   const employee = await EmployeeModel.findOne({
-    company: companyId,
+    company: companyNumber,
   })
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
@@ -103,21 +101,20 @@ async function getEmployeeRefById(
 
 async function joinExistingCompany(
   identifier: Types.ObjectId,
-  companyId: CompanyId,
-  employeeId: EmployeeId
+  companyNumber: string,
+  employeeNumber: string
 ) {
-  const company = await companyService.getBasicCompanyDetailsById(companyId)
-
-  if (!company) throw new BadRequestError('Company is not found', companyId)
+  const company = await companyService.getBasicCompanyDetails(companyNumber)
+  if (!company) throw new BadRequestError('Company is not found', companyNumber)
 
   const employee = await EmployeeModel.findOne({
     company: company?._id,
-    employeeId,
+    employeeNumber,
   })
     .lean()
     .exec()
-
-  if (!employee) throw new BadRequestError('Employee is not found', companyId)
+  if (!employee)
+    throw new BadRequestError('Employee is not found', companyNumber)
 
   // add auth identifier to profile
   await ProfileModel.findOneAndUpdate(
@@ -154,11 +151,11 @@ async function joinNewCompany(
 }
 
 async function setSupervisor(
-  employeeId: Types.ObjectId,
+  employeeNumber: Types.ObjectId,
   supervisorId: Types.ObjectId
 ): Promise<Employee | null> {
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
-    { employee: employeeId },
+    { employee: employeeNumber },
     { supervisor: supervisorId },
     { new: true }
   )
@@ -172,7 +169,7 @@ async function setSupervisor(
 
   const supervisorEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: supervisorId },
-    { $push: { subordinates: employeeId } },
+    { $push: { subordinates: employeeNumber } },
     { new: true }
   ).exec()
 
@@ -180,11 +177,11 @@ async function setSupervisor(
 }
 
 async function addSubordinate(
-  employeeId: Types.ObjectId,
+  employeeNumber: Types.ObjectId,
   subordinateId: Types.ObjectId
 ): Promise<Employee | null> {
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
-    { employee: employeeId },
+    { employee: employeeNumber },
     { $push: { subordinates: subordinateId } },
     { new: true }
   )
@@ -198,7 +195,7 @@ async function addSubordinate(
 
   const subordinateEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: subordinateId },
-    { supervisor: employeeId },
+    { supervisor: employeeNumber },
     { new: true }
   ).exec()
 
@@ -206,11 +203,11 @@ async function addSubordinate(
 }
 
 async function updateEmployee(
-  employeeId: Types.ObjectId,
+  employeeNumber: Types.ObjectId,
   updatedEmployeeData: Partial<Employee>
 ): Promise<Employee | null> {
   const employee = await EmployeeModel.findOneAndUpdate(
-    { employee: employeeId },
+    { employee: employeeNumber },
     updatedEmployeeData,
     { new: true }
   )
@@ -238,11 +235,11 @@ export const employeeService = {
   updateEmployee,
 }
 
-async function generateEmployeeNumber(): Promise<EmployeeId> {
+async function generateEmployeeNumber(): Promise<string> {
   let id = utilService.getRandomInt(1000, 9999)
 
   const existingCode = await EmployeeModel.findOne({
-    employeeId: id.toString(),
+    employeeNumber: id.toString(),
   })
 
   if (existingCode) {
@@ -250,5 +247,5 @@ async function generateEmployeeNumber(): Promise<EmployeeId> {
     return generateEmployeeNumber()
   }
 
-  return id.toString() as EmployeeId
+  return id.toString()
 }

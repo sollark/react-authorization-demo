@@ -34,11 +34,11 @@ async function getProfileByIdentifier(
 }
 
 async function updateProfile(
-  identifier: Types.ObjectId,
+  profileId: Types.ObjectId,
   updatedProfileData: Partial<Profile>
 ): Promise<(Profile & { _id: Types.ObjectId }) | null> {
-  const profile = await ProfileModel.findOneAndUpdate(
-    { identifier },
+  const profile = await ProfileModel.findByIdAndUpdate(
+    profileId,
     updatedProfileData,
     { new: true }
   ).exec()

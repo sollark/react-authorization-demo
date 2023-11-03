@@ -9,7 +9,13 @@ async function createDepartment(departmentName: string) {
     employees: [],
   })
 
-  logger.info(`departmentService - department added: ${newDepartment}`)
+  logger.info(
+    `departmentService - department added:  ${JSON.stringify(
+      newDepartment,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return newDepartment
 }

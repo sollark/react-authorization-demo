@@ -25,39 +25,43 @@ export async function updateAccount(
   next: NextFunction
 ) {
   const identifier = getIdentifierFromALS()
-  const account: Account = req.body
+  const accountData: Account = req.body
 
-  console.log('updateAccount, account: ', account)
+  console.log('updateAccount, account: ', accountData)
 
   const [
     updatedProfileData,
-    updatedWorkplaceData,
+    updateEmployeeData,
     updatedCompanyData,
     updatedDepartmentData,
-  ] = accountService.sortAccountData(account)
+  ] = accountService.sortAccountData(accountData)
 
   console.log('updateAccount, updatedProfileData: ', updatedProfileData)
-  console.log('updateAccount, updatedWorkplaceData: ', updatedWorkplaceData)
+  console.log('updateAccount, updateEmployeeData: ', updateEmployeeData)
   console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
   console.log('updateAccount, updatedDepartmentData: ', updatedDepartmentData)
 
+  const accountRef = await accountService.getAccountRef(identifier)
+  if (!accountRef) throw new BadRequestError('Cannot find account')
+
   const updatedProfile = await profileService.updateProfile(
-    identifier,
+    accountRef.profile,
     updatedProfileData
   )
   if (!updatedProfile) {
     throw new BadRequestError('Cannot update profile')
   }
 
-  const { companyName, companyId } = updatedCompanyData as Partial<Company>
+  const { companyName, companyNumber } = updatedCompanyData as Partial<Company>
   const { departmentName } = updatedDepartmentData as Partial<Department>
-  const { employeeNumber } = updatedWorkplaceData as Partial<Employee>
+  const { employeeNumber } = updateEmployeeData as Partial<Employee>
 
   let employee: any = null
-  if (companyId && employeeNumber) {
+  // TODO is not working as expected
+  if (companyNumber && employeeNumber) {
     employee = await employeeService.joinExistingCompany(
       identifier,
-      companyId,
+      companyNumber,
       employeeNumber
     )
 
@@ -65,24 +69,28 @@ export async function updateAccount(
     await accountService.setRole(identifier, USER_ROLE.user)
   }
 
+  // TODO is not working as expected
   if (companyName && departmentName) {
     let company = await companyService.createCompany(companyName)
-    const department = await departmentService.createDepartment(departmentName)
+    let department = await departmentService.createDepartment(departmentName)
     if (!company || !department)
       throw new BadRequestError('Cannot create company or department')
 
     company = await companyService.addDepartment(company._id, department._id)
     if (!company) throw new BadRequestError('Cannot add department to company')
 
-    company = await companyService.addEmployee(company._id, identifier)
-    if (!company) throw new BadRequestError('Cannot add an employee to company')
-
     const employee = await employeeService.createEmployee(
       identifier,
       company._id,
       department._id
     )
+    if (!employee) throw new BadRequestError('Cannot create employee')
 
+    company = await companyService.addEmployee(company._id, employee._id)
+    if (!company) throw new BadRequestError('Cannot add an employee to company')
+
+    // TODO
+    // department = await departmentService.addEmployee(department._id, employee._id)
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.manager)
   }

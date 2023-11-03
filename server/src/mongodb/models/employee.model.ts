@@ -47,5 +47,5 @@ EmployeeSchema.add({
   subordinates: [EmployeeSchema],
 })
 
-const EmployeeModel = model<EmployeeRef>('employee', EmployeeSchema)
+const EmployeeModel = model<EmployeeRef>('Employee', EmployeeSchema)
 export default EmployeeModel
