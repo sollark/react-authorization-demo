@@ -57,19 +57,23 @@ export async function updateAccount(
   const { employeeNumber } = updateEmployeeData as Partial<Employee>
 
   let employee: any = null
-  // TODO is not working as expected
+  // In this case we have employee already created, it contains profile and company and etc.
   if (companyNumber && employeeNumber) {
-    employee = await employeeService.joinExistingCompany(
-      identifier,
-      companyNumber,
+    const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
+    if (!companyDoc) throw new BadRequestError('Cannot find company')
+
+    const employeeDoc = await companyService.getCompanyEmployeeDocByNumber(
+      companyDoc._id,
       employeeNumber
     )
+    if (!employeeDoc) throw new BadRequestError('Cannot find employee')
+
+    await accountService.setEmployee(accountRef._id, employeeDoc._id)
 
     // when joining existing company, set role to user
     await accountService.setRole(identifier, USER_ROLE.user)
   }
 
-  // TODO is not working as expected
   if (companyName && departmentName) {
     let company = await companyService.createCompany(companyName)
     let department = await departmentService.createDepartment(departmentName)
@@ -80,7 +84,7 @@ export async function updateAccount(
     if (!company) throw new BadRequestError('Cannot add department to company')
 
     const employee = await employeeService.createEmployee(
-      identifier,
+      updatedProfile._id,
       company._id,
       department._id
     )
@@ -89,14 +93,17 @@ export async function updateAccount(
     company = await companyService.addEmployee(company._id, employee._id)
     if (!company) throw new BadRequestError('Cannot add an employee to company')
 
-    // TODO
-    // department = await departmentService.addEmployee(department._id, employee._id)
+    department = await departmentService.addEmployee(
+      department._id,
+      employee._id
+    )
+
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.manager)
   }
 
-  const updatedAccount = await accountService.addEmployee(
-    identifier,
+  const updatedAccount = await accountService.setEmployee(
+    accountRef._id,
     employee._id
   )
 

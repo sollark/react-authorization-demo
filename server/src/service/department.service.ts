@@ -1,23 +1,64 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
-import DepartmentModel from '../mongodb/models/department.model.js'
+import DepartmentModel, {
+  Department,
+} from '../mongodb/models/department.model.js'
+import { Employee } from '../mongodb/models/employee.model.js'
 import logger from './logger.service.js'
 
-async function createDepartment(departmentName: string) {
-  const newDepartment = DepartmentModel.create({
+async function createDepartment(
+  departmentName: string
+): Promise<(Department & { _id: Types.ObjectId }) | null> {
+  const newDepartment = await DepartmentModel.create({
     departmentName,
     employees: [],
   })
 
+  const department = await DepartmentModel.findById(newDepartment._id)
+    .populate<{ employees: Employee[] }>('employees')
+    .lean()
+    .exec()
+
   logger.info(
     `departmentService - department added:  ${JSON.stringify(
-      newDepartment,
+      department,
       null,
       2 // Indentation level, adjust as needed
     )}`
   )
 
-  return newDepartment
+  return department
+}
+
+async function addEmployee(
+  departmentId: Types.ObjectId,
+  employeeId: Types.ObjectId
+): Promise<(Department & { _id: Types.ObjectId }) | null> {
+  const department = await DepartmentModel.findByIdAndUpdate(
+    departmentId,
+    {
+      $push: { employees: employeeId },
+    },
+    { new: true }
+  )
+    .populate<{ employees: Employee[] }>('employees')
+    .lean()
+    .exec()
+
+  if (!department) {
+    logger.warn(`departmentService - department is not found: ${departmentId}`)
+    throw new BadRequestError('Department is not found')
+  }
+
+  logger.info(
+    `departmentService - employee added to department:  ${JSON.stringify(
+      department,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
+
+  return department
 }
 
 async function getDepartmentDBId(
@@ -36,5 +77,6 @@ async function getDepartmentDBId(
 
 export const departmentService = {
   createDepartment,
+  addEmployee,
   getDepartmentDBId,
 }

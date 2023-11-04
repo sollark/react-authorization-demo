@@ -1,9 +1,9 @@
 import { Schema, Types, model } from 'mongoose'
-import { Profile } from './profile.model.js'
+import { Employee } from './employee.model.js'
 
 export type Department = {
   departmentName: string
-  employees?: Profile[]
+  employees?: Employee[]
 }
 
 export type DepartmentRef = {
@@ -13,7 +13,7 @@ export type DepartmentRef = {
 
 const DepartmentSchema = new Schema({
   departmentName: { type: String, required: true },
-  employees: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
+  employees: [{ type: Schema.Types.ObjectId, ref: 'Employee' }],
 })
 
 const DepartmentModel = model<DepartmentRef>('Department', DepartmentSchema)

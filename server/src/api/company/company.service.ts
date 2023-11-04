@@ -3,7 +3,7 @@ import CompanyModel, { Company } from '../../mongodb/models/company.model.js'
 import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
-import { Employee } from '../../mongodb/models/employee.model.js'
+import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
 import { Profile } from '../../mongodb/models/profile.model.js'
 import { utilService } from '../../utils/utils.js'
 import logger from './../../service/logger.service.js'
@@ -95,6 +95,12 @@ async function getCompany(id: Types.ObjectId) {
   return company
 }
 
+async function getCompanyDocByNumber(companyNumber: string) {
+  const companyDoc = await CompanyModel.findOne({ companyNumber })
+
+  return companyDoc
+}
+
 async function addDepartment(
   companyId: Types.ObjectId,
   departmentId: Types.ObjectId
@@ -121,7 +127,7 @@ async function getDepartment(
     companyId,
     departmentName,
   })
-    .populate<{ employees: Profile[] }>('employees')
+    .populate<{ employees: Employee[] }>('employees')
     .lean()
     .exec()
 
@@ -143,6 +149,26 @@ async function addEmployee(
     .exec()
 
   return company
+}
+
+async function getCompanyEmployeeDocByNumber(
+  companyId: Types.ObjectId,
+  employeeNumber: string
+) {
+  const company = await CompanyModel.findById(companyId)
+
+  if (company) {
+    const employeeIds = company.employees
+    const employees = await EmployeeModel.find({ _id: { $in: employeeIds } })
+
+    const matchingEmployee = employees.find(
+      (employee) => employee.employeeNumber === employeeNumber
+    )
+
+    return matchingEmployee
+  }
+
+  return null // Return null if the company is not found
 }
 
 async function getCompanyEmployees(
@@ -194,6 +220,8 @@ export const companyService = {
   getBasicCompanyDetails,
   getBasicCompanyDetailsById,
   getCompany,
+  getCompanyDocByNumber,
+  getCompanyEmployeeDocByNumber,
   getCompanyEmployees,
   addEmployee,
   updateCompany,

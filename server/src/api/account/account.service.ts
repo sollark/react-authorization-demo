@@ -11,6 +11,7 @@ import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import logger from '../../service/logger.service.js'
+import { employeeService } from '../employee/employee.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
@@ -103,8 +104,9 @@ async function getAccount(
   return account
 }
 
-// TODO check if in use
-async function getAccountRef(identifier: Types.ObjectId): Promise<AccountRef> {
+async function getAccountRef(
+  identifier: Types.ObjectId
+): Promise<(AccountRef & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOne({ identifier }).lean().exec()
 
   if (!account) {
@@ -119,13 +121,22 @@ async function deleteAccount(identifier: Types.ObjectId) {
   await AccountModel.findOneAndDelete({ identifier })
 }
 
-async function addEmployee(
-  identifier: Types.ObjectId,
+async function setEmployee(
+  accountId: Types.ObjectId,
   employeeId: Types.ObjectId
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
-  const account = await AccountModel.findOneAndUpdate(
-    { identifier },
-    { $set: { employee: employeeId } },
+  const profileId = await employeeService.getProfileId(employeeId)
+
+  // TODO: check if employee is already assigned to another account
+  // TODO: check if account has already assigned profile. Can be separate function to set profile
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
+    {
+      $set: {
+        employee: employeeId,
+        profile: profileId,
+      },
+    },
     { new: true }
   )
     .populate<{ role: Role }>('role')
@@ -249,7 +260,7 @@ export const accountService = {
   getAccount,
   getAccountRef,
   deleteAccount,
-  addEmployee,
+  setEmployee,
   sortAccountData,
   completeAccount,
 }
