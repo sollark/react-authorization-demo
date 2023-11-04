@@ -7,14 +7,17 @@ import { Employee } from '../mongodb/models/employee.model.js'
 import logger from './logger.service.js'
 
 async function createDepartment(
+  companyId: Types.ObjectId,
   departmentName: string
 ): Promise<(Department & { _id: Types.ObjectId }) | null> {
   const newDepartment = await DepartmentModel.create({
     departmentName,
+    company: companyId,
     employees: [],
   })
 
   const department = await DepartmentModel.findById(newDepartment._id)
+    .populate<{ company: Types.ObjectId }>('company')
     .populate<{ employees: Employee[] }>('employees')
     .lean()
     .exec()

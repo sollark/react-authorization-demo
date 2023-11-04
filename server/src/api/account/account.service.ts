@@ -182,7 +182,7 @@ async function completeAccount(
           populate: [{ path: 'departments' }, { path: 'employees' }],
         },
         { path: 'department' },
-        { path: 'employee' },
+        { path: 'profile' },
         { path: 'supervisor' },
         { path: 'subordinates' },
       ],

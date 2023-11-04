@@ -76,9 +76,12 @@ export async function updateAccount(
 
   if (companyName && departmentName) {
     let company = await companyService.createCompany(companyName)
-    let department = await departmentService.createDepartment(departmentName)
-    if (!company || !department)
-      throw new BadRequestError('Cannot create company or department')
+    if (!company) throw new BadRequestError('Cannot create company')
+    let department = await departmentService.createDepartment(
+      company._id,
+      departmentName
+    )
+    if (!department) throw new BadRequestError('Cannot create department')
 
     company = await companyService.addDepartment(company._id, department._id)
     if (!company) throw new BadRequestError('Cannot add department to company')
@@ -89,7 +92,6 @@ export async function updateAccount(
       department._id
     )
     if (!employee) throw new BadRequestError('Cannot create employee')
-
     company = await companyService.addEmployee(company._id, employee._id)
     if (!company) throw new BadRequestError('Cannot add an employee to company')
 
@@ -97,23 +99,17 @@ export async function updateAccount(
       department._id,
       employee._id
     )
+    console.log('1')
+
+    await accountService.setEmployee(accountRef._id, employee._id)
+    console.log('2')
 
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.manager)
+    console.log('3')
   }
 
-  const updatedAccount = await accountService.setEmployee(
-    accountRef._id,
-    employee._id
-  )
-
-  if (!updatedAccount) {
-    throw new BadRequestError('Cannot update account')
-  }
-
-  const completedAccount = await accountService.completeAccount(
-    updatedAccount._id
-  )
+  const completedAccount = await accountService.completeAccount(accountRef._id)
 
   res.status(200).json({ account: completedAccount })
 }

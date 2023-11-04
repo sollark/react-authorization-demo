@@ -55,7 +55,7 @@ const AccountSchema = new Schema({
   },
   employee: {
     type: Schema.Types.ObjectId,
-    ref: 'employee',
+    ref: 'Employee',
   },
 })
 
