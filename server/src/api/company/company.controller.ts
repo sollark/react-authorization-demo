@@ -14,19 +14,6 @@ import { companyService } from './company.service.js'
 //     "data": { }
 // }
 
-// Workplace will be changed to Employee
-// type Employee = {
-//   firstName: string // Profile
-//   lastName: string // Profile
-//   ID: string // Profile
-//   companyName: string // Workplace
-//   departmentName: string // Workplace
-//   employeeId: string // Workplace
-//   position: string // Workplace
-//   role: Role // Account
-//   status: Status // Account
-// }
-
 export async function getCompanyEmployees(
   req: Request,
   res: Response,

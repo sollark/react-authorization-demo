@@ -5,9 +5,9 @@ import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import TokenModel from '../../mongodb/models/token.model.js'
 import logger from '../../service/logger.service.js'
 import { payloadService } from '../../service/payload.service.js'
-import { profileService } from '../../service/profile.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { accountService } from '../account/account.service.js'
+import { profileService } from '../profile/profile.service.js'
 
 async function registration(credentials: Credentials) {
   const { email, password } = credentials

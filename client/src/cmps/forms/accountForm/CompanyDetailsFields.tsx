@@ -17,7 +17,7 @@ const CompanyDetailsFields: FC = () => {
         <div>
           <h3>Employee:</h3>
           {employee &&
-            `${employee.company.companyName} (${employee.company.companyId}) `}
+            `${employee.company.companyName} (${employee.company.companyNumber}) `}
           {employee && `${employee.department?.departmentName}`}
         </div>
       )}

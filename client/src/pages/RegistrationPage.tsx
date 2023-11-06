@@ -11,7 +11,7 @@ const RegistrationPage: FC = () => {
       <h1>Registration</h1>
       <RegistrationForm />
       <p>
-        Already have an account? <Link to='signin'>Sign in</Link>
+        Already have an account? <Link to='/signin'>Sign in</Link>
       </p>
     </Box>
   )

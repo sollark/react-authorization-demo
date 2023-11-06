@@ -7,9 +7,9 @@ import { Employee } from '../../mongodb/models/employee.model.js'
 import { USER_ROLE } from '../../mongodb/models/role.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
-import { profileService } from '../../service/profile.service.js'
 import { companyService } from '../company/company.service.js'
 import { employeeService } from '../employee/employee.service.js'
+import { profileService } from '../profile/profile.service.js'
 import { accountService } from './account.service.js'
 
 // TODO

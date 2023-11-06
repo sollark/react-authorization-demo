@@ -1,14 +1,15 @@
 import { Types } from 'mongoose'
 import BadRequestError from '../errors/BadRequestError.js'
 import ProfileModel, { Profile } from '../mongodb/models/profile.model.js'
-import loggerService from './logger.service.js'
+import logger from './logger.service.js'
 
+// TODO check if in use
 async function createBlankProfile(): Promise<
   (Profile & { _id: Types.ObjectId }) | null
 > {
   const profile = await ProfileModel.create({})
 
-  loggerService.info(`profileService - profile has been created: ${profile}`)
+  logger.info(`profileService - profile has been created: ${profile}`)
 
   return profile
 }
@@ -16,9 +17,20 @@ async function createBlankProfile(): Promise<
 async function createProfile(
   profileData: Profile
 ): Promise<(Profile & { _id: Types.ObjectId }) | null> {
+  const { ID } = profileData
+
+  const isExist = await isIDExist(ID)
+
+  if (isExist) {
+    logger.warn(
+      `profileService - attempt to create new profile with existing ID: ${ID}`
+    )
+    throw new BadRequestError('Person with this ID already exists', ID)
+  }
+
   const profile = await ProfileModel.create(profileData)
 
-  loggerService.info(`profileService - profile has been created: ${profile}`)
+  logger.info(`profileService - profile has been created: ${profile}`)
 
   return profile
 }
@@ -28,7 +40,7 @@ async function getProfileByIdentifier(
 ): Promise<(Profile & { _id: Types.ObjectId }) | null> {
   const profile = await ProfileModel.findOne({ identifier })
 
-  loggerService.info(`profileService - profile fetched ${profile}`)
+  logger.info(`profileService - profile fetched ${profile}`)
 
   return profile
 }
@@ -43,7 +55,7 @@ async function updateProfile(
     { new: true }
   ).exec()
 
-  loggerService.info(`profileService - profile updated ${profile}`)
+  logger.info(`profileService - profile updated ${profile}`)
 
   return profile
 }
@@ -57,18 +69,27 @@ async function getProfileDBId(
 ): Promise<Types.ObjectId> {
   const profile = await ProfileModel.findOne({ identifier })
   if (!profile) {
-    loggerService.warn(`profileService - profile is not found: ${identifier}`)
+    logger.warn(`profileService - profile is not found: ${identifier}`)
     throw new BadRequestError('Profile is not found')
   }
 
   return profile._id
 }
 
-export const profileService = {
-  createBlankProfile,
-  createProfile,
-  getProfileByIdentifier,
-  updateProfile,
-  deleteProfile,
-  getProfileDBId,
+// export const profileService = {
+//   createBlankProfile,
+//   createProfile,
+//   getProfileByIdentifier,
+//   updateProfile,
+//   deleteProfile,
+//   getProfileDBId,
+// }
+
+const isIDExist = async (ID: string) => {
+  try {
+    const existingID = await ProfileModel.findOne({ ID })
+    return existingID ? true : false
+  } catch (error) {
+    throw error
+  }
 }
