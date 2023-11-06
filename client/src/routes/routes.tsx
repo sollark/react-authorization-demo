@@ -1,9 +1,11 @@
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
+import JoinCompanyPage from '@/pages/JoinCompanyPage'
 import PeoplePage from '@/pages/PeoplePage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
 import { Box } from '@mui/material'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
+import CreateCompanyPage from '../pages/CreateCompanyPage'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
@@ -53,6 +55,26 @@ export const registrationRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/registration',
   component: RegistrationPage,
+})
+
+export const joinCompanyRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/joinCompany',
+  component: () => (
+    <AuthProtectedRoute>
+      <JoinCompanyPage />
+    </AuthProtectedRoute>
+  ),
+})
+
+export const createCompanyRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/createCompany',
+  component: () => (
+    <AuthProtectedRoute>
+      <CreateCompanyPage />
+    </AuthProtectedRoute>
+  ),
 })
 
 export const unauthorizedRoute = new Route({
