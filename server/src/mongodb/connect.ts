@@ -18,6 +18,7 @@ export const connectMongo = async () => {
   }
 
   await populate.populateRole()
+  // await populate.populateTestData()
 
   // Uncomment this lines to delete the database
   // await deleteDatabase(mongoose.connections[0])
