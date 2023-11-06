@@ -6,7 +6,7 @@ import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 
 const AccountEditPage: FC = () => {
-  console.log('AccountEditPage connected')
+  console.log('AccountEdit connected')
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>

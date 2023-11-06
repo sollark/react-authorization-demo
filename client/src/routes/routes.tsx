@@ -4,7 +4,6 @@ import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
 import { Box } from '@mui/material'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
-import CreateCompanyPage from '../pages/CreateCompanyPage'
 import Home from '../pages/HomePage'
 import JoinCompanyPage from '../pages/JoinCompanyPage'
 import AuthProtectedRoute from './AuthProtectedRoute'
@@ -63,16 +62,6 @@ export const joinCompanyRoute = new Route({
   component: () => (
     <AuthProtectedRoute>
       <JoinCompanyPage />
-    </AuthProtectedRoute>
-  ),
-})
-
-export const createCompanyRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/createCompany',
-  component: () => (
-    <AuthProtectedRoute>
-      <CreateCompanyPage />
     </AuthProtectedRoute>
   ),
 })
