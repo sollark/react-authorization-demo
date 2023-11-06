@@ -67,7 +67,7 @@ async function setRole(identifier: Types.ObjectId, role: Role) {
 
 async function getAccount(
   identifier: Types.ObjectId
-): Promise<Account & { _id: Types.ObjectId }> {
+): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOne({ identifier })
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')

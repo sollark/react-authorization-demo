@@ -116,15 +116,22 @@ export async function joinCompany(
   next: NextFunction
 ) {
   const identifier = getIdentifierFromALS()
-  const { companyId, employeeId } = req.body
+  let account = await accountService.getAccount(identifier)
+  if (!account) throw new BadRequestError('Cannot find account')
 
-  const employee = await employeeService.joinExistingCompany(
-    identifier,
-    companyId,
-    employeeId
+  const { companyNumber, employeeNumber } = req.body
+
+  const company = await companyService.getCompanyDocByNumber(companyNumber)
+  if (!company) throw new BadRequestError('Cannot find company')
+
+  const employee = await companyService.getCompanyEmployeeDocByNumber(
+    company._id,
+    employeeNumber
   )
+  if (!employee) throw new BadRequestError('Cannot find employee')
 
-  const account = await accountService.getAccount(identifier)
+  account = await accountService.setEmployee(account._id, employee._id)
+
   res.status(200).json({ account })
 }
 

@@ -8,7 +8,7 @@ const JoinCompanyPage: FC = () => {
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
-      <h2>Join Company</h2>
+      <h2>Join a company</h2>
       <JoinCompanyForm />
       <p>
         Want to create your company?{' '}

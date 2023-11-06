@@ -8,7 +8,6 @@ import {
   adminRoute,
   companyAccessRoute,
   companyRoute,
-  createCompanyRoute,
   employeeRoute,
   homeRoute,
   joinCompanyRoute,
@@ -47,7 +46,6 @@ const routeTree = rootRoute.addChildren([
   signinRoute,
   registrationRoute,
   joinCompanyRoute,
-  createCompanyRoute,
   accountRoute.addChildren([
     accountDetailsRoute,
     accountEditRoute,

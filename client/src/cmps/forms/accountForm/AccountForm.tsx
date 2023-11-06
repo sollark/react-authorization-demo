@@ -46,7 +46,7 @@ const AccountForm: FC<Props> = (props: Props) => {
       form.departmentName
     )
 
-    console.log('Account form account: ', account)
+    console.log('AccountForm, account: ', account)
 
     if (account?.isComplete) navigate({ to: '/' })
   }

@@ -1,5 +1,7 @@
 import { CompanyNumberSchema } from '@/models/Company'
 import { EmployeeNumberSchema } from '@/models/Employee'
+import { accountService } from '@/service/account.service'
+import { useNavigate } from '@tanstack/react-router'
 import { FC } from 'react'
 import { z } from 'zod'
 import Form from './Form'
@@ -22,9 +24,22 @@ const defaultValues = {
 }
 
 const JoinCompanyForm: FC = () => {
-  console.log('CompanyAccessForm connected')
+  console.log('JoinCompanyForm connected')
 
-  async function submit(form: JoinCompanyForm) {}
+  const navigate = useNavigate()
+
+  async function submit(form: any) {
+    console.log('JoinCompanyForm form submitted: ', form)
+
+    const account = await accountService.joinCompany(
+      form.companyNumber,
+      form.employeeNumber
+    )
+
+    console.log('AccountForm, account: ', account)
+
+    if (account?.isComplete) navigate({ to: '/' })
+  }
 
   return (
     <Form

@@ -151,6 +151,7 @@ async function addEmployee(
   return company
 }
 
+// TODO when joining existing company, it is better to get an employee by employeeNumber and companyNumber
 async function getCompanyEmployeeDocByNumber(
   companyId: Types.ObjectId,
   employeeNumber: string
