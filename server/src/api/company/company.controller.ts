@@ -3,7 +3,9 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { accountService } from '../account/account.service.js'
+import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
+import { companyService } from './company.service.js'
 
 // TODO res structure
 // {
@@ -31,15 +33,17 @@ export async function getCompanyEmployees(
   next: NextFunction
 ) {
   const identifier = getIdentifierFromALS()
-  const account = await accountService.getAccount(identifier)
-  if (!account) {
-    throw new BadRequestError('Cannot find account')
-  }
+  const accountDoc = await accountService.getAccountDoc(identifier)
+  if (!accountDoc) throw new BadRequestError('Cannot find account')
 
-  const employees = account.employee?.company?.employees
-  if (!employees) {
-    throw new BadRequestError('Cannot find employees')
-  }
+  const employeeId = accountDoc.employee
+  if (!employeeId) throw new BadRequestError('Cannot find employee')
+
+  const companyId = await employeeService.getCompanyId(employeeId)
+  if (!companyId) throw new BadRequestError('Cannot find company')
+
+  const employees = await companyService.getCompanyEmployees(companyId)
+  if (!employees) throw new BadRequestError('Cannot find employees')
 
   res.status(200).json({
     success: true,

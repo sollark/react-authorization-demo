@@ -6,7 +6,7 @@ import { Profile } from './Profile'
 export type Employee = {
   company: Company
   department?: Department
-  employeeId: string
+  employeeNumber: string
   profile: Profile
   position?: string
   supervisor?: Employee
@@ -14,7 +14,7 @@ export type Employee = {
 }
 
 export const EmployeeIdSchema = z.object({
-  employeeId: z
+  employeeNumber: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()

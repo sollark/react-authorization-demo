@@ -112,6 +112,19 @@ async function getProfileId(
   return employee.profile
 }
 
+async function getCompanyId(
+  employeeId: Types.ObjectId
+): Promise<Types.ObjectId | null> {
+  const employee = await EmployeeModel.findById(employeeId)
+    .select('company')
+    .lean()
+    .exec()
+
+  if (!employee || !employee.company) return null
+
+  return employee.company
+}
+
 // TODO predicated (no use?)
 async function joinExistingCompany(
   identifier: Types.ObjectId,
@@ -243,6 +256,7 @@ export const employeeService = {
   getBasicEmployeeDetails,
   getEmployeeRefById,
   getProfileId,
+  getCompanyId,
   joinExistingCompany,
   joinNewCompany,
   setSupervisor,

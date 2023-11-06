@@ -41,11 +41,11 @@ export async function updateAccount(
   console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
   console.log('updateAccount, updatedDepartmentData: ', updatedDepartmentData)
 
-  const accountRef = await accountService.getAccountRef(identifier)
-  if (!accountRef) throw new BadRequestError('Cannot find account')
+  const accountDoc = await accountService.getAccountDoc(identifier)
+  if (!accountDoc) throw new BadRequestError('Cannot find account')
 
   const updatedProfile = await profileService.updateProfile(
-    accountRef.profile,
+    accountDoc.profile,
     updatedProfileData
   )
   if (!updatedProfile) {
@@ -68,7 +68,7 @@ export async function updateAccount(
     )
     if (!employeeDoc) throw new BadRequestError('Cannot find employee')
 
-    await accountService.setEmployee(accountRef._id, employeeDoc._id)
+    await accountService.setEmployee(accountDoc._id, employeeDoc._id)
 
     // when joining existing company, set role to user
     await accountService.setRole(identifier, USER_ROLE.user)
@@ -99,17 +99,13 @@ export async function updateAccount(
       department._id,
       employee._id
     )
-    console.log('1')
-
-    await accountService.setEmployee(accountRef._id, employee._id)
-    console.log('2')
+    await accountService.setEmployee(accountDoc._id, employee._id)
 
     // when joining new company, set role to manager
     await accountService.setRole(identifier, USER_ROLE.manager)
-    console.log('3')
   }
 
-  const completedAccount = await accountService.completeAccount(accountRef._id)
+  const completedAccount = await accountService.completeAccount(accountDoc._id)
 
   res.status(200).json({ account: completedAccount })
 }

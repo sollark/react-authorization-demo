@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, {
   Account,
-  AccountRef,
+  AccountDoc,
   Status,
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
@@ -20,18 +20,18 @@ async function createAccount(
   const role = USER_ROLE.user
   const roleDoc = await RoleModel.findOne({ role }).exec()
 
-  const accountRef = await AccountModel.create({
+  const accountDoc = await AccountModel.create({
     identifier,
     profile: profileId,
     role: roleDoc?._id,
   })
 
-  if (!accountRef) {
+  if (!accountDoc) {
     logger.warn(`accountService - cannot create account: ${identifier}`)
     throw new BadRequestError('Could not create account')
   }
 
-  const account = await AccountModel.findById(accountRef._id)
+  const account = await AccountModel.findById(accountDoc._id)
     .populate<{ profile: Profile }>('profile')
     .populate<{ role: Role }>('role')
     .populate<{ employee: Employee }>('employee')
@@ -79,7 +79,7 @@ async function getAccount(
           populate: [{ path: 'departments' }, { path: 'employees' }],
         },
         { path: 'department' },
-        { path: 'employee' },
+        { path: 'profile' },
         { path: 'supervisor' },
         { path: 'subordinates' },
       ],
@@ -104,9 +104,9 @@ async function getAccount(
   return account
 }
 
-async function getAccountRef(
+async function getAccountDoc(
   identifier: Types.ObjectId
-): Promise<(AccountRef & { _id: Types.ObjectId }) | null> {
+): Promise<(AccountDoc & { _id: Types.ObjectId }) | null> {
   const account = await AccountModel.findOne({ identifier }).lean().exec()
 
   if (!account) {
@@ -258,7 +258,7 @@ export const accountService = {
   createAccount,
   setRole,
   getAccount,
-  getAccountRef,
+  getAccountDoc,
   deleteAccount,
   setEmployee,
   sortAccountData,

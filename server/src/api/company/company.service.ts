@@ -4,7 +4,6 @@ import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
 import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
-import { Profile } from '../../mongodb/models/profile.model.js'
 import { utilService } from '../../utils/utils.js'
 import logger from './../../service/logger.service.js'
 
@@ -112,6 +111,7 @@ async function addDepartment(
   )
     .populate<{ departments: Department[] }>('departments')
     .populate<{ employees: Employee[] }>('employees')
+    .populate({ path: 'employees', model: 'Employee' })
     .lean()
     .exec()
 
@@ -173,10 +173,20 @@ async function getCompanyEmployeeDocByNumber(
 
 async function getCompanyEmployees(
   companyId: Types.ObjectId
-): Promise<Profile[] | null> {
+): Promise<Employee[] | null> {
   const company = await CompanyModel.findById(companyId)
     .select('employees')
-    .populate<{ employees: Profile[] }>('employees')
+    .populate<{ employees: Employee[] }>({
+      path: 'employees',
+      select: '-company',
+      populate: [
+        { path: 'department', select: '-employees -company' },
+        { path: 'profile' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
+      ],
+    })
+
     .lean()
 
   const employees = company?.employees

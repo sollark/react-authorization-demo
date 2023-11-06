@@ -4,7 +4,7 @@ import { Profile } from './Profile'
 
 export type Company = {
   companyName: string
-  companyId: string
+  companyNumber: string
   departments?: Department[]
   employees?: Profile[]
 }
@@ -19,7 +19,7 @@ export const CompanyNameSchema = z.object({
     .regex(/^[a-zA-Z0-9]*$/, { message: 'Company name must be alphanumeric' }),
 })
 export const CompanyIdSchema = z.object({
-  companyId: z
+  companyNumber: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()

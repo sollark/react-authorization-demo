@@ -22,12 +22,12 @@ const AccountDetailsPage: FC = () => {
         <br />
         ID: {profile?.ID}
         <br />
-        <h2>Workplace</h2>
+        <h2>Work details</h2>
         {employee && `Company: ${employee.company.companyName}`}
         <br />
-        {employee && `Company code: ${employee.company.companyId}`}
+        {employee && `Company number: ${employee.company.companyNumber}`}
         <br />
-        {employee && `Employee number: ${employee.employeeId}`}
+        {employee && `Employee number: ${employee.employeeNumber}`}
         <br />
       </div>
       {/* using href forces a page reload */}

@@ -10,8 +10,8 @@ async function getAllEmployees(): Promise<Account[] | null> {
   //TODO build employees from accounts
   console.log('employeeService - getAllEmployees, response.data', response)
 
-  const { employees } = response as any
-  //   if (employees) storeService.saveEmployees(employees)
+  const { success, message, data } = response as any
+  const employees = data.employees
 
   return employees ? employees : null
 }

@@ -21,7 +21,7 @@ export type Account = {
   employee?: Employee
 }
 
-export type AccountRef = {
+export type AccountDoc = {
   identifier?: Types.ObjectId
   profile: Types.ObjectId
   status: Status
@@ -59,5 +59,5 @@ const AccountSchema = new Schema({
   },
 })
 
-const accountModel = model<AccountRef>('Account', AccountSchema)
+const accountModel = model<AccountDoc>('Account', AccountSchema)
 export default accountModel
