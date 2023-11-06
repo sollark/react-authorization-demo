@@ -1,5 +1,4 @@
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
-import JoinCompanyPage from '@/pages/JoinCompanyPage'
 import PeoplePage from '@/pages/PeoplePage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
@@ -7,6 +6,7 @@ import { Box } from '@mui/material'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import CreateCompanyPage from '../pages/CreateCompanyPage'
 import Home from '../pages/HomePage'
+import JoinCompanyPage from '../pages/JoinCompanyPage'
 import AuthProtectedRoute from './AuthProtectedRoute'
 import RoleProtectedRoute from './RoleProtectedRoute'
 const CompanyPage = lazyRouteComponent(() => import('../pages/CompanyPage'))
@@ -15,7 +15,7 @@ const AccountEditPage = lazyRouteComponent(
   () => import('../pages/AccountEditPage')
 )
 const CompanyAccessPage = lazyRouteComponent(
-  () => import('../pages/CompanyAccessPage')
+  () => import('../pages/JoinCompanyPage')
 )
 const SigninPage = lazyRouteComponent(() => import('../pages/SigninPage'))
 const RegistrationPage = lazyRouteComponent(

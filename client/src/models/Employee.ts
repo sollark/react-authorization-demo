@@ -13,13 +13,13 @@ export type Employee = {
   subordinates?: Employee[]
 }
 
-export const EmployeeIdSchema = z.object({
+export const EmployeeNumberSchema = z.object({
   employeeNumber: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()
-    .length(4, { message: 'Employee id  must be 4 characters' })
-    .regex(/^[0-9]*$/, { message: 'Employee id must be numeric' }),
+    .length(4, { message: 'Employee number  must be 4 characters' })
+    .regex(/^[0-9]*$/, { message: 'Employee number must be numeric' }),
 })
 
 export const DepartmentNameSchema = z.object({

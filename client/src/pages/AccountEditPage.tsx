@@ -1,5 +1,5 @@
 import AccountForm from '@/cmps/forms/accountForm/AccountForm'
-import OrganizationDetailsFields from '@/cmps/forms/accountForm/CompanyDetailsFields'
+import CompanyDetailsFields from '@/cmps/forms/accountForm/CompanyDetailsFields'
 import UserDetailsFields from '@/cmps/forms/accountForm/UserDetailsFields'
 import { Box } from '@mui/material'
 import { Link } from '@tanstack/react-router'
@@ -12,10 +12,11 @@ const AccountEditPage: FC = () => {
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
       <AccountForm>
         <UserDetailsFields />
-        <OrganizationDetailsFields />
+        <CompanyDetailsFields />
       </AccountForm>
       <p>
-        Want to access your company? <Link to='/account/join'>Join</Link>
+        Want to join your company?{' '}
+        <Link to='/account/join'>Join a company</Link>
       </p>
     </Box>
   )

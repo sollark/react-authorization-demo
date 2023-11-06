@@ -18,11 +18,11 @@ export const CompanyNameSchema = z.object({
     .max(20, { message: 'Company name must be less than 20 characters' })
     .regex(/^[a-zA-Z0-9]*$/, { message: 'Company name must be alphanumeric' }),
 })
-export const CompanyIdSchema = z.object({
+export const CompanyNumberSchema = z.object({
   companyNumber: z
     .string()
     .nonempty({ message: 'Field can not be empty' })
     .trim()
-    .length(4, { message: 'Company id must be 4 characters' })
-    .regex(/^[0-9]*$/, { message: 'Company id must be numeric' }),
+    .length(4, { message: 'Company number must be 4 characters' })
+    .regex(/^[0-9]*$/, { message: 'Company number must be numeric' }),
 })
