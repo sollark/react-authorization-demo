@@ -138,6 +138,7 @@ async function setEmployee(
       $set: {
         employee: employeeId,
         profile: profileId,
+        isComplete: true,
       },
     },
     { new: true }

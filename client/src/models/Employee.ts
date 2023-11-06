@@ -5,7 +5,7 @@ import { Profile } from './Profile'
 
 export type Employee = {
   company: Company
-  department?: Department
+  department: Department
   employeeNumber: string
   profile: Profile
   position?: string

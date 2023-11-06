@@ -1,11 +1,9 @@
 import { ACCOUNT_STATUS, Status } from '@/models/Account'
 import { Employee } from '@/models/Employee'
 import { Role, USER_ROLE } from '@/models/Role'
-import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
-import employeeData from './../../assets/mock_data/employee.json'
 import Table from './Table'
 
 type EmployeeTableProps = {
@@ -16,10 +14,10 @@ export type EmployeeTableColumns = {
   firstName: string // Profile
   lastName: string // Profile
   ID: string // Profile
-  companyName: string // Workplace
-  departmentName: string // Workplace
-  employeeId: string // Workplace
-  position: string // Workplace
+  companyName: string // employee.company.companyName
+  departmentName: string // employee.department.departmentName
+  employeeNumber: string // Employee
+  position: string // Employee
   role: Role // Account
   status: Status // Account
 }
@@ -30,7 +28,7 @@ const employeeDefaultValues: EmployeeTableColumns = {
   ID: '',
   companyName: '',
   departmentName: '',
-  employeeId: '',
+  employeeNumber: '',
   position: '',
   role: USER_ROLE.user,
   status: ACCOUNT_STATUS.unregistered,
@@ -42,7 +40,7 @@ const employeeColumns: GridColDef[] = [
   { field: 'ID', headerName: 'ID', editable: true },
   { field: 'companyName', headerName: 'Company', editable: false },
   { field: 'departmentName', headerName: 'Department', editable: true },
-  { field: 'employeeId', headerName: 'Employee ID', editable: false },
+  { field: 'employeeNumber', headerName: 'Employee number', editable: false },
   { field: 'position', headerName: 'Position', editable: true },
   { field: 'role', headerName: 'Role', editable: true },
   { field: 'status', headerName: 'Status', editable: true },
@@ -67,16 +65,29 @@ function deleteEmployee(id: GridRowId) {
   console.log('deleteEmployee', id)
 }
 
-const EmployeeTable: FC<EmployeeTableProps> = () => {
-  const employee = employeeService.getAllEmployees()
+const EmployeeTable: FC<EmployeeTableProps> = (props) => {
+  const { employees } = props
+  const employeeData = employees?.map((employee) => {
+    return {
+      firstName: employee.profile.firstName,
+      lastName: employee.profile.lastName,
+      ID: employee.profile.ID,
+      // companyName: employee.company.companyName,
+      departmentName: employee.department.departmentName,
+      employeeNumber: employee.employeeNumber,
+      position: employee.position,
+      // role: employee.account.role,
+      // status: employee.account.status,
+    }
+  })
 
-  console.log('employeeData from api', employee)
+  console.log('employeeData from api', employeeData)
 
   return (
     <div>
       <h2>Employee Table</h2>
       <Table
-        dataRows={employeeData}
+        dataRows={employeeData as any}
         defaultValues={employeeDefaultValues}
         tableColumns={employeeColumns}
         updateRow={updateEmployee}
