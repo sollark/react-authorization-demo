@@ -61,3 +61,26 @@ const AccountSchema = new Schema({
 
 const accountModel = model<AccountDoc>('Account', AccountSchema)
 export default accountModel
+
+// account population
+// .populate<{ role: Role }>('role')
+// .populate<{ profile: Profile }>('profile')
+// .populate<{ employee: Employee }>({
+//   path: 'employee',
+//   populate: [
+//     {
+//       path: 'company',
+//       populate: [{ path: 'departments' }, { path: 'employees' }],
+//     },
+//     {
+//       path: 'department',
+//       populate: [{ path: 'company' }, { path: 'employees' }],
+//     },
+//     { path: 'profile' },
+//     { path: 'supervisor' },
+//     { path: 'subordinates' },
+//   ],
+// })
+// .populate<{ status: Status }>('status')
+// .lean()
+// .exec()

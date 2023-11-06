@@ -76,9 +76,12 @@ async function getAccount(
       populate: [
         {
           path: 'company',
-          populate: [{ path: 'departments' }, { path: 'employees' }],
+          select: 'companyName companyNumber',
         },
-        { path: 'department' },
+        {
+          path: 'department',
+          select: 'departmentName',
+        },
         { path: 'profile' },
         { path: 'supervisor' },
         { path: 'subordinates' },
@@ -146,11 +149,11 @@ async function setEmployee(
       populate: [
         {
           path: 'company',
-          populate: [{ path: 'departments' }, { path: 'employees' }],
+          select: 'companyName companyNumber',
         },
         {
           path: 'department',
-          populate: [{ path: 'company' }, { path: 'employees' }],
+          select: 'departmentName',
         },
         { path: 'profile' },
         { path: 'supervisor' },
@@ -179,9 +182,12 @@ async function completeAccount(
       populate: [
         {
           path: 'company',
-          populate: [{ path: 'departments' }, { path: 'employees' }],
+          select: 'companyName companyNumber',
         },
-        { path: 'department' },
+        {
+          path: 'department',
+          select: 'departmentName',
+        },
         { path: 'profile' },
         { path: 'supervisor' },
         { path: 'subordinates' },
