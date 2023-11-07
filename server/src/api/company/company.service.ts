@@ -81,7 +81,20 @@ async function getBasicCompanyDetailsById(id: Types.ObjectId) {
 }
 
 async function getCompany(id: Types.ObjectId) {
-  const company = await CompanyModel.findById(id).lean().exec()
+  const company = await CompanyModel.findById(id)
+    .populate<{ departments: Department[] }>('departments')
+    .populate<{ employees: Employee[] }>({
+      path: 'employees',
+      select: '-company',
+      populate: [
+        { path: 'department', select: '-employees -company' },
+        { path: 'profile' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
+      ],
+    })
+    .lean()
+    .exec()
 
   logger.info(
     `companyService - company fetched  ${JSON.stringify(

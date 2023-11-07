@@ -10,10 +10,9 @@ import { FC } from 'react'
 const CompanyPage: FC = () => {
   console.log(' Company connected')
 
-  // TODO refactor to employeeService.getCompany
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['employees'],
-    queryFn: () => employeeService.getAllEmployees(),
+    queryKey: ['company'],
+    queryFn: () => employeeService.getCompany(),
   })
 
   if (isPending) {
@@ -24,7 +23,9 @@ const CompanyPage: FC = () => {
     return <span>Error: {error.message}</span>
   }
 
-  //TODO client gets empty array
+  if (!data) {
+    return <span>Empty data</span>
+  }
   return (
     <Box
       sx={{
@@ -32,7 +33,7 @@ const CompanyPage: FC = () => {
       }}>
       <h1>Company page</h1>
       {JSON.stringify(data)}
-      <EmployeeTable employees={data} />
+      <EmployeeTable employees={data.employees} />
     </Box>
   )
 }

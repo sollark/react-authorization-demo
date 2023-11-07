@@ -67,6 +67,7 @@ function deleteEmployee(id: GridRowId) {
 
 const EmployeeTable: FC<EmployeeTableProps> = (props) => {
   const { employees } = props
+  console.log('prop from api', props)
   const employeeData = employees?.map((employee) => {
     return {
       firstName: employee.profile.firstName,

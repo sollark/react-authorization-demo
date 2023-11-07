@@ -14,6 +14,31 @@ import { companyService } from './company.service.js'
 //     "data": { }
 // }
 
+export async function getCompany(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+  const accountDoc = await accountService.getAccountDoc(identifier)
+  if (!accountDoc) throw new BadRequestError('Cannot find account')
+
+  const employeeId = accountDoc.employee
+  if (!employeeId) throw new BadRequestError('Cannot find employee')
+
+  const companyId = await employeeService.getCompanyId(employeeId)
+  if (!companyId) throw new BadRequestError('Cannot find company')
+
+  const company = await companyService.getCompany(companyId)
+  if (!company) throw new BadRequestError('Cannot find company')
+
+  res.status(200).json({
+    success: true,
+    message: 'Company is ready to view.',
+    data: { company },
+  })
+}
+
 export async function getCompanyEmployees(
   req: Request,
   res: Response,
