@@ -26,13 +26,15 @@ const CompanyPage: FC = () => {
   if (!data) {
     return <span>Empty data</span>
   }
+
   return (
     <Box
       sx={{
         p: 4,
       }}>
       <h1>Company page</h1>
-      {JSON.stringify(data)}
+      {/* {JSON.stringify(data)} */}
+      {data.companyName}
       <EmployeeTable employees={data.employees} />
     </Box>
   )

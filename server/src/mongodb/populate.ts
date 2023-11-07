@@ -97,22 +97,26 @@ async function populateTestData() {
   const employee1 = await employeeService.createEmployee(
     profile1._id,
     company._id,
-    salesDepartment._id
+    salesDepartment._id,
+    'Sales Representative'
   )
   const employee2 = await employeeService.createEmployee(
     profile2._id,
     company._id,
-    salesDepartment._id
+    salesDepartment._id,
+    'Sales Associate'
   )
   const employee3 = await employeeService.createEmployee(
     profile3._id,
     company._id,
-    hrDepartment._id
+    hrDepartment._id,
+    'HR Manager'
   )
   const employee4 = await employeeService.createEmployee(
     profile4._id,
     company._id,
-    hrDepartment._id
+    hrDepartment._id,
+    'HR Specialist'
   )
   if (!employee1 || !employee2 || !employee3 || !employee4) {
     console.log('Failed to create employee')

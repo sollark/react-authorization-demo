@@ -52,58 +52,41 @@ export async function updateAccount(
     throw new BadRequestError('Cannot update profile')
   }
 
-  const { companyName, companyNumber } = updatedCompanyData as Partial<Company>
+  const { companyName } = updatedCompanyData as Partial<Company>
   const { departmentName } = updatedDepartmentData as Partial<Department>
-  const { employeeNumber } = updateEmployeeData as Partial<Employee>
+  const { position } = updateEmployeeData as Partial<Employee>
 
-  let employee: any = null
-  // In this case we have employee already created, it contains profile and company and etc.
-  // if (companyNumber && employeeNumber) {
-  //   const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
-  //   if (!companyDoc) throw new BadRequestError('Cannot find company')
-
-  //   const employeeDoc = await companyService.getCompanyEmployeeDocByNumber(
-  //     companyDoc._id,
-  //     employeeNumber
-  //   )
-  //   if (!employeeDoc) throw new BadRequestError('Cannot find employee')
-
-  //   await accountService.setEmployee(accountDoc._id, employeeDoc._id)
-
-  //   // when joining existing company, set role to user
-  //   await accountService.setRole(identifier, USER_ROLE.user)
-  // }
-
-  if (companyName && departmentName) {
-    let company = await companyService.createCompany(companyName)
-    if (!company) throw new BadRequestError('Cannot create company')
-    let department = await departmentService.createDepartment(
-      company._id,
-      departmentName
-    )
-    if (!department) throw new BadRequestError('Cannot create department')
-
-    company = await companyService.addDepartment(company._id, department._id)
-    if (!company) throw new BadRequestError('Cannot add department to company')
-
-    const employee = await employeeService.createEmployee(
-      updatedProfile._id,
-      company._id,
-      department._id
-    )
-    if (!employee) throw new BadRequestError('Cannot create employee')
-    company = await companyService.addEmployee(company._id, employee._id)
-    if (!company) throw new BadRequestError('Cannot add an employee to company')
-
-    department = await departmentService.addEmployee(
-      department._id,
-      employee._id
-    )
-    await accountService.setEmployee(accountDoc._id, employee._id)
-
-    // when joining new company, set role to manager
-    await accountService.setRole(identifier, USER_ROLE.manager)
+  if (!companyName || !departmentName || !position) {
+    throw new BadRequestError('Missing account data')
   }
+
+  let company = await companyService.createCompany(companyName)
+  if (!company) throw new BadRequestError('Cannot create company')
+  let department = await departmentService.createDepartment(
+    company._id,
+    departmentName
+  )
+  if (!department) throw new BadRequestError('Cannot create department')
+
+  company = await companyService.addDepartment(company._id, department._id)
+  if (!company) throw new BadRequestError('Cannot add department to company')
+
+  const employee = await employeeService.createEmployee(
+    updatedProfile._id,
+    company._id,
+    department._id,
+    position
+  )
+
+  if (!employee) throw new BadRequestError('Cannot create employee')
+  company = await companyService.addEmployee(company._id, employee._id)
+  if (!company) throw new BadRequestError('Cannot add an employee to company')
+
+  department = await departmentService.addEmployee(department._id, employee._id)
+  await accountService.setEmployee(accountDoc._id, employee._id)
+
+  // when joining new company, set role to manager
+  await accountService.setRole(identifier, USER_ROLE.manager)
 
   const completedAccount = await accountService.completeAccount(accountDoc._id)
 

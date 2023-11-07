@@ -16,7 +16,8 @@ import { companyService } from '../company/company.service.js'
 async function createEmployee(
   profileId: Types.ObjectId,
   companyId: Types.ObjectId,
-  departmentId: Types.ObjectId
+  departmentId: Types.ObjectId,
+  position: string
 ): Promise<(Employee & { _id: Types.ObjectId }) | null> {
   const employeeNumber = await generateEmployeeNumber()
 
@@ -26,6 +27,7 @@ async function createEmployee(
     company: companyId,
     department: departmentId,
     employeeNumber,
+    position,
   })
 
   if (!employeeRef) {
@@ -158,7 +160,8 @@ async function joinExistingCompany(
 async function joinNewCompany(
   identifier: Types.ObjectId,
   companyName: string,
-  departmentName: string
+  departmentName: string,
+  position: string
 ) {
   let company = null
   company = await companyService.createCompany(companyName)
@@ -172,7 +175,12 @@ async function joinNewCompany(
   company = await companyService.addDepartment(company._id, department._id)
   if (!company) throw new BadRequestError('Adding department to company failed')
 
-  const employee = await createEmployee(identifier, company._id, department._id)
+  const employee = await createEmployee(
+    identifier,
+    company._id,
+    department._id,
+    position
+  )
 
   return employee
 }

@@ -12,6 +12,7 @@ const CompanyDetailsFields: FC = () => {
       <h2>Company</h2>
       <Input name='companyName' label='Company' type='text' />
       <Input name='departmentName' label='Department' type='text' />
+      <Input name='position' label='Position' type='text' />
 
       {employee !== null && (
         <div>
@@ -19,6 +20,7 @@ const CompanyDetailsFields: FC = () => {
           {employee &&
             `${employee.company.companyName} (${employee.company.companyNumber}) `}
           {employee && `${employee.department?.departmentName}`}
+          {employee && `${employee.position}`}
         </div>
       )}
     </div>
