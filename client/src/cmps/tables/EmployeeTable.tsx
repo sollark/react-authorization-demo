@@ -11,15 +11,15 @@ type EmployeeTableProps = {
 }
 
 export type EmployeeTableColumns = {
-  firstName: string // Profile
-  lastName: string // Profile
-  ID: string // Profile
+  firstName: string // profile
+  lastName: string // profile
+  ID: string // profile
   companyName: string // employee.company.companyName
   departmentName: string // employee.department.departmentName
-  employeeNumber: string // Employee
-  position: string // Employee
-  role: Role // Account
-  status: Status // Account
+  employeeNumber: string // employee
+  position: string // employee
+  role: Role // account
+  status: Status // account
 }
 
 const employeeDefaultValues: EmployeeTableColumns = {
@@ -38,12 +38,12 @@ const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', editable: true },
   { field: 'lastName', headerName: 'Last name', editable: true },
   { field: 'ID', headerName: 'ID', editable: true },
-  { field: 'companyName', headerName: 'Company', editable: false },
+  // { field: 'companyName', headerName: 'Company', editable: false },
   { field: 'departmentName', headerName: 'Department', editable: true },
   { field: 'employeeNumber', headerName: 'Employee number', editable: false },
   { field: 'position', headerName: 'Position', editable: true },
-  { field: 'role', headerName: 'Role', editable: true },
-  { field: 'status', headerName: 'Status', editable: true },
+  // { field: 'role', headerName: 'Role', editable: true },
+  // { field: 'status', headerName: 'Status', editable: true },
 ]
 
 async function updateEmployee(row: GridRowModel): Promise<boolean> {
