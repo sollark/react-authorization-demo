@@ -5,6 +5,12 @@ import { headerService } from './header.service'
 
 const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
 
+export type HttpResponse = {
+  success: boolean
+  message: string
+  data: Object
+}
+
 var api = axios.create({
   // to allow cookies to be sent to the server automatically
   withCredentials: true,
