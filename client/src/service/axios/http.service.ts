@@ -41,7 +41,9 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest: InternalAxiosRequestConfig = error.config
 
-    if (error.response?.status === 401 && !error.response?._retry) {
+    console.log('interceptor', error, originalRequest, originalRequest._retry)
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // if (error.response?.status === 401 && !error.response?._retry) {
       originalRequest._retry = true
 
       if (originalRequest.headers.Authorization) {

@@ -84,7 +84,7 @@ async function refreshTokens() {
     null
   )
 
-  // console.log('refreshTokens, response data', response)
+  console.log('refreshTokens, response data', refreshResponse)
 
   if (!isAuthResponse(refreshResponse)) return null
 

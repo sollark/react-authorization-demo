@@ -58,21 +58,21 @@ export async function updateAccount(
 
   let employee: any = null
   // In this case we have employee already created, it contains profile and company and etc.
-  if (companyNumber && employeeNumber) {
-    const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
-    if (!companyDoc) throw new BadRequestError('Cannot find company')
+  // if (companyNumber && employeeNumber) {
+  //   const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
+  //   if (!companyDoc) throw new BadRequestError('Cannot find company')
 
-    const employeeDoc = await companyService.getCompanyEmployeeDocByNumber(
-      companyDoc._id,
-      employeeNumber
-    )
-    if (!employeeDoc) throw new BadRequestError('Cannot find employee')
+  //   const employeeDoc = await companyService.getCompanyEmployeeDocByNumber(
+  //     companyDoc._id,
+  //     employeeNumber
+  //   )
+  //   if (!employeeDoc) throw new BadRequestError('Cannot find employee')
 
-    await accountService.setEmployee(accountDoc._id, employeeDoc._id)
+  //   await accountService.setEmployee(accountDoc._id, employeeDoc._id)
 
-    // when joining existing company, set role to user
-    await accountService.setRole(identifier, USER_ROLE.user)
-  }
+  //   // when joining existing company, set role to user
+  //   await accountService.setRole(identifier, USER_ROLE.user)
+  // }
 
   if (companyName && departmentName) {
     let company = await companyService.createCompany(companyName)
@@ -118,19 +118,26 @@ export async function joinCompany(
   const identifier = getIdentifierFromALS()
   let account = await accountService.getAccount(identifier)
   if (!account) throw new BadRequestError('Cannot find account')
+  const accountId = account._id
 
   const { companyNumber, employeeNumber } = req.body
 
   const company = await companyService.getCompanyDocByNumber(companyNumber)
   if (!company) throw new BadRequestError('Cannot find company')
 
-  const employee = await companyService.getCompanyEmployeeDocByNumber(
+  const employeeDoc = await companyService.getCompanyEmployeeDocByNumber(
     company._id,
     employeeNumber
   )
-  if (!employee) throw new BadRequestError('Cannot find employee')
+  if (!employeeDoc) throw new BadRequestError('Cannot find employee')
 
-  account = await accountService.setEmployee(account._id, employee._id)
+  const profileId = employeeDoc.profile
+  await accountService.setProfile(accountId, profileId)
+  await accountService.setEmployee(accountId, employeeDoc._id)
+  await accountService.setRole(accountId, USER_ROLE.user)
+
+  // get updated account
+  account = await accountService.getAccount(accountId)
 
   res.status(200).json({ account })
 }

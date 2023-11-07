@@ -12,6 +12,7 @@ import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import logger from '../../service/logger.service.js'
 import { employeeService } from '../employee/employee.service.js'
+import { profileService } from '../profile/profile.service.js'
 
 async function createAccount(
   identifier: Types.ObjectId,
@@ -55,11 +56,11 @@ async function createAccount(
   return account
 }
 
-async function setRole(identifier: Types.ObjectId, role: Role) {
+async function setRole(accountId: Types.ObjectId, role: Role) {
   const roleDoc = await RoleModel.findOne({ role }).exec()
 
-  const account = await AccountModel.findOneAndUpdate(
-    { identifier },
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
     { role: roleDoc?._id },
     { new: true }
   ).exec()
@@ -122,6 +123,40 @@ async function getAccountDoc(
 
 async function deleteAccount(identifier: Types.ObjectId) {
   await AccountModel.findOneAndDelete({ identifier })
+}
+
+async function setProfile(
+  accountId: Types.ObjectId,
+  profileId: Types.ObjectId
+) {
+  const accountDoc = await AccountModel.findById(accountId).exec()
+  if (!accountDoc) throw new BadRequestError('Account is not found')
+
+  const oldProfileId = accountDoc.profile
+  if (oldProfileId) await profileService.deleteProfile(oldProfileId)
+
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
+    { profile: profileId },
+    { new: true }
+  )
+    .lean()
+    .exec()
+
+  if (!account) {
+    logger.warn(
+      `accountService - cannot set profile: ${accountId} ${profileId}`
+    )
+    throw new BadRequestError('Account cannot be updated')
+  }
+
+  logger.info(
+    `accountService - account is updated: ${JSON.stringify(
+      account,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 }
 
 async function setEmployee(
@@ -267,6 +302,7 @@ export const accountService = {
   getAccount,
   getAccountDoc,
   deleteAccount,
+  setProfile,
   setEmployee,
   sortAccountData,
   completeAccount,

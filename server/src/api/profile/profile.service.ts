@@ -54,12 +54,17 @@ async function getProfileByIdentifier(identifier: Types.ObjectId) {
   return profile
 }
 
+async function deleteProfile(profileId: Types.ObjectId) {
+  await ProfileModel.findByIdAndDelete(profileId).exec()
+}
+
 export const profileService = {
   createBlankProfile,
   createProfile,
   updateProfile,
   getProfileByID,
   getProfileByIdentifier,
+  deleteProfile,
 }
 
 const isIDExist = async (ID: string) => {
