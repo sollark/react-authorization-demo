@@ -3,6 +3,12 @@ import { Company } from './company.model.js'
 import { Department } from './department.model.js'
 import { Profile } from './profile.model.js'
 
+export const EMPLOYEE_STATUS = {
+  unregistered: 'Unregistered',
+  registered: 'Registered',
+} as const
+export type EmployeeStatus = keyof typeof EMPLOYEE_STATUS
+
 export type Employee = {
   company: Company
   department?: Department
@@ -11,6 +17,7 @@ export type Employee = {
   profile: Profile
   supervisor?: Employee
   subordinates?: Employee[]
+  employeeStatus: EmployeeStatus
 }
 
 export type EmployeeRef = {
@@ -21,6 +28,7 @@ export type EmployeeRef = {
   profile: Types.ObjectId
   supervisor?: Types.ObjectId
   subordinates?: Types.ObjectId[]
+  employeeStatus: EmployeeStatus
 }
 
 const EmployeeSchema = new Schema({
@@ -38,6 +46,13 @@ const EmployeeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Profile',
     required: true,
+  },
+  employeeStatus: {
+    type: String,
+    enum: Object.values(EMPLOYEE_STATUS),
+    default: EMPLOYEE_STATUS.unregistered,
+    required: true,
+    immutable: true,
   },
 })
 
