@@ -7,7 +7,7 @@ export type Department = {
   employees?: Employee[]
 }
 
-export type DepartmentRef = {
+export type DepartmentDoc = {
   departmentName: string
   company: Types.ObjectId
   employees?: Types.ObjectId[]
@@ -24,5 +24,5 @@ const DepartmentSchema = new Schema({
   employees: [{ type: Schema.Types.ObjectId, ref: 'Employee' }],
 })
 
-const DepartmentModel = model<DepartmentRef>('Department', DepartmentSchema)
+const DepartmentModel = model<DepartmentDoc>('Department', DepartmentSchema)
 export default DepartmentModel

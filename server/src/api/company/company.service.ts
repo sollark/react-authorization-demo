@@ -12,12 +12,12 @@ async function createCompany(
 ): Promise<(Company & { _id: Types.ObjectId }) | null> {
   const companyNumber = await generateCompanyNumber()
 
-  const companyRef = await CompanyModel.create({
+  const companyDoc = await CompanyModel.create({
     companyName,
     companyNumber,
   })
 
-  const company = await CompanyModel.findById(companyRef._id)
+  const company = await CompanyModel.findById(companyDoc._id)
     .populate<{ departments: Department[] }>('departments')
     .populate<{ employees: Employee[] }>('employees')
     .lean()
