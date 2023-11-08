@@ -2,12 +2,18 @@ import { ACCOUNT_STATUS, Status } from '@/models/Account'
 import { Employee } from '@/models/Employee'
 import { Role, USER_ROLE } from '@/models/Role'
 import { adaptTableRowToObject } from '@/service/utils.service'
-import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
+import {
+  GridColDef,
+  GridRowId,
+  GridRowModel,
+  GridValueOptionsParams,
+} from '@mui/x-data-grid'
 import { FC } from 'react'
 import Table from './Table'
 
 type EmployeeTableProps = {
   employees: Employee[] | null
+  departmentOptions: string[]
 }
 
 export type EmployeeTableColumns = {
@@ -34,12 +40,21 @@ const employeeDefaultValues: EmployeeTableColumns = {
   status: ACCOUNT_STATUS.pending,
 }
 
+const departmentOptions = ['Market', 'Finance', 'Development']
+const departments = setOptions(departmentOptions)
+
 const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', editable: true },
   { field: 'lastName', headerName: 'Last name', editable: true },
   { field: 'ID', headerName: 'ID', editable: true },
   // { field: 'companyName', headerName: 'Company', editable: false },
-  { field: 'departmentName', headerName: 'Department', editable: true },
+  {
+    field: 'departmentName',
+    headerName: 'Department',
+    editable: true,
+    type: 'singleSelect',
+    valueOptions: (params) => departments(params),
+  },
   { field: 'employeeNumber', headerName: 'Employee number', editable: false },
   { field: 'position', headerName: 'Position', editable: true },
   // { field: 'role', headerName: 'Role', editable: true },
@@ -66,8 +81,9 @@ function deleteEmployee(id: GridRowId) {
 }
 
 const EmployeeTable: FC<EmployeeTableProps> = (props) => {
-  const { employees } = props
+  const { employees, departmentOptions } = props
   console.log('prop from api', props)
+
   const employeeData = employees?.map((employee) => {
     return {
       firstName: employee.profile.firstName,
@@ -99,3 +115,11 @@ const EmployeeTable: FC<EmployeeTableProps> = (props) => {
 }
 
 export default EmployeeTable
+
+function setOptions(types: string[]) {
+  return function (params: GridValueOptionsParams<any>) {
+    const options: string[] = []
+    types?.map((type) => options.push(type))
+    return options
+  }
+}
