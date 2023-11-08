@@ -40,8 +40,7 @@ const employeeDefaultValues: EmployeeTableColumns = {
   status: ACCOUNT_STATUS.pending,
 }
 
-const departmentOptions = ['Market', 'Finance', 'Development']
-const departments = setOptions(departmentOptions)
+let departments: (params: GridValueOptionsParams<any>) => string[]
 
 const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', editable: true },
@@ -83,6 +82,8 @@ function deleteEmployee(id: GridRowId) {
 const EmployeeTable: FC<EmployeeTableProps> = (props) => {
   const { employees, departmentOptions } = props
   console.log('prop from api', props)
+
+  departments = setOptions(departmentOptions)
 
   const employeeData = employees?.map((employee) => {
     return {

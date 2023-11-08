@@ -35,7 +35,10 @@ const CompanyPage: FC = () => {
       <h1>Company page</h1>
       {/* {JSON.stringify(data)} */}
       {data.companyName}
-      <EmployeeTable employees={data.employees} departmentOptions={[]} />
+      <EmployeeTable
+        employees={data.employees}
+        departmentOptions={['Market', 'Finance', 'Development']}
+      />
     </Box>
   )
 }
