@@ -1,5 +1,5 @@
 import { CompanyNameSchema } from '@/models/Company'
-import { DepartmentNameSchema } from '@/models/Employee'
+import { DepartmentNameSchema, PositionSchema } from '@/models/Employee'
 import { ProfileSchema } from '@/models/Profile'
 import { accountService } from '@/service/account.service'
 import useEmployeeStore from '@/stores/employeeStore'
@@ -19,6 +19,7 @@ const AccountSchema = z
   .merge(ProfileSchema)
   .merge(CompanyNameSchema)
   .merge(DepartmentNameSchema)
+  .merge(PositionSchema)
 
 const AccountForm: FC<Props> = (props: Props) => {
   const { children } = props

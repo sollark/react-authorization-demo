@@ -8,7 +8,7 @@ export type Employee = {
   department: Department
   employeeNumber: string
   profile: Profile
-  position?: string
+  position: string
   supervisor?: Employee
   subordinates?: Employee[]
 }
@@ -31,5 +31,17 @@ export const DepartmentNameSchema = z.object({
     .max(20, { message: 'Department must be less than 20 characters' })
     .regex(/^[a-zA-Z0-9]*$/, {
       message: 'Department must be alphanumeric',
+    }),
+})
+
+export const PositionSchema = z.object({
+  position: z
+    .string()
+    .nonempty({ message: 'Field can not be empty' })
+    .trim()
+    .min(2, { message: 'Position must be at least 3 characters' })
+    .max(20, { message: 'Position must be less than 20 characters' })
+    .regex(/^[a-zA-Z0-9]*$/, {
+      message: 'Position must be alphanumeric',
     }),
 })
