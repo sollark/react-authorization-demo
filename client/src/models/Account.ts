@@ -2,15 +2,9 @@ import { Employee } from './Employee'
 import { Profile } from './Profile'
 import { Role } from './Role'
 
-export type Status =
-  | 'Unregistered'
-  | 'Pending'
-  | 'Active'
-  | 'Inactive'
-  | 'Deleted'
+export type Status = 'Pending' | 'Active' | 'Inactive' | 'Deleted'
 
 export const ACCOUNT_STATUS = {
-  unregistered: 'Unregistered' as Status,
   pending: 'Pending' as Status,
   active: 'Active' as Status,
   inactive: 'Inactive' as Status,

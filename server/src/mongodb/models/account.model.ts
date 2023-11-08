@@ -4,7 +4,6 @@ import { Profile } from './profile.model.js'
 import { Role } from './role.model.js'
 
 export const ACCOUNT_STATUS = {
-  unregistered: 'Unregistered',
   pending: 'Pending',
   active: 'Active',
   inactive: 'Inactive',
@@ -40,7 +39,7 @@ const AccountSchema = new Schema({
   status: {
     type: String,
     enum: Object.values(ACCOUNT_STATUS),
-    default: ACCOUNT_STATUS.unregistered,
+    default: ACCOUNT_STATUS.pending,
     required: true,
     immutable: true,
   },

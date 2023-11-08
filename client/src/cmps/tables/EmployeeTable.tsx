@@ -31,7 +31,7 @@ const employeeDefaultValues: EmployeeTableColumns = {
   employeeNumber: '',
   position: '',
   role: USER_ROLE.user,
-  status: ACCOUNT_STATUS.unregistered,
+  status: ACCOUNT_STATUS.pending,
 }
 
 const employeeColumns: GridColDef[] = [
