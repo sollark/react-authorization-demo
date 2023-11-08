@@ -20,7 +20,7 @@ export type Employee = {
   employeeStatus: EmployeeStatus
 }
 
-export type EmployeeRef = {
+export type EmployeeDoc = {
   company: Types.ObjectId
   department?: Types.ObjectId
   employeeNumber: string
@@ -62,5 +62,5 @@ EmployeeSchema.add({
   subordinates: [EmployeeSchema],
 })
 
-const EmployeeModel = model<EmployeeRef>('Employee', EmployeeSchema)
+const EmployeeModel = model<EmployeeDoc>('Employee', EmployeeSchema)
 export default EmployeeModel

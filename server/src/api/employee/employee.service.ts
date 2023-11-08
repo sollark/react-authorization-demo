@@ -6,7 +6,7 @@ import DepartmentModel, {
 } from '../../mongodb/models/department.model.js'
 import EmployeeModel, {
   Employee,
-  EmployeeRef,
+  EmployeeDoc,
 } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import logger from '../../service/logger.service.js'
@@ -22,7 +22,7 @@ async function createEmployee(
   const employeeNumber = await generateEmployeeNumber()
 
   // Create a new employee
-  const employeeRef = await EmployeeModel.create({
+  const employeeDoc = await EmployeeModel.create({
     profile: profileId,
     company: companyId,
     department: departmentId,
@@ -30,12 +30,12 @@ async function createEmployee(
     position,
   })
 
-  if (!employeeRef) {
+  if (!employeeDoc) {
     logger.warn(`employeeService - cannot create employee`)
     throw new BadRequestError('Employee creation failed')
   }
 
-  const employee = await EmployeeModel.findById(employeeRef._id)
+  const employee = await EmployeeModel.findById(employeeDoc._id)
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ profile: Profile }>('profile')
@@ -45,7 +45,7 @@ async function createEmployee(
     .exec()
 
   if (!employee) {
-    logger.warn(`employeeService - employee is not found: ${employeeRef._id}`)
+    logger.warn(`employeeService - employee is not found: ${employeeDoc._id}`)
     throw new BadRequestError('employee is not found')
   }
 
@@ -93,12 +93,12 @@ async function getEmployee(
   return employee
 }
 
-async function getEmployeeRefById(
+async function getEmployeeDocById(
   workplaceId: Types.ObjectId
-): Promise<EmployeeRef | null> {
-  const employeeRef = await EmployeeModel.findById(workplaceId).lean().exec()
+): Promise<EmployeeDoc | null> {
+  const employeeDoc = await EmployeeModel.findById(workplaceId).lean().exec()
 
-  return employeeRef
+  return employeeDoc
 }
 
 async function getProfileId(
@@ -262,7 +262,7 @@ async function updateEmployee(
 export const employeeService = {
   createEmployee,
   getBasicEmployeeDetails,
-  getEmployeeRefById,
+  getEmployeeDocById,
   getProfileId,
   getCompanyId,
   joinExistingCompany,
