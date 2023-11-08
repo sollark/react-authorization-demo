@@ -1,6 +1,5 @@
 import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
-import employeeData from '../../assets/mock_data/employee.json'
 import Table from './Table'
 
 export type Person = {
@@ -62,7 +61,7 @@ const PeopleTable: FC = () => {
     <div>
       <h2>People Table</h2>
       <Table
-        dataRows={employeeData}
+        dataRows={[]}
         defaultValues={peopleDefaultValues}
         tableColumns={peopleColumns}
         updateRow={updatePerson}

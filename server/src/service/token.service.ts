@@ -62,6 +62,7 @@ async function validateAccessToken(token: string) {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
+    console.log('validateAccessToken token', token)
     const userData = jwt.verify(token, accessSecret)
     console.log('validateAccessToken userData', userData)
 
