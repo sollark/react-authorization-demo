@@ -37,7 +37,9 @@ const CompanyPage: FC = () => {
       {data.companyName}
       <EmployeeTable
         employees={data.employees}
-        departmentOptions={['Market', 'Finance', 'Development']}
+        departmentOptions={
+          data.departments.map((department) => department.departmentName) || []
+        }
       />
     </Box>
   )

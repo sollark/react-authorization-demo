@@ -5,7 +5,7 @@ import { Employee } from './Employee'
 export type Company = {
   companyName: string
   companyNumber: string
-  departments: Department[] | null
+  departments: Department[]
   employees: Employee[] | null
 }
 
