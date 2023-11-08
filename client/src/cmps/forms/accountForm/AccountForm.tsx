@@ -33,6 +33,7 @@ const AccountForm: FC<Props> = (props: Props) => {
     ID: profile?.ID || '',
     companyName: employee?.company?.companyName || '',
     departmentName: employee?.department?.departmentName || '',
+    position: employee?.position || '',
   }
 
   async function submit(form: any) {
@@ -43,7 +44,8 @@ const AccountForm: FC<Props> = (props: Props) => {
       form.lastName,
       form.ID,
       form.companyName,
-      form.departmentName
+      form.departmentName,
+      form.position
     )
 
     console.log('AccountForm, account: ', account)

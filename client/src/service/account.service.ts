@@ -10,11 +10,12 @@ async function updateAccount(
   firstName: string,
   lastName: string,
   ID: string,
-  companyName?: string,
-  departmentName?: string
+  companyName: string,
+  departmentName: string,
+  position: string
 ) {
   const response = await httpService.post<
-    Profile & Partial<Company> & Partial<Department>,
+    Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
     Account
   >('account/update', {
     firstName,
@@ -22,6 +23,7 @@ async function updateAccount(
     ID,
     companyName,
     departmentName,
+    position,
   })
 
   console.log('accountService - update, response data', response)

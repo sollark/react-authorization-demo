@@ -1,6 +1,7 @@
 import { ACCOUNT_STATUS, Status } from '@/models/Account'
 import { Employee } from '@/models/Employee'
 import { Role, USER_ROLE } from '@/models/Role'
+import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import {
   GridColDef,
@@ -20,7 +21,6 @@ export type EmployeeTableColumns = {
   firstName: string // profile
   lastName: string // profile
   ID: string // profile
-  companyName: string // employee.company.companyName
   departmentName: string // employee.department.departmentName
   employeeNumber: string // employee
   position: string // employee
@@ -32,7 +32,6 @@ const employeeDefaultValues: EmployeeTableColumns = {
   firstName: '',
   lastName: '',
   ID: '',
-  companyName: '',
   departmentName: '',
   employeeNumber: '',
   position: '',
@@ -63,16 +62,25 @@ const employeeColumns: GridColDef[] = [
 async function updateEmployee(row: GridRowModel): Promise<boolean> {
   console.log('updateEmployee', row)
 
-  const employee = adaptTableRowToObject<EmployeeTableColumns>(row)
-  console.log('employee', employee)
+  const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
+  console.log('employee row', rowData)
+  const { firstName, lastName, ID, departmentName, position } = rowData
 
-  // const res = await workplaceService.updateEmployee(employee)
+  const res = await employeeService.updateEmployee(
+    firstName,
+    lastName,
+    ID,
+    departmentName,
+    position
+  )
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(false) // Resolves the promise after 5 seconds
-    }, 5000) // 5000 milliseconds = 5 seconds
-  })
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(false) // Resolves the promise after 5 seconds
+  //   }, 5000) // 5000 milliseconds = 5 seconds
+  // })
+
+  return true
 }
 
 function deleteEmployee(id: GridRowId) {
@@ -90,7 +98,6 @@ const EmployeeTable: FC<EmployeeTableProps> = (props) => {
       firstName: employee.profile.firstName,
       lastName: employee.profile.lastName,
       ID: employee.profile.ID,
-      // companyName: employee.company.companyName,
       departmentName: employee.department.departmentName,
       employeeNumber: employee.employeeNumber,
       position: employee.position,
