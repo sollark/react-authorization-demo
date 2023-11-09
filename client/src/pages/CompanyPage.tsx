@@ -38,7 +38,7 @@ const CompanyPage: FC = () => {
         ) || []
       }`}
 
-      {/* <EmployeeTable
+      {/* <AdvancedEmployeeTable
         employees={data.employees}
         departmentOptions={
           data.departments.map((department) => department.departmentName) || []

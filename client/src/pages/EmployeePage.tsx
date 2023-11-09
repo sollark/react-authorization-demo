@@ -1,4 +1,4 @@
-import EmployeeTable from '@/cmps/tables/EmployeeTable'
+import AdvancedEmployeeTable from '@/cmps/tables/emloyeeTable/AdvancedEmployeeTable'
 import { employeeService } from '@/service/employee.service'
 import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -32,7 +32,7 @@ const EmployeePage: FC = () => {
       <h1>Employee page</h1>
       {/* {JSON.stringify(data)} */}
       {data.companyName}
-      <EmployeeTable
+      <AdvancedEmployeeTable
         employees={data.employees}
         departmentOptions={
           data.departments.map((department) => department.departmentName) || []

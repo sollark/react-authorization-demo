@@ -10,22 +10,22 @@ import {
   GridValueOptionsParams,
 } from '@mui/x-data-grid'
 import { FC } from 'react'
-import Table from './Table'
+import Table from '../Table'
 
 type EmployeeTableProps = {
   employees: Employee[] | null
   departmentOptions: string[]
 }
 
-export type EmployeeTableColumns = {
-  firstName: string // profile
-  lastName: string // profile
-  ID: string // profile
-  departmentName: string // employee.department.departmentName
-  employeeNumber: string // employee
-  position: string // employee
-  role: Role // account
-  status: Status // account
+type EmployeeTableColumns = {
+  firstName: string
+  lastName: string
+  ID: string
+  departmentName: string
+  employeeNumber: string
+  position: string
+  role: Role
+  status: Status
 }
 
 const employeeDefaultValues: EmployeeTableColumns = {
@@ -74,12 +74,6 @@ async function updateEmployee(row: GridRowModel): Promise<boolean> {
     position
   )
 
-  // return new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     resolve(false) // Resolves the promise after 5 seconds
-  //   }, 5000) // 5000 milliseconds = 5 seconds
-  // })
-
   return true
 }
 
@@ -87,7 +81,7 @@ function deleteEmployee(id: GridRowId) {
   console.log('deleteEmployee', id)
 }
 
-const EmployeeTable: FC<EmployeeTableProps> = (props) => {
+const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
   const { employees, departmentOptions } = props
   console.log('prop from api', props)
 
@@ -122,7 +116,7 @@ const EmployeeTable: FC<EmployeeTableProps> = (props) => {
   )
 }
 
-export default EmployeeTable
+export default AdvancedEmployeeTable
 
 function setOptions(types: string[]) {
   return function (params: GridValueOptionsParams<any>) {
