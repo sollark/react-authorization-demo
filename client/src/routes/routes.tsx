@@ -1,12 +1,10 @@
 import AccountDetailsPage from '@/pages/AccountDetailsPage'
-import PeoplePage from '@/pages/PeoplePage'
+import EmployeePage from '@/pages/EmployeePage'
 import RootPage from '@/pages/RootPage'
 import useAuthStore from '@/stores/authStore'
-import { Box } from '@mui/material'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
-import RoleProtectedRoute from './RoleProtectedRoute'
 const CompanyPage = lazyRouteComponent(() => import('../pages/CompanyPage'))
 const AccountPage = lazyRouteComponent(() => import('../pages/AccountPage'))
 const AccountEditPage = lazyRouteComponent(
@@ -19,7 +17,6 @@ const SigninPage = lazyRouteComponent(() => import('../pages/SigninPage'))
 const RegistrationPage = lazyRouteComponent(
   () => import('../pages/RegistrationPage')
 )
-const RolePage = lazyRouteComponent(() => import('../pages/RolePage'))
 const UnauthorizedPage = lazyRouteComponent(
   () => import('../pages/UnauthorizedPage')
 )
@@ -111,111 +108,13 @@ export const companyRoute = new Route({
   ),
 })
 
-export const peopleRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/people',
-  component: () => (
-    <AuthProtectedRoute>
-      <PeoplePage />
-    </AuthProtectedRoute>
-  ),
-})
-
-export const roleRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/role',
-  component: () => (
-    <AuthProtectedRoute>
-      <RolePage />
-    </AuthProtectedRoute>
-  ),
-})
-
 export const employeeRoute = new Route({
-  getParentRoute: () => roleRoute,
+  getParentRoute: () => rootRoute,
   path: '/employee',
   component: () => (
-    <RoleProtectedRoute allowed={['User', 'Manager', 'Supervisor', 'Admin']}>
-      <Box
-        sx={{
-          m: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          maxHeight: '100vh',
-          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
-          backgroundColor: 'primary.light',
-        }}>
-        <h1>Employee page</h1>
-      </Box>
-    </RoleProtectedRoute>
-  ),
-})
-
-export const managerRoute = new Route({
-  getParentRoute: () => roleRoute,
-  path: '/manager',
-  component: () => (
-    <RoleProtectedRoute allowed={['Manager', 'Supervisor', 'Admin']}>
-      <Box
-        sx={{
-          m: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          maxHeight: '100vh',
-          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
-          backgroundColor: 'primary.light',
-        }}>
-        <h1>Manager page</h1>
-      </Box>
-    </RoleProtectedRoute>
-  ),
-})
-
-export const supervisorRouter = new Route({
-  getParentRoute: () => roleRoute,
-  path: '/supervisor',
-  component: () => (
-    <RoleProtectedRoute allowed={['Supervisor', 'Admin']}>
-      <Box
-        sx={{
-          m: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          maxHeight: '100vh',
-          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
-          backgroundColor: 'primary.light',
-        }}>
-        <h1>Supervisor page</h1>
-      </Box>
-    </RoleProtectedRoute>
-  ),
-})
-
-export const adminRoute = new Route({
-  getParentRoute: () => roleRoute,
-  path: '/admin',
-  component: () => (
-    <RoleProtectedRoute allowed={['Admin']}>
-      <Box
-        sx={{
-          m: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          maxHeight: '100vh',
-          maxWidth: ['100%', '100%', '100%', '75%', '75%'],
-          backgroundColor: 'primary.light',
-        }}>
-        <h1>Admin page</h1>
-      </Box>
-    </RoleProtectedRoute>
+    <AuthProtectedRoute>
+      <EmployeePage />
+    </AuthProtectedRoute>
   ),
 })
 
