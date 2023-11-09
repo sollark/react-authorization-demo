@@ -3,6 +3,11 @@ import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import Table from '../Table'
 
+/*
+ * BasicEmployeeTable has basic info about employee
+ * BasicEmployeeTable is not editable
+ */
+
 type EmployeeTableProps = {
   employees: Employee[] | null
   departmentOptions: string[]

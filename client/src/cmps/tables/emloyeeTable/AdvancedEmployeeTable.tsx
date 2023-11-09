@@ -1,16 +1,14 @@
 import { ACCOUNT_STATUS, Status } from '@/models/Account'
 import { Employee } from '@/models/Employee'
 import { Role, USER_ROLE } from '@/models/Role'
-import { employeeService } from '@/service/employee.service'
-import { adaptTableRowToObject } from '@/service/utils.service'
-import {
-  GridColDef,
-  GridRowId,
-  GridRowModel,
-  GridValueOptionsParams,
-} from '@mui/x-data-grid'
+import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import Table from '../Table'
+
+/*
+ * AdvancedEmployeeTable has full info about employee
+ * AdvancedEmployeeTable is not editable
+ */
 
 type EmployeeTableProps = {
   employees: Employee[] | null
@@ -39,53 +37,30 @@ const employeeDefaultValues: EmployeeTableColumns = {
   status: ACCOUNT_STATUS.pending,
 }
 
-let departments: (params: GridValueOptionsParams<any>) => string[]
-
 const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name', editable: true },
-  { field: 'lastName', headerName: 'Last name', editable: true },
-  { field: 'ID', headerName: 'ID', editable: true },
-  // { field: 'companyName', headerName: 'Company', editable: false },
-  {
-    field: 'departmentName',
-    headerName: 'Department',
-    editable: true,
-    type: 'singleSelect',
-    valueOptions: (params) => departments(params),
-  },
-  { field: 'employeeNumber', headerName: 'Employee number', editable: false },
-  { field: 'position', headerName: 'Position', editable: true },
-  // { field: 'role', headerName: 'Role', editable: true },
-  // { field: 'status', headerName: 'Status', editable: true },
+  { field: 'firstName', headerName: 'First name' },
+  { field: 'lastName', headerName: 'Last name' },
+  { field: 'ID', headerName: 'ID' },
+  { field: 'departmentName', headerName: 'Department' },
+  { field: 'employeeNumber', headerName: 'Employee number' },
+  { field: 'position', headerName: 'Position' },
+  // { field: 'role', headerName: 'Role' },
+  // { field: 'status', headerName: 'Status' },
 ]
 
 async function updateEmployee(row: GridRowModel): Promise<boolean> {
-  console.log('updateEmployee', row)
-
-  const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
-  console.log('employee row', rowData)
-  const { firstName, lastName, ID, departmentName, position } = rowData
-
-  const res = await employeeService.updateEmployee(
-    firstName,
-    lastName,
-    ID,
-    departmentName,
-    position
-  )
-
+  // advanced table cant be updated
   return true
 }
 
 function deleteEmployee(id: GridRowId) {
-  console.log('deleteEmployee', id)
+  // advanced table cant be deleted
+  return true
 }
 
 const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
   const { employees, departmentOptions } = props
   console.log('prop from api', props)
-
-  departments = setOptions(departmentOptions)
 
   const employeeData = employees?.map((employee) => {
     return {
@@ -99,8 +74,6 @@ const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
       // status: employee.account.status,
     }
   })
-
-  console.log('employeeData from api', employeeData)
 
   return (
     <div>
@@ -117,11 +90,3 @@ const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
 }
 
 export default AdvancedEmployeeTable
-
-function setOptions(types: string[]) {
-  return function (params: GridValueOptionsParams<any>) {
-    const options: string[] = []
-    types?.map((type) => options.push(type))
-    return options
-  }
-}
