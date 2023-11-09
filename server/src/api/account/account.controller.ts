@@ -19,6 +19,8 @@ import { accountService } from './account.service.js'
 //     "data": { }
 // }
 
+// TODO every updateAccount creates a new profile, employee, company, department
+// TODO when user updating account , he may update company, department, position, that is not allowed
 export async function updateAccount(
   req: Request,
   res: Response,
