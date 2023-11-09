@@ -54,7 +54,7 @@ async function updateEmployee(row: GridRowModel): Promise<boolean> {
 }
 
 function deleteEmployee(id: GridRowId) {
-  // advanced table cant be deleted
+  // advanced table has not option to deleted data
   return true
 }
 

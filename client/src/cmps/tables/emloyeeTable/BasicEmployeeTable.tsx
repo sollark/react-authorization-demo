@@ -40,7 +40,7 @@ async function updateEmployee(row: GridRowModel): Promise<boolean> {
 }
 
 function deleteEmployee(id: GridRowId) {
-  // basic table cant be deleted
+  // basic table has not option to deleted data
   return true
 }
 
