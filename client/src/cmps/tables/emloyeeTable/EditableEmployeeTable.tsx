@@ -115,6 +115,7 @@ const EditableEmployeeTable: FC<EmployeeTableProps> = (props) => {
         tableColumns={employeeColumns}
         updateRow={updateEmployee}
         deleteRow={deleteEmployee}
+        editable
       />
     </div>
   )

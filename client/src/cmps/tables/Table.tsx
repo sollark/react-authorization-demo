@@ -27,6 +27,7 @@ type TableProps = {
   defaultValues: GridRowModel
   updateRow: (row: GridRowModel) => Promise<boolean>
   deleteRow: (id: GridRowId) => void
+  editable?: boolean
 }
 
 // tool bar
@@ -66,10 +67,18 @@ function EditToolbar(props: EditToolbarProps) {
   )
 }
 
+// TODO remove actionColumn if table is not editable
 const Table: FC<TableProps> = (props: TableProps) => {
   console.log('Table connected')
 
-  const { dataRows, defaultValues, tableColumns, updateRow, deleteRow } = props
+  const {
+    dataRows,
+    defaultValues,
+    tableColumns,
+    updateRow,
+    deleteRow,
+    editable,
+  } = props
 
   const actionColumn: GridColDef[] = [
     {
@@ -121,7 +130,7 @@ const Table: FC<TableProps> = (props: TableProps) => {
   ]
 
   const data = generateKeys(dataRows)
-  const columns = [...tableColumns, ...actionColumn]
+  const columns = editable ? [...tableColumns, ...actionColumn] : tableColumns
 
   const [rows, setRows] = useState(data)
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
