@@ -13,7 +13,7 @@ export type Employee = {
   company: Company
   department?: Department
   employeeNumber: string
-  position?: string
+  position: string
   profile: Profile
   supervisor?: Employee
   subordinates?: Employee[]
@@ -24,7 +24,7 @@ export type EmployeeDoc = {
   company: Types.ObjectId
   department?: Types.ObjectId
   employeeNumber: string
-  position?: string
+  position: string
   profile: Types.ObjectId
   supervisor?: Types.ObjectId
   subordinates?: Types.ObjectId[]
