@@ -1,8 +1,9 @@
 import AdvancedEmployeeTable from '@/cmps/tables/emloyeeTable/AdvancedEmployeeTable'
 import BasicEmployeeTable from '@/cmps/tables/emloyeeTable/BasicEmployeeTable'
 import EditableEmployeeTable from '@/cmps/tables/emloyeeTable/EditableEmployeeTable'
+import { Department } from '@/models/Department'
 import { Role } from '@/models/Role'
-import { employeeService } from '@/service/employee.service'
+import { companyService } from '@/service/company.service'
 import useRoleStore from '@/stores/roleStore'
 import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -16,6 +17,14 @@ const TableViews = {
   Admin: EditableEmployeeTable,
 }
 
+const fetchFunctions = {
+  Guest: async () => null,
+  User: async () => await companyService.getBasicCompanyData(),
+  Supervisor: async () => await companyService.getBasicCompanyData(),
+  Manager: async () => await companyService.getBasicCompanyData(),
+  Admin: async () => await companyService.getBasicCompanyData(),
+}
+
 const EmployeePage: FC = () => {
   console.log(' Employee connected')
 
@@ -24,7 +33,7 @@ const EmployeePage: FC = () => {
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
-    queryFn: () => employeeService.getCompany(),
+    queryFn: fetchFunctions[role],
   })
 
   if (isPending) {
@@ -50,7 +59,9 @@ const EmployeePage: FC = () => {
       <Table
         employees={data.employees}
         departmentOptions={
-          data.departments.map((department) => department.departmentName) || []
+          data.departments.map(
+            (department: Department) => department.departmentName
+          ) || []
         }
       />
     </Box>
