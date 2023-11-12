@@ -16,7 +16,7 @@ import errorHandler from './middleware/errorHandler.js'
 // import routes
 import { accountRoutes } from './api/account/account.routes.js'
 import { authRoutes } from './api/auth/auth.routes.js'
-import { workplaceRoutes } from './api/employee/employee.routes.js'
+import { employeeRoutes } from './api/employee/employee.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
@@ -50,7 +50,7 @@ app.use(deleteSensitiveData)
 app.use('/api/auth', authRoutes)
 app.use('/api/account', accountRoutes)
 app.use('/api/profile', profileRoutes)
-app.use('/api/workplace', workplaceRoutes)
+app.use('/api/employee', employeeRoutes)
 app.use('/api/company', companyRoutes)
 
 // server globals

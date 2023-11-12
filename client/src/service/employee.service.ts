@@ -73,4 +73,8 @@ async function getCompany(): Promise<Company | null> {
 
   return data.company ? data.company : null
 }
-export const employeeService = { updateEmployee, getCompany, getAllEmployees }
+export const employeeService = {
+  updateEmployee,
+  getCompany,
+  getAllEmployees,
+}

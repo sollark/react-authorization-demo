@@ -107,6 +107,12 @@ async function getCompany(id: Types.ObjectId) {
   return company
 }
 
+async function getCompanyDoc(id: Types.ObjectId) {
+  const companyDoc = await CompanyModel.findById(id).exec()
+
+  return companyDoc
+}
+
 async function getCompanyDocByNumber(companyNumber: string) {
   const companyDoc = await CompanyModel.findOne({ companyNumber })
 
@@ -244,6 +250,7 @@ export const companyService = {
   getBasicCompanyDetails,
   getBasicCompanyDetailsById,
   getCompany,
+  getCompanyDoc,
   getCompanyDocByNumber,
   getCompanyEmployeeDocByNumber,
   getCompanyEmployees,

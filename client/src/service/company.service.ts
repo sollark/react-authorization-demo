@@ -12,9 +12,7 @@ async function getBasicCompanyData(): Promise<Company | null> {
     return null
   }
 
-  const company = data.company as Company
-
-  return company ? company : null
+  return data.company ? data.company : null
 }
 
 async function getAdvancedCompanyData() {}
