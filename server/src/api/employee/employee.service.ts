@@ -60,20 +60,18 @@ async function createEmployee(
   return employee
 }
 
-async function getBasicEmployeeDetails(
-  workplaceId: Types.ObjectId
-): Promise<Partial<Employee> | null> {
-  const employee = await EmployeeModel.findById(workplaceId)
-    .select('company department position')
+async function getBasicEmployeeData(
+  employeeIds: Types.ObjectId[]
+): Promise<Partial<Employee>[] | null> {
+  const employees = await EmployeeModel.find({ _id: { $in: employeeIds } })
+    .select('company department employeeNumber position profile')
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>('department')
     .populate<{ profile: Profile }>('profile')
-    .populate<{ supervisor: Employee }>('supervisor')
-    .populate<{ subordinates: Employee[] }>('subordinates')
     .lean()
     .exec()
 
-  return employee
+  return null
 }
 
 async function getEmployee(
@@ -152,7 +150,7 @@ async function joinExistingCompany(
     { new: true }
   ).exec()
 
-  const updatedEmployee = await getBasicEmployeeDetails(employee._id)
+  const updatedEmployee = await getBasicEmployeeData([employee._id])
 
   return updatedEmployee
 }
@@ -261,7 +259,7 @@ async function updateEmployee(
 
 export const employeeService = {
   createEmployee,
-  getBasicEmployeeDetails,
+  getBasicEmployeeData,
   getEmployeeDocById,
   getProfileId,
   getCompanyId,
