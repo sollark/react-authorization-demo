@@ -131,11 +131,12 @@ async function joinExistingCompany(
   companyNumber: string,
   employeeNumber: string
 ) {
-  const company = await companyService.getBasicCompanyDetails(companyNumber)
-  if (!company) throw new BadRequestError('Company is not found', companyNumber)
+  const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
+  if (!companyDoc)
+    throw new BadRequestError('Company is not found', companyNumber)
 
   const employee = await EmployeeModel.findOne({
-    company: company?._id,
+    company: companyDoc._id,
     employeeNumber,
   })
     .lean()
