@@ -31,6 +31,8 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
   res.cookie('refreshToken', refreshToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    sameSite: 'strict',
+    secure: true,
   })
 
   // send access token to the client
