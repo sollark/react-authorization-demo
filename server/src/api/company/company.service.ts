@@ -46,24 +46,7 @@ async function isCompanyIdExists(company: string) {
   return true
 }
 
-async function getBasicCompanyDetails(companyNumber: string) {
-  const company = await CompanyModel.findOne({ companyNumber })
-    .select('companyName companyNumber')
-    .lean()
-    .exec()
-
-  logger.info(
-    `companyService - company fetched  ${JSON.stringify(
-      company,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
-  )
-
-  return company
-}
-
-async function getBasicCompanyDetailsById(id: Types.ObjectId) {
+async function getBasicCompanyDetails(id: Types.ObjectId) {
   const company = await CompanyModel.findById(id)
     .select('companyName CompanyNumber')
     .lean()
@@ -248,7 +231,6 @@ export const companyService = {
   createCompany,
   addDepartment,
   getBasicCompanyDetails,
-  getBasicCompanyDetailsById,
   getCompany,
   getCompanyDoc,
   getCompanyDocByNumber,

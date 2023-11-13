@@ -11,7 +11,7 @@ export type EmployeeStatus = keyof typeof EMPLOYEE_STATUS
 
 export type Employee = {
   company: Company
-  department?: Department
+  department: Department
   employeeNumber: string
   position: string
   profile: Profile
@@ -22,7 +22,7 @@ export type Employee = {
 
 export type EmployeeDoc = {
   company: Types.ObjectId
-  department?: Types.ObjectId
+  department: Types.ObjectId
   employeeNumber: string
   position: string
   profile: Types.ObjectId

@@ -39,6 +39,56 @@ export async function getCompany(
   })
 }
 
+export async function getBasicCompanyData(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+  const accountDoc = await accountService.getAccountDoc(identifier)
+  if (!accountDoc) throw new BadRequestError('Cannot find account')
+
+  const employeeId = accountDoc.employee
+  if (!employeeId) throw new BadRequestError('Cannot find employee')
+
+  const companyId = await employeeService.getCompanyId(employeeId)
+  if (!companyId) throw new BadRequestError('Cannot find company')
+
+  const company = await companyService.getCompany(companyId)
+  if (!company) throw new BadRequestError('Cannot find company')
+
+  // filter company data, only return basic data
+  const { _id, companyName, companyNumber, departments, employees } = company
+  const basicDepartmentsData = departments.map((department) => {
+    const { departmentName } = department
+    return { departmentName }
+  })
+  const basicEmployeesData = employees.map((employee) => {
+    const { department, employeeNumber, position, profile } = employee
+    const { firstName, lastName } = profile
+
+    return {
+      profile: { firstName, lastName },
+      department,
+      employeeNumber,
+      position,
+    }
+  })
+
+  const basicCompanyData = {
+    companyName,
+    companyNumber,
+    departments: basicDepartmentsData,
+    employees: basicEmployeesData,
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Company is ready to view.',
+    data: { basicCompanyData },
+  })
+}
+
 export async function getCompanyEmployees(
   req: Request,
   res: Response,
