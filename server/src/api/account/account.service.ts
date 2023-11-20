@@ -3,13 +3,13 @@ import BadRequestError from '../../errors/BadRequestError.js'
 import AccountModel, {
   Account,
   AccountDoc,
+  Role,
   Status,
 } from '../../mongodb/models/account.model.js'
 import CompanyModel from '../../mongodb/models/company.model.js'
 import DepartmentModel from '../../mongodb/models/department.model.js'
 import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
-import RoleModel, { Role, USER_ROLE } from '../../mongodb/models/role.model.js'
 import logger from '../../service/logger.service.js'
 import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
@@ -18,13 +18,9 @@ async function createAccount(
   identifier: Types.ObjectId,
   profileId: Types.ObjectId
 ): Promise<Partial<Account>> {
-  const role = USER_ROLE.user
-  const roleDoc = await RoleModel.findOne({ role }).exec()
-
   const accountDoc = await AccountModel.create({
     identifier,
     profile: profileId,
-    role: roleDoc?._id,
   })
 
   if (!accountDoc) {
@@ -34,9 +30,7 @@ async function createAccount(
 
   const account = await AccountModel.findById(accountDoc._id)
     .populate<{ profile: Profile }>('profile')
-    .populate<{ role: Role }>('role')
     .populate<{ employee: Employee }>('employee')
-    .populate<{ status: Status }>('status')
     .lean()
     .exec()
 
@@ -57,11 +51,9 @@ async function createAccount(
 }
 
 async function setRole(accountId: Types.ObjectId, role: Role) {
-  const roleDoc = await RoleModel.findOne({ role }).exec()
-
   const account = await AccountModel.findByIdAndUpdate(
     accountId,
-    { role: roleDoc?._id },
+    { role },
     { new: true }
   ).exec()
 }

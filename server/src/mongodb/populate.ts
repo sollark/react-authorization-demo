@@ -3,34 +3,6 @@ import { companyService } from '../api/company/company.service.js'
 import { employeeService } from '../api/employee/employee.service.js'
 import { profileService } from '../api/profile/profile.service.js'
 import { departmentService } from '../service/department.service.js'
-import RoleModel, { Role, USER_ROLE } from './models/role.model.js'
-
-// Function to populate roles in the database
-async function populateRole() {
-  console.log('Populating roles in the database...')
-
-  try {
-    const existingRoles = await RoleModel.find({})
-    if (existingRoles.length !== 0) {
-      console.log('Roles already populated.')
-      return
-    }
-
-    // Define roles to be inserted into the database
-    const rolesToInsert = Object.values(USER_ROLE) as Role[]
-
-    // Insert the roles into the database
-    const insertedRoles = await RoleModel.insertMany(
-      rolesToInsert.map((role) => ({ role }))
-    )
-
-    console.log('Role populated successfully.')
-    // console.log('Roles inserted:', insertedRoles)
-  } catch (error) {
-    console.error('Error populating roles:', error)
-    throw error
-  }
-}
 
 async function populateTestData() {
   console.log('Populating users in the database...')
@@ -130,4 +102,4 @@ async function populateTestData() {
   companyService.addEmployee(company._id, employee4._id)
 }
 
-export const populate = { populateRole, populateTestData }
+export const populate = { populateTestData }

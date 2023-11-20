@@ -44,6 +44,8 @@ export async function getBasicCompanyData(
   res: Response,
   next: NextFunction
 ) {
+  console.log('getBasicCompanyData')
+
   const identifier = getIdentifierFromALS()
   const accountDoc = await accountService.getAccountDoc(identifier)
   if (!accountDoc) throw new BadRequestError('Cannot find account')
@@ -58,7 +60,7 @@ export async function getBasicCompanyData(
   if (!company) throw new BadRequestError('Cannot find company')
 
   // filter company data, only return basic data
-  const { _id, companyName, companyNumber, departments, employees } = company
+  const { companyName, companyNumber, departments, employees } = company
   const basicDepartmentsData = departments.map((department) => {
     const { departmentName } = department
     return { departmentName }

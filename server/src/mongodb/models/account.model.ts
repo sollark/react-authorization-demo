@@ -1,7 +1,6 @@
 import { Schema, Types, model } from 'mongoose'
 import { Employee } from './employee.model.js'
 import { Profile } from './profile.model.js'
-import { Role } from './role.model.js'
 
 export const ACCOUNT_STATUS = {
   pending: 'Pending',
@@ -10,6 +9,15 @@ export const ACCOUNT_STATUS = {
   deleted: 'Deleted',
 } as const
 export type Status = keyof typeof ACCOUNT_STATUS
+
+export const USER_ROLE = {
+  guest: 'Guest',
+  user: 'User',
+  manager: 'Manager',
+  supervisor: 'Supervisor',
+  admin: 'Admin',
+} as const
+export type Role = keyof typeof USER_ROLE
 
 export type Account = {
   identifier?: Types.ObjectId
@@ -25,7 +33,7 @@ export type AccountDoc = {
   profile: Types.ObjectId
   status: Status
   isComplete: boolean
-  role?: Types.ObjectId
+  role?: Role
   employee?: Types.ObjectId
 }
 
@@ -41,7 +49,6 @@ const AccountSchema = new Schema({
     enum: Object.values(ACCOUNT_STATUS),
     default: ACCOUNT_STATUS.pending,
     required: true,
-    immutable: true,
   },
   isComplete: {
     type: Boolean,
@@ -49,8 +56,10 @@ const AccountSchema = new Schema({
     required: true,
   },
   role: {
-    type: Schema.Types.ObjectId,
-    ref: 'Role',
+    type: String,
+    enum: Object.values(USER_ROLE),
+    default: USER_ROLE.user,
+    required: true,
   },
   employee: {
     type: Schema.Types.ObjectId,
