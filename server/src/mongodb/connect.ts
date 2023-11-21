@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose'
 import { config } from '../config/config.js'
 import { deleteDatabase } from './delete.js'
-import { populate } from './populate.js'
 
 export const connectMongo = async () => {
   if (!config.mongo.url) {
@@ -17,7 +16,6 @@ export const connectMongo = async () => {
     throw new Error('Failed to connect to MongoDB')
   }
 
-  await populate.populateRole()
   // await populate.populateTestData()
 
   // Uncomment this lines to delete the database

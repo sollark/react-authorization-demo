@@ -1,8 +1,8 @@
 import AdvancedEmployeeTable from '@/cmps/tables/emloyeeTable/AdvancedEmployeeTable'
 import BasicEmployeeTable from '@/cmps/tables/emloyeeTable/BasicEmployeeTable'
 import EditableEmployeeTable from '@/cmps/tables/emloyeeTable/EditableEmployeeTable'
+import { Role } from '@/models/Account'
 import { Department } from '@/models/Department'
-import { Role } from '@/models/Role'
 import { companyService } from '@/service/company.service'
 import useRoleStore from '@/stores/roleStore'
 import { Box } from '@mui/material'
@@ -10,19 +10,19 @@ import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 
 const TableViews = {
-  Guest: BasicEmployeeTable,
-  User: BasicEmployeeTable,
-  Supervisor: AdvancedEmployeeTable,
-  Manager: EditableEmployeeTable,
-  Admin: EditableEmployeeTable,
+  guest: BasicEmployeeTable,
+  user: BasicEmployeeTable,
+  supervisor: AdvancedEmployeeTable,
+  manager: EditableEmployeeTable,
+  admin: EditableEmployeeTable,
 }
 
 const fetchFunctions = {
-  Guest: async () => null,
-  User: async () => await companyService.getBasicCompanyData(),
-  Supervisor: async () => await companyService.getBasicCompanyData(),
-  Manager: async () => await companyService.getBasicCompanyData(),
-  Admin: async () => await companyService.getBasicCompanyData(),
+  guest: async () => null,
+  user: async () => await companyService.getBasicCompanyData(),
+  supervisor: async () => await companyService.getBasicCompanyData(),
+  manager: async () => await companyService.getBasicCompanyData(),
+  admin: async () => await companyService.getBasicCompanyData(),
 }
 
 const EmployeePage: FC = () => {
@@ -33,7 +33,7 @@ const EmployeePage: FC = () => {
 
   const Table = TableViews[role] || BasicEmployeeTable
 
-  console.log(fetchFunctions['User'])
+  console.log(fetchFunctions['user'])
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],

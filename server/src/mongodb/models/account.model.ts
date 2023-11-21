@@ -3,19 +3,19 @@ import { Employee } from './employee.model.js'
 import { Profile } from './profile.model.js'
 
 export const ACCOUNT_STATUS = {
-  pending: 'Pending',
-  active: 'Active',
-  inactive: 'Inactive',
-  deleted: 'Deleted',
+  pending: 'pending',
+  active: 'active',
+  inactive: 'inactive',
+  deleted: 'deleted',
 } as const
 export type Status = keyof typeof ACCOUNT_STATUS
 
 export const USER_ROLE = {
-  guest: 'Guest',
-  user: 'User',
-  manager: 'Manager',
-  supervisor: 'Supervisor',
-  admin: 'Admin',
+  guest: 'guest',
+  user: 'user',
+  manager: 'manager',
+  supervisor: 'supervisor',
+  admin: 'admin',
 } as const
 export type Role = keyof typeof USER_ROLE
 

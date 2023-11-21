@@ -1,4 +1,4 @@
-import { Role, USER_ROLE } from '@/models/Role'
+import { Role, USER_ROLE } from '@/models/Account'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'

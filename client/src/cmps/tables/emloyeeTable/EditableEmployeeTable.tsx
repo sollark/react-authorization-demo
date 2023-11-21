@@ -1,6 +1,5 @@
-import { ACCOUNT_STATUS, Status } from '@/models/Account'
+import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
 import { Employee } from '@/models/Employee'
-import { Role, USER_ROLE } from '@/models/Role'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import {

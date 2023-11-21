@@ -1,6 +1,5 @@
-import { ACCOUNT_STATUS, Status } from '@/models/Account'
+import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
 import { Employee } from '@/models/Employee'
-import { Role, USER_ROLE } from '@/models/Role'
 import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
 import { FC } from 'react'
 import Table from '../Table'

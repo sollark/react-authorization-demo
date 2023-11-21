@@ -1,4 +1,4 @@
-import { Role } from '@/models/Role'
+import { Role } from '@/models/Account'
 import UnauthorizedPage from '@/pages/UnauthorizedPage'
 import useRoleStore from '@/stores/roleStore'
 import { ReactNode } from 'react'

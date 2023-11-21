@@ -4,8 +4,8 @@ import { Department } from './department.model.js'
 import { Profile } from './profile.model.js'
 
 export const EMPLOYEE_STATUS = {
-  unregistered: 'Unregistered',
-  registered: 'Registered',
+  unregistered: 'unregistered',
+  registered: 'registered',
 } as const
 export type EmployeeStatus = keyof typeof EMPLOYEE_STATUS
 
