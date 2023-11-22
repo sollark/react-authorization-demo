@@ -29,11 +29,8 @@ const EmployeePage: FC = () => {
   console.log(' Employee connected')
 
   const role: Role = useRoleStore((state) => state.role)
-  console.log('role', role)
 
   const Table = TableViews[role] || BasicEmployeeTable
-
-  console.log(fetchFunctions['user'])
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
@@ -59,7 +56,6 @@ const EmployeePage: FC = () => {
       }}>
       <h1>Employee page</h1>
       {/* {JSON.stringify(data)} */}
-      {data.companyName}
       <Table
         employees={data.employees}
         departmentOptions={

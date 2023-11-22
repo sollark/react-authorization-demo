@@ -3,6 +3,7 @@ import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 
+// TODO user role is not correct
 const CompanyPage: FC = () => {
   console.log(' Company connected')
 

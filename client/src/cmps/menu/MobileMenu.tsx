@@ -3,7 +3,8 @@ import { Link } from '@tanstack/react-router'
 
 const pages = [
   { key: 'Home', link: <Link to='/'>Home</Link> },
-  { key: 'Role', link: <Link to='/role'>Role</Link> },
+  { key: 'Company', link: <Link to='/company'>Company</Link> },
+  { key: 'Employee', link: <Link to='/employee'>Employee</Link> },
 ]
 
 interface NavigationProps {
