@@ -1,5 +1,4 @@
 import { model, Schema } from 'mongoose'
-import { v4 as uuidv4 } from 'uuid'
 
 export type Credentials = {
   email: string
@@ -7,7 +6,7 @@ export type Credentials = {
 }
 
 const AuthSchema = new Schema({
-  uuid: { type: String, default: uuidv4, required: true, unique: true },
+  uuid: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, select: false },
 })

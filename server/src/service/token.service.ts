@@ -12,6 +12,8 @@ function generateTokens(payload: string): {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
+  console.log('generateTokens, payload', payload)
+
   const accessToken = jwt.sign({ payload }, accessSecret, {
     expiresIn: '1h',
   })

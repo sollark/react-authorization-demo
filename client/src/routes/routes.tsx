@@ -24,8 +24,8 @@ const MissingPage = lazyRouteComponent(() => import('../pages/MissingPage'))
 
 export const rootRoute = new RootRoute({
   component: RootPage,
-  beforeLoad: async () => {
-    await useAuthStore.getState().getAccess()
+  beforeLoad: () => {
+    useAuthStore.getState().getAccess()
   },
 })
 

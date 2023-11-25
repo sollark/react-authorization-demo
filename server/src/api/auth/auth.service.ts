@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt'
+import { v4 as uuidv4 } from 'uuid'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import TokenModel from '../../mongodb/models/token.model.js'
 import logger from '../../service/logger.service.js'
-import { payloadService } from '../../service/payload.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { accountService } from '../account/account.service.js'
 import { profileService } from '../profile/profile.service.js'
@@ -24,7 +24,8 @@ async function registration(credentials: Credentials) {
   const hashPassword = await bcrypt.hash(password, 10)
 
   // create new authentication
-  const auth = await authModel.create({ email, password: hashPassword })
+  const uuid = uuidv4()
+  const auth = await authModel.create({ uuid, email, password: hashPassword })
   logger.info(`authService - New authentication created for email: ${email}`)
 
   // generate tokens
@@ -155,7 +156,5 @@ const isEmailTaken = async (email: string) => {
 }
 
 async function generateTokens(uuid: string) {
-  const payload: string = await payloadService.generateTokenPayload(uuid)
-
-  return tokenService.generateTokens(payload)
+  return tokenService.generateTokens(uuid)
 }
