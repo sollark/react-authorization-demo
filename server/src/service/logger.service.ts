@@ -51,3 +51,13 @@ export default {
     doLog('ERROR', ...args)
   },
 }
+
+// log object example:
+//
+// logger.info(
+//   `accountService - setProfile, account: ${JSON.stringify(
+//     account,
+//     null,
+//     2 // Indentation level, adjust as needed
+//   )}`
+// )

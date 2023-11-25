@@ -142,13 +142,7 @@ async function setProfile(
     throw new BadRequestError('Account cannot be updated')
   }
 
-  logger.info(
-    `accountService - account is updated: ${JSON.stringify(
-      account,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
-  )
+  logger.info(`accountService - setProfile, profileId: ${profileId}`)
 }
 
 async function setEmployee(

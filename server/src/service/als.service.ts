@@ -16,10 +16,10 @@ export function getIdentifierFromALS() {
   const identifier = store?.userData?.identifier
 
   if (!identifier) {
-    loggerService.warn(`ALSService- cannot get identifier from ALS`)
+    loggerService.warn(`getIdentifierFromALS- cannot get identifier from ALS`)
 
     throw new UnauthorizedError('You are not unauthorized')
-  }
+  } else loggerService.info(`getIdentifierFromALS- identifier: ${identifier}`)
 
   return identifier
 }
