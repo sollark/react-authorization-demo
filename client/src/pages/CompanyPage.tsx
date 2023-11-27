@@ -31,13 +31,15 @@ const CompanyPage: FC = () => {
       }}>
       <h1>Company page</h1>
       {/* {JSON.stringify(data)} */}
-      {`Company: ${data.companyName} \n`}
-      {`Company number: ${data.companyNumber}`}
-      {`Employees: ${
-        data.departments.map(
-          (department) => department.departmentName + '\n'
-        ) || []
-      }`}
+      <p>{`Company: ${data.companyName}`}</p>
+      <p> {`Company number: ${data.companyNumber}`}</p>
+      <p>
+        {' '}
+        {`Departments: ${
+          data.departments.map((department) => department.departmentName) || []
+        }`}
+      </p>
+      <p>{`Number of employees: ${data.employees.length}`}</p>
 
       {/* <AdvancedEmployeeTable
         employees={data.employees}

@@ -6,7 +6,7 @@ export type Company = {
   companyName: string
   companyNumber: string
   departments: Department[]
-  employees: Employee[] | null
+  employees: Employee[]
 }
 
 export const CompanyNameSchema = z.object({

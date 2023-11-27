@@ -15,7 +15,7 @@ const RootPage: FC = () => {
     if (!isAuthenticated) {
       navigate({ to: '/signin' } as unknown as MakeLinkOptions)
     } else if (!isComplete)
-      navigate({ to: '/account/edit' } as unknown as MakeLinkOptions)
+      navigate({ to: '/account/join' } as unknown as MakeLinkOptions)
   }, [])
 
   return (
