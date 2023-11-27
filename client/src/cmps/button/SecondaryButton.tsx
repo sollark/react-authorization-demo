@@ -12,3 +12,6 @@ const SecondaryButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 export default SecondaryButton
+
+/* using href forces a page reload */
+/* <SecondaryButton onClick={() => navigate({ to: '/account/edit' })}>Edit</SecondaryButton> */

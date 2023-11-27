@@ -30,7 +30,6 @@ const CompanyPage: FC = () => {
         p: 4,
       }}>
       <h1>Company page</h1>
-      {/* {JSON.stringify(data)} */}
       <p>{`Company: ${data.companyName}`}</p>
       <p> {`Company number: ${data.companyNumber}`}</p>
       <p>

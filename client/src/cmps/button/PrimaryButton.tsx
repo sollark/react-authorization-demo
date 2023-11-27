@@ -12,3 +12,6 @@ const PrimaryButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 export default PrimaryButton
+
+/* using href forces a page reload */
+/* <PrimaryButton onClick={() => navigate({ to: '/account/edit' })}>Edit</PrimaryButton> */

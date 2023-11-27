@@ -1,37 +1,24 @@
 import useEmployeeStore from '@/stores/employeeStore'
 import useProfileStore from '@/stores/userStore'
-import { useNavigate } from '@tanstack/react-router'
 
 import { FC } from 'react'
 const AccountDetailsPage: FC = () => {
   console.log('AccountDetailsPage connected')
 
-  const navigate = useNavigate({ from: '/account/edit' })
   const profile = useProfileStore((state) => state.profile)
   const employee = useEmployeeStore((state) => state.employee)
 
   return (
     <div>
       <h2>Profile</h2>
-      First Name: {profile?.firstName}
-      <br />
-      Last Name: {profile?.lastName}
-      <br />
-      ID: {profile?.ID}
-      <br />
+      <p>First Name: {profile?.firstName}</p>
+      <p>Last Name: {profile?.lastName}</p>
+      <p>ID: {profile?.ID}</p>
       <h2>Work details</h2>
-      {employee && `Company: ${employee.company.companyName}`}
-      <br />
-      {employee && `Department: ${employee.department.departmentName}`}
-      <br />
-      {employee && `Position: ${employee.position}`}
-      <br />
-      {employee && `Employee number: ${employee.employeeNumber}`}
-      <br />
-      {/* using href forces a page reload */}
-      {/* <SecondaryButton onClick={() => navigate({ to: '/account/edit' })}>
-        Edit
-      </SecondaryButton> */}
+      {employee && <p>Company: {employee.company.companyName}</p>}
+      {employee && <p>Department: {employee.department.departmentName}</p>}
+      {employee && <p>Position: {employee.position}</p>}
+      {employee && <p>Employee number: {employee.employeeNumber}</p>}
     </div>
   )
 }
