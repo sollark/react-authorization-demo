@@ -115,7 +115,6 @@ export async function joinCompany(
   )
   if (!employeeDoc) throw new BadRequestError('Cannot find employee')
 
-  // TODO go through joining process, check why account has profile set, it cause profile deletion in setProfile
   const profileId = employeeDoc.profile
   await accountService.setProfile(accountId, profileId)
   await accountService.setEmployee(accountId, employeeDoc._id)

@@ -5,13 +5,12 @@ import { profileService } from '../api/profile/profile.service.js'
 import { departmentService } from '../service/department.service.js'
 
 async function populateTestData() {
-  console.log('Populating users in the database...')
+  console.log('Populating test data in the database...')
 
   authService.registration({
     email: 'employee@test.com',
     password: 'employee',
   })
-  console.log('Populating test company in the database...')
 
   // Company
   const company = await companyService.createCompany('TestCompany')
