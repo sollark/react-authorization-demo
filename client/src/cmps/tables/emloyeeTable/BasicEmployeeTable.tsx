@@ -1,10 +1,10 @@
 import { Employee } from '@/models/Employee'
-import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
+import { GridColDef } from '@mui/x-data-grid'
 import { FC } from 'react'
 import Table from '../Table'
 
 /*
- * BasicEmployeeTable has basic info about employee
+ * BasicEmployeeTable has basic info about employees
  * BasicEmployeeTable is not editable
  */
 
@@ -34,16 +34,6 @@ const employeeColumns: GridColDef[] = [
   { field: 'position', headerName: 'Position' },
 ]
 
-async function updateEmployee(row: GridRowModel): Promise<boolean> {
-  // basic table cant be updated
-  return true
-}
-
-function deleteEmployee(id: GridRowId) {
-  // basic table has not option to deleted data
-  return true
-}
-
 const BasicEmployeeTable: FC<EmployeeTableProps> = (props) => {
   const { employees, departmentOptions } = props
 
@@ -63,8 +53,6 @@ const BasicEmployeeTable: FC<EmployeeTableProps> = (props) => {
         dataRows={employeeData as any}
         defaultValues={employeeDefaultValues}
         tableColumns={employeeColumns}
-        updateRow={updateEmployee}
-        deleteRow={deleteEmployee}
       />
     </div>
   )

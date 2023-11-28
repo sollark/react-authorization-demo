@@ -1,11 +1,10 @@
-import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
 import { Employee } from '@/models/Employee'
-import { GridColDef, GridRowId, GridRowModel } from '@mui/x-data-grid'
+import { GridColDef } from '@mui/x-data-grid'
 import { FC } from 'react'
 import Table from '../Table'
 
 /*
- * AdvancedEmployeeTable has full info about employee
+ * AdvancedEmployeeTable has full info about employees
  * AdvancedEmployeeTable is not editable
  */
 
@@ -21,8 +20,6 @@ type EmployeeTableColumns = {
   departmentName: string
   employeeNumber: string
   position: string
-  role: Role
-  status: Status
 }
 
 const employeeDefaultValues: EmployeeTableColumns = {
@@ -32,8 +29,6 @@ const employeeDefaultValues: EmployeeTableColumns = {
   departmentName: '',
   employeeNumber: '',
   position: '',
-  role: USER_ROLE.user,
-  status: ACCOUNT_STATUS.pending,
 }
 
 const employeeColumns: GridColDef[] = [
@@ -43,19 +38,7 @@ const employeeColumns: GridColDef[] = [
   { field: 'departmentName', headerName: 'Department' },
   { field: 'employeeNumber', headerName: 'Employee number' },
   { field: 'position', headerName: 'Position' },
-  // { field: 'role', headerName: 'Role' },
-  // { field: 'status', headerName: 'Status' },
 ]
-
-async function updateEmployee(row: GridRowModel): Promise<boolean> {
-  // advanced table cant be updated
-  return true
-}
-
-function deleteEmployee(id: GridRowId) {
-  // advanced table has not option to deleted data
-  return true
-}
 
 const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
   const { employees, departmentOptions } = props
@@ -69,8 +52,6 @@ const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
       departmentName: employee.department.departmentName,
       employeeNumber: employee.employeeNumber,
       position: employee.position,
-      // role: employee.account.role,
-      // status: employee.account.status,
     }
   })
 
@@ -81,8 +62,6 @@ const AdvancedEmployeeTable: FC<EmployeeTableProps> = (props) => {
         dataRows={employeeData as any}
         defaultValues={employeeDefaultValues}
         tableColumns={employeeColumns}
-        updateRow={updateEmployee}
-        deleteRow={deleteEmployee}
       />
     </div>
   )

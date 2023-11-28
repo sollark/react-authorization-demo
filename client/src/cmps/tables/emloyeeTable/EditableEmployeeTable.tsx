@@ -1,4 +1,3 @@
-import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
 import { Employee } from '@/models/Employee'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
@@ -12,7 +11,7 @@ import { FC } from 'react'
 import Table from '../Table'
 
 /*
- * EditableEmployeeTable has full info about employee
+ * EditableEmployeeTable has full info about employees
  * EditableEmployeeTable is editable
  */
 
@@ -28,8 +27,6 @@ type EmployeeTableColumns = {
   departmentName: string
   employeeNumber: string
   position: string
-  role: Role
-  status: Status
 }
 
 const employeeDefaultValues: EmployeeTableColumns = {
@@ -39,8 +36,6 @@ const employeeDefaultValues: EmployeeTableColumns = {
   departmentName: '',
   employeeNumber: '',
   position: '',
-  role: USER_ROLE.user,
-  status: ACCOUNT_STATUS.pending,
 }
 
 let departments: (params: GridValueOptionsParams<any>) => string[]
@@ -58,8 +53,6 @@ const employeeColumns: GridColDef[] = [
   },
   { field: 'employeeNumber', headerName: 'Employee number', editable: false },
   { field: 'position', headerName: 'Position', editable: true },
-  // { field: 'role', headerName: 'Role', editable: true },
-  // { field: 'status', headerName: 'Status', editable: true },
 ]
 
 async function updateEmployee(row: GridRowModel): Promise<boolean> {
@@ -98,8 +91,6 @@ const EditableEmployeeTable: FC<EmployeeTableProps> = (props) => {
       departmentName: employee.department.departmentName,
       employeeNumber: employee.employeeNumber,
       position: employee.position,
-      // role: employee.account.role,
-      // status: employee.account.status,
     }
   })
 

@@ -25,8 +25,8 @@ type TableProps = {
   dataRows: GridRowsProp
   tableColumns: GridColDef[]
   defaultValues: GridRowModel
-  updateRow: (row: GridRowModel) => Promise<boolean>
-  deleteRow: (id: GridRowId) => void
+  updateRow?: (row: GridRowModel) => Promise<boolean>
+  deleteRow?: (id: GridRowId) => void
   editable?: boolean
 }
 
@@ -156,6 +156,9 @@ const Table: FC<TableProps> = (props: TableProps) => {
   }
 
   const handleSaveClick = (id: GridRowId) => async () => {
+    // return if updateRow is not defined ( table is not editable)
+    if (!updateRow) return
+
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
 
     const editedRow = rows.filter((row) => row.id === id)
@@ -172,6 +175,9 @@ const Table: FC<TableProps> = (props: TableProps) => {
   }
 
   const handleDeleteClick = (id: GridRowId) => () => {
+    // return if deleteRow is not defined ( table is not editable)
+    if (!deleteRow) return
+
     setRows(rows.filter((row) => row.id !== id))
 
     deleteRow(id)
