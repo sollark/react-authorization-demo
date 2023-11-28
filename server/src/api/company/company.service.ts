@@ -24,12 +24,15 @@ async function createCompany(
     .exec()
 
   logger.info(
-    `companyService - company is created:  ${JSON.stringify(
-      company,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `companyService- createCompany, company is created ${company?._id}  ${company?.companyName}`
   )
+  // logger.info(
+  //   `companyService - company is created:  ${JSON.stringify(
+  //     company,
+  //     null,
+  //     2 // Indentation level, adjust as needed
+  //   )}`
+  // )
 
   return company
 }
@@ -53,12 +56,15 @@ async function getBasicCompanyDetails(id: Types.ObjectId) {
     .exec()
 
   logger.info(
-    `companyService - company fetched  ${JSON.stringify(
-      company,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `companyService- getBasicCompanyDetails, company is fetched ${company?._id}  ${company?.companyName}`
   )
+  // logger.info(
+  //   `companyService - company is fetched  ${JSON.stringify(
+  //     company,
+  //     null,
+  //     2 // Indentation level, adjust as needed
+  //   )}`
+  // )
 
   return company
 }
@@ -80,12 +86,15 @@ async function getCompany(id: Types.ObjectId) {
     .exec()
 
   logger.info(
-    `companyService - company fetched  ${JSON.stringify(
-      company,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `companyService- getCompany, company is fetched ${company?._id}  ${company?.companyName}`
   )
+  // logger.info(
+  //   `companyService - company is fetched  ${JSON.stringify(
+  //     company,
+  //     null,
+  //     2 // Indentation level, adjust as needed
+  //   )}`
+  // )
 
   return company
 }
@@ -212,12 +221,15 @@ async function updateCompany(
     .exec()
 
   logger.info(
-    `companyService - company updated  ${JSON.stringify(
-      company,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `companyService- updateCompany, company is updated ${company?._id}  ${company?.companyName}`
   )
+  // logger.info(
+  //   `companyService - company is updated  ${JSON.stringify(
+  //     company,
+  //     null,
+  //     2 // Indentation level, adjust as needed
+  //   )}`
+  // )
 
   return company
 }
