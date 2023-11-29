@@ -9,7 +9,7 @@ export type Profile = {
 const ProfileSchema = new Schema({
   firstName: { type: String, default: '' },
   lastName: { type: String, default: '' },
-  ID: { type: String, default: '', unique: true },
+  ID: { type: String, default: '' },
 })
 
 const ProfileModel = model<Profile>('Profile', ProfileSchema)
