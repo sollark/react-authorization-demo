@@ -8,7 +8,9 @@ async function createBlankProfile(): Promise<
 > {
   const profile = await ProfileModel.create({})
 
-  logger.info(`profileService - profile has been created: ${profile}`)
+  logger.info(
+    `profileService- createBlankProfile,  profile has been created: ${profile}`
+  )
 
   return profile
 }
@@ -20,7 +22,7 @@ async function createProfile(profile: Profile) {
 
   if (isExist) {
     logger.warn(
-      `profileService - attempt to create new profile with existing ID: ${ID}`
+      `profileService- createProfile, attempt to create new profile with existing ID: ${ID}`
     )
     throw new BadRequestError('Person with this ID already exists', ID)
   }
@@ -39,7 +41,7 @@ async function updateProfile(
     { new: true }
   ).exec()
 
-  logger.info(`profileService - profile updated ${profile}`)
+  logger.info(`profileService- updateProfile, profile updated ${profile}`)
 
   return profile
 }
