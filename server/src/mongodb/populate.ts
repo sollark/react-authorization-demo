@@ -82,13 +82,11 @@ async function populateTestData() {
     lastName: 'Manager',
     ID: '5555555555',
   })
-
   const supervisorProfile = await profileService.createProfile({
     firstName: 'Test',
     lastName: 'Supervisor',
     ID: '6666666666',
   })
-
   const adminProfile = await profileService.createProfile({
     firstName: 'Test',
     lastName: 'Admin',
@@ -141,7 +139,15 @@ async function populateTestData() {
     'Factory Director'
   )
 
-  if (!managerEmployee || !supervisorEmployee) {
+  // Create admin employee (IT)
+  const adminEmployee = await employeeService.createEmployee(
+    adminProfile._id,
+    company._id,
+    itDepartment._id,
+    'IT Specialist'
+  )
+
+  if (!managerEmployee || !supervisorEmployee || !adminEmployee) {
     console.log('Failed to create employee')
     return
   }
@@ -194,6 +200,7 @@ async function populateTestData() {
     managementDepartment._id,
     supervisorEmployee._id
   )
+  departmentService.addEmployee(itDepartment._id, adminEmployee._id)
 }
 
 export const populate = { populateTestData }
