@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
+import logger from '../../service/logger.service.js'
 import { accountService } from '../account/account.service.js'
 import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
@@ -44,7 +45,7 @@ export async function getBasicCompanyData(
   res: Response,
   next: NextFunction
 ) {
-  console.log('getBasicCompanyData')
+  logger.info(`companyController- getBasicCompanyData`)
 
   const identifier = getIdentifierFromALS()
   const accountDoc = await accountService.getAccountDoc(identifier)

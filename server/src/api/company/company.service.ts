@@ -26,13 +26,6 @@ async function createCompany(
   logger.info(
     `companyService- createCompany, company is created ${company?._id}  ${company?.companyName}`
   )
-  // logger.info(
-  //   `companyService - company is created:  ${JSON.stringify(
-  //     company,
-  //     null,
-  //     2 // Indentation level, adjust as needed
-  //   )}`
-  // )
 
   return company
 }
@@ -58,13 +51,6 @@ async function getBasicCompanyDetails(id: Types.ObjectId) {
   logger.info(
     `companyService- getBasicCompanyDetails, company is fetched ${company?._id}  ${company?.companyName}`
   )
-  // logger.info(
-  //   `companyService - company is fetched  ${JSON.stringify(
-  //     company,
-  //     null,
-  //     2 // Indentation level, adjust as needed
-  //   )}`
-  // )
 
   return company
 }
@@ -88,13 +74,6 @@ async function getCompany(id: Types.ObjectId) {
   logger.info(
     `companyService- getCompany, company is fetched ${company?._id}  ${company?.companyName}`
   )
-  // logger.info(
-  //   `companyService - company is fetched  ${JSON.stringify(
-  //     company,
-  //     null,
-  //     2 // Indentation level, adjust as needed
-  //   )}`
-  // )
 
   return company
 }
@@ -223,13 +202,6 @@ async function updateCompany(
   logger.info(
     `companyService- updateCompany, company is updated ${company?._id}  ${company?.companyName}`
   )
-  // logger.info(
-  //   `companyService - company is updated  ${JSON.stringify(
-  //     company,
-  //     null,
-  //     2 // Indentation level, adjust as needed
-  //   )}`
-  // )
 
   return company
 }
