@@ -1,6 +1,5 @@
-import { authService } from '@/service/auth.service'
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
@@ -11,24 +10,24 @@ type AuthState = {
   token: string | null
   setToken: (token: string) => void
   clearToken: () => void
-  getAccess: () => void
 }
 
+// TODO split this store into two stores: authStore and tokenStore
 // Create a store with initial state
 const useAuthStore = create<AuthState>()(
   zustandLogger(
-    devtools(
-      immer((set) => ({
-        isAuthenticated: false,
-        setAsAuthenticated: () => set(() => ({ isAuthenticated: true })),
-        setAsUnauthenticated: () => set(() => ({ isAuthenticated: false })),
-        token: null,
-        setToken: (token) => set(() => ({ token })),
-        clearToken: () => set(() => ({ token: null })),
-        getAccess: async () => {
-          await authService.getAccess()
-        },
-      }))
+    persist(
+      devtools(
+        immer((set) => ({
+          isAuthenticated: false,
+          setAsAuthenticated: () => set(() => ({ isAuthenticated: true })),
+          setAsUnauthenticated: () => set(() => ({ isAuthenticated: false })),
+          token: null,
+          setToken: (token) => set(() => ({ token })),
+          clearToken: () => set(() => ({ token: null })),
+        }))
+      ),
+      { name: 'auth-storage' }
     )
   )
 )

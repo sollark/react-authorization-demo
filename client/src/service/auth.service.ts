@@ -1,28 +1,8 @@
 import { AuthCredentials } from '@/models/Auth'
-import useAuthStore from '@/stores/authStore'
 import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
 import { accountService } from './account.service'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
-
-// renew tokens when access token is gone on page reload
-async function getAccess() {
-  const currentAccessToken = useAuthStore.getState().token
-  if (currentAccessToken) return
-
-  const getAccessResponse = await httpService.get<
-    null,
-    AuthResponse | undefined
-  >('auth/access', null)
-
-  // if (!isAuthResponse(getAccessResponse)) return
-
-  const { accessToken } = getAccessResponse as any
-  if (accessToken) {
-    storeService.saveAccessToken(accessToken)
-    storeService.setProfileAsAuthenticated()
-  } else storeService.clearStoreStates()
-}
 
 async function registration(email: string, password: string) {
   const registrationResponse = await httpService.post<
@@ -99,7 +79,6 @@ async function refreshTokens() {
 }
 
 export const authService = {
-  getAccess,
   signIn,
   signOut,
   registration,

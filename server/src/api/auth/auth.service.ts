@@ -111,39 +111,11 @@ const refresh = async (refreshToken: string) => {
   return { ...tokens }
 }
 
-const getAccess = async (refreshToken: string) => {
-  console.log('getAccess, refreshToken: ', refreshToken)
-
-  if (!refreshToken) return
-
-  const payload = await tokenService.validateRefreshToken(refreshToken)
-  const tokenFromDb = await tokenService.getToken(refreshToken)
-
-  if (!payload || !tokenFromDb) return
-
-  // find user
-  const tokenData = await TokenModel.findOne({ refreshToken })
-    .select('identifier')
-    .lean()
-    .exec()
-
-  if (!tokenData) return
-
-  // generate tokens
-  const tokens = tokenService.generateTokens(payload as string)
-
-  // save refresh token to db
-  await tokenService.saveToken(tokenData.identifier, tokens.refreshToken)
-
-  return { ...tokens }
-}
-
 export const authService = {
   registration,
   signIn,
   signOut,
   refresh,
-  getAccess,
 }
 
 const isEmailTaken = async (email: string) => {
