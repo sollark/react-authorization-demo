@@ -94,6 +94,10 @@ async function populateTestData() {
     lastName: 'Admin',
     ID: '7777777777',
   })
+  if (!managerProfile || !supervisorProfile || !adminProfile) {
+    console.log('Failed to create manager, supervisor and admin profiles')
+    return
+  }
 
   // Employees' profiles
   const profile1 = await profileService.createProfile({
@@ -117,7 +121,7 @@ async function populateTestData() {
     ID: '4444444444',
   })
   if (!profile1 || !profile2 || !profile3 || !profile4) {
-    console.log('Failed to create profile')
+    console.log('Failed to create employee profiles')
     return
   }
 
@@ -179,6 +183,17 @@ async function populateTestData() {
   companyService.addEmployee(company._id, employee2._id)
   companyService.addEmployee(company._id, employee3._id)
   companyService.addEmployee(company._id, employee4._id)
+
+  // Add employees to departments
+  departmentService.addEmployee(salesDepartment._id, employee1._id)
+  departmentService.addEmployee(salesDepartment._id, employee2._id)
+  departmentService.addEmployee(hrDepartment._id, employee3._id)
+  departmentService.addEmployee(hrDepartment._id, employee4._id)
+  departmentService.addEmployee(productionDepartment._id, managerEmployee._id)
+  departmentService.addEmployee(
+    managementDepartment._id,
+    supervisorEmployee._id
+  )
 }
 
 export const populate = { populateTestData }
