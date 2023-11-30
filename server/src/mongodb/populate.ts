@@ -10,19 +10,19 @@ async function populateTestData() {
   // register user, manager, supervisor and admin
   authService.registration({
     email: 'user@test.com',
-    password: 'user',
+    password: 'useruser',
   })
   authService.registration({
     email: 'manager@test.com',
-    password: 'manager',
+    password: 'managermanager',
   })
   authService.registration({
     email: 'supervisor@test.com',
-    password: 'supervisor',
+    password: 'supervisorsupervisor',
   })
   authService.registration({
     email: 'admin@test.com',
-    password: 'admin',
+    password: 'adminadmin',
   })
 
   // Company
@@ -185,6 +185,7 @@ async function populateTestData() {
   // Add employees to company
   companyService.addEmployee(company._id, managerEmployee._id)
   companyService.addEmployee(company._id, supervisorEmployee._id)
+  companyService.addEmployee(company._id, adminEmployee._id)
   companyService.addEmployee(company._id, employee1._id)
   companyService.addEmployee(company._id, employee2._id)
   companyService.addEmployee(company._id, employee3._id)

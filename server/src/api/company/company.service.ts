@@ -148,18 +148,22 @@ async function getCompanyEmployeeDocByNumber(
 ) {
   const company = await CompanyModel.findById(companyId)
 
-  if (company) {
-    const employeeIds = company.employees
-    const employees = await EmployeeModel.find({ _id: { $in: employeeIds } })
-
-    const matchingEmployee = employees.find(
-      (employee) => employee.employeeNumber === employeeNumber
+  if (!company) {
+    logger.error(
+      `companyService- getCompanyEmployeeDocByNumber, company is not found ${companyId}`
     )
 
-    return matchingEmployee
+    return null
   }
 
-  return null // Return null if the company is not found
+  const employeeIds = company.employees
+  const employees = await EmployeeModel.find({ _id: { $in: employeeIds } })
+
+  const matchingEmployee = employees.find(
+    (employee) => employee.employeeNumber === employeeNumber
+  )
+
+  return matchingEmployee
 }
 
 async function getCompanyEmployees(

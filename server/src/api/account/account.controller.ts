@@ -6,6 +6,7 @@ import { Department } from '../../mongodb/models/department.model.js'
 import { Employee } from '../../mongodb/models/employee.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
+import logger from '../../service/logger.service.js'
 import { companyService } from '../company/company.service.js'
 import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
@@ -113,7 +114,12 @@ export async function joinCompany(
     company._id,
     employeeNumber
   )
-  if (!employeeDoc) throw new BadRequestError('Cannot find employee')
+  if (!employeeDoc) {
+    logger.warn(
+      `accountController- joinCompany: employee is not found, company._id ${company._id}, employeeNumber ${employeeNumber}`
+    )
+    throw new BadRequestError('Cannot find employee')
+  }
 
   const profileId = employeeDoc.profile
   await accountService.setProfile(accountId, profileId)
