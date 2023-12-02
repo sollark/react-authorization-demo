@@ -7,7 +7,6 @@ import { HttpResponse, httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
 async function updateEmployee(
-  companyNumber: string,
   firstName: string,
   lastName: string,
   ID: string,
@@ -22,6 +21,47 @@ async function updateEmployee(
     lastName,
     ID,
     departmentName,
+    position,
+  })
+
+  console.log('accountService - update, response data', response)
+
+  const { account } = response as any
+  if (account) storeService.saveAccount(account)
+
+  return account ? account : null
+}
+
+async function updateCompanyEmployee(
+  companyNumber: string,
+  firstName: string,
+  lastName: string,
+  ID: string,
+  departmentName: string,
+  employeeNumber: string,
+  position: string
+) {
+  console.log(
+    'EmployeeService- updateCompanyEmployee',
+    companyNumber,
+    firstName,
+    lastName,
+    ID,
+    departmentName,
+    employeeNumber,
+    position
+  )
+
+  const response = await httpService.post<
+    Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
+    Account
+  >('company/updateEmployee', {
+    companyNumber,
+    firstName,
+    lastName,
+    ID,
+    departmentName,
+    employeeNumber,
     position,
   })
 
@@ -76,6 +116,7 @@ async function getCompany(): Promise<Company | null> {
 }
 export const employeeService = {
   updateEmployee,
+  updateCompanyEmployee,
   getCompany,
   getAllEmployees,
 }

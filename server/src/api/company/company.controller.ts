@@ -117,6 +117,7 @@ export async function getCompanyEmployees(
   })
 }
 
+// TODO is in use?
 export async function addEmployee(
   req: Request,
   res: Response,
@@ -143,6 +144,73 @@ export async function addEmployee(
 
   // create employee
   // const companyDBId = employeeService.getCompanyDBId()
+
+  res.status(200).json({
+    success: true,
+    message: 'A new employee has been added to the company.',
+    data: {},
+  })
+}
+
+export async function updateEmployee(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  // TODO check permissions
+  const identifier = getIdentifierFromALS()
+
+  const data = req.body
+
+  // destruct employee table rows
+  const {
+    companyNumber,
+    firstName,
+    lastName,
+    ID,
+    departmentName,
+    employeeNumber,
+    position,
+  } = data
+
+  // check if an employee exists
+  const isExist = await employeeService.isEmployeeExist(
+    companyNumber,
+    employeeNumber
+  )
+
+  if (!isExist) {
+    const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
+    if (!companyDoc) throw new BadRequestError('Cannot find company')
+
+    const profile = await profileService.createProfile({
+      firstName,
+      lastName,
+      ID,
+    })
+
+    const departmentDoc = await companyService.getCompanyDepartmentDocByName(
+      companyDoc._id,
+      departmentName
+    )
+    if (!departmentDoc) throw new BadRequestError('Cannot find department')
+
+    const employee = await employeeService.createEmployee(
+      profile._id,
+      companyDoc._id,
+      departmentDoc._id,
+      position
+    )
+    if (!employee) throw new BadRequestError('Cannot create employee')
+
+    await companyService.addEmployee(companyDoc._id, employee._id)
+    await departmentService.addEmployee(departmentDoc._id, employee._id)
+  }
+
+  if (isExist) {
+    // TODO fix this function or updateEmployee function
+    const employee = await employeeService.updateEmployee(employeeNumber, data)
+  }
 
   res.status(200).json({
     success: true,

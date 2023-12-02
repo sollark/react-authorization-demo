@@ -108,20 +108,18 @@ async function addDepartment(
   return company
 }
 
-async function getDepartment(
+async function getCompanyDepartmentDocByName(
   companyId: Types.ObjectId,
   departmentName: string
-): Promise<(Department & { _id: Types.ObjectId }) | null> {
-  // TODO look through company's departments to find . Below code is not correct
-  const department = await DepartmentModel.findOne({
-    companyId,
+) {
+  console.log('getCompanyDepartmentDocByName', companyId, departmentName)
+
+  const departmentDoc = await DepartmentModel.findOne({
+    company: companyId,
     departmentName,
   })
-    .populate<{ employees: Employee[] }>('employees')
-    .lean()
-    .exec()
 
-  return department
+  return departmentDoc
 }
 
 async function addEmployee(
@@ -218,6 +216,7 @@ export const companyService = {
   isCompanyIdExists,
   createCompany,
   addDepartment,
+  getCompanyDepartmentDocByName,
   getBasicCompanyDetails,
   getCompany,
   getCompanyDoc,

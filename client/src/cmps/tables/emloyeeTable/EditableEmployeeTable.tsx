@@ -58,15 +58,22 @@ function updateCompanyEmployee(companyNumber: string) {
     )
 
     const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
-    console.log('employee table columns: ', rowData)
-    const { firstName, lastName, ID, departmentName, position } = rowData
+    const {
+      firstName,
+      lastName,
+      ID,
+      departmentName,
+      employeeNumber,
+      position,
+    } = rowData
 
-    const res = await employeeService.updateEmployee(
+    const res = await employeeService.updateCompanyEmployee(
       companyNumber,
       firstName,
       lastName,
       ID,
       departmentName,
+      employeeNumber,
       position
     )
 
