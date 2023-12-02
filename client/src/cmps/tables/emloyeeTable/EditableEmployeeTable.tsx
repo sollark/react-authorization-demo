@@ -62,6 +62,7 @@ async function updateEmployee(row: GridRowModel): Promise<boolean> {
   console.log('employee row', rowData)
   const { firstName, lastName, ID, departmentName, position } = rowData
 
+  // TODO function updates user account , not chosen employee
   const res = await employeeService.updateEmployee(
     firstName,
     lastName,

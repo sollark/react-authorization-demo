@@ -7,6 +7,4 @@ const router = express.Router()
 
 router.get('/basic', requireAuth, asyncHandler(getBasicEmployeeData))
 
-// router.get('/advanced', requireAuth, asyncHandler(getAdvancedEmployeeData))
-
 export { router as employeeRoutes }
