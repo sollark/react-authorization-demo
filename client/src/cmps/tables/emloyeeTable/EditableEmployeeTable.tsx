@@ -12,16 +12,6 @@ import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from '../Table'
 
-/*
- * EditableEmployeeTable has full info about employees
- * EditableEmployeeTable is editable
- */
-
-// type EmployeeTableProps = {
-//   employees: Employee[] | null
-//   departmentOptions: string[]
-// }
-
 type EmployeeTableColumns = {
   firstName: string
   lastName: string
@@ -57,23 +47,31 @@ const employeeColumns: GridColDef[] = [
   { field: 'position', headerName: 'Position', editable: true },
 ]
 
-async function updateEmployee(row: GridRowModel): Promise<boolean> {
-  console.log('updateEmployee', row)
+function updateCompanyEmployee(companyNumber: string) {
+  return async (row: GridRowModel): Promise<boolean> => {
+    console.log(
+      `updateEmployee - row: ${JSON.stringify(
+        row,
+        null,
+        2 // Indentation level, adjust as needed
+      )}`
+    )
 
-  const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
-  console.log('employee row', rowData)
-  const { firstName, lastName, ID, departmentName, position } = rowData
+    const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
+    console.log('employee table columns: ', rowData)
+    const { firstName, lastName, ID, departmentName, position } = rowData
 
-  // TODO function updates user account , not chosen employee
-  const res = await employeeService.updateEmployee(
-    firstName,
-    lastName,
-    ID,
-    departmentName,
-    position
-  )
+    const res = await employeeService.updateEmployee(
+      companyNumber,
+      firstName,
+      lastName,
+      ID,
+      departmentName,
+      position
+    )
 
-  return true
+    return true
+  }
 }
 
 function deleteEmployee(id: GridRowId) {
@@ -100,7 +98,8 @@ const EditableEmployeeTable: FC = () => {
     return <span>Empty data</span>
   }
 
-  const employees = data.employees
+  const { companyNumber, employees } = data
+
   const departmentOptions =
     data.departments.map(
       (department: Department) => department.departmentName
@@ -120,6 +119,8 @@ const EditableEmployeeTable: FC = () => {
   })
 
   console.log('employeeData from api', employeeData)
+
+  const updateEmployee = updateCompanyEmployee(companyNumber)
 
   return (
     <div>

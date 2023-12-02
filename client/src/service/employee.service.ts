@@ -7,6 +7,7 @@ import { HttpResponse, httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
 async function updateEmployee(
+  companyNumber: string,
   firstName: string,
   lastName: string,
   ID: string,
