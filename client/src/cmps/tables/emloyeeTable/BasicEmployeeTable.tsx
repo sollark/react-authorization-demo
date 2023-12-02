@@ -1,5 +1,6 @@
-import { Employee } from '@/models/Employee'
+import { companyService } from '@/service/company.service'
 import { GridColDef } from '@mui/x-data-grid'
+import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from '../Table'
 
@@ -8,10 +9,10 @@ import Table from '../Table'
  * BasicEmployeeTable is not editable
  */
 
-type EmployeeTableProps = {
-  employees: Employee[] | null
-  departmentOptions: string[]
-}
+// type EmployeeTableProps = {
+//   employees: Employee[] | null
+//   departmentOptions: string[]
+// }
 
 type EmployeeTableColumns = {
   firstName: string
@@ -34,8 +35,27 @@ const employeeColumns: GridColDef[] = [
   { field: 'position', headerName: 'Position' },
 ]
 
-const BasicEmployeeTable: FC<EmployeeTableProps> = (props) => {
-  const { employees, departmentOptions } = props
+const BasicEmployeeTable: FC = () => {
+  // const { employees, departmentOptions } = props
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['company'],
+    queryFn: companyService.getBasicCompanyData,
+  })
+
+  if (isPending) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
+  if (!data) {
+    return <span>Empty data</span>
+  }
+
+  const employees = data.employees
 
   const employeeData = employees?.map((employee) => {
     return {

@@ -1,4 +1,5 @@
-import { Employee } from '@/models/Employee'
+import { Department } from '@/models/Department'
+import { companyService } from '@/service/company.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import {
@@ -7,6 +8,7 @@ import {
   GridRowModel,
   GridValueOptionsParams,
 } from '@mui/x-data-grid'
+import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from '../Table'
 
@@ -15,10 +17,10 @@ import Table from '../Table'
  * EditableEmployeeTable is editable
  */
 
-type EmployeeTableProps = {
-  employees: Employee[] | null
-  departmentOptions: string[]
-}
+// type EmployeeTableProps = {
+//   employees: Employee[] | null
+//   departmentOptions: string[]
+// }
 
 type EmployeeTableColumns = {
   firstName: string
@@ -78,9 +80,31 @@ function deleteEmployee(id: GridRowId) {
   console.log('deleteEmployee', id)
 }
 
-const EditableEmployeeTable: FC<EmployeeTableProps> = (props) => {
-  const { employees, departmentOptions } = props
-  console.log('prop from api', props)
+const EditableEmployeeTable: FC = () => {
+  // const { employees, departmentOptions } = props
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['company'],
+    queryFn: companyService.getAdvancedCompanyData,
+  })
+
+  if (isPending) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
+  if (!data) {
+    return <span>Empty data</span>
+  }
+
+  const employees = data.employees
+  const departmentOptions =
+    data.departments.map(
+      (department: Department) => department.departmentName
+    ) || []
 
   departments = setOptions(departmentOptions)
 
