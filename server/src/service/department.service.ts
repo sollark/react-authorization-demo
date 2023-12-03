@@ -33,6 +33,36 @@ async function createDepartment(
   return department
 }
 
+async function updateDepartment(
+  departmentId: Types.ObjectId,
+  updatedDepartmentData: Partial<Department>
+): Promise<(Department & { _id: Types.ObjectId }) | null> {
+  const department = await DepartmentModel.findByIdAndUpdate(
+    departmentId,
+    updatedDepartmentData,
+    { new: true }
+  )
+    .populate<{ company: Types.ObjectId }>('company')
+    .populate<{ employees: Employee[] }>('employees')
+    .lean()
+    .exec()
+
+  if (!department) {
+    logger.warn(`departmentService - department is not found: ${departmentId}`)
+    throw new BadRequestError('Department is not found')
+  }
+
+  logger.info(
+    `departmentService - department updated:  ${JSON.stringify(
+      department,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
+
+  return department
+}
+
 async function addEmployee(
   departmentId: Types.ObjectId,
   employeeId: Types.ObjectId
@@ -80,6 +110,7 @@ async function getDepartmentDBId(
 
 export const departmentService = {
   createDepartment,
+  updateDepartment,
   addEmployee,
   getDepartmentDBId,
 }

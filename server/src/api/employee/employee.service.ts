@@ -4,7 +4,10 @@ import { Company } from '../../mongodb/models/company.model.js'
 import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
-import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
+import EmployeeModel, {
+  Employee,
+  EmployeeDoc,
+} from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
@@ -79,10 +82,10 @@ async function updateEmployee(
   return employee
 }
 
-async function isEmployeeExist(
+async function getEmployeeDoc(
   companyNumber: string,
   employeeNumber: string
-): Promise<boolean> {
+): Promise<(EmployeeDoc & { _id: Types.ObjectId }) | null> {
   const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
   if (!companyDoc)
     throw new BadRequestError('Company is not found', companyNumber)
@@ -92,7 +95,7 @@ async function isEmployeeExist(
     employeeNumber,
   })
 
-  return !!employeeDoc
+  return employeeDoc
 }
 
 async function getBasicEmployeeData(
@@ -266,7 +269,7 @@ async function addSubordinate(
 export const employeeService = {
   createEmployee,
   updateEmployee,
-  isEmployeeExist,
+  getEmployeeDoc,
   getBasicEmployeeData,
   getProfileId,
   getCompanyId,

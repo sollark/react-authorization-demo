@@ -245,6 +245,13 @@ function sortAccountData(
   updatedCompanyData: Partial<Company>,
   updatedDepartmentData: Partial<Department>
 ] {
+  // const [
+  //   updatedProfileData,
+  //   updateEmployeeData,
+  //   updatedCompanyData,
+  //   updatedDepartmentData,
+  // ] = accountService.sortAccountData(accountData)
+
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
   const employeeSchemaKeys = Object.keys(EmployeeModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)

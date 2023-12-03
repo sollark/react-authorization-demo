@@ -174,12 +174,12 @@ export async function updateEmployee(
   } = data
 
   // check if an employee exists
-  const isExist = await employeeService.isEmployeeExist(
+  const employeeDoc = await employeeService.getEmployeeDoc(
     companyNumber,
     employeeNumber
   )
 
-  if (!isExist) {
+  if (!employeeDoc) {
     const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
     if (!companyDoc) throw new BadRequestError('Cannot find company')
 
@@ -207,14 +207,33 @@ export async function updateEmployee(
     await departmentService.addEmployee(departmentDoc._id, employee._id)
   }
 
-  if (isExist) {
-    // TODO fix this function or updateEmployee function
-    const employee = await employeeService.updateEmployee(employeeNumber, data)
+  if (employeeDoc) {
+    const [
+      updatedProfileData,
+      updateEmployeeData,
+      updatedCompanyData,
+      updatedDepartmentData,
+    ] = accountService.sortAccountData(data)
+
+    const updatedProfile = await profileService.updateProfile(
+      employeeDoc.profile,
+      updatedProfileData
+    )
+
+    const updatedEmployee = await employeeService.updateEmployee(
+      employeeDoc._id,
+      updateEmployeeData
+    )
+
+    const updatedDepartment = await departmentService.updateDepartment(
+      employeeDoc.department,
+      updatedDepartmentData
+    )
   }
 
   res.status(200).json({
     success: true,
-    message: 'A new employee has been added to the company.',
+    message: 'An employee has been updated.',
     data: {},
   })
 }
