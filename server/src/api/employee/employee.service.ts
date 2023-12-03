@@ -214,6 +214,17 @@ async function joinNewCompany(
   return employee
 }
 
+async function changeDepartment(
+  employeeId: Types.ObjectId,
+  departmentId: Types.ObjectId
+) {
+  const employee = await EmployeeModel.findOneAndUpdate(
+    { _id: employeeId },
+    { department: departmentId },
+    { new: true }
+  )
+}
+
 async function setSupervisor(
   employeeNumber: Types.ObjectId,
   supervisorId: Types.ObjectId
@@ -275,6 +286,7 @@ export const employeeService = {
   getCompanyId,
   joinExistingCompany,
   joinNewCompany,
+  changeDepartment,
   setSupervisor,
   addSubordinate,
 }

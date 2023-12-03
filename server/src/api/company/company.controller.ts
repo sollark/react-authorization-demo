@@ -225,10 +225,13 @@ export async function updateEmployee(
       updateEmployeeData
     )
 
-    const updatedDepartment = await departmentService.updateDepartment(
-      employeeDoc.department,
-      updatedDepartmentData
+    const departmentDoc = await companyService.getCompanyDepartmentDocByName(
+      employeeDoc.company,
+      departmentName
     )
+    if (!departmentDoc) throw new BadRequestError('Cannot find department')
+
+    await employeeService.changeDepartment(employeeDoc._id, departmentDoc._id)
   }
 
   res.status(200).json({

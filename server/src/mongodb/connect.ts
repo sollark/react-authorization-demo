@@ -17,7 +17,7 @@ export const connectMongo = async () => {
     throw new Error('Failed to connect to MongoDB')
   }
 
-  // await populate.populateTestData()
+  // await populate.populateTestData()s
 
   // Uncomment this lines to delete the database
   // await deleteDatabase(mongoose.connections[0])
