@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Account, USER_ROLE } from '../../mongodb/models/account.model.js'
-import { Company } from '../../mongodb/models/company.model.js'
-import { Department } from '../../mongodb/models/department.model.js'
-import { Employee } from '../../mongodb/models/employee.model.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import logger from '../../service/logger.service.js'
@@ -38,11 +35,6 @@ export async function updateAccount(
     updatedDepartmentData,
   ] = accountService.sortAccountData(accountData)
 
-  console.log('updateAccount, updatedProfileData: ', updatedProfileData)
-  console.log('updateAccount, updateEmployeeData: ', updateEmployeeData)
-  console.log('updateAccount, updatedCompanyData: ', updatedCompanyData)
-  console.log('updateAccount, updatedDepartmentData: ', updatedDepartmentData)
-
   const accountDoc = await accountService.getAccountDoc(identifier)
   if (!accountDoc) throw new BadRequestError('Cannot find account')
 
@@ -54,9 +46,9 @@ export async function updateAccount(
     throw new BadRequestError('Cannot update profile')
   }
 
-  const { companyName } = updatedCompanyData as Partial<Company>
-  const { departmentName } = updatedDepartmentData as Partial<Department>
-  const { position } = updateEmployeeData as Partial<Employee>
+  const { companyName } = updatedCompanyData
+  const { departmentName } = updatedDepartmentData
+  const { position } = updateEmployeeData
 
   if (!companyName || !departmentName || !position) {
     throw new BadRequestError('Missing account data')

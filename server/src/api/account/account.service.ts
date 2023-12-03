@@ -6,8 +6,10 @@ import AccountModel, {
   Role,
   Status,
 } from '../../mongodb/models/account.model.js'
-import CompanyModel from '../../mongodb/models/company.model.js'
-import DepartmentModel from '../../mongodb/models/department.model.js'
+import CompanyModel, { Company } from '../../mongodb/models/company.model.js'
+import DepartmentModel, {
+  Department,
+} from '../../mongodb/models/department.model.js'
 import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import logger from '../../service/logger.service.js'
@@ -238,10 +240,10 @@ async function completeAccount(
 function sortAccountData(
   accountData: any
 ): [
-  updatedProfileData: Object,
-  updateEmployeeData: Object,
-  updatedCompanyData: Object,
-  updatedDepartmentData: Object
+  updatedProfileData: Partial<Profile>,
+  updateEmployeeData: Partial<Employee>,
+  updatedCompanyData: Partial<Company>,
+  updatedDepartmentData: Partial<Department>
 ] {
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
   const employeeSchemaKeys = Object.keys(EmployeeModel.schema.paths)
@@ -274,11 +276,16 @@ function sortAccountData(
     }
   )
 
+  console.log('sortAccountData, updatedProfileData: ', updatedProfileData)
+  console.log('sortAccountData, updateEmployeeData: ', updateEmployeeData)
+  console.log('sortAccountData, updatedCompanyData: ', updatedCompanyData)
+  console.log('sortAccountData, updatedDepartmentData: ', updatedDepartmentData)
+
   return [
-    updatedProfileData,
-    updateEmployeeData,
-    updatedCompanyData,
-    updatedDepartmentData,
+    updatedProfileData as Partial<Profile>,
+    updateEmployeeData as Partial<Employee>,
+    updatedCompanyData as Partial<Company>,
+    updatedDepartmentData as Partial<Department>,
   ]
 }
 
