@@ -16,8 +16,8 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.2",
     "@mui/x-data-grid": "^6.13.0",
-    "@tanstack/react-query": "^5.0.0",
-    "@tanstack/react-router": "^0.0.1-beta.191",
+    "@tanstack/react-query": "^5.12.2",
+    "@tanstack/react-router": "^0.0.1-beta.225",
     "@tanstack/react-table": "^8.9.8",
     "axios": "^1.4.0",
     "immer": "^9.0.21",
@@ -32,8 +32,8 @@
     "zustand": "^4.3.7"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^4.28.0",
-    "@tanstack/router-devtools": "^0.0.1-beta.84",
+    "@tanstack/react-query-devtools": "^5.12.2",
+    "@tanstack/router-devtools": "^0.0.1-beta.225",
     "@types/axios": "^0.14.0",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.15.11",
