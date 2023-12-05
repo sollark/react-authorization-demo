@@ -156,22 +156,7 @@ const Table: FC<TableProps> = (props: TableProps) => {
   }
 
   const handleSaveClick = (id: GridRowId) => async () => {
-    // return if updateRow is not defined ( table is not editable)
-    if (!updateRow) return
-
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-
-    const editedRow = rows.filter((row) => row.id === id)
-    const isSuccess = await updateRow(editedRow)
-
-    if (!isSuccess) {
-      const originalRow = rowsPendingUpdates.find((row) => row.id === id)
-      setRows(
-        rows.map((row) => (row.id === id && originalRow ? originalRow : row))
-      )
-    }
-
-    setRowsPendingUpdates((prev) => prev.filter((row) => row.id !== id))
   }
 
   const handleDeleteClick = (id: GridRowId) => () => {
@@ -195,9 +180,27 @@ const Table: FC<TableProps> = (props: TableProps) => {
     }
   }
 
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (
+    newRow: GridRowModel,
+    oldRow: GridRowModel
+  ) => {
+    // return if updateRow is not defined ( table is not editable)
+    if (!updateRow) return
+
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
+
+    const isSuccess = await updateRow(newRow)
+
+    if (!isSuccess && oldRow.isNew) {
+      setRows(rows.filter((row) => row.id !== oldRow.id))
+      return
+    }
+
+    if (!isSuccess && !oldRow.isNew) {
+      setRows(rows.map((row) => (row.id === oldRow.id ? oldRow : row)))
+      return oldRow
+    }
 
     return updatedRow
   }

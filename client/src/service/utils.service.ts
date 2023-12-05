@@ -18,6 +18,6 @@ export function isOfType<T>(obj: any, type: { new (): T }): obj is T {
 }
 
 export function adaptTableRowToObject<T>(row: GridRowModel): T {
-  const { isNew, id, ...rest } = row[0]
+  const { isNew, id, ...rest } = row
   return rest as T
 }

@@ -49,14 +49,6 @@ const employeeColumns: GridColDef[] = [
 
 function updateCompanyEmployee(companyNumber: string) {
   return async (row: GridRowModel): Promise<boolean> => {
-    console.log(
-      `updateEmployee - row: ${JSON.stringify(
-        row,
-        null,
-        2 // Indentation level, adjust as needed
-      )}`
-    )
-
     const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
     const {
       firstName,
@@ -67,7 +59,7 @@ function updateCompanyEmployee(companyNumber: string) {
       position,
     } = rowData
 
-    const res = await employeeService.updateCompanyEmployee(
+    const response = await employeeService.updateCompanyEmployee(
       companyNumber,
       firstName,
       lastName,
@@ -77,6 +69,7 @@ function updateCompanyEmployee(companyNumber: string) {
       position
     )
 
+    // TODO return false if error in response
     return true
   }
 }

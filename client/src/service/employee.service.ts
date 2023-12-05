@@ -24,7 +24,7 @@ async function updateEmployee(
     position,
   })
 
-  console.log('accountService - update, response data', response)
+  console.log('accountService- updateEmployee, response data', response)
 
   const { account } = response as any
   if (account) storeService.saveAccount(account)
@@ -42,7 +42,7 @@ async function updateCompanyEmployee(
   position: string
 ) {
   console.log(
-    'EmployeeService- updateCompanyEmployee',
+    'employeeService- updateCompanyEmployee',
     companyNumber,
     firstName,
     lastName,
