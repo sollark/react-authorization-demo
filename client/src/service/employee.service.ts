@@ -3,6 +3,7 @@ import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
+import { ApiResponse } from '@/models/response/ApiResponse'
 import { HttpResponse, httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
@@ -65,7 +66,7 @@ async function updateCompanyEmployee(
     position,
   })
 
-  console.log('accountService - update, response data', response)
+  console.log('accountService- updateCompanyEmployee, response data:', response)
 
   const { account } = response as any
   if (account) storeService.saveAccount(account)
@@ -73,21 +74,21 @@ async function updateCompanyEmployee(
   return account ? account : null
 }
 
-async function joinCompany(companyNumber: string, employeeNumber: string) {
-  const response = await httpService.post<
+async function deleteCompanyEmployee(
+  companyNumber: string,
+  employeeNumber: string
+) {
+  const response = await httpService.delete<
     Partial<Company> & Partial<Employee>,
-    Account
-  >('account/join', {
+    ApiResponse
+  >('company/deleteEmployee', {
     companyNumber,
     employeeNumber,
   })
 
-  console.log('accountService - joinCompany, response data', response)
+  console.log('accountService- deleteCompanyEmployee, response data', response)
 
-  const { account } = response as any
-  if (account) storeService.saveAccount(account)
-
-  return account ? account : null
+  return true
 }
 
 // TODO this function is meant to be used by the admin to get all employees in database
@@ -117,6 +118,7 @@ async function getCompany(): Promise<Company | null> {
 export const employeeService = {
   updateEmployee,
   updateCompanyEmployee,
+  deleteCompanyEmployee,
   getCompany,
   getAllEmployees,
 }

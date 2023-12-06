@@ -26,7 +26,7 @@ type TableProps = {
   tableColumns: GridColDef[]
   defaultValues: GridRowModel
   updateRow?: (row: GridRowModel) => Promise<boolean>
-  deleteRow?: (id: GridRowId) => void
+  deleteRow?: (row: GridRowModel) => Promise<boolean>
   editable?: boolean
 }
 
@@ -37,13 +37,12 @@ type EditToolbarProps = {
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void
   defaultValues: GridRowModel
-  updateRow: (row: GridRowModel) => void
-  deleteRow: (id: GridRowId) => void
+  // updateRow: (row: GridRowModel) => void
+  // deleteRow: (row: GridRowModel) => void
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, defaultValues, updateRow, deleteRow } =
-    props
+  const { setRows, setRowModesModel, defaultValues } = props
 
   const handleClick = () => {
     const id = nanoid()
@@ -159,13 +158,14 @@ const Table: FC<TableProps> = (props: TableProps) => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
   }
 
-  const handleDeleteClick = (id: GridRowId) => () => {
+  // TODO handle delete row
+  const handleDeleteClick = (id: GridRowId) => async () => {
     // return if deleteRow is not defined ( table is not editable)
     if (!deleteRow) return
 
     setRows(rows.filter((row) => row.id !== id))
 
-    deleteRow(id)
+    await deleteRow(rows.find((row) => row.id === id)!)
   }
 
   const handleCancelClick = (id: GridRowId) => () => {

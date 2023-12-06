@@ -4,7 +4,6 @@ import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import {
   GridColDef,
-  GridRowId,
   GridRowModel,
   GridValueOptionsParams,
 } from '@mui/x-data-grid'
@@ -74,8 +73,19 @@ function updateCompanyEmployee(companyNumber: string) {
   }
 }
 
-function deleteEmployee(id: GridRowId) {
-  console.log('deleteEmployee', id)
+function deleteCompanyEmployee(companyNumber: string) {
+  return async (row: GridRowModel): Promise<boolean> => {
+    const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
+    const { employeeNumber } = rowData
+
+    const response = await employeeService.deleteCompanyEmployee(
+      companyNumber,
+      employeeNumber
+    )
+
+    // TODO return false if error in response
+    return true
+  }
 }
 
 const EditableEmployeeTable: FC = () => {
@@ -121,6 +131,7 @@ const EditableEmployeeTable: FC = () => {
   console.log('employeeData from api', employeeData)
 
   const updateEmployee = updateCompanyEmployee(companyNumber)
+  const deleteEmployee = deleteCompanyEmployee(companyNumber)
 
   return (
     <div>
