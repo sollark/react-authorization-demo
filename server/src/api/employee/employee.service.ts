@@ -9,6 +9,7 @@ import EmployeeModel, {
   EmployeeDoc,
 } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
+import { departmentService } from '../../service/department.service.js'
 import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
 import { companyService } from '../company/company.service.js'
@@ -60,13 +61,37 @@ async function createEmployee(
   return employee
 }
 
+async function deleteEmployee(employeeId: Types.ObjectId) {
+  console.log('employeeService- deleteEmployee, employeeId', employeeId)
+
+  const employeeDoc = await EmployeeModel.findById(employeeId)
+  if (!employeeDoc) throw new BadRequestError('Employee is not found')
+
+  // remove employee from company
+  const company = await companyService.getCompanyDoc(employeeDoc.company)
+
+  if (!company) throw new BadRequestError('Company is not found')
+  await await companyService.removeEmployee(company._id, employeeId)
+
+  // remove employee from department
+  const department = await DepartmentModel.findById(employeeDoc.department)
+  if (!department) throw new BadRequestError('Department is not found')
+  await departmentService.removeEmployee(department._id, employeeId)
+
+  // delete employee(error here)
+  await EmployeeModel.findByIdAndDelete(employeeId)
+
+  logger.info(`employeeService - employee deleted ${employeeId}`)
+}
+
 async function updateEmployee(
-  employeeNumber: Types.ObjectId,
+  employeeId: Types.ObjectId,
   updatedEmployeeData: Partial<Employee>
 ): Promise<Employee | null> {
   const employee = await EmployeeModel.findOneAndUpdate(
-    { employee: employeeNumber },
+    { employee: employeeId },
     updatedEmployeeData,
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -94,6 +119,16 @@ async function getEmployeeDoc(
     company: companyDoc._id,
     employeeNumber,
   })
+    .lean()
+    .exec()
+
+  logger.info(
+    `employeeService- getEmployeeDoc, employeeDoc: ${JSON.stringify(
+      employeeDoc,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   return employeeDoc
 }
@@ -178,6 +213,7 @@ async function joinExistingCompany(
   await ProfileModel.findOneAndUpdate(
     { _id: employee.profile },
     { identifier },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
@@ -221,6 +257,7 @@ async function changeDepartment(
   const employee = await EmployeeModel.findOneAndUpdate(
     { _id: employeeId },
     { department: departmentId },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
 }
@@ -232,6 +269,7 @@ async function setSupervisor(
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeNumber },
     { supervisor: supervisorId },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -245,6 +283,7 @@ async function setSupervisor(
   const supervisorEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: supervisorId },
     { $push: { subordinates: employeeNumber } },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
@@ -258,6 +297,7 @@ async function addSubordinate(
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeNumber },
     { $push: { subordinates: subordinateId } },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -271,6 +311,7 @@ async function addSubordinate(
   const subordinateEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: subordinateId },
     { supervisor: employeeNumber },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
@@ -279,6 +320,7 @@ async function addSubordinate(
 
 export const employeeService = {
   createEmployee,
+  deleteEmployee,
   updateEmployee,
   getEmployeeDoc,
   getBasicEmployeeData,

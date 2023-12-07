@@ -97,7 +97,8 @@ async function ajax<T, R>(
       url: `${API_URL}${endpoint}`,
       method,
       data,
-      params: method === 'GET' ? data : null,
+      // params: method === 'GET' ? data : null,
+      params: data,
     })
 
     return res.data

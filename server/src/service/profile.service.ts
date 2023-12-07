@@ -52,6 +52,7 @@ async function updateProfile(
   const profile = await ProfileModel.findByIdAndUpdate(
     profileId,
     updatedProfileData,
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 

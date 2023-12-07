@@ -40,6 +40,7 @@ async function updateDepartment(
   const department = await DepartmentModel.findByIdAndUpdate(
     departmentId,
     updatedDepartmentData,
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Types.ObjectId }>('company')
@@ -72,6 +73,7 @@ async function addEmployee(
     {
       $push: { employees: employeeId },
     },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ employees: Employee[] }>('employees')
@@ -94,6 +96,20 @@ async function addEmployee(
   return department
 }
 
+async function removeEmployee(
+  departmentId: Types.ObjectId,
+  employeeId: Types.ObjectId
+) {
+  const department = await DepartmentModel.findByIdAndUpdate(
+    departmentId,
+    {
+      $pull: { employees: employeeId },
+    },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
+}
+
 async function getDepartmentDBId(
   departmentName: string
 ): Promise<Types.ObjectId> {
@@ -112,5 +128,6 @@ export const departmentService = {
   createDepartment,
   updateDepartment,
   addEmployee,
+  removeEmployee,
   getDepartmentDBId,
 }

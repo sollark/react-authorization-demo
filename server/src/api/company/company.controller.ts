@@ -66,6 +66,7 @@ export async function getBasicCompanyData(
     const { departmentName } = department
     return { departmentName }
   })
+
   const basicEmployeesData = employees.map((employee) => {
     const { department, employeeNumber, position, profile } = employee
     const { firstName, lastName } = profile
@@ -240,3 +241,43 @@ export async function updateEmployee(
     data: {},
   })
 }
+
+export async function deleteEmployee(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  // TODO check permissions
+  const identifier = getIdentifierFromALS()
+
+  const data = req.body
+  const { companyNumber, employeeNumber } = data
+
+  const employeeDoc = await employeeService.getEmployeeDoc(
+    companyNumber,
+    employeeNumber
+  )
+  if (!employeeDoc) throw new BadRequestError('Cannot find employee')
+
+  console.log('employeeDoc', employeeDoc._id)
+
+  const accountDoc = await accountService.getEmployeeAccountDoc(employeeDoc._id)
+  if (accountDoc) await accountService.disconnectEmployee(accountDoc._id)
+  if (!accountDoc) await profileService.deleteProfile(employeeDoc.profile)
+
+  await employeeService.deleteEmployee(employeeDoc._id)
+
+  res.status(200).json({
+    success: true,
+    message: 'An employee has been deleted.',
+    data: {},
+  })
+}
+
+// console.log(
+//   `companyController- getBasicCompanyData, company: ${JSON.stringify(
+//     company,
+//     null,
+//     2 // Indentation level, adjust as needed
+//   )}`
+// )

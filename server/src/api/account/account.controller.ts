@@ -77,7 +77,7 @@ export async function updateAccount(
   if (!company) throw new BadRequestError('Cannot add an employee to company')
 
   department = await departmentService.addEmployee(department._id, employee._id)
-  await accountService.setEmployee(accountDoc._id, employee._id)
+  await accountService.connectEmployee(accountDoc._id, employee._id)
 
   // when joining new company, set role to manager
   await accountService.setRole(identifier, USER_ROLE.manager)
@@ -115,7 +115,7 @@ export async function joinCompany(
 
   const profileId = employeeDoc.profile
   await accountService.setProfile(accountId, profileId)
-  await accountService.setEmployee(accountId, employeeDoc._id)
+  await accountService.connectEmployee(accountId, employeeDoc._id)
   await accountService.setRole(accountId, USER_ROLE.user)
 
   // get updated account
