@@ -12,10 +12,10 @@ function generateTokens(data: string): {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  console.log('generateTokens, data', data)
+  // console.log('generateTokens, data', data)
 
   const accessToken = jwt.sign({ data }, accessSecret, {
-    expiresIn: '1m',
+    expiresIn: '1d',
   })
   const refreshToken = jwt.sign({ data }, refreshSecret, {
     expiresIn: '10d',
@@ -41,7 +41,6 @@ async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
 
 async function removeToken(refreshToken: string) {
   const result = await TokenModel.deleteOne({ refreshToken })
-  console.log('removeToken result', result)
 
   return result
 }
@@ -64,14 +63,11 @@ async function validateAccessToken(token: string) {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
-    console.log('validateAccessToken token', token)
     const payload = jwt.verify(token, accessSecret)
-    console.log('validateAccessToken payload', payload)
 
     return payload as jwt.JwtPayload
   } catch (error) {
     console.log('validateAccessToken error', error)
-
     return null
   }
 }
