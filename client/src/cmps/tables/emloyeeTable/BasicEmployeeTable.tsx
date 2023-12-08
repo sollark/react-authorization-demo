@@ -9,11 +9,6 @@ import Table from '../Table'
  * BasicEmployeeTable is not editable
  */
 
-// type EmployeeTableProps = {
-//   employees: Employee[] | null
-//   departmentOptions: string[]
-// }
-
 type EmployeeTableColumns = {
   firstName: string
   lastName: string
@@ -70,9 +65,7 @@ const BasicEmployeeTable: FC = () => {
     <div>
       <h2>Employee Table</h2>
       <Table
-        dataRows={employeeData as any}
-        defaultValues={employeeDefaultValues}
-        tableColumns={employeeColumns}
+        basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
       />
     </div>
   )

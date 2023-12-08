@@ -259,8 +259,6 @@ export async function deleteEmployee(
   )
   if (!employeeDoc) throw new BadRequestError('Cannot find employee')
 
-  console.log('employeeDoc', employeeDoc._id)
-
   const accountDoc = await accountService.getEmployeeAccountDoc(employeeDoc._id)
   if (accountDoc) await accountService.disconnectEmployee(accountDoc._id)
   if (!accountDoc) await profileService.deleteProfile(employeeDoc.profile)

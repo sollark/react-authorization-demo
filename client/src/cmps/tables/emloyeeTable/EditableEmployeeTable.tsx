@@ -137,11 +137,17 @@ const EditableEmployeeTable: FC = () => {
     <div>
       <h2>Employee Table</h2>
       <Table
-        dataRows={employeeData as any}
-        defaultValues={employeeDefaultValues}
-        tableColumns={employeeColumns}
-        updateRow={updateEmployee}
-        deleteRow={deleteEmployee}
+        // dataRows={employeeData as any}
+        // defaultValues={employeeDefaultValues}
+        // tableColumns={employeeColumns}
+        // updateRow={updateEmployee}
+        // deleteRow={deleteEmployee}
+        basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
+        specialProps={{
+          defaultValues: employeeDefaultValues,
+          updateRow: updateEmployee,
+          deleteRow: deleteEmployee,
+        }}
         editable
       />
     </div>
