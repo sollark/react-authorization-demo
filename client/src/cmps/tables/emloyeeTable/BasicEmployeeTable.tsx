@@ -9,20 +9,6 @@ import Table from '../Table'
  * BasicEmployeeTable is not editable
  */
 
-type EmployeeTableColumns = {
-  firstName: string
-  lastName: string
-  departmentName: string
-  position: string
-}
-
-const employeeDefaultValues: EmployeeTableColumns = {
-  firstName: '',
-  lastName: '',
-  departmentName: '',
-  position: '',
-}
-
 const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name' },
   { field: 'lastName', headerName: 'Last name' },

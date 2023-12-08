@@ -89,8 +89,6 @@ function deleteCompanyEmployee(companyNumber: string) {
 }
 
 const EditableEmployeeTable: FC = () => {
-  // const { employees, departmentOptions } = props
-
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
     queryFn: companyService.getAdvancedCompanyData,
@@ -137,11 +135,6 @@ const EditableEmployeeTable: FC = () => {
     <div>
       <h2>Employee Table</h2>
       <Table
-        // dataRows={employeeData as any}
-        // defaultValues={employeeDefaultValues}
-        // tableColumns={employeeColumns}
-        // updateRow={updateEmployee}
-        // deleteRow={deleteEmployee}
         basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
         specialProps={{
           defaultValues: employeeDefaultValues,

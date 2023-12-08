@@ -87,7 +87,6 @@ const EditableTable = (props: BasicTableProps & EditableTableProps) => {
 
   const data = generateKeys(dataRows)
   const columns = [...tableColumns, ...actionColumn]
-
   const [rows, setRows] = useState(data)
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [rowsPendingUpdates, setRowsPendingUpdates] = useState<GridRowModel[]>(
