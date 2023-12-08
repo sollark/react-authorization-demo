@@ -23,11 +23,7 @@ async function createDepartment(
     .exec()
 
   logger.info(
-    `departmentService - department added:  ${JSON.stringify(
-      department,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `departmentService- createDepartment, department:  ${department?.departmentName}`
   )
 
   return department
@@ -49,16 +45,14 @@ async function updateDepartment(
     .exec()
 
   if (!department) {
-    logger.warn(`departmentService - department is not found: ${departmentId}`)
+    logger.warn(
+      `departmentService- updateDepartment, failed to update department: ${departmentId}`
+    )
     throw new BadRequestError('Department is not found')
   }
 
   logger.info(
-    `departmentService - department updated:  ${JSON.stringify(
-      department,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `departmentService- updateDepartment, departmentId: ${department.departmentName}`
   )
 
   return department
@@ -81,16 +75,14 @@ async function addEmployee(
     .exec()
 
   if (!department) {
-    logger.warn(`departmentService - department is not found: ${departmentId}`)
+    logger.warn(
+      `departmentService- addEmployee, department is not found: ${departmentId}`
+    )
     throw new BadRequestError('Department is not found')
   }
 
   logger.info(
-    `departmentService - employee added to department:  ${JSON.stringify(
-      department,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `departmentService- addEmployee, department :  ${department.departmentName}`
   )
 
   return department
@@ -116,7 +108,7 @@ async function getDepartmentDBId(
   const department = await DepartmentModel.findOne({ departmentName })
   if (!department) {
     logger.warn(
-      `departmentService - department is not found: ${departmentName}`
+      `departmentService- getDepartmentDBId, department is not found: ${departmentName}`
     )
     throw new BadRequestError('Department is not found')
   }
@@ -131,3 +123,11 @@ export const departmentService = {
   removeEmployee,
   getDepartmentDBId,
 }
+
+// logger.info(
+//   `departmentService - department added:  ${JSON.stringify(
+//     department,
+//     null,
+//     2 // Indentation level, adjust as needed
+//   )}`
+// )
