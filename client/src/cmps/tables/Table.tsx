@@ -16,69 +16,25 @@ import {
   GridRowModesModel,
   GridRowsProp,
   GridToolbarContainer,
+  GridValidRowModel,
 } from '@mui/x-data-grid'
 import { nanoid } from 'nanoid'
 import { FC, useState } from 'react'
 import SecondaryButton from '../button/SecondaryButton'
 
-type TableProps = {
-  dataRows: GridRowsProp
+type BasicTableProps = {
+  dataRows: readonly GridValidRowModel[]
   tableColumns: GridColDef[]
-  defaultValues: GridRowModel
+}
+
+type EditableTableProps = {
+  defaultValues?: GridRowModel
   updateRow?: (row: GridRowModel) => Promise<boolean>
-  deleteRow?: (id: GridRowId) => void
-  editable?: boolean
+  deleteRow?: (row: GridRowModel) => Promise<boolean>
 }
 
-// tool bar
-type EditToolbarProps = {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void
-  defaultValues: GridRowModel
-  updateRow: (row: GridRowModel) => void
-  deleteRow: (id: GridRowId) => void
-}
-
-function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, defaultValues, updateRow, deleteRow } =
-    props
-
-  const handleClick = () => {
-    const id = nanoid()
-
-    setRows((oldRows) => [{ id, ...defaultValues, isNew: true }, ...oldRows])
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit },
-    }))
-  }
-
-  return (
-    <GridToolbarContainer>
-      <SecondaryButton
-        color='primary'
-        startIcon={<AddCircleOutlineOutlinedIcon />}
-        onClick={handleClick}>
-        Add record
-      </SecondaryButton>
-    </GridToolbarContainer>
-  )
-}
-
-// TODO remove actionColumn if table is not editable
-const Table: FC<TableProps> = (props: TableProps) => {
-  console.log('Table connected')
-
-  const {
-    dataRows,
-    defaultValues,
-    tableColumns,
-    updateRow,
-    deleteRow,
-    editable,
-  } = props
+const EditableTable = (props: BasicTableProps & EditableTableProps) => {
+  const { dataRows, defaultValues, tableColumns, updateRow, deleteRow } = props
 
   const actionColumn: GridColDef[] = [
     {
@@ -130,8 +86,7 @@ const Table: FC<TableProps> = (props: TableProps) => {
   ]
 
   const data = generateKeys(dataRows)
-  const columns = editable ? [...tableColumns, ...actionColumn] : tableColumns
-
+  const columns = [...tableColumns, ...actionColumn]
   const [rows, setRows] = useState(data)
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [rowsPendingUpdates, setRowsPendingUpdates] = useState<GridRowModel[]>(
@@ -156,31 +111,16 @@ const Table: FC<TableProps> = (props: TableProps) => {
   }
 
   const handleSaveClick = (id: GridRowId) => async () => {
-    // return if updateRow is not defined ( table is not editable)
-    if (!updateRow) return
-
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-
-    const editedRow = rows.filter((row) => row.id === id)
-    const isSuccess = await updateRow(editedRow)
-
-    if (!isSuccess) {
-      const originalRow = rowsPendingUpdates.find((row) => row.id === id)
-      setRows(
-        rows.map((row) => (row.id === id && originalRow ? originalRow : row))
-      )
-    }
-
-    setRowsPendingUpdates((prev) => prev.filter((row) => row.id !== id))
   }
 
-  const handleDeleteClick = (id: GridRowId) => () => {
+  const handleDeleteClick = (id: GridRowId) => async () => {
     // return if deleteRow is not defined ( table is not editable)
     if (!deleteRow) return
 
     setRows(rows.filter((row) => row.id !== id))
 
-    deleteRow(id)
+    await deleteRow(rows.find((row) => row.id === id)!)
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -195,9 +135,27 @@ const Table: FC<TableProps> = (props: TableProps) => {
     }
   }
 
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (
+    newRow: GridRowModel,
+    oldRow: GridRowModel
+  ) => {
+    // return if updateRow is not defined ( table is not editable)
+    if (!updateRow) return
+
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
+
+    const isSuccess = await updateRow(newRow)
+
+    if (!isSuccess && oldRow.isNew) {
+      setRows(rows.filter((row) => row.id !== oldRow.id))
+      return
+    }
+
+    if (!isSuccess && !oldRow.isNew) {
+      setRows(rows.map((row) => (row.id === oldRow.id ? oldRow : row)))
+      return oldRow
+    }
 
     return updatedRow
   }
@@ -205,22 +163,86 @@ const Table: FC<TableProps> = (props: TableProps) => {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel)
   }
+
+  return (
+    <DataGrid
+      columns={columns}
+      rows={rows}
+      editMode='row'
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      slots={{
+        toolbar: EditToolbar,
+      }}
+      slotProps={{
+        toolbar: { setRows, setRowModesModel, defaultValues },
+      }}></DataGrid>
+  )
+}
+
+const NotEditableTable = (props: BasicTableProps) => {
+  const { dataRows, tableColumns } = props
+  const data = generateKeys(dataRows)
+  const columns = tableColumns
+  const [rows, setRows] = useState(data)
+
+  return <DataGrid columns={columns} rows={rows}></DataGrid>
+}
+
+// tool bar props(add record button)
+type EditToolbarProps = {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
+  setRowModesModel: (
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void
+  defaultValues: GridRowModel
+}
+// tool bar (add record button)
+function EditToolbar(props: EditToolbarProps) {
+  const { setRows, setRowModesModel, defaultValues } = props
+
+  const handleClick = () => {
+    const id = nanoid()
+
+    setRows((oldRows) => [{ id, ...defaultValues, isNew: true }, ...oldRows])
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit },
+    }))
+  }
+
+  return (
+    <GridToolbarContainer>
+      <SecondaryButton
+        color='primary'
+        startIcon={<AddCircleOutlineOutlinedIcon />}
+        onClick={handleClick}>
+        Add record
+      </SecondaryButton>
+    </GridToolbarContainer>
+  )
+}
+
+type TableProps = {
+  editable?: boolean
+  basicProps: BasicTableProps
+  specialProps?: EditableTableProps
+}
+
+const Table: FC<TableProps> = ({
+  editable,
+  basicProps,
+  specialProps,
+}: TableProps) => {
+  console.log('Table connected')
+
+  const TableComponent = editable ? EditableTable : NotEditableTable
+
   return (
     <Box>
-      <DataGrid
-        columns={columns}
-        rows={rows}
-        editMode='row'
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel, defaultValues },
-        }}></DataGrid>
+      <TableComponent {...basicProps} {...(editable ? specialProps : {})} />
     </Box>
   )
 }

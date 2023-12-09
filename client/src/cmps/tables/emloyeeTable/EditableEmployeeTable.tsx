@@ -1,24 +1,15 @@
-import { Employee } from '@/models/Employee'
+import { Department } from '@/models/Department'
+import { companyService } from '@/service/company.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import {
   GridColDef,
-  GridRowId,
   GridRowModel,
   GridValueOptionsParams,
 } from '@mui/x-data-grid'
+import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from '../Table'
-
-/*
- * EditableEmployeeTable has full info about employees
- * EditableEmployeeTable is editable
- */
-
-type EmployeeTableProps = {
-  employees: Employee[] | null
-  departmentOptions: string[]
-}
 
 type EmployeeTableColumns = {
   firstName: string
@@ -41,46 +32,92 @@ const employeeDefaultValues: EmployeeTableColumns = {
 let departments: (params: GridValueOptionsParams<any>) => string[]
 
 const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name', editable: true },
-  { field: 'lastName', headerName: 'Last name', editable: true },
-  { field: 'ID', headerName: 'ID', editable: true },
+  { field: 'firstName', headerName: 'First name', editable: true, flex: 1 },
+  { field: 'lastName', headerName: 'Last name', editable: true, flex: 1 },
+  { field: 'ID', headerName: 'ID', editable: true, flex: 1 },
   {
     field: 'departmentName',
     headerName: 'Department',
     editable: true,
+    flex: 1,
     type: 'singleSelect',
     valueOptions: (params) => departments(params),
   },
-  { field: 'employeeNumber', headerName: 'Employee number', editable: false },
-  { field: 'position', headerName: 'Position', editable: true },
+  {
+    field: 'employeeNumber',
+    headerName: 'Employee number',
+    editable: false,
+    flex: 1,
+  },
+  { field: 'position', headerName: 'Position', editable: true, flex: 1 },
 ]
 
-async function updateEmployee(row: GridRowModel): Promise<boolean> {
-  console.log('updateEmployee', row)
+function updateCompanyEmployee(companyNumber: string) {
+  return async (row: GridRowModel): Promise<boolean> => {
+    const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
+    const {
+      firstName,
+      lastName,
+      ID,
+      departmentName,
+      employeeNumber,
+      position,
+    } = rowData
 
-  const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
-  console.log('employee row', rowData)
-  const { firstName, lastName, ID, departmentName, position } = rowData
+    const response = await employeeService.updateCompanyEmployee(
+      companyNumber,
+      firstName,
+      lastName,
+      ID,
+      departmentName,
+      employeeNumber,
+      position
+    )
 
-  // TODO function updates user account , not chosen employee
-  const res = await employeeService.updateEmployee(
-    firstName,
-    lastName,
-    ID,
-    departmentName,
-    position
-  )
-
-  return true
+    // TODO return false if error in response
+    return true
+  }
 }
 
-function deleteEmployee(id: GridRowId) {
-  console.log('deleteEmployee', id)
+function deleteCompanyEmployee(companyNumber: string) {
+  return async (row: GridRowModel): Promise<boolean> => {
+    const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
+    const { employeeNumber } = rowData
+
+    const response = await employeeService.deleteCompanyEmployee(
+      companyNumber,
+      employeeNumber
+    )
+
+    // TODO return false if error in response
+    return true
+  }
 }
 
-const EditableEmployeeTable: FC<EmployeeTableProps> = (props) => {
-  const { employees, departmentOptions } = props
-  console.log('prop from api', props)
+const EditableEmployeeTable: FC = () => {
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['company'],
+    queryFn: companyService.getAdvancedCompanyData,
+  })
+
+  if (isPending) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
+  if (!data) {
+    return <span>Empty data</span>
+  }
+
+  const { companyNumber, employees } = data
+
+  const departmentOptions =
+    data.departments.map(
+      (department: Department) => department.departmentName
+    ) || []
 
   departments = setOptions(departmentOptions)
 
@@ -97,15 +134,19 @@ const EditableEmployeeTable: FC<EmployeeTableProps> = (props) => {
 
   console.log('employeeData from api', employeeData)
 
+  const updateEmployee = updateCompanyEmployee(companyNumber)
+  const deleteEmployee = deleteCompanyEmployee(companyNumber)
+
   return (
     <div>
       <h2>Employee Table</h2>
       <Table
-        dataRows={employeeData as any}
-        defaultValues={employeeDefaultValues}
-        tableColumns={employeeColumns}
-        updateRow={updateEmployee}
-        deleteRow={deleteEmployee}
+        basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
+        specialProps={{
+          defaultValues: employeeDefaultValues,
+          updateRow: updateEmployee,
+          deleteRow: deleteEmployee,
+        }}
         editable
       />
     </div>

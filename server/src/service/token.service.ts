@@ -5,19 +5,19 @@ import TokenModel, { RefreshToken } from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
-function generateTokens(payload: string): {
+function generateTokens(data: string): {
   accessToken: string
   refreshToken: string
 } {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  console.log('generateTokens, payload', payload)
+  // console.log('generateTokens, data', data)
 
-  const accessToken = jwt.sign({ payload }, accessSecret, {
-    expiresIn: '1h',
+  const accessToken = jwt.sign({ data }, accessSecret, {
+    expiresIn: '1d',
   })
-  const refreshToken = jwt.sign({ payload }, refreshSecret, {
+  const refreshToken = jwt.sign({ data }, refreshSecret, {
     expiresIn: '10d',
   })
 
@@ -41,7 +41,6 @@ async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
 
 async function removeToken(refreshToken: string) {
   const result = await TokenModel.deleteOne({ refreshToken })
-  console.log('removeToken result', result)
 
   return result
 }
@@ -64,14 +63,11 @@ async function validateAccessToken(token: string) {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
 
   try {
-    console.log('validateAccessToken token', token)
-    const userData = jwt.verify(token, accessSecret)
-    console.log('validateAccessToken userData', userData)
+    const payload = jwt.verify(token, accessSecret)
 
-    return userData
+    return payload as jwt.JwtPayload
   } catch (error) {
     console.log('validateAccessToken error', error)
-
     return null
   }
 }
@@ -81,7 +77,7 @@ async function validateRefreshToken(token: string) {
 
   try {
     const payload = jwt.verify(token, refreshSecret)
-    return payload
+    return payload as jwt.JwtPayload
   } catch (error) {
     console.log('validateRefreshToken error', error)
     return null

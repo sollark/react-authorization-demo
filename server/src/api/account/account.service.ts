@@ -6,8 +6,10 @@ import AccountModel, {
   Role,
   Status,
 } from '../../mongodb/models/account.model.js'
-import CompanyModel from '../../mongodb/models/company.model.js'
-import DepartmentModel from '../../mongodb/models/department.model.js'
+import CompanyModel, { Company } from '../../mongodb/models/company.model.js'
+import DepartmentModel, {
+  Department,
+} from '../../mongodb/models/department.model.js'
 import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
 import logger from '../../service/logger.service.js'
@@ -54,6 +56,7 @@ async function setRole(accountId: Types.ObjectId, role: Role) {
   const account = await AccountModel.findByIdAndUpdate(
     accountId,
     { role },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 }
@@ -113,6 +116,23 @@ async function getAccountDoc(
   return account
 }
 
+async function getEmployeeAccountDoc(
+  employeeId: Types.ObjectId
+): Promise<(AccountDoc & { _id: Types.ObjectId }) | null> {
+  const accountDoc = await AccountModel.findOne({ employee: employeeId })
+    .lean()
+    .exec()
+
+  // logger.info(
+  //   `accountService- getEmployeeAccountDoc, account fetched: ${JSON.stringify(
+  //     accountDoc,
+  //     null,
+  //     2 // Indentation level, adjust as needed
+  //   )}`
+  // )
+  return accountDoc
+}
+
 async function deleteAccount(identifier: Types.ObjectId) {
   await AccountModel.findOneAndDelete({ identifier })
 }
@@ -121,7 +141,7 @@ async function setProfile(
   accountId: Types.ObjectId,
   profileId: Types.ObjectId
 ) {
-  const accountDoc = await AccountModel.findById(accountId).exec()
+  const accountDoc = await AccountModel.findById(accountId)
   if (!accountDoc) throw new BadRequestError('Account is not found')
 
   const oldProfileId = accountDoc.profile
@@ -130,6 +150,7 @@ async function setProfile(
   const account = await AccountModel.findByIdAndUpdate(
     accountId,
     { profile: profileId },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .lean()
@@ -145,7 +166,7 @@ async function setProfile(
   logger.info(`accountService - setProfile, profileId: ${profileId}`)
 }
 
-async function setEmployee(
+async function connectEmployee(
   accountId: Types.ObjectId,
   employeeId: Types.ObjectId
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
@@ -162,6 +183,7 @@ async function setEmployee(
         isComplete: true,
       },
     },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ role: Role }>('role')
@@ -189,12 +211,29 @@ async function setEmployee(
   return account
 }
 
+async function disconnectEmployee(accountId: Types.ObjectId) {
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
+    {
+      $unset: {
+        employee: 1,
+        isComplete: false,
+      },
+    },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
+
+  logger.info(`accountService - disconnectEmployee, accountId: ${accountId}`)
+}
+
 async function completeAccount(
   accountId: Types.ObjectId
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
   const updatedAccount = await AccountModel.findByIdAndUpdate(
     accountId,
     { isComplete: true },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ role: Role }>('role')
@@ -238,11 +277,18 @@ async function completeAccount(
 function sortAccountData(
   accountData: any
 ): [
-  updatedProfileData: Object,
-  updateEmployeeData: Object,
-  updatedCompanyData: Object,
-  updatedDepartmentData: Object
+  updatedProfileData: Partial<Profile>,
+  updateEmployeeData: Partial<Employee>,
+  updatedCompanyData: Partial<Company>,
+  updatedDepartmentData: Partial<Department>
 ] {
+  // const [
+  //   updatedProfileData,
+  //   updateEmployeeData,
+  //   updatedCompanyData,
+  //   updatedDepartmentData,
+  // ] = accountService.sortAccountData(accountData)
+
   const profileSchemaKeys = Object.keys(ProfileModel.schema.paths)
   const employeeSchemaKeys = Object.keys(EmployeeModel.schema.paths)
   const companySchemaKeys = Object.keys(CompanyModel.schema.paths)
@@ -274,11 +320,16 @@ function sortAccountData(
     }
   )
 
+  console.log('sortAccountData, updatedProfileData: ', updatedProfileData)
+  console.log('sortAccountData, updateEmployeeData: ', updateEmployeeData)
+  console.log('sortAccountData, updatedCompanyData: ', updatedCompanyData)
+  console.log('sortAccountData, updatedDepartmentData: ', updatedDepartmentData)
+
   return [
-    updatedProfileData,
-    updateEmployeeData,
-    updatedCompanyData,
-    updatedDepartmentData,
+    updatedProfileData as Partial<Profile>,
+    updateEmployeeData as Partial<Employee>,
+    updatedCompanyData as Partial<Company>,
+    updatedDepartmentData as Partial<Department>,
   ]
 }
 
@@ -287,9 +338,11 @@ export const accountService = {
   setRole,
   getAccount,
   getAccountDoc,
+  getEmployeeAccountDoc,
   deleteAccount,
   setProfile,
-  setEmployee,
+  connectEmployee,
+  disconnectEmployee,
   sortAccountData,
   completeAccount,
 }

@@ -23,11 +23,36 @@ async function createDepartment(
     .exec()
 
   logger.info(
-    `departmentService - department added:  ${JSON.stringify(
-      department,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `departmentService- createDepartment, department:  ${department?.departmentName}`
+  )
+
+  return department
+}
+
+async function updateDepartment(
+  departmentId: Types.ObjectId,
+  updatedDepartmentData: Partial<Department>
+): Promise<(Department & { _id: Types.ObjectId }) | null> {
+  const department = await DepartmentModel.findByIdAndUpdate(
+    departmentId,
+    updatedDepartmentData,
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
+    .populate<{ company: Types.ObjectId }>('company')
+    .populate<{ employees: Employee[] }>('employees')
+    .lean()
+    .exec()
+
+  if (!department) {
+    logger.warn(
+      `departmentService- updateDepartment, failed to update department: ${departmentId}`
+    )
+    throw new BadRequestError('Department is not found')
+  }
+
+  logger.info(
+    `departmentService- updateDepartment, departmentId: ${department.departmentName}`
   )
 
   return department
@@ -42,6 +67,7 @@ async function addEmployee(
     {
       $push: { employees: employeeId },
     },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ employees: Employee[] }>('employees')
@@ -49,19 +75,31 @@ async function addEmployee(
     .exec()
 
   if (!department) {
-    logger.warn(`departmentService - department is not found: ${departmentId}`)
+    logger.warn(
+      `departmentService- addEmployee, department is not found: ${departmentId}`
+    )
     throw new BadRequestError('Department is not found')
   }
 
   logger.info(
-    `departmentService - employee added to department:  ${JSON.stringify(
-      department,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `departmentService- addEmployee, department :  ${department.departmentName}`
   )
 
   return department
+}
+
+async function removeEmployee(
+  departmentId: Types.ObjectId,
+  employeeId: Types.ObjectId
+) {
+  const department = await DepartmentModel.findByIdAndUpdate(
+    departmentId,
+    {
+      $pull: { employees: employeeId },
+    },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
 }
 
 async function getDepartmentDBId(
@@ -70,7 +108,7 @@ async function getDepartmentDBId(
   const department = await DepartmentModel.findOne({ departmentName })
   if (!department) {
     logger.warn(
-      `departmentService - department is not found: ${departmentName}`
+      `departmentService- getDepartmentDBId, department is not found: ${departmentName}`
     )
     throw new BadRequestError('Department is not found')
   }
@@ -80,6 +118,16 @@ async function getDepartmentDBId(
 
 export const departmentService = {
   createDepartment,
+  updateDepartment,
   addEmployee,
+  removeEmployee,
   getDepartmentDBId,
 }
+
+// logger.info(
+//   `departmentService - department added:  ${JSON.stringify(
+//     department,
+//     null,
+//     2 // Indentation level, adjust as needed
+//   )}`
+// )

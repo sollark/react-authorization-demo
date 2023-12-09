@@ -78,8 +78,8 @@ async function getCompany(id: Types.ObjectId) {
   return company
 }
 
-async function getCompanyDoc(id: Types.ObjectId) {
-  const companyDoc = await CompanyModel.findById(id).exec()
+async function getCompanyDoc(companyId: Types.ObjectId) {
+  const companyDoc = await CompanyModel.findById(companyId)
 
   return companyDoc
 }
@@ -97,6 +97,7 @@ async function addDepartment(
   const company = await CompanyModel.findOneAndUpdate(
     { _id: companyId },
     { $push: { departments: departmentId } },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ departments: Department[] }>('departments')
@@ -108,20 +109,18 @@ async function addDepartment(
   return company
 }
 
-async function getDepartment(
+async function getCompanyDepartmentDocByName(
   companyId: Types.ObjectId,
   departmentName: string
-): Promise<(Department & { _id: Types.ObjectId }) | null> {
-  // TODO look through company's departments to find . Below code is not correct
-  const department = await DepartmentModel.findOne({
-    companyId,
+) {
+  console.log('getCompanyDepartmentDocByName', companyId, departmentName)
+
+  const departmentDoc = await DepartmentModel.findOne({
+    company: companyId,
     departmentName,
   })
-    .populate<{ employees: Employee[] }>('employees')
-    .lean()
-    .exec()
 
-  return department
+  return departmentDoc
 }
 
 async function addEmployee(
@@ -131,6 +130,7 @@ async function addEmployee(
   const company = await CompanyModel.findByIdAndUpdate(
     companyId,
     { $push: { employees: employeeId } },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ departments: Department[] }>('departments')
@@ -139,6 +139,18 @@ async function addEmployee(
     .exec()
 
   return company
+}
+
+async function removeEmployee(
+  companyId: Types.ObjectId,
+  employeeId: Types.ObjectId
+) {
+  const company = await CompanyModel.findByIdAndUpdate(
+    companyId,
+    { $pull: { employees: employeeId } },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
 }
 
 // TODO when joining existing company, it is better to get an employee by employeeNumber and companyNumber
@@ -196,6 +208,7 @@ async function updateCompany(
   const company = await CompanyModel.findOneAndUpdate(
     { id },
     { name },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ departments: Department[] }>('departments')
@@ -218,6 +231,7 @@ export const companyService = {
   isCompanyIdExists,
   createCompany,
   addDepartment,
+  getCompanyDepartmentDocByName,
   getBasicCompanyDetails,
   getCompany,
   getCompanyDoc,
@@ -225,6 +239,7 @@ export const companyService = {
   getCompanyEmployeeDocByNumber,
   getCompanyEmployees,
   addEmployee,
+  removeEmployee,
   updateCompany,
   deleteCompany,
 }

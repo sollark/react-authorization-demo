@@ -9,6 +9,7 @@ import EmployeeModel, {
   EmployeeDoc,
 } from '../../mongodb/models/employee.model.js'
 import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
+import { departmentService } from '../../service/department.service.js'
 import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
 import { companyService } from '../company/company.service.js'
@@ -60,6 +61,78 @@ async function createEmployee(
   return employee
 }
 
+async function deleteEmployee(employeeId: Types.ObjectId) {
+  console.log('employeeService- deleteEmployee, employeeId', employeeId)
+
+  const employeeDoc = await EmployeeModel.findById(employeeId)
+  if (!employeeDoc) throw new BadRequestError('Employee is not found')
+
+  // remove employee from company
+  const company = await companyService.getCompanyDoc(employeeDoc.company)
+
+  if (!company) throw new BadRequestError('Company is not found')
+  await await companyService.removeEmployee(company._id, employeeId)
+
+  // remove employee from department
+  const department = await DepartmentModel.findById(employeeDoc.department)
+  if (!department) throw new BadRequestError('Department is not found')
+  await departmentService.removeEmployee(department._id, employeeId)
+
+  // delete employee(error here)
+  await EmployeeModel.findByIdAndDelete(employeeId)
+
+  logger.info(`employeeService - employee deleted ${employeeId}`)
+}
+
+async function updateEmployee(
+  employeeId: Types.ObjectId,
+  updatedEmployeeData: Partial<Employee>
+): Promise<Employee | null> {
+  const employee = await EmployeeModel.findOneAndUpdate(
+    { employee: employeeId },
+    updatedEmployeeData,
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
+    .populate<{ company: Company }>('company')
+    .populate<{ department: Department }>('department')
+    .populate<{ profile: Profile }>('profile')
+    .populate<{ supervisor: Employee }>('supervisor')
+    .populate<{ subordinates: Employee[] }>('subordinates')
+    .lean()
+    .exec()
+
+  logger.info(`employeeService - employee updated ${employee}`)
+
+  return employee
+}
+
+async function getEmployeeDoc(
+  companyNumber: string,
+  employeeNumber: string
+): Promise<(EmployeeDoc & { _id: Types.ObjectId }) | null> {
+  const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
+  if (!companyDoc)
+    throw new BadRequestError('Company is not found', companyNumber)
+
+  const employeeDoc = await EmployeeModel.findOne({
+    company: companyDoc._id,
+    employeeNumber,
+  })
+    .lean()
+    .exec()
+
+  logger.info(
+    `employeeService- getEmployeeDoc, employeeDoc: ${JSON.stringify(
+      employeeDoc,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
+
+  return employeeDoc
+}
+
 async function getBasicEmployeeData(
   employeeIds: Types.ObjectId[]
 ): Promise<Partial<Employee>[] | null> {
@@ -89,14 +162,6 @@ async function getEmployee(
     .exec()
 
   return employee
-}
-
-async function getEmployeeDocById(
-  workplaceId: Types.ObjectId
-): Promise<EmployeeDoc | null> {
-  const employeeDoc = await EmployeeModel.findById(workplaceId).lean().exec()
-
-  return employeeDoc
 }
 
 async function getProfileId(
@@ -148,6 +213,7 @@ async function joinExistingCompany(
   await ProfileModel.findOneAndUpdate(
     { _id: employee.profile },
     { identifier },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
@@ -184,6 +250,18 @@ async function joinNewCompany(
   return employee
 }
 
+async function changeDepartment(
+  employeeId: Types.ObjectId,
+  departmentId: Types.ObjectId
+) {
+  const employee = await EmployeeModel.findOneAndUpdate(
+    { _id: employeeId },
+    { department: departmentId },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
+}
+
 async function setSupervisor(
   employeeNumber: Types.ObjectId,
   supervisorId: Types.ObjectId
@@ -191,6 +269,7 @@ async function setSupervisor(
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeNumber },
     { supervisor: supervisorId },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -204,6 +283,7 @@ async function setSupervisor(
   const supervisorEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: supervisorId },
     { $push: { subordinates: employeeNumber } },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
@@ -217,6 +297,7 @@ async function addSubordinate(
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeNumber },
     { $push: { subordinates: subordinateId } },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -230,45 +311,26 @@ async function addSubordinate(
   const subordinateEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: subordinateId },
     { supervisor: employeeNumber },
+    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
   return employeeEmployee
 }
 
-async function updateEmployee(
-  employeeNumber: Types.ObjectId,
-  updatedEmployeeData: Partial<Employee>
-): Promise<Employee | null> {
-  const employee = await EmployeeModel.findOneAndUpdate(
-    { employee: employeeNumber },
-    updatedEmployeeData,
-    { new: true }
-  )
-    .populate<{ company: Company }>('company')
-    .populate<{ department: Department }>('department')
-    .populate<{ profile: Profile }>('profile')
-    .populate<{ supervisor: Employee }>('supervisor')
-    .populate<{ subordinates: Employee[] }>('subordinates')
-    .lean()
-    .exec()
-
-  logger.info(`employeeService - employee updated ${employee}`)
-
-  return employee
-}
-
 export const employeeService = {
   createEmployee,
+  deleteEmployee,
+  updateEmployee,
+  getEmployeeDoc,
   getBasicEmployeeData,
-  getEmployeeDocById,
   getProfileId,
   getCompanyId,
   joinExistingCompany,
   joinNewCompany,
+  changeDepartment,
   setSupervisor,
   addSubordinate,
-  updateEmployee,
 }
 
 async function generateEmployeeNumber(): Promise<string> {
