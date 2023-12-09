@@ -1,13 +1,7 @@
 import { Button } from '@mui/material'
-import { Link } from '@tanstack/react-router'
+import { pages } from './Pages'
 
-const pages = [
-  { key: 'Home', link: <Link to='/'>Home</Link> },
-  { key: 'Company', link: <Link to='/company'>Company</Link> },
-  { key: 'Employee', link: <Link to='/employee'>Employee</Link> },
-]
-
-interface SiteNavigationProps {
+type SiteNavigationProps = {
   handleCloseNavMenu: () => void
 }
 
