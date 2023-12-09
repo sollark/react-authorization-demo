@@ -1,26 +1,32 @@
-import AccountDetailsPage from '@/pages/AccountDetailsPage'
-import EmployeePage from '@/pages/EmployeePage'
 import RootPage from '@/pages/RootPage'
-import useAuthStore from '@/stores/authStore'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
-const CompanyPage = lazyRouteComponent(() => import('../pages/CompanyPage'))
-const AccountPage = lazyRouteComponent(() => import('../pages/AccountPage'))
+const AccountDetailsPage = lazyRouteComponent(
+  () => import('@/pages/AccountDetailsPage')
+)
+const AccountListPage = lazyRouteComponent(
+  () => import('@/pages/AccountListPage')
+)
+const EmployeeListPage = lazyRouteComponent(
+  () => import('@/pages/EmployeeListPage')
+)
+const CompanyPage = lazyRouteComponent(() => import('@/pages/CompanyPage'))
+const AccountPage = lazyRouteComponent(() => import('@/pages/AccountPage'))
 const AccountEditPage = lazyRouteComponent(
-  () => import('../pages/AccountEditPage')
+  () => import('@/pages/AccountEditPage')
 )
 const JoinCompanyPage = lazyRouteComponent(
-  () => import('../pages/JoinCompanyPage')
+  () => import('@/pages/JoinCompanyPage')
 )
-const SigninPage = lazyRouteComponent(() => import('../pages/SigninPage'))
+const SigninPage = lazyRouteComponent(() => import('@/pages/SigninPage'))
 const RegistrationPage = lazyRouteComponent(
-  () => import('../pages/RegistrationPage')
+  () => import('@/pages/RegistrationPage')
 )
 const UnauthorizedPage = lazyRouteComponent(
-  () => import('../pages/UnauthorizedPage')
+  () => import('@/pages/UnauthorizedPage')
 )
-const MissingPage = lazyRouteComponent(() => import('../pages/MissingPage'))
+const MissingPage = lazyRouteComponent(() => import('@/pages/MissingPage'))
 
 export const rootRoute = new RootRoute({
   component: RootPage,
@@ -108,12 +114,22 @@ export const companyRoute = new Route({
   ),
 })
 
-export const employeeRoute = new Route({
+export const employeeListRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/employee',
+  path: '/employeeList',
   component: () => (
     <AuthProtectedRoute>
-      <EmployeePage />
+      <EmployeeListPage />
+    </AuthProtectedRoute>
+  ),
+})
+
+export const accountListRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/accountList',
+  component: () => (
+    <AuthProtectedRoute>
+      <AccountListPage />
     </AuthProtectedRoute>
   ),
 })

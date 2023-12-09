@@ -4,9 +4,10 @@ import React from 'react'
 import {
   accountDetailsRoute,
   accountEditRoute,
+  accountListRoute,
   accountRoute,
   companyRoute,
-  employeeRoute,
+  employeeListRoute,
   homeRoute,
   joinCompanyRoute,
   missingRoute,
@@ -45,7 +46,8 @@ const routeTree = rootRoute.addChildren([
     joinCompanyRoute,
   ]),
   companyRoute,
-  employeeRoute,
+  employeeListRoute,
+  accountListRoute,
   unauthorizedRoute,
   missingRoute,
 ])
