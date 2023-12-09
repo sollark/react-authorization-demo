@@ -33,12 +33,12 @@ const employeeDefaultValues: EmployeeTableColumns = {
 }
 
 const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name' },
-  { field: 'lastName', headerName: 'Last name' },
-  { field: 'ID', headerName: 'ID' },
-  { field: 'departmentName', headerName: 'Department' },
-  { field: 'employeeNumber', headerName: 'Employee number' },
-  { field: 'position', headerName: 'Position' },
+  { field: 'firstName', headerName: 'First name', flex: 1 },
+  { field: 'lastName', headerName: 'Last name', flex: 1 },
+  { field: 'ID', headerName: 'ID', flex: 1 },
+  { field: 'departmentName', headerName: 'Department', flex: 1 },
+  { field: 'employeeNumber', headerName: 'Employee number', flex: 1 },
+  { field: 'position', headerName: 'Position', flex: 1 },
 ]
 
 const AdvancedEmployeeTable: FC = () => {
@@ -78,9 +78,7 @@ const AdvancedEmployeeTable: FC = () => {
     <div>
       <h2>Employee Table</h2>
       <Table
-        dataRows={employeeData as any}
-        defaultValues={employeeDefaultValues}
-        tableColumns={employeeColumns}
+        basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
       />
     </div>
   )

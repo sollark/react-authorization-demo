@@ -10,10 +10,10 @@ import Table from '../Table'
  */
 
 const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name' },
-  { field: 'lastName', headerName: 'Last name' },
-  { field: 'departmentName', headerName: 'Department' },
-  { field: 'position', headerName: 'Position' },
+  { field: 'firstName', headerName: 'First name', flex: 1 },
+  { field: 'lastName', headerName: 'Last name', flex: 1 },
+  { field: 'departmentName', headerName: 'Department', flex: 1 },
+  { field: 'position', headerName: 'Position', flex: 1 },
 ]
 
 const BasicEmployeeTable: FC = () => {

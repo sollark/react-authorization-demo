@@ -32,18 +32,24 @@ const employeeDefaultValues: EmployeeTableColumns = {
 let departments: (params: GridValueOptionsParams<any>) => string[]
 
 const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name', editable: true },
-  { field: 'lastName', headerName: 'Last name', editable: true },
-  { field: 'ID', headerName: 'ID', editable: true },
+  { field: 'firstName', headerName: 'First name', editable: true, flex: 1 },
+  { field: 'lastName', headerName: 'Last name', editable: true, flex: 1 },
+  { field: 'ID', headerName: 'ID', editable: true, flex: 1 },
   {
     field: 'departmentName',
     headerName: 'Department',
     editable: true,
+    flex: 1,
     type: 'singleSelect',
     valueOptions: (params) => departments(params),
   },
-  { field: 'employeeNumber', headerName: 'Employee number', editable: false },
-  { field: 'position', headerName: 'Position', editable: true },
+  {
+    field: 'employeeNumber',
+    headerName: 'Employee number',
+    editable: false,
+    flex: 1,
+  },
+  { field: 'position', headerName: 'Position', editable: true, flex: 1 },
 ]
 
 function updateCompanyEmployee(companyNumber: string) {
