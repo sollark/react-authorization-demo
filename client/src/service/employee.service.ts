@@ -25,7 +25,7 @@ async function updateEmployee(
     position,
   })
 
-  console.log('accountService- updateEmployee, response data', response)
+  console.log('accountService- updateEmployee, response:', response)
 
   const { account } = response as any
   if (account) storeService.saveAccount(account)
@@ -66,7 +66,7 @@ async function updateCompanyEmployee(
     position,
   })
 
-  console.log('accountService- updateCompanyEmployee, response data:', response)
+  console.log('accountService- updateCompanyEmployee, response:', response)
 
   const { account } = response as any
   if (account) storeService.saveAccount(account)
@@ -86,7 +86,7 @@ async function deleteCompanyEmployee(
     employeeNumber,
   })
 
-  console.log('accountService- deleteCompanyEmployee, response data', response)
+  console.log('accountService- deleteCompanyEmployee, response: ', response)
 
   return true
 }
@@ -98,7 +98,7 @@ async function getAllEmployees(): Promise<Employee[] | null> {
     null
   )
 
-  console.log('employeeService - getAllEmployees, response.data', response)
+  console.log('employeeService - getAllEmployees, response: ', response)
 
   const { success, message, data } = response as any
   const employees = data.employees
@@ -109,7 +109,7 @@ async function getAllEmployees(): Promise<Employee[] | null> {
 async function getCompany(): Promise<Company | null> {
   const response = await httpService.get<null, HttpResponse>('company', null)
 
-  console.log('employeeService - getCompany, response.data', response)
+  console.log('employeeService - getCompany, response', response)
 
   const { success, message, data } = response as any
 

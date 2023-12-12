@@ -1,7 +1,7 @@
-import { ACCOUNT_STATUS, USER_ROLE } from '@/models/Account'
-import { accountService } from '@/service/account.service'
+import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
 import { companyService } from '@/service/company.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
+import useEmployeeStore from '@/stores/employeeStore'
 import {
   GridColDef,
   GridRowModel,
@@ -10,6 +10,13 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from './Table'
+
+// Profile
+// Employee // need for employeeNumber
+// User preference // no need
+// isComplete // no need
+// role
+// status
 
 type AccountTableColumns = {
   firstName: string
@@ -51,19 +58,19 @@ const accountColumns: GridColDef[] = [
   },
 ]
 
-function updateEmployeeAccount(companyNumber: string, employeeNumber: string) {
+function updateEmployeeAccount(companyNumber: string) {
   return async (row: GridRowModel): Promise<boolean> => {
     const rowData = adaptTableRowToObject<AccountTableColumns>(row)
     const { firstName, lastName, ID, employeeNumber, role, status } = rowData
 
-    const response = await accountService.updateEmployeeAccount(
+    const response = await companyService.updateEmployeeAccount(
       companyNumber,
       firstName,
       lastName,
       ID,
       employeeNumber,
-      role,
-      status
+      role as Role,
+      status as Status
     )
 
     // TODO return false if error in response
@@ -72,16 +79,22 @@ function updateEmployeeAccount(companyNumber: string, employeeNumber: string) {
 }
 
 // no delete employee accounts
-function deleteCompanyEmployee(companyNumber: string) {
+function deleteEmployeeAccount(companyNumber: string) {
   return async (row: GridRowModel): Promise<boolean> => {
+    const rowData = adaptTableRowToObject<AccountTableColumns>(row)
+    const { employeeNumber } = rowData
+
     return true
   }
 }
 
 const EditableAccountTable: FC = () => {
+  const company = useEmployeeStore((state) => state.employee?.company)
+  if (!company) return <span>Error: Company is not found in the store</span>
+
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['company'],
-    queryFn: companyService.getAccountsData,
+    queryKey: ['accounts'],
+    queryFn: companyService.getEmployeeAccountData,
   })
 
   if (isPending) {
@@ -96,7 +109,7 @@ const EditableAccountTable: FC = () => {
     return <span>Empty data</span>
   }
 
-  const { companyNumber, accounts } = data
+  const accounts = data
 
   const roleOptions = Object.values(USER_ROLE)
   const statusOptions = Object.values(ACCOUNT_STATUS)
@@ -105,10 +118,10 @@ const EditableAccountTable: FC = () => {
 
   const accountData = accounts?.map((account) => {
     return {
-      firstName: account.profile.firstName,
-      lastName: account.profile.lastName,
-      ID: account.profile.ID,
-      employeeNumber: account.employee.employeeNumber,
+      firstName: account.profile?.firstName,
+      lastName: account.profile?.lastName,
+      ID: account.profile?.ID,
+      employeeNumber: account.employee?.employeeNumber,
       role: account.role,
       status: account.status,
     }
@@ -116,8 +129,8 @@ const EditableAccountTable: FC = () => {
 
   console.log('accountData from api', accountData)
 
-  const updateAccount = updateEmployeeAccount(companyNumber)
-  const deleteAccount = deleteEmployeeAccount(companyNumber)
+  const updateAccount = updateEmployeeAccount(company.companyNumber)
+  const deleteAccount = deleteEmployeeAccount(company.companyNumber)
 
   return (
     <div>
