@@ -11,13 +11,6 @@ import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from './Table'
 
-// Profile
-// Employee // need for employeeNumber
-// User preference // no need
-// isComplete // no need
-// role
-// status
-
 type AccountTableColumns = {
   firstName: string
   lastName: string
@@ -61,29 +54,14 @@ const accountColumns: GridColDef[] = [
 function updateEmployeeAccount(companyNumber: string) {
   return async (row: GridRowModel): Promise<boolean> => {
     const rowData = adaptTableRowToObject<AccountTableColumns>(row)
-    const { firstName, lastName, ID, employeeNumber, role, status } = rowData
+    const { role, status } = rowData
 
     const response = await companyService.updateEmployeeAccount(
-      companyNumber,
-      firstName,
-      lastName,
-      ID,
-      employeeNumber,
       role as Role,
       status as Status
     )
 
     // TODO return false if error in response
-    return true
-  }
-}
-
-// no delete employee accounts
-function deleteEmployeeAccount(companyNumber: string) {
-  return async (row: GridRowModel): Promise<boolean> => {
-    const rowData = adaptTableRowToObject<AccountTableColumns>(row)
-    const { employeeNumber } = rowData
-
     return true
   }
 }
@@ -130,7 +108,6 @@ const EditableAccountTable: FC = () => {
   console.log('accountData from api', accountData)
 
   const updateAccount = updateEmployeeAccount(company.companyNumber)
-  const deleteAccount = deleteEmployeeAccount(company.companyNumber)
 
   return (
     <div>
