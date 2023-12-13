@@ -103,6 +103,47 @@ async function getAccount(
   return account
 }
 
+async function getAccounts(
+  employeeIds: Types.ObjectId[]
+): Promise<(Account & { _id: Types.ObjectId })[] | null> {
+  const accounts = await AccountModel.find(
+    { employee: { $in: employeeIds } },
+    { isComplete: 0 }
+  )
+    .populate<{ profile: Profile }>('profile')
+    .populate<{ employee: Employee }>({
+      path: 'employee',
+      select: '-profile -supervisor -subordinates',
+      populate: [
+        {
+          path: 'company',
+          select: 'companyName',
+        },
+        {
+          path: 'department',
+          select: 'departmentName',
+        },
+      ],
+    })
+    .lean()
+    .exec()
+
+  if (!accounts) {
+    logger.warn(`accountService - accounts are not found`)
+    throw new BadRequestError('Accounts are not found')
+  }
+
+  logger.info(
+    `accountService - accounts fetched: ${JSON.stringify(
+      accounts,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
+
+  return accounts
+}
+
 async function getAccountDoc(
   identifier: Types.ObjectId
 ): Promise<(AccountDoc & { _id: Types.ObjectId }) | null> {
@@ -337,6 +378,7 @@ export const accountService = {
   createAccount,
   setRole,
   getAccount,
+  getAccounts,
   getAccountDoc,
   getEmployeeAccountDoc,
   deleteAccount,

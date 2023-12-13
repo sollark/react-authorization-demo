@@ -1,4 +1,4 @@
-import EditableEmployeeTable from '@/cmps/tables/employeeTable/EditableEmployeeTable'
+import EditableAccountTable from '@/cmps/tables/EditableAccountTable'
 import { Role } from '@/models/Account'
 import useRoleStore from '@/stores/roleStore'
 import { Box } from '@mui/material'
@@ -8,7 +8,7 @@ const AccountListPage: FC = () => {
   console.log(' AccountList connected')
 
   const role: Role = useRoleStore((state) => state.role)
-  const Table = EditableEmployeeTable
+  const Table = EditableAccountTable
 
   return (
     <Box
@@ -16,7 +16,7 @@ const AccountListPage: FC = () => {
         p: 4,
       }}>
       <h1>Account page</h1>
-      {/* <Table /> */}
+      <Table />
     </Box>
   )
 }

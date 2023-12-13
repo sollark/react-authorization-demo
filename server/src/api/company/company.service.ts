@@ -193,12 +193,21 @@ async function getCompanyEmployees(
         { path: 'subordinates' },
       ],
     })
-
     .lean()
+    .exec()
 
   const employees = company?.employees
 
   return employees ? employees : null
+}
+
+async function getCompanyEmployeeIds(
+  companyId: Types.ObjectId
+): Promise<Types.ObjectId[] | null> {
+  const company = await CompanyModel.findById(companyId).select('employees')
+  const employeeIds = company?.employees
+
+  return employeeIds ? employeeIds : null
 }
 
 async function updateCompany(
@@ -238,6 +247,7 @@ export const companyService = {
   getCompanyDocByNumber,
   getCompanyEmployeeDocByNumber,
   getCompanyEmployees,
+  getCompanyEmployeeIds,
   addEmployee,
   removeEmployee,
   updateCompany,

@@ -6,6 +6,7 @@ import {
   getBasicCompanyData,
   getCompany,
   getCompanyEmployees,
+  getCompanyEmployeesAccounts,
   updateEmployee,
 } from './company.controller.js'
 
@@ -14,6 +15,7 @@ router.post('/updateEmployee', requireAuth, asyncHandler(updateEmployee))
 router.delete('/deleteEmployee', requireAuth, asyncHandler(deleteEmployee))
 router.get('/', requireAuth, asyncHandler(getCompany))
 router.get('/employees', requireAuth, asyncHandler(getCompanyEmployees))
+router.get('/accounts', requireAuth, asyncHandler(getCompanyEmployeesAccounts))
 router.get('/basic', requireAuth, asyncHandler(getBasicCompanyData))
 
 export { router as companyRoutes }

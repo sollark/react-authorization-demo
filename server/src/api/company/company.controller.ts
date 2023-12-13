@@ -118,6 +118,35 @@ export async function getCompanyEmployees(
   })
 }
 
+// TODO check this code and continue
+export async function getCompanyEmployeesAccounts(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+  const accountDoc = await accountService.getAccountDoc(identifier)
+  if (!accountDoc) throw new BadRequestError('Cannot find account')
+
+  const employeeId = accountDoc.employee
+  if (!employeeId) throw new BadRequestError('Cannot find employee')
+
+  const companyId = await employeeService.getCompanyId(employeeId)
+  if (!companyId) throw new BadRequestError('Cannot find company')
+
+  const employeeIds = await companyService.getCompanyEmployeeIds(companyId)
+  if (!employeeIds) throw new BadRequestError('Cannot find employees')
+
+  const accounts = await accountService.getAccounts(employeeIds)
+  if (!accounts) throw new BadRequestError('Cannot find accounts')
+
+  res.status(200).json({
+    success: true,
+    message: 'Company employees accounts are ready to view.',
+    data: { accounts },
+  })
+}
+
 // TODO is in use?
 export async function addEmployee(
   req: Request,
