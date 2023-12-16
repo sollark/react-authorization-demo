@@ -10,12 +10,33 @@ import {
   updateEmployee,
 } from './company.controller.js'
 
+// TODO update employee account
 const router = express.Router()
-router.post('/updateEmployee', requireAuth, asyncHandler(updateEmployee))
-router.delete('/deleteEmployee', requireAuth, asyncHandler(deleteEmployee))
-router.get('/', requireAuth, asyncHandler(getCompany))
-router.get('/employees', requireAuth, asyncHandler(getCompanyEmployees))
-router.get('/accounts', requireAuth, asyncHandler(getCompanyEmployeesAccounts))
-router.get('/basic', requireAuth, asyncHandler(getBasicCompanyData))
+router.get('/:companyNumber', requireAuth, asyncHandler(getCompany))
+router.get(
+  '/:companyNumber/basic',
+  requireAuth,
+  asyncHandler(getBasicCompanyData)
+)
+router.get(
+  '/:companyNumber/employees',
+  requireAuth,
+  asyncHandler(getCompanyEmployees)
+)
+router.put(
+  '/:companyNumber/employees/:employeeNumber',
+  requireAuth,
+  asyncHandler(updateEmployee)
+)
+router.delete(
+  '/:companyNumber/employees/:employeeNumber',
+  requireAuth,
+  asyncHandler(deleteEmployee)
+)
+router.get(
+  '/:companyNumber/accounts',
+  requireAuth,
+  asyncHandler(getCompanyEmployeesAccounts)
+)
 
 export { router as companyRoutes }

@@ -4,13 +4,14 @@ import DepartmentModel, {
   Department,
 } from '../../mongodb/models/department.model.js'
 import EmployeeModel, { Employee } from '../../mongodb/models/employee.model.js'
+import { companyNumberService } from '../../service/companyNumber.service.js'
 import { utilService } from '../../utils/utils.js'
 import logger from './../../service/logger.service.js'
 
 async function createCompany(
   companyName: string
 ): Promise<(Company & { _id: Types.ObjectId }) | null> {
-  const companyNumber = await generateCompanyNumber()
+  const companyNumber = await companyNumberService.generateCompanyNumber()
 
   const companyDoc = await CompanyModel.create({
     companyName,
@@ -57,6 +58,31 @@ async function getBasicCompanyDetails(id: Types.ObjectId) {
 
 async function getCompany(id: Types.ObjectId) {
   const company = await CompanyModel.findById(id)
+    .populate<{ departments: Department[] }>('departments')
+    .populate<{ employees: Employee[] }>({
+      path: 'employees',
+      select: '-company',
+      populate: [
+        { path: 'department', select: '-employees -company' },
+        { path: 'profile' },
+        { path: 'supervisor' },
+        { path: 'subordinates' },
+      ],
+    })
+    .lean()
+    .exec()
+
+  logger.info(
+    `companyService- getCompany, company is fetched ${company?._id}  ${company?.companyName}`
+  )
+
+  return company
+}
+
+async function getCompanyByNumber(
+  companyNumber: string
+): Promise<(Company & { _id: Types.ObjectId }) | null> {
+  const company = await CompanyModel.findOne({ companyNumber })
     .populate<{ departments: Department[] }>('departments')
     .populate<{ employees: Employee[] }>({
       path: 'employees',
@@ -243,6 +269,7 @@ export const companyService = {
   getCompanyDepartmentDocByName,
   getBasicCompanyDetails,
   getCompany,
+  getCompanyByNumber,
   getCompanyDoc,
   getCompanyDocByNumber,
   getCompanyEmployeeDocByNumber,
@@ -252,19 +279,4 @@ export const companyService = {
   removeEmployee,
   updateCompany,
   deleteCompany,
-}
-
-async function generateCompanyNumber(): Promise<string> {
-  let id = utilService.getRandomInt(1000, 9999)
-
-  const existingCode = await CompanyModel.findOne({
-    companyNumber: id.toString(),
-  })
-
-  if (existingCode) {
-    // Code already exists, generate a new one recursively
-    return generateCompanyNumber()
-  }
-
-  return id.toString()
 }

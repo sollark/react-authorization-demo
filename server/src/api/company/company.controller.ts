@@ -1,19 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { getIdentifierFromALS } from '../../service/als.service.js'
+import { companyNumberService } from '../../service/companyNumber.service.js'
 import { departmentService } from '../../service/department.service.js'
-import logger from '../../service/logger.service.js'
+import { employeeNumberService } from '../../service/employeeNumber.service.js'
 import { accountService } from '../account/account.service.js'
 import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
 import { companyService } from './company.service.js'
-
-// TODO res structure
-// {
-//     "success": true,
-//     "message": "User logged in successfully",
-//     "data": { }
-// }
 
 export async function getCompany(
   req: Request,
@@ -21,17 +15,20 @@ export async function getCompany(
   next: NextFunction
 ) {
   const identifier = getIdentifierFromALS()
-  const accountDoc = await accountService.getAccountDoc(identifier)
-  if (!accountDoc) throw new BadRequestError('Cannot find account')
 
-  const employeeId = accountDoc.employee
-  if (!employeeId) throw new BadRequestError('Cannot find employee')
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
 
-  const companyId = await employeeService.getCompanyId(employeeId)
-  if (!companyId) throw new BadRequestError('Cannot find company')
-
-  const company = await companyService.getCompany(companyId)
-  if (!company) throw new BadRequestError('Cannot find company')
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
 
   res.status(200).json({
     success: true,
@@ -45,23 +42,24 @@ export async function getBasicCompanyData(
   res: Response,
   next: NextFunction
 ) {
-  logger.info(`companyController- getBasicCompanyData`)
-
   const identifier = getIdentifierFromALS()
-  const accountDoc = await accountService.getAccountDoc(identifier)
-  if (!accountDoc) throw new BadRequestError('Cannot find account')
 
-  const employeeId = accountDoc.employee
-  if (!employeeId) throw new BadRequestError('Cannot find employee')
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
 
-  const companyId = await employeeService.getCompanyId(employeeId)
-  if (!companyId) throw new BadRequestError('Cannot find company')
-
-  const company = await companyService.getCompany(companyId)
-  if (!company) throw new BadRequestError('Cannot find company')
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
 
   // filter company data, only return basic data
-  const { companyName, companyNumber, departments, employees } = company
+  const { companyName, departments, employees } = company
   const basicDepartmentsData = departments.map((department) => {
     const { departmentName } = department
     return { departmentName }
@@ -99,17 +97,30 @@ export async function getCompanyEmployees(
   next: NextFunction
 ) {
   const identifier = getIdentifierFromALS()
-  const accountDoc = await accountService.getAccountDoc(identifier)
-  if (!accountDoc) throw new BadRequestError('Cannot find account')
 
-  const employeeId = accountDoc.employee
-  if (!employeeId) throw new BadRequestError('Cannot find employee')
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
 
-  const companyId = await employeeService.getCompanyId(employeeId)
-  if (!companyId) throw new BadRequestError('Cannot find company')
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
 
-  const employees = await companyService.getCompanyEmployees(companyId)
-  if (!employees) throw new BadRequestError('Cannot find employees')
+  const employees = await companyService.getCompanyEmployees(company._id)
+  if (!employees) {
+    res.status(404).json({
+      success: false,
+      message: 'Employees not found',
+      data: {},
+    })
+    return
+  }
 
   res.status(200).json({
     success: true,
@@ -118,27 +129,44 @@ export async function getCompanyEmployees(
   })
 }
 
-// TODO check this code and continue
 export async function getCompanyEmployeesAccounts(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   const identifier = getIdentifierFromALS()
-  const accountDoc = await accountService.getAccountDoc(identifier)
-  if (!accountDoc) throw new BadRequestError('Cannot find account')
 
-  const employeeId = accountDoc.employee
-  if (!employeeId) throw new BadRequestError('Cannot find employee')
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
 
-  const companyId = await employeeService.getCompanyId(employeeId)
-  if (!companyId) throw new BadRequestError('Cannot find company')
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
 
-  const employeeIds = await companyService.getCompanyEmployeeIds(companyId)
-  if (!employeeIds) throw new BadRequestError('Cannot find employees')
+  const employeeIds = await companyService.getCompanyEmployeeIds(company._id)
+  if (!employeeIds) {
+    res.status(404).json({
+      success: false,
+      message: 'Employees not found',
+    })
+    return
+  }
 
   const accounts = await accountService.getAccounts(employeeIds)
-  if (!accounts) throw new BadRequestError('Cannot find accounts')
+  if (!accounts) {
+    res.status(404).json({
+      success: false,
+      message: 'Employees not found',
+    })
+    return
+  }
 
   res.status(200).json({
     success: true,
@@ -147,20 +175,29 @@ export async function getCompanyEmployeesAccounts(
   })
 }
 
-// TODO is in use?
 export async function addEmployee(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // TODO check permissions
   const identifier = getIdentifierFromALS()
 
-  const data = req.body
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
 
-  // destruct employee table rows
-  const { firstName, lastName, ID, departmentName, position, role, status } =
-    data
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
+
+  const data = req.body
+  const { firstName, lastName, ID, departmentName, position, role } = data
 
   // create profile
   const profile = await profileService.createProfile({
@@ -169,11 +206,34 @@ export async function addEmployee(
     ID,
   })
 
-  // TODO find any department, should find company department
-  const department = departmentService.getDepartmentDBId(departmentName)
+  const departmentDoc = await companyService.getCompanyDepartmentDocByName(
+    company._id,
+    departmentName
+  )
+  if (!departmentDoc) {
+    res.status(404).json({
+      success: false,
+      message: 'Department not found',
+      data: {},
+    })
+    return
+  }
 
   // create employee
-  // const companyDBId = employeeService.getCompanyDBId()
+  const employee = await employeeService.createEmployee(
+    profile._id,
+    company._id,
+    departmentDoc._id,
+    position
+  )
+  if (!employee) {
+    res.status(404).json({
+      success: false,
+      message: 'Employee not created',
+      data: {},
+    })
+    return
+  }
 
   res.status(200).json({
     success: true,
@@ -187,31 +247,41 @@ export async function updateEmployee(
   res: Response,
   next: NextFunction
 ) {
-  // TODO check permissions
   const identifier = getIdentifierFromALS()
 
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
+
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
+
   const data = req.body
+  const { firstName, lastName, ID, departmentName, employeeNumber, position } =
+    data
 
-  // destruct employee table rows
-  const {
-    companyNumber,
-    firstName,
-    lastName,
-    ID,
-    departmentName,
-    employeeNumber,
-    position,
-  } = data
-
-  // check if an employee exists
   const employeeDoc = await employeeService.getEmployeeDoc(
     companyNumber,
     employeeNumber
   )
-
+  // TODO this function used also to create new employee if not exists, need to refactor to only update
   if (!employeeDoc) {
     const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
-    if (!companyDoc) throw new BadRequestError('Cannot find company')
+    if (!companyDoc) {
+      res.status(404).json({
+        success: false,
+        message: 'Company not found',
+        data: {},
+      })
+      return
+    }
 
     const profile = await profileService.createProfile({
       firstName,
@@ -259,7 +329,14 @@ export async function updateEmployee(
       employeeDoc.company,
       departmentName
     )
-    if (!departmentDoc) throw new BadRequestError('Cannot find department')
+    if (!departmentDoc) {
+      res.status(404).json({
+        success: false,
+        message: 'Department not found',
+        data: {},
+      })
+      return
+    }
 
     await employeeService.changeDepartment(employeeDoc._id, departmentDoc._id)
   }
@@ -276,20 +353,46 @@ export async function deleteEmployee(
   res: Response,
   next: NextFunction
 ) {
-  // TODO check permissions
   const identifier = getIdentifierFromALS()
 
-  const data = req.body
-  const { companyNumber, employeeNumber } = data
+  const companyNumber = req.params.companyNumber
+  const isValidCompanyNumber =
+    companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValidCompanyNumber) throw new BadRequestError('Invalid company number')
+
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
+
+  const employeeNumber = req.params.employeeNumber
+  const isValidEmployeeNumber =
+    employeeNumberService.isValidEmployeeNumber(employeeNumber)
+  if (!isValidEmployeeNumber)
+    throw new BadRequestError('Invalid employee number')
 
   const employeeDoc = await employeeService.getEmployeeDoc(
     companyNumber,
     employeeNumber
   )
-  if (!employeeDoc) throw new BadRequestError('Cannot find employee')
+  if (!employeeDoc) {
+    res.status(404).json({
+      success: false,
+      message: 'Employee not found',
+      data: {},
+    })
+    return
+  }
 
   const accountDoc = await accountService.getEmployeeAccountDoc(employeeDoc._id)
+  // employee has account
   if (accountDoc) await accountService.disconnectEmployee(accountDoc._id)
+  // employee has no account
   if (!accountDoc) await profileService.deleteProfile(employeeDoc.profile)
 
   await employeeService.deleteEmployee(employeeDoc._id)
@@ -300,11 +403,3 @@ export async function deleteEmployee(
     data: {},
   })
 }
-
-// console.log(
-//   `companyController- getBasicCompanyData, company: ${JSON.stringify(
-//     company,
-//     null,
-//     2 // Indentation level, adjust as needed
-//   )}`
-// )
