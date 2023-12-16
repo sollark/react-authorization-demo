@@ -1,9 +1,5 @@
 import { GridRowModel } from '@mui/x-data-grid'
 
-export function isDevelopment() {
-  return process.env.NODE_ENV === 'development'
-}
-
 type EmptyObject = {}
 export function isEmptyObject(obj: unknown): obj is EmptyObject {
   return (

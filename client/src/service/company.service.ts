@@ -1,12 +1,21 @@
 import { Account, Role, Status } from '@/models/Account'
 import { Company } from '@/models/Company'
 import { ApiResponse } from '@/models/response/ApiResponse'
+import useEmployeeStore from '@/stores/employeeStore'
 import { httpService } from './axios/http.service'
 
 async function getBasicCompanyData(): Promise<Company | null> {
-  const response = await httpService.get<null, Company>('company/basic', null)
+  // get company number from employee store
+  const companyNumber = useEmployeeStore(
+    (state) => state.employee?.company.companyNumber
+  )
 
-  console.log('companyService - getBasicCompanyData, response.data', response)
+  const response = await httpService.get<null, Company>(
+    `company/${companyNumber}/basic`,
+    null
+  )
+
+  console.log('companyService - getBasicCompanyData, response', response)
 
   const { success, message, data } = response as any
   if (!success) {

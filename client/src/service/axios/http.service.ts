@@ -1,9 +1,8 @@
 import axios, { AxiosPromise, InternalAxiosRequestConfig } from 'axios'
+import { config } from 'dotenv'
 import { authService } from '../auth.service'
-import { isDevelopment } from '../utils.service'
 import { headerService } from './header.service'
-
-const API_URL = isDevelopment() ? '//localhost:3030/api/' : '/api/'
+config()
 
 export type HttpResponse = {
   success: boolean
@@ -11,7 +10,11 @@ export type HttpResponse = {
   data: Object
 }
 
-var api = axios.create({
+const API_URL = isDevelopment()
+  ? process.env.DEV_API_URL
+  : process.env.PROD_API_URL
+
+const api = axios.create({
   // to allow cookies to be sent to the server automatically
   withCredentials: true,
   baseURL: API_URL,
@@ -97,7 +100,6 @@ async function ajax<T, R>(
       url: `${API_URL}${endpoint}`,
       method,
       data,
-      // params: method === 'GET' ? data : null,
       params: data,
     })
 
@@ -112,4 +114,8 @@ async function ajax<T, R>(
 
     throw error
   }
+}
+
+function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development'
 }
