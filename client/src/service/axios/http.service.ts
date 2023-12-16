@@ -4,12 +4,6 @@ import { authService } from '../auth.service'
 import { headerService } from './header.service'
 config()
 
-export type HttpResponse = {
-  success: boolean
-  message: string
-  data: Object
-}
-
 const API_URL = isDevelopment()
   ? process.env.DEV_API_URL
   : process.env.PROD_API_URL
@@ -51,7 +45,6 @@ api.interceptors.response.use(
       originalRequest._retry
     )
     if (error.response?.status === 401 && !originalRequest._retry) {
-      // if (error.response?.status === 401 && !error.response?._retry) {
       originalRequest._retry = true
 
       if (originalRequest.headers.Authorization) {
@@ -94,7 +87,7 @@ async function ajax<T, R>(
   endpoint: string,
   method = 'GET',
   data: T | null = null
-): Promise<AxiosPromise<R>> {
+): Promise<R> {
   try {
     const res = await api({
       url: `${API_URL}${endpoint}`,

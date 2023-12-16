@@ -4,7 +4,7 @@ import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
 import { ApiResponse } from '@/models/response/ApiResponse'
-import { HttpResponse, httpService } from './axios/http.service'
+import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
 async function updateEmployee(
@@ -107,7 +107,7 @@ async function getAllEmployees(): Promise<Employee[] | null> {
 }
 
 async function getCompany(): Promise<Company | null> {
-  const response = await httpService.get<null, HttpResponse>('company', null)
+  const response = await httpService.get<null, ApiResponse>('company', null)
 
   console.log('employeeService - getCompany, response', response)
 
