@@ -16,8 +16,8 @@ export type Employee = {
 export const EmployeeNumberSchema = z.object({
   employeeNumber: z
     .string()
-    .nonempty({ message: 'Field can not be empty' })
     .trim()
+    .min(1, { message: 'Field can not be empty' })
     .length(4, { message: 'Employee number  must be 4 characters' })
     .regex(/^[0-9]*$/, { message: 'Employee number must be numeric' }),
 })
@@ -25,8 +25,8 @@ export const EmployeeNumberSchema = z.object({
 export const DepartmentNameSchema = z.object({
   departmentName: z
     .string()
-    .nonempty({ message: 'Field can not be empty' })
     .trim()
+    .min(1, { message: 'Field can not be empty' })
     .min(2, { message: 'Department must be at least 3 characters' })
     .max(20, { message: 'Department must be less than 20 characters' })
     .regex(/^[a-zA-Z0-9]*$/, {
@@ -37,8 +37,8 @@ export const DepartmentNameSchema = z.object({
 export const PositionSchema = z.object({
   position: z
     .string()
-    .nonempty({ message: 'Field can not be empty' })
     .trim()
+    .min(1, { message: 'Field can not be empty' })
     .min(2, { message: 'Position must be at least 3 characters' })
     .max(20, { message: 'Position must be less than 20 characters' })
     .regex(/^[a-zA-Z0-9]*$/, {
