@@ -17,8 +17,6 @@ const employeeColumns: GridColDef[] = [
 ]
 
 const BasicEmployeeTable: FC = () => {
-  // const { employees, departmentOptions } = props
-
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
     queryFn: companyService.getBasicCompanyData,
@@ -32,7 +30,7 @@ const BasicEmployeeTable: FC = () => {
     return <span>Error: {error.message}</span>
   }
 
-  if (!data) {
+  if (!data || !data.employees) {
     return <span>Empty data</span>
   }
 
