@@ -5,6 +5,7 @@ import { getBasicEmployeeData } from './employee.controller.js'
 
 const router = express.Router()
 
-router.get('/basic', requireAuth, asyncHandler(getBasicEmployeeData))
+// TODO is in use?
+// router.get('/basic', requireAuth, asyncHandler(getBasicEmployeeData))
 
 export { router as employeeRoutes }

@@ -11,35 +11,38 @@ import { employeeService } from './employee.service.js'
 //     "message": "User logged in successfully",
 //     "data": { }
 // }
-export async function getBasicEmployeeData(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const identifier = getIdentifierFromALS()
 
-  const accountDoc = await accountService.getAccountDoc(identifier)
-  if (!accountDoc) throw new BadRequestError('Cannot find account')
+// TODO is in use?
 
-  const employeeId = accountDoc.employee
-  if (!employeeId) throw new BadRequestError('Cannot find employee')
+// export async function getBasicEmployeeData(
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) {
+//   const identifier = getIdentifierFromALS()
 
-  const companyId = await employeeService.getCompanyId(employeeId)
-  if (!companyId) throw new BadRequestError('Cannot find company')
+//   const accountDoc = await accountService.getAccountDoc(identifier)
+//   if (!accountDoc) throw new BadRequestError('Cannot find account')
 
-  const company = await companyService.getCompanyDoc(companyId)
-  if (!company) throw new BadRequestError('Cannot find company')
+//   const employeeId = accountDoc.employee
+//   if (!employeeId) throw new BadRequestError('Cannot find employee')
 
-  const companyEmployeeIds = company.employees
+//   const companyId = await employeeService.getCompanyId(employeeId)
+//   if (!companyId) throw new BadRequestError('Cannot find company')
 
-  const basicEmployeeData =
-    employeeService.getBasicEmployeeData(companyEmployeeIds)
+//   const company = await companyService.getCompanyDoc(companyId)
+//   if (!company) throw new BadRequestError('Cannot find company')
 
-  res.status(200).json({
-    success: true,
-    message: 'Successfully retrieved basic employee data',
-    data: {
-      employee: basicEmployeeData,
-    },
-  })
-}
+//   const companyEmployeeIds = company.employees
+
+//   const basicEmployeeData =
+//     employeeService.getBasicEmployeeData(companyEmployeeIds)
+
+//   res.status(200).json({
+//     success: true,
+//     message: 'Successfully retrieved basic employee data',
+//     data: {
+//       employee: basicEmployeeData,
+//     },
+//   })
+// }
