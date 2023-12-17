@@ -253,6 +253,12 @@ export async function updateEmployee(
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
   if (!isValid) throw new BadRequestError('Invalid company number')
 
+  const employeeNumber = req.params.employeeNumber
+  const isValidEmployeeNumber =
+    employeeNumberService.isValidEmployeeNumber(employeeNumber)
+  if (!isValidEmployeeNumber)
+    throw new BadRequestError('Invalid employee number')
+
   const company = await companyService.getCompanyByNumber(companyNumber)
   if (!company) {
     res.status(404).json({
@@ -264,8 +270,7 @@ export async function updateEmployee(
   }
 
   const data = req.body
-  const { firstName, lastName, ID, departmentName, employeeNumber, position } =
-    data
+  const { firstName, lastName, ID, departmentName, position } = data
 
   const employeeDoc = await employeeService.getEmployeeDoc(
     companyNumber,
