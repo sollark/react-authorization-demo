@@ -14,6 +14,27 @@ import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
 import { companyService } from '../company/company.service.js'
 
+async function getAllEmployees(): Promise<
+  (Employee & { _id: Types.ObjectId })[] | null
+> {
+  const employees = await EmployeeModel.find()
+    .populate<{ company: Company }>('company')
+    .populate<{ department: Department }>('department')
+    .populate<{ profile: Profile }>('profile')
+    .populate<{ supervisor: Employee }>('supervisor')
+    .populate<{ subordinates: Employee[] }>('subordinates')
+    .lean()
+    .exec()
+
+  if (!employees) {
+    logger.warn(`employeeService - getAllEmployees, cannot get employees`)
+  } else {
+    logger.info(`employeeService - getAllEmployees, all employees fetched`)
+  }
+
+  return employees
+}
+
 async function createEmployee(
   profileId: Types.ObjectId,
   companyId: Types.ObjectId,
@@ -319,6 +340,7 @@ async function addSubordinate(
 }
 
 export const employeeService = {
+  getAllEmployees,
   createEmployee,
   deleteEmployee,
   updateEmployee,

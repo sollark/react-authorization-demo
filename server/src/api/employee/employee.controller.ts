@@ -1,8 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import BadRequestError from '../../errors/BadRequestError.js'
-import { getIdentifierFromALS } from '../../service/als.service.js'
-import { accountService } from '../account/account.service.js'
-import { companyService } from '../company/company.service.js'
 import { employeeService } from './employee.service.js'
 
 // TODO
@@ -11,6 +7,28 @@ import { employeeService } from './employee.service.js'
 //     "message": "User logged in successfully",
 //     "data": { }
 // }
+
+export async function getAllEmployees(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const employees = await employeeService.getAllEmployees()
+  if (!employees) {
+    return res.status(400).json({
+      success: false,
+      message: 'Cannot find employees',
+    })
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Successfully retrieved all employees',
+    data: {
+      employees,
+    },
+  })
+}
 
 // TODO is in use?
 
