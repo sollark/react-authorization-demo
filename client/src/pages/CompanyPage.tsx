@@ -1,4 +1,4 @@
-import { employeeService } from '@/service/employee.service'
+import { companyService } from '@/service/company.service'
 import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
@@ -9,7 +9,7 @@ const CompanyPage: FC = () => {
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
-    queryFn: () => employeeService.getCompany(),
+    queryFn: () => companyService.getAdvancedCompanyData(),
   })
 
   if (isPending) {

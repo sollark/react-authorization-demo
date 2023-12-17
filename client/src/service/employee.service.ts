@@ -5,32 +5,17 @@ import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
 import { ApiResponse } from '@/models/response/ApiResponse'
 import { httpService } from './axios/http.service'
-import { storeService } from './store.service'
 
-async function updateEmployee(
-  firstName: string,
-  lastName: string,
-  ID: string,
-  departmentName: string,
-  position: string
-) {
-  const response = await httpService.post<
-    Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
-    Account
-  >('account/update', {
-    firstName,
-    lastName,
-    ID,
-    departmentName,
-    position,
-  })
+// TODO some functions get company number from employee store
+// others get company number from parameter
+// make it consistent
 
-  console.log('accountService- updateEmployee, response:', response)
+type AccountData = {
+  account: Account
+}
 
-  const { account } = response as any
-  if (account) storeService.saveAccount(account)
-
-  return account ? account : null
+type AllEmployeeData = {
+  employees: Employee[]
 }
 
 async function updateCompanyEmployee(
@@ -42,83 +27,69 @@ async function updateCompanyEmployee(
   employeeNumber: string,
   position: string
 ) {
-  console.log(
-    'employeeService- updateCompanyEmployee',
-    companyNumber,
-    firstName,
-    lastName,
-    ID,
-    departmentName,
-    employeeNumber,
-    position
-  )
-
-  const response = await httpService.post<
+  const response = await httpService.put<
     Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
-    Account
-  >('company/updateEmployee', {
-    companyNumber,
+    ApiResponse<AccountData>
+  >(`company/${companyNumber}/employees/${employeeNumber}`, {
     firstName,
     lastName,
     ID,
     departmentName,
-    employeeNumber,
     position,
   })
 
-  console.log('accountService- updateCompanyEmployee, response:', response)
+  console.log('employeeService - updateCompanyEmployee, response:', response)
 
-  const { account } = response as any
-  if (account) storeService.saveAccount(account)
+  const { success, message, data } = response.data
+  if (!success) {
+    console.log(message)
+    return null
+  }
+  const { account } = data
 
-  return account ? account : null
+  return account
 }
 
 async function deleteCompanyEmployee(
   companyNumber: string,
   employeeNumber: string
 ) {
-  const response = await httpService.delete<
-    Partial<Company> & Partial<Employee>,
-    ApiResponse
-  >('company/deleteEmployee', {
-    companyNumber,
-    employeeNumber,
-  })
+  const response = await httpService.delete<null, ApiResponse<null>>(
+    `company/${companyNumber}/employees/${employeeNumber}`,
+    null
+  )
 
-  console.log('accountService- deleteCompanyEmployee, response: ', response)
+  console.log('employeeService - deleteCompanyEmployee, response: ', response)
+
+  const { success, message, data } = response.data
+  if (!success) {
+    console.log(message)
+    return false
+  }
 
   return true
 }
 
-// TODO this function is meant to be used by the admin to get all employees in database
 async function getAllEmployees(): Promise<Employee[] | null> {
-  const response = await httpService.get<null, Employee[]>(
-    'company/employees',
+  const response = await httpService.get<null, ApiResponse<AllEmployeeData>>(
+    'employee/all',
     null
   )
 
   console.log('employeeService - getAllEmployees, response: ', response)
 
-  const { success, message, data } = response as any
+  const { success, message, data } = response.data
+  if (!success) {
+    console.log(message)
+    return null
+  }
   const employees = data.employees
 
-  return employees ? employees : null
+  return employees
 }
 
-async function getCompany(): Promise<Company | null> {
-  const response = await httpService.get<null, ApiResponse>('company', null)
-
-  console.log('employeeService - getCompany, response', response)
-
-  const { success, message, data } = response as any
-
-  return data.company ? data.company : null
-}
 export const employeeService = {
-  updateEmployee,
   updateCompanyEmployee,
   deleteCompanyEmployee,
-  getCompany,
   getAllEmployees,
 }
