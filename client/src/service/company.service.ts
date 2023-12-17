@@ -53,7 +53,7 @@ async function getAdvancedCompanyData(): Promise<Company | null> {
     ApiResponse<AdvancedCompanyData>
   >(`company/${companyNumber} `, null)
 
-  console.log('companyService - getBasicCompanyData, response', response)
+  console.log('companyService - getAdvancedCompanyData, response', response)
 
   const { success, message, data } = response.data
   if (!success) {
