@@ -3,8 +3,13 @@ import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
+import { ApiResponse } from '@/models/response/ApiResponse'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
+
+type AccountData = {
+  account: Account
+}
 
 async function updateAccount(
   firstName: string,
@@ -16,7 +21,7 @@ async function updateAccount(
 ) {
   const response = await httpService.post<
     Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
-    Account
+    ApiResponse<AccountData>
   >('account/update', {
     firstName,
     lastName,
@@ -26,18 +31,24 @@ async function updateAccount(
     position,
   })
 
-  console.log('accountService - update, response data', response)
+  console.log('accountService - update, response', response)
 
-  const { account } = response as any
-  if (account) storeService.saveAccount(account)
+  const { success, message, data } = response.data
+  if (!success) {
+    console.log(message)
+    return null
+  }
 
-  return account ? account : null
+  const { account } = data
+  storeService.saveAccount(account)
+
+  return account
 }
 
 async function joinCompany(companyNumber: string, employeeNumber: string) {
   const response = await httpService.post<
     Partial<Company> & Partial<Employee>,
-    Account
+    ApiResponse<AccountData>
   >('account/join', {
     companyNumber,
     employeeNumber,
@@ -45,21 +56,36 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
 
   console.log('accountService - joinCompany, response data', response)
 
-  const { account } = response as any
-  if (account) storeService.saveAccount(account)
+  const { success, message, data } = response.data
+  if (!success) {
+    console.log(message)
+    return null
+  }
 
-  return account ? account : null
+  const { account } = data
+  storeService.saveAccount(account)
+
+  return account
 }
 
 async function getAccount(): Promise<Account | null> {
-  const response = await httpService.get<null, Account>('account/get', null)
+  const response = await httpService.get<null, ApiResponse<AccountData>>(
+    'account',
+    null
+  )
 
-  console.log('accountService - getAccount, response data', response)
+  console.log('accountService - getAccount, response', response)
 
-  const { account } = response as any
-  if (account) storeService.saveAccount(account)
+  const { success, message, data } = response.data
+  if (!success) {
+    console.log(message)
+    return null
+  }
 
-  return account ? account : null
+  const { account } = data
+  storeService.saveAccount(account)
+
+  return account
 }
 
 export const accountService = { updateAccount, joinCompany, getAccount }
