@@ -39,13 +39,6 @@ const CompanyPage: FC = () => {
         }`}
       </p>
       <p>{`Number of employees: ${data.employees.length}`}</p>
-
-      {/* <AdvancedEmployeeTable
-        employees={data.employees}
-        departmentOptions={
-          data.departments.map((department) => department.departmentName) || []
-        }
-      /> */}
     </Box>
   )
 }

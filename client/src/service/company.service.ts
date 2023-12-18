@@ -1,6 +1,5 @@
 import { Account, Role, Status } from '@/models/Account'
 import { Company } from '@/models/Company'
-import { ApiResponse } from '@/models/response/ApiResponse'
 import useEmployeeStore from '@/stores/employeeStore'
 import { httpService } from './axios/http.service'
 
@@ -21,92 +20,58 @@ type UpdateEmployeeAccountData = {
 }
 
 async function getBasicCompanyData(): Promise<Partial<Company> | null> {
-  // get company number from employee store
-  const companyNumber = useEmployeeStore(
-    (state) => state.employee?.company.companyNumber
-  )
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
 
-  const response = await httpService.get<null, ApiResponse<BasicCompanyData>>(
+  const data = await httpService.get<null, BasicCompanyData>(
     `company/${companyNumber}/basic`,
     null
   )
 
-  console.log('companyService - getBasicCompanyData, response', response)
+  console.log('companyService - getBasicCompanyData, data', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
-
-  return data.basicCompanyData
+  return data?.basicCompanyData || null
 }
 
 async function getAdvancedCompanyData(): Promise<Company | null> {
-  // get company number from employee store
   const companyNumber = useEmployeeStore.getState().getCompanyNumber()
 
-  const response = await httpService.get<
-    null,
-    ApiResponse<AdvancedCompanyData>
-  >(`company/${companyNumber}`, null)
+  const data = await httpService.get<null, AdvancedCompanyData>(
+    `company/${companyNumber}`,
+    null
+  )
 
-  console.log('companyService - getAdvancedCompanyData, response', response)
+  console.log('companyService - getAdvancedCompanyData, data', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
-
-  return data.company
+  return data?.company || null
 }
 
 async function getEmployeeAccountData(): Promise<Partial<Account>[] | null> {
-  // get company number from employee store
-  const companyNumber = useEmployeeStore(
-    (state) => state.employee?.company.companyNumber
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+
+  const data = await httpService.get<null, EmployeeAccountData>(
+    `company/${companyNumber}/accounts`,
+    null
   )
 
-  const response = await httpService.get<
-    null,
-    ApiResponse<EmployeeAccountData>
-  >(`company/${companyNumber}/accounts`, null)
+  console.log('companyService- getEmployeeAccountData, data', data)
 
-  console.log('companyService- getEmployeeAccountData, response', response)
-
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
-
-  return data.accounts
+  return data?.accounts || null
 }
 
 async function updateEmployeeAccount(
   role: Role,
   status: Status
 ): Promise<Partial<Account> | null> {
-  // get company number from employee store
-  const companyNumber = useEmployeeStore(
-    (state) => state.employee?.company.companyNumber
-  )
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
 
-  const response = await httpService.put<
+  const data = await httpService.put<
     Partial<Account>,
-    ApiResponse<UpdateEmployeeAccountData>
+    UpdateEmployeeAccountData
   >(`company/${companyNumber}/accounts`, { role, status })
 
-  console.log('companyService - updateEmployeeAccount, response', response)
+  console.log('companyService - updateEmployeeAccount, data', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
-
-  return data.accounts
+  return data?.accounts || null
 }
 
 export const companyService = {
