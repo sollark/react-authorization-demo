@@ -2,10 +2,10 @@ import axios, { AxiosPromise, InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { headerService } from './header.service'
 
-const NODE_ENV = import.meta.env.NODE_ENV
-const DEV_API_URL = import.meta.env.DEV_API_URL
-const PROD_API_URL = import.meta.env.PROD_API_URL
-
+// Vite environment variables, must start with VITE_
+const NODE_ENV = import.meta.env.VITE_NODE_ENV
+const DEV_API_URL = import.meta.env.VITE_DEV_API_URL
+const PROD_API_URL = import.meta.env.VITE_PROD_API_URL
 const API_URL = isDevelopment() ? DEV_API_URL : PROD_API_URL
 
 const api = axios.create({
