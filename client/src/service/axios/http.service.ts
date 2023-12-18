@@ -1,6 +1,7 @@
-import axios, { AxiosPromise, InternalAxiosRequestConfig } from 'axios'
+import axios, { InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { headerService } from './header.service'
+import { responseService } from './response.service'
 
 // Vite environment variables, must start with VITE_
 const NODE_ENV = import.meta.env.VITE_NODE_ENV
@@ -69,17 +70,17 @@ api.interceptors.response.use(
 )
 
 export const httpService = {
-  get<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
-    return ajax(endpoint, 'GET', data)
+  get<T, R>(endpoint: string, data: T): Promise<R | null> {
+    return ajax<T, R>(endpoint, 'GET', data)
   },
-  post<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
-    return ajax(endpoint, 'POST', data)
+  post<T, R>(endpoint: string, data: T): Promise<R | null> {
+    return ajax<T, R>(endpoint, 'POST', data)
   },
-  put<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
-    return ajax(endpoint, 'PUT', data)
+  put<T, R>(endpoint: string, data: T): Promise<R | null> {
+    return ajax<T, R>(endpoint, 'PUT', data)
   },
-  delete<T, R>(endpoint: string, data: T): Promise<AxiosPromise<R>> {
-    return ajax(endpoint, 'DELETE', data)
+  delete<T, R>(endpoint: string, data: T): Promise<R | null> {
+    return ajax<T, R>(endpoint, 'DELETE', data)
   },
 }
 
@@ -87,7 +88,7 @@ async function ajax<T, R>(
   endpoint: string,
   method = 'GET',
   data: T | null = null
-): Promise<R> {
+): Promise<R | null> {
   try {
     const res = await api({
       url: `${API_URL}${endpoint}`,
@@ -96,7 +97,8 @@ async function ajax<T, R>(
       params: data,
     })
 
-    return res.data
+    // return res.data
+    return responseService.handleApiResponse<R>(res)
   } catch (error) {
     if (isDevelopment())
       console.log(
