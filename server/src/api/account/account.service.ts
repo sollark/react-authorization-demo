@@ -42,11 +42,7 @@ async function createAccount(
   }
 
   logger.info(
-    `accountService - account is created:  ${JSON.stringify(
-      account,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `accountService - createAccount, account is created:  ${account._id}`
   )
 
   return account
@@ -88,17 +84,13 @@ async function getAccount(
     .exec()
 
   if (!account) {
-    logger.warn(`accountService - account is not found: ${identifier}`)
+    logger.warn(
+      `accountService - getAccount, account is not found: ${identifier}`
+    )
     throw new BadRequestError('Account is not found')
   }
 
-  logger.info(
-    `accountService - account fetched: ${JSON.stringify(
-      account,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
-  )
+  logger.info(`accountService - getAccount, account fetched: ${account._id}`)
 
   return account
 }
@@ -129,16 +121,12 @@ async function getAccounts(
     .exec()
 
   if (!accounts) {
-    logger.warn(`accountService - accounts are not found`)
+    logger.warn(`accountService - getAccounts, accounts are not found`)
     throw new BadRequestError('Accounts are not found')
   }
 
   logger.info(
-    `accountService - accounts fetched: ${JSON.stringify(
-      accounts,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `accountService - getAccounts, number of accounts fetched: ${accounts.length}`
   )
 
   return accounts
@@ -150,7 +138,9 @@ async function getAccountDoc(
   const account = await AccountModel.findOne({ identifier }).lean().exec()
 
   if (!account) {
-    logger.warn(`accountService - account is not found: ${identifier}`)
+    logger.warn(
+      `accountService - getAccountDoc, account is not found: ${identifier}`
+    )
     throw new BadRequestError('Account is not found')
   }
 
@@ -164,13 +154,6 @@ async function getEmployeeAccountDoc(
     .lean()
     .exec()
 
-  // logger.info(
-  //   `accountService- getEmployeeAccountDoc, account fetched: ${JSON.stringify(
-  //     accountDoc,
-  //     null,
-  //     2 // Indentation level, adjust as needed
-  //   )}`
-  // )
   return accountDoc
 }
 
@@ -199,7 +182,7 @@ async function setProfile(
 
   if (!account) {
     logger.warn(
-      `accountService - cannot set profile: ${accountId} ${profileId}`
+      `accountService - setProfile, cannot set profile: ${accountId} ${profileId}`
     )
     throw new BadRequestError('Account cannot be updated')
   }
@@ -300,16 +283,14 @@ async function completeAccount(
     .exec()
 
   if (!updatedAccount) {
-    logger.warn(`accountService - cannot update account: ${accountId}`)
+    logger.warn(
+      `accountService - completeAccount, cannot update account: ${accountId}`
+    )
     throw new BadRequestError('Account cannot be updated')
   }
 
   logger.info(
-    `accountService - account is completed: ${JSON.stringify(
-      updatedAccount,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `accountService - completeAccount, account is completed: ${updatedAccount._id}`
   )
 
   return updatedAccount
@@ -323,6 +304,7 @@ function sortAccountData(
   updatedCompanyData: Partial<Company>,
   updatedDepartmentData: Partial<Department>
 ] {
+  // function usage:
   // const [
   //   updatedProfileData,
   //   updateEmployeeData,
@@ -388,3 +370,12 @@ export const accountService = {
   sortAccountData,
   completeAccount,
 }
+
+// expanded logging:
+// logger.info(
+//   `accountService - createAccount, account is created:  ${JSON.stringify(
+//     account,
+//     null,
+//     2 // Indentation level, adjust as needed
+//   )}`
+// )
