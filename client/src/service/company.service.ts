@@ -44,14 +44,12 @@ async function getBasicCompanyData(): Promise<Partial<Company> | null> {
 
 async function getAdvancedCompanyData(): Promise<Company | null> {
   // get company number from employee store
-  const companyNumber = useEmployeeStore(
-    (state) => state.employee?.company.companyNumber
-  )
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
 
   const response = await httpService.get<
     null,
     ApiResponse<AdvancedCompanyData>
-  >(`company/${companyNumber} `, null)
+  >(`company/${companyNumber}`, null)
 
   console.log('companyService - getAdvancedCompanyData, response', response)
 
