@@ -36,7 +36,7 @@ function doLog(level: string, ...args: any[]): void {
   })
 }
 
-export default {
+const logger = {
   debug(...args: any[]) {
     if (process.env.NODE_ENV === 'production') return
     doLog('DEBUG', ...args)
@@ -51,6 +51,8 @@ export default {
     doLog('ERROR', ...args)
   },
 }
+
+export default logger
 
 // log object example:
 //
