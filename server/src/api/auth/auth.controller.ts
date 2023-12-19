@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
+import logger from '../../service/logger.service.js'
 import { authService } from './auth.service.js'
 
 export async function registration(
@@ -54,6 +55,8 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
 
   const { accessToken, refreshToken: newRefreshToken } =
     await authService.refresh(expiredRefreshToken)
+
+  logger.info('refreshing expired access token')
 
   // save refresh token in cookie for 7 days
   res.cookie('refreshToken', newRefreshToken, {
