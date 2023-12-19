@@ -1,4 +1,4 @@
-import EditableAccountTable from '@/cmps/tables/EditableAccountTable'
+import EditableAccountTable from '@/cmps/tables/accountTable/EditableAccountTable'
 import { Role } from '@/models/Account'
 import useRoleStore from '@/stores/roleStore'
 import { Box } from '@mui/material'

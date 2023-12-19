@@ -9,7 +9,7 @@ import {
 } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
-import Table from './Table'
+import Table from '../Table'
 
 type AccountTableColumns = {
   firstName: string
