@@ -7,6 +7,7 @@ import {
   getCompany,
   getCompanyEmployees,
   getCompanyEmployeesAccounts,
+  updateCompanyEmployeeAccount,
   updateEmployee,
 } from './company.controller.js'
 
@@ -37,6 +38,11 @@ router.get(
   '/:companyNumber/accounts',
   requireAuth,
   asyncHandler(getCompanyEmployeesAccounts)
+)
+router.put(
+  '/:companyNumber/accounts/:employeeNumber',
+  requireAuth,
+  asyncHandler(updateCompanyEmployeeAccount)
 )
 
 export { router as companyRoutes }

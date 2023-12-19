@@ -175,6 +175,73 @@ export async function getCompanyEmployeesAccounts(
   })
 }
 
+export async function updateCompanyEmployeeAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
+
+  const employeeNumber = req.params.employeeNumber
+  const isValidEmployeeNumber =
+    employeeNumberService.isValidEmployeeNumber(employeeNumber)
+  if (!isValidEmployeeNumber)
+    throw new BadRequestError('Invalid employee number')
+
+  const company = await companyService.getCompanyByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
+
+  const employeeDoc = await employeeService.getEmployeeDoc(
+    companyNumber,
+    employeeNumber
+  )
+  if (!employeeDoc) {
+    res.status(404).json({
+      success: false,
+      message: 'Employee not found',
+      data: {},
+    })
+    return
+  }
+
+  const accountDoc = await accountService.getEmployeeAccountDoc(employeeDoc._id)
+  if (!accountDoc) {
+    res.status(404).json({
+      success: false,
+      message: 'Account not found',
+      data: {},
+    })
+    return
+  }
+
+  const data = req.body
+  const { role, status } = data
+
+  const updatedAccount = await accountService.updateAccount(
+    accountDoc._id,
+    role,
+    status
+  )
+  if (!updatedAccount) throw new BadRequestError('Account not updated')
+
+  res.status(200).json({
+    success: true,
+    message: 'Account has been updated.',
+    data: { updatedAccount },
+  })
+}
+
 export async function addEmployee(
   req: Request,
   res: Response,

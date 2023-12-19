@@ -236,6 +236,7 @@ async function getCompanyEmployeeIds(
   return employeeIds ? employeeIds : null
 }
 
+// TODO is not in use
 async function updateCompany(
   id: number,
   name: string

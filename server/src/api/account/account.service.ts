@@ -48,15 +48,6 @@ async function createAccount(
   return account
 }
 
-async function setRole(accountId: Types.ObjectId, role: Role) {
-  const account = await AccountModel.findByIdAndUpdate(
-    accountId,
-    { role },
-    // returns new version of document, if false returns original version, before updates
-    { new: true }
-  ).exec()
-}
-
 async function getAccount(
   identifier: Types.ObjectId
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
@@ -102,6 +93,7 @@ async function getAccounts(
     { employee: { $in: employeeIds } },
     { isComplete: 0 }
   )
+    .select('-isComplete')
     .populate<{ profile: Profile }>('profile')
     .populate<{ employee: Employee }>({
       path: 'employee',
@@ -157,10 +149,6 @@ async function getEmployeeAccountDoc(
   return accountDoc
 }
 
-async function deleteAccount(identifier: Types.ObjectId) {
-  await AccountModel.findOneAndDelete({ identifier })
-}
-
 async function setProfile(
   accountId: Types.ObjectId,
   profileId: Types.ObjectId
@@ -188,6 +176,15 @@ async function setProfile(
   }
 
   logger.info(`accountService - setProfile, profileId: ${profileId}`)
+}
+
+async function setRole(accountId: Types.ObjectId, role: Role) {
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
+    { role },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  ).exec()
 }
 
 async function connectEmployee(
@@ -296,6 +293,46 @@ async function completeAccount(
   return updatedAccount
 }
 
+async function updateAccount(
+  accountId: Types.ObjectId,
+  role: Role,
+  status: Status
+): Promise<(Account & { _id: Types.ObjectId }) | null> {
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
+    { role, status },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  )
+    .populate<{ profile: Profile }>('profile')
+    .populate<{ employee: Employee }>({
+      path: 'employee',
+      select: '-profile -supervisor -subordinates',
+      populate: [
+        {
+          path: 'company',
+          select: 'companyName',
+        },
+        {
+          path: 'department',
+          select: 'departmentName',
+        },
+      ],
+    })
+    .lean()
+    .exec()
+
+  logger.info(
+    `accountService - updateAccount, account is updated: ${accountId}`
+  )
+
+  return account
+}
+
+async function deleteAccount(identifier: Types.ObjectId) {
+  await AccountModel.findOneAndDelete({ identifier })
+}
+
 function sortAccountData(
   accountData: any
 ): [
@@ -358,17 +395,18 @@ function sortAccountData(
 
 export const accountService = {
   createAccount,
-  setRole,
   getAccount,
   getAccounts,
   getAccountDoc,
   getEmployeeAccountDoc,
-  deleteAccount,
   setProfile,
+  setRole,
   connectEmployee,
   disconnectEmployee,
-  sortAccountData,
   completeAccount,
+  updateAccount,
+  deleteAccount,
+  sortAccountData,
 }
 
 // expanded logging:
