@@ -21,7 +21,11 @@ export async function registration(
     secure: true,
   })
 
-  res.status(200).json({ accessToken })
+  res.status(200).json({
+    success: true,
+    message: 'New access token.',
+    data: { accessToken },
+  })
 }
 
 export async function signIn(req: Request, res: Response, next: NextFunction) {
@@ -36,7 +40,11 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     secure: true,
   })
 
-  res.status(200).json({ accessToken })
+  res.status(200).json({
+    success: true,
+    message: 'New access token.',
+    data: { accessToken },
+  })
 }
 
 export async function signOut(req: Request, res: Response, next: NextFunction) {
@@ -66,5 +74,9 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
     secure: true,
   })
 
-  res.status(200).json({ accessToken })
+  res.status(200).json({
+    success: true,
+    message: 'New access token.',
+    data: { accessToken },
+  })
 }
