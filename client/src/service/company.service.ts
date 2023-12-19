@@ -59,6 +59,7 @@ async function getEmployeeAccountData(): Promise<Partial<Account>[] | null> {
 }
 
 async function updateEmployeeAccount(
+  employeeNumber: string,
   role: Role,
   status: Status
 ): Promise<Partial<Account> | null> {
@@ -67,7 +68,7 @@ async function updateEmployeeAccount(
   const data = await httpService.put<
     Partial<Account>,
     UpdateEmployeeAccountData
-  >(`company/${companyNumber}/accounts`, { role, status })
+  >(`company/${companyNumber}/accounts/${employeeNumber}`, { role, status })
 
   console.log('companyService - updateEmployeeAccount, data', data)
 

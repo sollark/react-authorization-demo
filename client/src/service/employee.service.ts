@@ -3,6 +3,7 @@ import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
+import useEmployeeStore from '@/stores/employeeStore'
 import { httpService } from './axios/http.service'
 
 // TODO some functions get company number from employee store
@@ -18,7 +19,6 @@ type AllEmployeeData = {
 }
 
 async function updateCompanyEmployee(
-  companyNumber: string,
   firstName: string,
   lastName: string,
   ID: string,
@@ -26,6 +26,8 @@ async function updateCompanyEmployee(
   employeeNumber: string,
   position: string
 ) {
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+
   const data = await httpService.put<
     Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
     AccountData
@@ -42,10 +44,8 @@ async function updateCompanyEmployee(
   return data?.account || null
 }
 
-async function deleteCompanyEmployee(
-  companyNumber: string,
-  employeeNumber: string
-) {
+async function deleteCompanyEmployee(employeeNumber: string) {
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
   const data = await httpService.delete<null, null>(
     `company/${companyNumber}/employees/${employeeNumber}`,
     null

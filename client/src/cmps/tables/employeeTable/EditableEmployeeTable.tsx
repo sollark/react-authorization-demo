@@ -52,7 +52,7 @@ const employeeColumns: GridColDef[] = [
   { field: 'position', headerName: 'Position', editable: true, flex: 1 },
 ]
 
-function updateCompanyEmployee(companyNumber: string) {
+function updateCompanyEmployee() {
   return async (row: GridRowModel): Promise<boolean> => {
     const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
     const {
@@ -65,7 +65,6 @@ function updateCompanyEmployee(companyNumber: string) {
     } = rowData
 
     const response = await employeeService.updateCompanyEmployee(
-      companyNumber,
       firstName,
       lastName,
       ID,
@@ -79,15 +78,12 @@ function updateCompanyEmployee(companyNumber: string) {
   }
 }
 
-function deleteCompanyEmployee(companyNumber: string) {
+function deleteCompanyEmployee() {
   return async (row: GridRowModel): Promise<boolean> => {
     const rowData = adaptTableRowToObject<EmployeeTableColumns>(row)
     const { employeeNumber } = rowData
 
-    const response = await employeeService.deleteCompanyEmployee(
-      companyNumber,
-      employeeNumber
-    )
+    const response = await employeeService.deleteCompanyEmployee(employeeNumber)
 
     // TODO return false if error in response
     return true
@@ -112,7 +108,7 @@ const EditableEmployeeTable: FC = () => {
     return <span>Empty data</span>
   }
 
-  const { companyNumber, employees } = data
+  const { employees } = data
 
   const departmentOptions =
     data.departments.map(
@@ -134,8 +130,8 @@ const EditableEmployeeTable: FC = () => {
 
   console.log('employeeData from api', employeeData)
 
-  const updateEmployee = updateCompanyEmployee(companyNumber)
-  const deleteEmployee = deleteCompanyEmployee(companyNumber)
+  const updateEmployee = updateCompanyEmployee()
+  const deleteEmployee = deleteCompanyEmployee()
 
   return (
     <div>

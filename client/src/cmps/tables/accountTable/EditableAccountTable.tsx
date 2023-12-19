@@ -51,12 +51,13 @@ const accountColumns: GridColDef[] = [
   },
 ]
 
-function updateEmployeeAccount(companyNumber: string) {
+function updateEmployeeAccount() {
   return async (row: GridRowModel): Promise<boolean> => {
     const rowData = adaptTableRowToObject<AccountTableColumns>(row)
-    const { role, status } = rowData
+    const { employeeNumber, role, status } = rowData
 
     const response = await companyService.updateEmployeeAccount(
+      employeeNumber,
       role as Role,
       status as Status
     )
@@ -107,7 +108,7 @@ const EditableAccountTable: FC = () => {
 
   console.log('accountData from api', accountData)
 
-  const updateAccount = updateEmployeeAccount(company.companyNumber)
+  const updateAccount = updateEmployeeAccount()
 
   return (
     <div>
@@ -116,6 +117,7 @@ const EditableAccountTable: FC = () => {
         basicProps={{ dataRows: accountData, tableColumns: accountColumns }}
         specialProps={{
           updateRow: updateAccount,
+          config: { showAddButton: false, showDeleteButton: false },
         }}
         editable
       />
