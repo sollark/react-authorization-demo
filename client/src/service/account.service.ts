@@ -3,7 +3,6 @@ import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
-import { ApiResponse } from '@/models/response/ApiResponse'
 import { httpService } from './axios/http.service'
 import { storeService } from './store.service'
 
@@ -19,9 +18,9 @@ async function updateAccount(
   departmentName: string,
   position: string
 ) {
-  const response = await httpService.post<
+  const data = await httpService.post<
     Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
-    ApiResponse<AccountData>
+    AccountData
   >('account/update', {
     firstName,
     lastName,
@@ -31,13 +30,9 @@ async function updateAccount(
     position,
   })
 
-  console.log('accountService - update, response', response)
+  console.log('accountService - updateAccount, data', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
+  if (!data) return null
 
   const { account } = data
   storeService.saveAccount(account)
@@ -46,21 +41,17 @@ async function updateAccount(
 }
 
 async function joinCompany(companyNumber: string, employeeNumber: string) {
-  const response = await httpService.post<
+  const data = await httpService.post<
     Partial<Company> & Partial<Employee>,
-    ApiResponse<AccountData>
+    AccountData
   >('account/join', {
     companyNumber,
     employeeNumber,
   })
 
-  console.log('accountService - joinCompany, response data', response)
+  console.log('accountService - joinCompany, data', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
+  if (!data) return null
 
   const { account } = data
   storeService.saveAccount(account)
@@ -69,18 +60,11 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
 }
 
 async function getAccount(): Promise<Account | null> {
-  const response = await httpService.get<null, ApiResponse<AccountData>>(
-    'account',
-    null
-  )
+  const data = await httpService.get<null, AccountData>('account', null)
 
-  console.log('accountService - getAccount, response', response)
+  console.log('accountService - getAccount, data', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
+  if (!data) return null
 
   const { account } = data
   storeService.saveAccount(account)

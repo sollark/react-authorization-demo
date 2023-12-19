@@ -3,7 +3,6 @@ import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
-import { ApiResponse } from '@/models/response/ApiResponse'
 import { httpService } from './axios/http.service'
 
 // TODO some functions get company number from employee store
@@ -27,9 +26,9 @@ async function updateCompanyEmployee(
   employeeNumber: string,
   position: string
 ) {
-  const response = await httpService.put<
+  const data = await httpService.put<
     Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
-    ApiResponse<AccountData>
+    AccountData
   >(`company/${companyNumber}/employees/${employeeNumber}`, {
     firstName,
     lastName,
@@ -38,54 +37,34 @@ async function updateCompanyEmployee(
     position,
   })
 
-  console.log('employeeService - updateCompanyEmployee, response:', response)
+  console.log('employeeService - updateCompanyEmployee, data:', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
-  const { account } = data
-
-  return account
+  return data?.account || null
 }
 
 async function deleteCompanyEmployee(
   companyNumber: string,
   employeeNumber: string
 ) {
-  const response = await httpService.delete<null, ApiResponse<null>>(
+  const data = await httpService.delete<null, null>(
     `company/${companyNumber}/employees/${employeeNumber}`,
     null
   )
 
-  console.log('employeeService - deleteCompanyEmployee, response: ', response)
-
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return false
-  }
+  console.log('employeeService - deleteCompanyEmployee, data: ', data)
 
   return true
 }
 
 async function getAllEmployees(): Promise<Employee[] | null> {
-  const response = await httpService.get<null, ApiResponse<AllEmployeeData>>(
+  const data = await httpService.get<null, AllEmployeeData>(
     'employee/all',
     null
   )
 
-  console.log('employeeService - getAllEmployees, response: ', response)
+  console.log('employeeService - getAllEmployees, data: ', data)
 
-  const { success, message, data } = response.data
-  if (!success) {
-    console.log(message)
-    return null
-  }
-  const employees = data.employees
-
-  return employees
+  return data?.employees || null
 }
 
 export const employeeService = {
