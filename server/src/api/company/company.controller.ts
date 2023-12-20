@@ -129,6 +129,74 @@ export async function getCompanyEmployees(
   })
 }
 
+export async function getCompanyEmployeeBasicTableData(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
+
+  const company = await companyService.getCompanyDocByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
+
+  const companyEmployeeIds = company.employees
+  const basicEmployeeData =
+    employeeService.getBasicEmployeeTableData(companyEmployeeIds)
+
+  res.status(200).json({
+    success: true,
+    message: 'Successfully retrieved basic employee data',
+    data: {
+      employee: basicEmployeeData,
+    },
+  })
+}
+
+export async function getCompanyEmployeeAdvancedTableData(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+
+  const companyNumber = req.params.companyNumber
+  const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValid) throw new BadRequestError('Invalid company number')
+
+  const company = await companyService.getCompanyDocByNumber(companyNumber)
+  if (!company) {
+    res.status(404).json({
+      success: false,
+      message: 'Company not found',
+      data: {},
+    })
+    return
+  }
+
+  const companyEmployeeIds = company.employees
+  const advancedEmployeeData =
+    employeeService.getAdvancedEmployeeTableData(companyEmployeeIds)
+
+  res.status(200).json({
+    success: true,
+    message: 'Successfully retrieved advanced employee data',
+    data: {
+      employee: advancedEmployeeData,
+    },
+  })
+}
+
 export async function getCompanyEmployeesAccounts(
   req: Request,
   res: Response,

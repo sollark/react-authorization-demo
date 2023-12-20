@@ -5,13 +5,14 @@ import {
   deleteEmployee,
   getBasicCompanyData,
   getCompany,
+  getCompanyEmployeeAdvancedTableData,
+  getCompanyEmployeeBasicTableData,
   getCompanyEmployees,
   getCompanyEmployeesAccounts,
   updateCompanyEmployeeAccount,
   updateEmployee,
 } from './company.controller.js'
 
-// TODO update employee account
 const router = express.Router()
 router.get('/:companyNumber', requireAuth, asyncHandler(getCompany))
 router.get(
@@ -23,6 +24,16 @@ router.get(
   '/:companyNumber/employees',
   requireAuth,
   asyncHandler(getCompanyEmployees)
+)
+router.get(
+  '/:companyNumber/employees/basicTableData',
+  requireAuth,
+  asyncHandler(getCompanyEmployeeBasicTableData)
+)
+router.get(
+  '/:companyNumber/employees/advancedTableData',
+  requireAuth,
+  asyncHandler(getCompanyEmployeeAdvancedTableData)
 )
 router.put(
   '/:companyNumber/employees/:employeeNumber',
