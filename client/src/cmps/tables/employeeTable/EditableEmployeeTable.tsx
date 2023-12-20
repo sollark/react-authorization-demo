@@ -1,5 +1,4 @@
 import { Department } from '@/models/Department'
-import { companyService } from '@/service/company.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import {
@@ -93,7 +92,7 @@ function deleteCompanyEmployee() {
 const EditableEmployeeTable: FC = () => {
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
-    queryFn: companyService.getAdvancedCompanyData,
+    queryFn: employeeService.getCompanyEmployeeAdvancedData,
   })
 
   if (isPending) {
@@ -108,8 +107,9 @@ const EditableEmployeeTable: FC = () => {
     return <span>Empty data</span>
   }
 
-  const { employees } = data
+  const employees = data
 
+  // TODO need to fetch departments from ...
   const departmentOptions =
     data.departments.map(
       (department: Department) => department.departmentName

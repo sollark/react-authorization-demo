@@ -1,4 +1,4 @@
-import { companyService } from '@/service/company.service'
+import { employeeService } from '@/service/employee.service'
 import { GridColDef } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
@@ -8,29 +8,6 @@ import Table from '../Table'
  * AdvancedEmployeeTable has full info about employees
  * AdvancedEmployeeTable is not editable
  */
-
-// type EmployeeTableProps = {
-//   employees: Employee[] | null
-//   departmentOptions: string[]
-// }
-
-type EmployeeTableColumns = {
-  firstName: string
-  lastName: string
-  ID: string
-  departmentName: string
-  employeeNumber: string
-  position: string
-}
-
-const employeeDefaultValues: EmployeeTableColumns = {
-  firstName: '',
-  lastName: '',
-  ID: '',
-  departmentName: '',
-  employeeNumber: '',
-  position: '',
-}
 
 const employeeColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'First name', flex: 1 },
@@ -42,11 +19,9 @@ const employeeColumns: GridColDef[] = [
 ]
 
 const AdvancedEmployeeTable: FC = () => {
-  // const { employees, departmentOptions } = props
-
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
-    queryFn: companyService.getAdvancedCompanyData,
+    queryFn: employeeService.getCompanyEmployeeAdvancedData,
   })
 
   if (isPending) {
@@ -61,7 +36,7 @@ const AdvancedEmployeeTable: FC = () => {
     return <span>Empty data</span>
   }
 
-  const employees = data.employees
+  const employees = data
 
   const employeeData = employees?.map((employee) => {
     return {

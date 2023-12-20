@@ -1,4 +1,4 @@
-import { companyService } from '@/service/company.service'
+import { employeeService } from '@/service/employee.service'
 import { GridColDef } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
@@ -19,7 +19,7 @@ const employeeColumns: GridColDef[] = [
 const BasicEmployeeTable: FC = () => {
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
-    queryFn: companyService.getBasicCompanyData,
+    queryFn: employeeService.getCompanyEmployeeBasicData,
   })
 
   if (isPending) {
@@ -30,11 +30,11 @@ const BasicEmployeeTable: FC = () => {
     return <span>Error: {error.message}</span>
   }
 
-  if (!data || !data.employees) {
+  if (!data) {
     return <span>Empty data</span>
   }
 
-  const employees = data.employees
+  const employees = data
 
   const employeeData = employees?.map((employee) => {
     return {
