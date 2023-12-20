@@ -154,18 +154,42 @@ async function getEmployeeDoc(
   return employeeDoc
 }
 
-async function getBasicEmployeeData(
+async function getBasicEmployeeTableData(
   employeeIds: Types.ObjectId[]
-): Promise<Partial<Employee>[] | null> {
+): Promise<Partial<Employee & { _id: Types.ObjectId }>[] | null> {
   const employees = await EmployeeModel.find({ _id: { $in: employeeIds } })
-    .select('company department employeeNumber position profile')
     .populate<{ company: Company }>('company')
-    .populate<{ department: Department }>('department')
+    .populate<{ department: Department }>({
+      path: 'department',
+      select: 'departmentName',
+    })
     .populate<{ profile: Profile }>('profile')
+    .populate<{ supervisor: Employee }>('supervisor')
+    .populate<{ subordinates: Employee[] }>('subordinates')
+    .select('-company -supervisor -subordinates department position profile')
     .lean()
     .exec()
 
-  return null
+  return employees
+}
+
+async function getAdvancedEmployeeTableData(
+  employeeIds: Types.ObjectId[]
+): Promise<Partial<Employee>[] | null> {
+  const employees = await EmployeeModel.find({ _id: { $in: employeeIds } })
+    .populate<{ company: Company }>('company')
+    .populate<{ department: Department }>({
+      path: 'department',
+      select: 'departmentName',
+    })
+    .populate<{ profile: Profile }>('profile')
+    .populate<{ supervisor: Employee }>('supervisor')
+    .populate<{ subordinates: Employee[] }>('subordinates')
+    .select('-company -supervisor -subordinates department position profile')
+    .lean()
+    .exec()
+
+  return employees
 }
 
 async function getEmployee(
@@ -345,7 +369,8 @@ export const employeeService = {
   deleteEmployee,
   updateEmployee,
   getEmployeeDoc,
-  getBasicEmployeeData,
+  getBasicEmployeeTableData,
+  getAdvancedEmployeeTableData,
   getProfileId,
   getCompanyId,
   joinExistingCompany,
