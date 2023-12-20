@@ -1,5 +1,5 @@
 import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
-import { companyService } from '@/service/company.service'
+import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import useEmployeeStore from '@/stores/employeeStore'
 import {
@@ -56,7 +56,7 @@ function updateEmployeeAccount() {
     const rowData = adaptTableRowToObject<AccountTableColumns>(row)
     const { employeeNumber, role, status } = rowData
 
-    const response = await companyService.updateEmployeeAccount(
+    const response = await employeeService.updateEmployeeAccount(
       employeeNumber,
       role as Role,
       status as Status
@@ -73,7 +73,7 @@ const EditableAccountTable: FC = () => {
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['accounts'],
-    queryFn: companyService.getEmployeeAccountData,
+    queryFn: employeeService.getEmployeeAccountData,
   })
 
   if (isPending) {

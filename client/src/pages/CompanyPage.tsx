@@ -3,13 +3,12 @@ import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 
-// TODO user role is not correct
 const CompanyPage: FC = () => {
   console.log(' Company connected')
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
-    queryFn: () => companyService.getAdvancedCompanyData(),
+    queryFn: () => companyService.getBasicCompanyData(),
   })
 
   if (isPending) {
@@ -34,11 +33,13 @@ const CompanyPage: FC = () => {
       <p> {`Company number: ${data.companyNumber}`}</p>
       <p>
         {' '}
-        {`Departments: ${
-          data.departments.map((department) => department.departmentName) || []
+        {`Departments:${
+          data.departments?.map(
+            (department) => '  ' + department.departmentName
+          ) || []
         }`}
       </p>
-      <p>{`Number of employees: ${data.employees.length}`}</p>
+      <p>{`Number of employees: ${data.employees?.length}`}</p>
     </Box>
   )
 }

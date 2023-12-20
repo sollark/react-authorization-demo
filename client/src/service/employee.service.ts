@@ -1,4 +1,4 @@
-import { Account } from '@/models/Account'
+import { Account, Role, Status } from '@/models/Account'
 import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
@@ -6,12 +6,16 @@ import { Profile } from '@/models/Profile'
 import useEmployeeStore from '@/stores/employeeStore'
 import { httpService } from './axios/http.service'
 
-// TODO some functions get company number from employee store
-// others get company number from parameter
-// make it consistent
-
 type AccountData = {
   account: Account
+}
+
+type EmployeeAccountData = {
+  accounts: Partial<Account>[]
+}
+
+type UpdateEmployeeAccountData = {
+  accounts: Partial<Account>
 }
 
 type AllEmployeeData = {
@@ -56,6 +60,36 @@ async function deleteCompanyEmployee(employeeNumber: string) {
   return true
 }
 
+async function getEmployeeAccountData(): Promise<Partial<Account>[] | null> {
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+
+  const data = await httpService.get<null, EmployeeAccountData>(
+    `company/${companyNumber}/accounts`,
+    null
+  )
+
+  console.log('employeeService - getEmployeeAccountData, data', data)
+
+  return data?.accounts || null
+}
+
+async function updateEmployeeAccount(
+  employeeNumber: string,
+  role: Role,
+  status: Status
+): Promise<Partial<Account> | null> {
+  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+
+  const data = await httpService.put<
+    Partial<Account>,
+    UpdateEmployeeAccountData
+  >(`company/${companyNumber}/accounts/${employeeNumber}`, { role, status })
+
+  console.log('employeeService - updateEmployeeAccount, data', data)
+
+  return data?.accounts || null
+}
+
 async function getAllEmployees(): Promise<Employee[] | null> {
   const data = await httpService.get<null, AllEmployeeData>(
     'employee/all',
@@ -70,5 +104,7 @@ async function getAllEmployees(): Promise<Employee[] | null> {
 export const employeeService = {
   updateCompanyEmployee,
   deleteCompanyEmployee,
+  getEmployeeAccountData,
+  updateEmployeeAccount,
   getAllEmployees,
 }
