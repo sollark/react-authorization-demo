@@ -3,7 +3,7 @@ import { Company } from '@/models/Company'
 import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
-import useEmployeeStore from '@/stores/employeeStore'
+import useCompanyStore from '@/stores/companyStore'
 import { httpService } from './axios/http.service'
 
 type AccountData = {
@@ -23,7 +23,7 @@ type AllEmployeeData = {
 }
 
 async function getCompanyEmployeeBasicData(): Promise<Employee[] | null> {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.get<null, Employee[]>(
     `company/${companyNumber}/employees/basicTableData`,
@@ -36,7 +36,7 @@ async function getCompanyEmployeeBasicData(): Promise<Employee[] | null> {
 }
 
 async function getCompanyEmployeeAdvancedData(): Promise<Employee[] | null> {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.get<null, Employee[]>(
     `company/${companyNumber}/employees/advancedTableData`,
@@ -56,7 +56,7 @@ async function updateCompanyEmployee(
   employeeNumber: string,
   position: string
 ) {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.put<
     Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
@@ -75,7 +75,7 @@ async function updateCompanyEmployee(
 }
 
 async function deleteCompanyEmployee(employeeNumber: string) {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
   const data = await httpService.delete<null, null>(
     `company/${companyNumber}/employees/${employeeNumber}`,
     null
@@ -87,7 +87,7 @@ async function deleteCompanyEmployee(employeeNumber: string) {
 }
 
 async function getEmployeeAccountData(): Promise<Partial<Account>[] | null> {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.get<null, EmployeeAccountData>(
     `company/${companyNumber}/accounts`,
@@ -104,7 +104,7 @@ async function updateEmployeeAccount(
   role: Role,
   status: Status
 ): Promise<Partial<Account> | null> {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.put<
     Partial<Account>,

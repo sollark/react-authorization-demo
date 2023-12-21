@@ -17,6 +17,13 @@ function saveAccount(account: Account) {
   if (employee) {
     console.log('storeService - saveAccount, employee :', employee)
 
+    // destructure from employee, company
+    const { company } = employee
+    console.log(
+      'storeService - saveAccount, company(TODO save to company store) :',
+      company
+    )
+
     useEmployeeStore.getState().setEmployee(employee)
   }
 }

@@ -8,7 +8,6 @@ type EmployeeState = {
   employee: Employee | null
   setEmployee: (employee: Employee) => void
   clearEmployee: () => void
-  getCompanyNumber: () => string | null
 }
 
 const useEmployeeStore = create<EmployeeState>()(
@@ -19,8 +18,6 @@ const useEmployeeStore = create<EmployeeState>()(
           employee: null,
           setEmployee: (employee) => set(() => ({ employee })),
           clearEmployee: () => set(() => ({ employee: null })),
-          getCompanyNumber: () =>
-            get().employee?.company?.companyNumber || null,
         }))
       ),
       { name: 'employee-storage' }

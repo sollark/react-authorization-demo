@@ -1,5 +1,5 @@
 import { Company } from '@/models/Company'
-import useEmployeeStore from '@/stores/employeeStore'
+import useCompanyStore from '@/stores/companyStore'
 import { httpService } from './axios/http.service'
 
 type BasicCompanyData = {
@@ -11,7 +11,7 @@ type AdvancedCompanyData = {
 }
 
 async function getBasicCompanyData(): Promise<Partial<Company> | null> {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.get<null, BasicCompanyData>(
     `company/${companyNumber}/basic`,
@@ -24,7 +24,7 @@ async function getBasicCompanyData(): Promise<Partial<Company> | null> {
 }
 
 async function getAdvancedCompanyData(): Promise<Company | null> {
-  const companyNumber = useEmployeeStore.getState().getCompanyNumber()
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
   const data = await httpService.get<null, AdvancedCompanyData>(
     `company/${companyNumber}`,
