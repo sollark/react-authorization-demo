@@ -56,16 +56,20 @@ async function getAccount(
     .populate<{ profile: Profile }>('profile')
     .populate<{ employee: Employee }>({
       path: 'employee',
+      select: '-profile',
       populate: [
         {
           path: 'company',
-          select: 'companyName companyNumber',
+          select: 'companyName companyNumber departments',
+          populate: {
+            path: 'departments',
+            select: 'departmentName',
+          },
         },
         {
           path: 'department',
           select: 'departmentName',
         },
-        { path: 'profile' },
         { path: 'supervisor' },
         { path: 'subordinates' },
       ],

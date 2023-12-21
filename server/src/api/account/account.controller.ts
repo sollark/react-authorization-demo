@@ -84,7 +84,13 @@ export async function updateAccount(
 
   const completedAccount = await accountService.completeAccount(accountDoc._id)
 
-  res.status(200).json({ account: completedAccount })
+  res.status(200).json({
+    success: true,
+    message: 'Account is ready to view',
+    data: {
+      account: completedAccount,
+    },
+  })
 }
 
 export async function joinCompany(
@@ -121,7 +127,13 @@ export async function joinCompany(
   // get updated account
   account = await accountService.getAccount(identifier)
 
-  res.status(200).json({ account })
+  res.status(200).json({
+    success: true,
+    message: 'Account is ready to view',
+    data: {
+      account,
+    },
+  })
 }
 
 export async function getAccount(
@@ -132,5 +144,11 @@ export async function getAccount(
   const identifier = getIdentifierFromALS()
   const account = await accountService.getAccount(identifier)
 
-  res.status(200).json({ account })
+  res.status(200).json({
+    success: true,
+    message: 'Account is ready to view',
+    data: {
+      account,
+    },
+  })
 }
