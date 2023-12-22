@@ -8,7 +8,7 @@ import EmployeeModel, {
   Employee,
   EmployeeDoc,
 } from '../../mongodb/models/employee.model.js'
-import ProfileModel, { Profile } from '../../mongodb/models/profile.model.js'
+import { Profile } from '../../mongodb/models/profile.model.js'
 import { departmentService } from '../../service/department.service.js'
 import logger from '../../service/logger.service.js'
 import { utilService } from '../../utils/utils.js'
@@ -239,66 +239,6 @@ async function getCompanyId(
   return employee.company
 }
 
-// TODO predicated (no use?)
-async function joinExistingCompany(
-  identifier: Types.ObjectId,
-  companyNumber: string,
-  employeeNumber: string
-) {
-  const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
-  if (!companyDoc)
-    throw new BadRequestError('Company is not found', companyNumber)
-
-  const employee = await EmployeeModel.findOne({
-    company: companyDoc._id,
-    employeeNumber,
-  })
-    .lean()
-    .exec()
-  if (!employee)
-    throw new BadRequestError('Employee is not found', companyNumber)
-
-  // add auth identifier to profile
-  await ProfileModel.findOneAndUpdate(
-    { _id: employee.profile },
-    { identifier },
-    // returns new version of document, if false returns original version, before updates
-    { new: true }
-  ).exec()
-
-  const updatedEmployee = await getBasicEmployeeData([employee._id])
-
-  return updatedEmployee
-}
-
-async function joinNewCompany(
-  identifier: Types.ObjectId,
-  companyName: string,
-  departmentName: string,
-  position: string
-) {
-  let company = null
-  company = await companyService.createCompany(companyName)
-
-  let department = null
-  department = await DepartmentModel.create({ departmentName })
-
-  if (!company || !department)
-    throw new BadRequestError('Creating department to company failed')
-
-  company = await companyService.addDepartment(company._id, department._id)
-  if (!company) throw new BadRequestError('Adding department to company failed')
-
-  const employee = await createEmployee(
-    identifier,
-    company._id,
-    department._id,
-    position
-  )
-
-  return employee
-}
-
 async function changeDepartment(
   employeeId: Types.ObjectId,
   departmentId: Types.ObjectId
@@ -377,8 +317,6 @@ export const employeeService = {
   getAdvancedEmployeeTableData,
   getProfileId,
   getCompanyId,
-  joinExistingCompany,
-  joinNewCompany,
   changeDepartment,
   setSupervisor,
   addSubordinate,
