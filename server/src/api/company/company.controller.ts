@@ -160,7 +160,7 @@ export async function getCompanyEmployeeBasicTableData(
     success: true,
     message: 'Successfully retrieved basic employee data',
     data: {
-      employee: basicEmployeeData,
+      employees: basicEmployeeData,
     },
   })
 }

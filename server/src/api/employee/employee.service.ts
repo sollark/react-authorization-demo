@@ -159,7 +159,7 @@ async function getBasicEmployeeTableData(
 ): Promise<Partial<Employee & { _id: Types.ObjectId }>[] | null> {
   const employees = await EmployeeModel.find(
     { _id: { $in: employeeIds } },
-    { company: 0, supervisor: 0, subordinates: 0 }
+    { company: 0, employeeStatus: 0, supervisor: 0, subordinates: 0 }
   )
     .populate<{ company: Company }>('company')
     .populate<{ department: Department }>({
