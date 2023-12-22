@@ -43,6 +43,7 @@ function clearStoreStates() {
   useRoleStore.getState().clearRole()
   useAccountStore.getState().resetIsComplete()
   useProfileStore.getState().clearProfile()
+  useCompanyStore.getState().clearCompany()
   useEmployeeStore.getState().clearEmployee()
   useAuthStore.getState().clearToken()
   useAuthStore.getState().setAsUnauthenticated()
