@@ -4,6 +4,7 @@ import { getIdentifierFromALS } from '../../service/als.service.js'
 import { companyNumberService } from '../../service/companyNumber.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { employeeNumberService } from '../../service/employeeNumber.service.js'
+import logger from '../../service/logger.service.js'
 import { accountService } from '../account/account.service.js'
 import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
@@ -151,8 +152,9 @@ export async function getCompanyEmployeeBasicTableData(
   }
 
   const companyEmployeeIds = company.employees
-  const basicEmployeeData =
-    employeeService.getBasicEmployeeTableData(companyEmployeeIds)
+  const basicEmployeeData = await employeeService.getBasicEmployeeTableData(
+    companyEmployeeIds
+  )
 
   res.status(200).json({
     success: true,
@@ -186,13 +188,21 @@ export async function getCompanyEmployeeAdvancedTableData(
 
   const companyEmployeeIds = company.employees
   const advancedEmployeeData =
-    employeeService.getAdvancedEmployeeTableData(companyEmployeeIds)
+    await employeeService.getAdvancedEmployeeTableData(companyEmployeeIds)
+
+  logger.info(
+    `companyController - getCompanyEmployeeAdvancedTableData, advancedEmployeeData: ${JSON.stringify(
+      advancedEmployeeData,
+      null,
+      2 // Indentation level, adjust as needed
+    )}`
+  )
 
   res.status(200).json({
     success: true,
     message: 'Successfully retrieved advanced employee data',
     data: {
-      employee: advancedEmployeeData,
+      employees: advancedEmployeeData,
     },
   })
 }

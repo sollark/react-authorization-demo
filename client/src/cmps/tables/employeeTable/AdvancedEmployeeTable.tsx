@@ -37,7 +37,6 @@ const AdvancedEmployeeTable: FC = () => {
   }
 
   const employees = data
-
   const employeeData = employees?.map((employee) => {
     return {
       firstName: employee.profile.firstName,

@@ -1,6 +1,7 @@
 import { Department } from '@/models/Department'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
+import useCompanyStore from '@/stores/companyStore'
 import {
   GridColDef,
   GridRowModel,
@@ -90,6 +91,13 @@ function deleteCompanyEmployee() {
 }
 
 const EditableEmployeeTable: FC = () => {
+  const companyDepartments = useCompanyStore(
+    (state) => state.company?.departments
+  )
+  if (!companyDepartments) {
+    return <span>Error: Departments are not found in the store</span>
+  }
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
     queryFn: employeeService.getCompanyEmployeeAdvancedData,
@@ -108,16 +116,14 @@ const EditableEmployeeTable: FC = () => {
   }
 
   const employees = data
-
-  // TODO need to fetch departments from ...
   const departmentOptions =
-    data.departments.map(
+    companyDepartments.map(
       (department: Department) => department.departmentName
     ) || []
 
   departments = setOptions(departmentOptions)
 
-  const employeeData = employees?.map((employee) => {
+  const employeeData = employees.map((employee) => {
     return {
       firstName: employee.profile.firstName,
       lastName: employee.profile.lastName,

@@ -1,6 +1,7 @@
 import { Account } from '@/models/Account'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
+import useCompanyStore from '@/stores/companyStore'
 import { default as useEmployeeStore } from '@/stores/employeeStore'
 import useRoleStore from '@/stores/roleStore'
 import useProfileStore from '@/stores/userStore'
@@ -17,13 +18,9 @@ function saveAccount(account: Account) {
   if (employee) {
     console.log('storeService - saveAccount, employee :', employee)
 
-    // destructure from employee, company
     const { company } = employee
-    console.log(
-      'storeService - saveAccount, company(TODO save to company store) :',
-      company
-    )
 
+    useCompanyStore.getState().setCompany(company)
     useEmployeeStore.getState().setEmployee(employee)
   }
 }

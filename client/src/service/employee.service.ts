@@ -18,6 +18,10 @@ type UpdateEmployeeAccountData = {
   accounts: Partial<Account>
 }
 
+type CompanyEmployeeList = {
+  employees: Employee[]
+}
+
 type AllEmployeeData = {
   employees: Employee[]
 }
@@ -25,27 +29,23 @@ type AllEmployeeData = {
 async function getCompanyEmployeeBasicData(): Promise<Employee[] | null> {
   const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
-  const data = await httpService.get<null, Employee[]>(
+  const data = await httpService.get<null, CompanyEmployeeList>(
     `company/${companyNumber}/employees/basicTableData`,
     null
   )
 
-  console.log('employeeService - getCompanyEmployeeBasicData, data', data)
-
-  return data || null
+  return data?.employees || null
 }
 
 async function getCompanyEmployeeAdvancedData(): Promise<Employee[] | null> {
   const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
-  const data = await httpService.get<null, Employee[]>(
+  const data = await httpService.get<null, CompanyEmployeeList>(
     `company/${companyNumber}/employees/advancedTableData`,
     null
   )
 
-  console.log('employeeService - getCompanyEmployeeAdvancedData, data', data)
-
-  return data || null
+  return data?.employees || null
 }
 
 async function updateCompanyEmployee(
