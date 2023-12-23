@@ -62,7 +62,6 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
 async function getAccount(): Promise<Account | null> {
   const data = await httpService.get<null, AccountData>('account', null)
 
-  // TODO getting null here
   console.log('accountService - getAccount, data', data)
 
   if (!data) return null

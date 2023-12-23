@@ -112,7 +112,6 @@ async function updateEmployee(
   const employee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeId },
     updatedEmployeeData,
-    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -246,7 +245,6 @@ async function changeDepartment(
   const employee = await EmployeeModel.findOneAndUpdate(
     { _id: employeeId },
     { department: departmentId },
-    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
 }
@@ -258,7 +256,6 @@ async function setSupervisor(
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeNumber },
     { supervisor: supervisorId },
-    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -272,7 +269,6 @@ async function setSupervisor(
   const supervisorEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: supervisorId },
     { $push: { subordinates: employeeNumber } },
-    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 
@@ -286,7 +282,6 @@ async function addSubordinate(
   const employeeEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: employeeNumber },
     { $push: { subordinates: subordinateId } },
-    // returns new version of document, if false returns original version, before updates
     { new: true }
   )
     .populate<{ company: Company }>('company')
@@ -300,7 +295,6 @@ async function addSubordinate(
   const subordinateEmployee = await EmployeeModel.findOneAndUpdate(
     { employee: subordinateId },
     { supervisor: employeeNumber },
-    // returns new version of document, if false returns original version, before updates
     { new: true }
   ).exec()
 

@@ -1,13 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { employeeService } from './employee.service.js'
 
-// TODO
-// {
-//     "success": true,
-//     "message": "User logged in successfully",
-//     "data": { }
-// }
-
 export async function getAllEmployees(
   req: Request,
   res: Response,
