@@ -2,6 +2,7 @@ import RootPage from '@/pages/RootPage'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
+import VerifiedAccountProtectedRoute from './VerifiedAccountProtectedRoute'
 const AccountDetailsPage = lazyRouteComponent(
   () => import('@/pages/AccountDetailsPage')
 )
@@ -77,31 +78,19 @@ export const accountRoute = new Route({
 export const accountDetailsRoute = new Route({
   getParentRoute: () => accountRoute,
   path: '/details',
-  component: () => (
-    <AuthProtectedRoute>
-      <AccountDetailsPage />
-    </AuthProtectedRoute>
-  ),
+  component: () => <AccountDetailsPage />,
 })
 
 export const accountEditRoute = new Route({
   getParentRoute: () => accountRoute,
   path: '/edit',
-  component: () => (
-    <AuthProtectedRoute>
-      <AccountEditPage />
-    </AuthProtectedRoute>
-  ),
+  component: () => <AccountEditPage />,
 })
 
 export const joinCompanyRoute = new Route({
   getParentRoute: () => accountRoute,
   path: '/join',
-  component: () => (
-    <AuthProtectedRoute>
-      <JoinCompanyPage />
-    </AuthProtectedRoute>
-  ),
+  component: () => <JoinCompanyPage />,
 })
 
 export const companyRoute = new Route({
@@ -109,7 +98,9 @@ export const companyRoute = new Route({
   path: '/company',
   component: () => (
     <AuthProtectedRoute>
-      <CompanyPage />
+      <VerifiedAccountProtectedRoute>
+        <CompanyPage />
+      </VerifiedAccountProtectedRoute>
     </AuthProtectedRoute>
   ),
 })
@@ -119,7 +110,9 @@ export const employeeListRoute = new Route({
   path: '/employeeList',
   component: () => (
     <AuthProtectedRoute>
-      <EmployeeListPage />
+      <VerifiedAccountProtectedRoute>
+        <EmployeeListPage />
+      </VerifiedAccountProtectedRoute>
     </AuthProtectedRoute>
   ),
 })
@@ -129,7 +122,9 @@ export const accountListRoute = new Route({
   path: '/accountList',
   component: () => (
     <AuthProtectedRoute>
-      <AccountListPage />
+      <VerifiedAccountProtectedRoute>
+        <AccountListPage />
+      </VerifiedAccountProtectedRoute>
     </AuthProtectedRoute>
   ),
 })

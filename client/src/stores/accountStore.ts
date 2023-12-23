@@ -8,7 +8,7 @@ type AccountState = {
   status: Status | null
   role: Role
   isComplete: () => boolean
-  isPending: () => boolean
+  isVerified: () => boolean
   updateStatus: () => void
   setStatus: (status: Status) => void
   setRole: (role: Role) => void
@@ -24,7 +24,7 @@ const useAccountStore = create<AccountState>()(
           role: USER_ROLE.guest,
           isComplete: () =>
             get().status !== 'incomplete' && get().status !== null,
-          isPending: () => get().status === 'pending',
+          isVerified: () => get().status !== 'pending' && get().status !== null,
           updateStatus: () => {
             const status = get().role === 'admin' ? 'active' : 'pending'
             set(() => ({ status }))
