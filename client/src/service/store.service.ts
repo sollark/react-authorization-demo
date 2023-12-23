@@ -3,17 +3,16 @@ import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
 import useCompanyStore from '@/stores/companyStore'
 import { default as useEmployeeStore } from '@/stores/employeeStore'
-import useRoleStore from '@/stores/roleStore'
 import useProfileStore from '@/stores/userStore'
 
 function saveAccount(account: Account) {
   console.log('storeService - saveAccount, account :', account)
 
-  const { isComplete, profile, employee, role } = account
+  const { profile, employee, role, status } = account
 
-  useAccountStore.getState().setIsComplete(isComplete)
+  useAccountStore.getState().setStatus(status)
+  useAccountStore.getState().setRole(role)
   useProfileStore.getState().setProfile(profile)
-  useRoleStore.getState().setRole(role)
 
   if (employee) {
     console.log('storeService - saveAccount, employee :', employee)
@@ -40,8 +39,7 @@ function setProfileAsUnauthenticated() {
 function clearStoreStates() {
   console.log('clearStoreStates()')
 
-  useRoleStore.getState().clearRole()
-  useAccountStore.getState().resetIsComplete()
+  useAccountStore.getState().clearAccount()
   useProfileStore.getState().clearProfile()
   useCompanyStore.getState().clearCompany()
   useEmployeeStore.getState().clearEmployee()

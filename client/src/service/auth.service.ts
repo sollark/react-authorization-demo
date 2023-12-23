@@ -36,7 +36,6 @@ async function signIn(email: string, password: string) {
   if (!isAuthResponse(signInResponse)) return null
 
   const { accessToken } = signInResponse
-
   if (accessToken) {
     storeService.saveAccessToken(accessToken)
     storeService.setProfileAsAuthenticated()

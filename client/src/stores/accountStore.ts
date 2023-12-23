@@ -1,23 +1,41 @@
+import { Role, Status, USER_ROLE } from '@/models/Account'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { zustandLogger } from './zustandLogger'
 
 type AccountState = {
-  isComplete: boolean
-  setIsComplete: (isComplete: boolean) => void
-  resetIsComplete: () => void
+  status: Status | null
+  role: Role
+  isComplete: () => boolean
+  isPending: () => boolean
+  updateStatus: () => void
+  setStatus: (status: Status) => void
+  setRole: (role: Role) => void
+  clearAccount: () => void
 }
 
-// Create a store with initial state
 const useAccountStore = create<AccountState>()(
   zustandLogger(
     persist(
       devtools(
-        immer((set) => ({
-          isComplete: false,
-          setIsComplete: (isComplete) => set(() => ({ isComplete })),
-          resetIsComplete: () => set(() => ({ isComplete: false })),
+        immer((set, get) => ({
+          status: null,
+          role: USER_ROLE.guest,
+          isComplete: () => get().status !== 'incomplete',
+          isPending: () => get().status === 'pending',
+          updateStatus: () => {
+            const status = get().role === 'admin' ? 'active' : 'pending'
+            set(() => ({ status }))
+          },
+          setStatus: (status: Status) => set(() => ({ status })),
+          setRole: (role: Role) => set(() => ({ role })),
+          clearAccount: () => {
+            set(() => ({
+              status: null,
+              role: USER_ROLE.guest,
+            }))
+          },
         }))
       ),
       { name: 'account-storage' }

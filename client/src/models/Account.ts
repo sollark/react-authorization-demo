@@ -1,8 +1,14 @@
 import { Employee } from './Employee'
 import { Profile } from './Profile'
 
-export type Status = 'pending' | 'active' | 'inactive' | 'deleted'
+export type Status =
+  | 'incomplete'
+  | 'pending'
+  | 'active'
+  | 'inactive'
+  | 'deleted'
 export const ACCOUNT_STATUS = {
+  incomplete: 'incomplete' as Status,
   pending: 'pending' as Status,
   active: 'active' as Status,
   inactive: 'inactive' as Status,
