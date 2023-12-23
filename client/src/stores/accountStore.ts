@@ -22,7 +22,8 @@ const useAccountStore = create<AccountState>()(
         immer((set, get) => ({
           status: null,
           role: USER_ROLE.guest,
-          isComplete: () => get().status !== 'incomplete',
+          isComplete: () =>
+            get().status !== 'incomplete' && get().status !== null,
           isPending: () => get().status === 'pending',
           updateStatus: () => {
             const status = get().role === 'admin' ? 'active' : 'pending'
