@@ -1,6 +1,6 @@
 import JoinCompanyForm from '@/cmps/forms/JoinCompanyForm'
+import CustomLink from '@/cmps/link/CustomLink'
 import { Box } from '@mui/material'
-import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 
 const JoinCompanyPage: FC = () => {
@@ -12,7 +12,7 @@ const JoinCompanyPage: FC = () => {
       <JoinCompanyForm />
       <p>
         Want to create your company?{' '}
-        <Link to='/account/edit'>Create a company</Link>
+        <CustomLink to='/account/edit'>Create a company</CustomLink>
       </p>
     </Box>
   )

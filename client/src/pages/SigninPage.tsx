@@ -1,5 +1,5 @@
+import CustomLink from '@/cmps/link/CustomLink'
 import { Box } from '@mui/material'
-import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 import SignInForm from '../cmps/forms/SignInForm'
 
@@ -11,7 +11,8 @@ const SigninPage: FC = () => {
       <h1>Sign In</h1>
       <SignInForm />
       <p>
-        Don't have an account? <Link to='/registration'>Registration</Link>
+        Don't have an account?{' '}
+        <CustomLink to='/registration'>Registration</CustomLink>
       </p>
     </Box>
   )

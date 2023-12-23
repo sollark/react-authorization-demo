@@ -1,8 +1,8 @@
 import AccountForm from '@/cmps/forms/accountForm/AccountForm'
 import CompanyDetailsFields from '@/cmps/forms/accountForm/CompanyDetailsFields'
 import UserDetailsFields from '@/cmps/forms/accountForm/UserDetailsFields'
+import CustomLink from '@/cmps/link/CustomLink'
 import { Box } from '@mui/material'
-import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 
 const AccountEditPage: FC = () => {
@@ -16,7 +16,7 @@ const AccountEditPage: FC = () => {
       </AccountForm>
       <p>
         Want to join your company?{' '}
-        <Link to='/account/join'>Join a company</Link>
+        <CustomLink to='/account/join'>Join a company</CustomLink>
       </p>
     </Box>
   )
