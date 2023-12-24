@@ -127,6 +127,19 @@ async function getAllEmployees(): Promise<Employee[] | null> {
   return data?.employees || null
 }
 
+async function getCompanyEmployeeNumber(): Promise<string | null> {
+  const companyNumber = useCompanyStore.getState().getCompanyNumber()
+
+  const data = await httpService.get<null, { employeeNumber: string }>(
+    `company/${companyNumber}/employees/employeeNumber`,
+    null
+  )
+
+  console.log('employeeService - getCompanyEmployeeNumber, data: ', data)
+
+  return data?.employeeNumber || null
+}
+
 export const employeeService = {
   getCompanyEmployeeBasicData,
   getCompanyEmployeeAdvancedData,
@@ -135,4 +148,5 @@ export const employeeService = {
   getEmployeeAccountData,
   updateEmployeeAccount,
   getAllEmployees,
+  getCompanyEmployeeNumber,
 }
