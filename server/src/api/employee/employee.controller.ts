@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { companyNumberService } from '../../service/companyNumber.service.js'
 import { employeeService } from './employee.service.js'
 
 export async function getAllEmployees(
@@ -20,5 +21,19 @@ export async function getAllEmployees(
     data: {
       employees,
     },
+  })
+}
+
+export async function getEmployeeNumber(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const employeeNumber = companyNumberService.generateCompanyNumber()
+
+  res.status(200).json({
+    success: true,
+    message: 'Successfully retrieved employeeNumber',
+    data: { employeeNumber },
   })
 }
