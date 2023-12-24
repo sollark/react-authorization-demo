@@ -2,7 +2,7 @@ import RootPage from '@/pages/RootPage'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
-import VerifiedAccountProtectedRoute from './VerifiedAccountProtectedRoute'
+import VerifiedProtectedRoute from './VerifiedProtectedRoute'
 const AccountDetailsPage = lazyRouteComponent(
   () => import('@/pages/AccountDetailsPage')
 )
@@ -98,9 +98,9 @@ export const companyRoute = new Route({
   path: '/company',
   component: () => (
     <AuthProtectedRoute>
-      <VerifiedAccountProtectedRoute>
+      <VerifiedProtectedRoute>
         <CompanyPage />
-      </VerifiedAccountProtectedRoute>
+      </VerifiedProtectedRoute>
     </AuthProtectedRoute>
   ),
 })
@@ -110,9 +110,9 @@ export const employeeListRoute = new Route({
   path: '/employeeList',
   component: () => (
     <AuthProtectedRoute>
-      <VerifiedAccountProtectedRoute>
+      <VerifiedProtectedRoute>
         <EmployeeListPage />
-      </VerifiedAccountProtectedRoute>
+      </VerifiedProtectedRoute>
     </AuthProtectedRoute>
   ),
 })
@@ -122,9 +122,9 @@ export const accountListRoute = new Route({
   path: '/accountList',
   component: () => (
     <AuthProtectedRoute>
-      <VerifiedAccountProtectedRoute>
+      <VerifiedProtectedRoute>
         <AccountListPage />
-      </VerifiedAccountProtectedRoute>
+      </VerifiedProtectedRoute>
     </AuthProtectedRoute>
   ),
 })
