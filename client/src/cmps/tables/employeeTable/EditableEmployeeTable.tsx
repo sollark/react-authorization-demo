@@ -20,15 +20,6 @@ type EmployeeTableColumns = {
   position: string
 }
 
-const employeeDefaultValues: EmployeeTableColumns = {
-  firstName: '',
-  lastName: '',
-  ID: '',
-  departmentName: '',
-  employeeNumber: '',
-  position: '',
-}
-
 let departments: (params: GridValueOptionsParams<any>) => string[]
 
 const employeeColumns: GridColDef[] = [
@@ -90,6 +81,18 @@ function deleteCompanyEmployee() {
   }
 }
 
+async function getDefaultValues() {
+  const employeeNumber = await employeeService.getCompanyEmployeeNumber()
+  return {
+    firstName: '',
+    lastName: '',
+    ID: '',
+    departmentName: '',
+    employeeNumber: employeeNumber,
+    position: '',
+  }
+}
+
 const EditableEmployeeTable: FC = () => {
   const companyDepartments = useCompanyStore(
     (state) => state.company?.departments
@@ -145,7 +148,7 @@ const EditableEmployeeTable: FC = () => {
       <Table
         basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
         specialProps={{
-          defaultValues: employeeDefaultValues,
+          getDefaultValues: getDefaultValues,
           updateRow: updateEmployee,
           deleteRow: deleteEmployee,
         }}

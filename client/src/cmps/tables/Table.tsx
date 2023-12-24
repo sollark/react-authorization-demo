@@ -16,7 +16,7 @@ type BasicTableProps = {
 }
 
 type EditableTableProps = {
-  defaultValues?: GridRowModel
+  getDefaultValues?: () => GridRowModel
   updateRow?: (row: GridRowModel) => Promise<boolean>
   deleteRow?: (row: GridRowModel) => Promise<boolean>
   config?: TableConfig

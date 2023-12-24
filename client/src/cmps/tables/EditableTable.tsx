@@ -32,9 +32,9 @@ type TableConfig = {
 }
 
 type EditableTableProps = {
-  defaultValues?: GridRowModel
   updateRow?: (row: GridRowModel) => Promise<boolean>
   deleteRow?: (row: GridRowModel) => Promise<boolean>
+  getDefaultValues?: () => GridRowModel
   config?: TableConfig
 }
 
@@ -45,14 +45,16 @@ type EditToolbarProps = {
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void
   defaultValues: GridRowModel
+  getDefaultValues: () => Promise<GridRowModel>
 }
 
 // tool bar (add record button)
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, defaultValues } = props
+  const { setRows, setRowModesModel, getDefaultValues } = props
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const id = nanoid()
+    const defaultValues = await getDefaultValues()
 
     setRows((oldRows) => [{ id, ...defaultValues, isNew: true }, ...oldRows])
     setRowModesModel((oldModel) => ({
@@ -78,10 +80,10 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
 ) => {
   const {
     dataRows,
-    defaultValues,
     tableColumns,
     updateRow,
     deleteRow,
+    getDefaultValues,
     config = { showAddButton: true, showDeleteButton: true },
   } = props
 
@@ -235,7 +237,7 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
         toolbar: showAddButton ? EditToolbar : null,
       }}
       slotProps={{
-        toolbar: { setRows, setRowModesModel, defaultValues },
+        toolbar: { setRows, setRowModesModel, getDefaultValues },
       }}></DataGrid>
   )
 }
