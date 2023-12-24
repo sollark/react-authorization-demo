@@ -553,3 +553,29 @@ export async function deleteEmployee(
     data: {},
   })
 }
+
+export async function generateEmployeeNumber(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const identifier = getIdentifierFromALS()
+
+  const companyNumber = req.params.companyNumber
+  const isValidCompanyNumber =
+    companyNumberService.isValidCompanyNumber(companyNumber)
+  if (!isValidCompanyNumber) throw new BadRequestError('Invalid company number')
+
+  const companyDoc = await companyService.getCompanyDocByNumber(companyNumber)
+  if (!companyDoc) throw new BadRequestError('Company not found')
+
+  const employeeNumber = await employeeNumberService.generateEmployeeNumber(
+    companyDoc._id
+  )
+
+  res.status(200).json({
+    success: true,
+    message: 'Employee number is ready to use.',
+    data: { employeeNumber },
+  })
+}

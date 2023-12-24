@@ -3,6 +3,7 @@ import asyncHandler from '../../middleware/asyncHandler.js'
 import requireAuth from '../../middleware/requireAuth.js'
 import {
   deleteEmployee,
+  generateEmployeeNumber,
   getBasicCompanyData,
   getCompany,
   getCompanyEmployeeAdvancedTableData,
@@ -35,6 +36,13 @@ router.get(
   requireAuth,
   asyncHandler(getCompanyEmployeeAdvancedTableData)
 )
+
+router.get(
+  '/:companyNumber/employees/employeeNumber',
+  requireAuth,
+  asyncHandler(generateEmployeeNumber)
+)
+
 router.put(
   '/:companyNumber/employees/:employeeNumber',
   requireAuth,
