@@ -31,8 +31,6 @@ async function signIn(email: string, password: string) {
     { email, password }
   )
 
-  // console.log('signIn, response data: ', signInResponse)
-
   if (!isAuthResponse(signInResponse)) return null
 
   const { accessToken } = signInResponse
