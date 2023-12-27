@@ -1,6 +1,5 @@
-import { GridRowModel } from '@mui/x-data-grid'
 import { describe, expect, it } from 'vitest'
-import { isEmptyObject, isOfType, adaptTableRowToObject } from './utils.service'
+import { adaptTableRowToObject, isEmptyObject, isOfType } from './utils.service'
 
 describe('isEmptyObject', () => {
   it('should return true for an empty object', () => {
