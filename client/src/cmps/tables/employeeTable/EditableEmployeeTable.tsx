@@ -102,7 +102,7 @@ const EditableEmployeeTable: FC = () => {
   }
 
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['company'],
+    queryKey: ['employees'],
     queryFn: employeeService.getCompanyEmployeeAdvancedData,
   })
 
