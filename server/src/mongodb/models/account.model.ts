@@ -3,6 +3,7 @@ import { Employee } from './employee.model.js'
 import { Profile } from './profile.model.js'
 
 export const ACCOUNT_STATUS = {
+  incomplete: 'incomplete',
   pending: 'pending',
   active: 'active',
   inactive: 'inactive',

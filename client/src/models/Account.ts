@@ -1,29 +1,23 @@
 import { Employee } from './Employee'
 import { Profile } from './Profile'
 
-export type Status =
-  | 'incomplete'
-  | 'pending'
-  | 'active'
-  | 'inactive'
-  | 'deleted'
 export const ACCOUNT_STATUS = {
-  incomplete: 'incomplete' as Status,
-  pending: 'pending' as Status,
-  active: 'active' as Status,
-  inactive: 'inactive' as Status,
-  deleted: 'deleted' as Status,
+  incomplete: 'incomplete',
+  pending: 'pending',
+  active: 'active',
+  inactive: 'inactive',
+  deleted: 'deleted',
 } as const
-
-export type Role = 'guest' | 'user' | 'manager' | 'supervisor' | 'admin'
+export type Status = keyof typeof ACCOUNT_STATUS
 
 export const USER_ROLE = {
-  guest: 'guest' as Role,
-  user: 'user' as Role,
-  manager: 'manager' as Role,
-  supervisor: 'supervisor' as Role,
-  admin: 'admin' as Role,
-}
+  guest: 'guest',
+  user: 'user',
+  manager: 'manager',
+  supervisor: 'supervisor',
+  admin: 'admin',
+} as const
+export type Role = keyof typeof USER_ROLE
 
 export type Account = {
   profile: Profile
