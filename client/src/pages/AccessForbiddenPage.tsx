@@ -1,8 +1,9 @@
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const AccessForbiddenPage: FC = () => {
-  console.log('AccessForbidden connected')
+  log('AccessForbidden connected')
 
   return (
     <Box

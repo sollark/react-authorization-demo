@@ -1,5 +1,6 @@
 import { useMultistepForm } from '@/hooks/useMultistepForm'
 import { router } from '@/routes/router'
+import { log } from '@/service/console.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const MultistepForm: FC<Props> = (props: Props) => {
-  console.log('MultistepForm connected')
+  log('MultistepForm connected')
 
   const navigateBack = router.history.back
 

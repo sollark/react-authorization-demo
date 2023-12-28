@@ -1,9 +1,10 @@
+import { log } from '@/service/console.service'
 import useEmployeeStore from '@/stores/employeeStore'
 import useProfileStore from '@/stores/userStore'
 
 import { FC } from 'react'
 const AccountDetailsPage: FC = () => {
-  console.log('AccountDetailsPage connected')
+  log('AccountDetailsPage connected')
 
   const profile = useProfileStore((state) => state.profile)
   const employee = useEmployeeStore((state) => state.employee)

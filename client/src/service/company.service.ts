@@ -1,6 +1,7 @@
 import { Company } from '@/models/Company'
 import useCompanyStore from '@/stores/companyStore'
 import { httpService } from './axios/http.service'
+import { log } from './console.service'
 
 type BasicCompanyData = {
   basicCompanyData: Partial<Company>
@@ -18,7 +19,7 @@ async function getBasicCompanyData(): Promise<Partial<Company> | null> {
     null
   )
 
-  console.log('companyService - getBasicCompanyData, data', data)
+  log('companyService - getBasicCompanyData, data', data)
 
   return data?.basicCompanyData || null
 }
@@ -31,7 +32,7 @@ async function getAdvancedCompanyData(): Promise<Company | null> {
     null
   )
 
-  console.log('companyService - getAdvancedCompanyData, data', data)
+  log('companyService - getAdvancedCompanyData, data', data)
 
   return data?.company || null
 }

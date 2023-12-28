@@ -1,11 +1,12 @@
 import Header from '@/cmps/Header'
+import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
 import { MakeLinkOptions, Outlet, useNavigate } from '@tanstack/react-router'
 import { FC, useEffect } from 'react'
 
 const RootPage: FC = () => {
-  console.log('RootPage connected')
+  log('RootPage connected')
 
   const navigate = useNavigate()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)

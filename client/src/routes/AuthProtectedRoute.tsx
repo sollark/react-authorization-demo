@@ -1,4 +1,5 @@
 import UnauthorizedPage from '@/pages/UnauthorizedPage'
+import { log } from '@/service/console.service'
 import useAuthStore from '@/stores/authStore'
 import { ReactNode } from 'react'
 
@@ -12,7 +13,7 @@ const AuthProtectedRoute = ({
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const isAccessAllowed = isAuthenticated
 
-  console.log('AuthProtectedRoute, isAccessAllowed: ', isAccessAllowed)
+  log('AuthProtectedRoute, isAccessAllowed: ', isAccessAllowed)
   return <>{isAccessAllowed ? children : <UnauthorizedPage />}</>
 }
 

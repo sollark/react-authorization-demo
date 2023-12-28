@@ -1,8 +1,9 @@
+import { log } from '@/service/console.service'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
 
 const UserDetailsFields: FC = () => {
-  console.log('UserDetailsFields connected')
+  log('UserDetailsFields connected')
 
   return (
     <>

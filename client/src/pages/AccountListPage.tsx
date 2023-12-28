@@ -1,9 +1,10 @@
 import EditableAccountTable from '@/cmps/tables/accountTable/EditableAccountTable'
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const AccountListPage: FC = () => {
-  console.log(' AccountList connected')
+  log(' AccountList connected')
 
   const Table = EditableAccountTable
 

@@ -1,4 +1,5 @@
 import { authService } from '@/service/auth.service'
+import { log } from '@/service/console.service'
 import { useNavigate } from '@tanstack/react-router'
 import { FC, useState } from 'react'
 import { z } from 'zod'
@@ -32,13 +33,13 @@ const SignInSchema = z.object({
 })
 
 const SignInForm: FC = () => {
-  console.log('SignInForm connected')
+  log('SignInForm connected')
 
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
   async function submit(form: SigninForm) {
-    console.log('Signin form submitted: ', form)
+    log('Signin form submitted: ', form)
 
     const { email, password } = form
     setErrorMessage('')
@@ -48,7 +49,7 @@ const SignInForm: FC = () => {
       if (account?.isComplete) navigate({ to: '/' })
       else navigate({ to: '/account/edit' })
     } catch (error: any) {
-      console.log('in SignInForm', error)
+      log('in SignInForm', error)
       setErrorMessage(error.response?.data?.errors[0]?.message)
     }
   }

@@ -1,3 +1,4 @@
+import { log } from '@/service/console.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, ReactElement, ReactNode } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const Form: FC<Props> = (props: Props) => {
-  console.log('Form connected')
+  log('Form connected')
 
   const { children, schema, defaultValues, submit, submitButton, ...rest } =
     props

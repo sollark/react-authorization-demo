@@ -3,11 +3,11 @@ const isDevelopmentEnvironment = NODE_ENV === 'development'
 
 function log(...args: any[]) {
   if (isDevelopmentEnvironment) {
-    console.log(...args)
+    log(...args)
   }
 }
 
-function error(...args: any[]) {
+function fail(...args: any[]) {
   if (isDevelopmentEnvironment) {
     console.error(...args)
   }
@@ -21,4 +21,4 @@ function warn(...args: any[]) {
 
 // Add other console methods as needed
 
-export { log, error, warn }
+export { log, fail, warn }

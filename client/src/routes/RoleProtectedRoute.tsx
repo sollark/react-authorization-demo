@@ -1,5 +1,6 @@
 import { Role } from '@/models/Account'
 import UnauthorizedPage from '@/pages/UnauthorizedPage'
+import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
 import { ReactNode } from 'react'
 
@@ -12,14 +13,14 @@ const RoleProtectedRoute = ({
   children,
   allowed,
 }: RoleProtectedRouteProps): JSX.Element => {
-  console.log('RoleProtectedRoute, allowed: ', allowed)
+  log('RoleProtectedRoute, allowed: ', allowed)
 
   const userRole = useAccountStore((state) => state.role)
-
   const isAccessAllowed = allowed.some(
     (allowedRole) => allowedRole === userRole
   )
-  console.log('RoleProtectedRoute, isAccessAllowed: ', isAccessAllowed)
+
+  log('RoleProtectedRoute, isAccessAllowed: ', isAccessAllowed)
   return <>{isAccessAllowed ? children : <UnauthorizedPage />}</>
 }
 

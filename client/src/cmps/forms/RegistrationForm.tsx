@@ -1,4 +1,5 @@
 import { authService } from '@/service/auth.service'
+import { log } from '@/service/console.service'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -44,13 +45,13 @@ const RegistrationSchema = z
   })
 
 const RegistrationForm = () => {
-  console.log('RegistrationForm connected')
+  log('RegistrationForm connected')
 
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
   async function submit(form: RegistrationForm) {
-    console.log('Registration form submitted: ', form)
+    log('Registration form submitted: ', form)
 
     const { email, password } = form
     setErrorMessage('')
@@ -60,7 +61,7 @@ const RegistrationForm = () => {
 
       navigate({ to: '/account/join' })
     } catch (error: any) {
-      console.log(error)
+      log(error)
       setErrorMessage(error.response.data.errors[0].message)
     }
   }

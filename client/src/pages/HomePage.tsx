@@ -1,8 +1,9 @@
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const HomePage: FC = () => {
-  console.log('Home connected')
+  log('Home connected')
 
   return (
     <Box

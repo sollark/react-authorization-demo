@@ -1,8 +1,9 @@
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const MissingPage: FC = () => {
-  console.log('Missing connected')
+  log('Missing connected')
 
   return (
     <Box

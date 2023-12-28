@@ -2,11 +2,12 @@ import { useMediaQuery } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { RouterProvider } from '@tanstack/react-router'
 import React, { useMemo, useState } from 'react'
-import { TanStackRouterDevtools, router } from './routes/router'
+import { router } from './routes/router'
+import { log } from './service/console.service'
 import getDesignTokens from './ui/theme/theme'
 
 function App() {
-  console.log('App connected')
+  log('App connected')
 
   const [mode, setMode] = useState<'light' | 'dark'>('light')
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')

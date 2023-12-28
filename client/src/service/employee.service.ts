@@ -5,6 +5,7 @@ import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
 import useCompanyStore from '@/stores/companyStore'
 import { httpService } from './axios/http.service'
+import { log } from './console.service'
 
 type AccountData = {
   account: Account
@@ -69,7 +70,7 @@ async function updateCompanyEmployee(
     position,
   })
 
-  console.log('employeeService - updateCompanyEmployee, data:', data)
+  log('employeeService - updateCompanyEmployee, data:', data)
 
   return data?.account || null
 }
@@ -81,7 +82,7 @@ async function deleteCompanyEmployee(employeeNumber: string) {
     null
   )
 
-  console.log('employeeService - deleteCompanyEmployee, data: ', data)
+  log('employeeService - deleteCompanyEmployee, data: ', data)
 
   return true
 }
@@ -94,7 +95,7 @@ async function getEmployeeAccountData(): Promise<Partial<Account>[] | null> {
     null
   )
 
-  console.log('employeeService - getEmployeeAccountData, data', data)
+  log('employeeService - getEmployeeAccountData, data', data)
 
   return data?.accounts || null
 }
@@ -111,7 +112,7 @@ async function updateEmployeeAccount(
     UpdateEmployeeAccountData
   >(`company/${companyNumber}/accounts/${employeeNumber}`, { role, status })
 
-  console.log('employeeService - updateEmployeeAccount, data', data)
+  log('employeeService - updateEmployeeAccount, data', data)
 
   return data?.accounts || null
 }
@@ -122,7 +123,7 @@ async function getAllEmployees(): Promise<Employee[] | null> {
     null
   )
 
-  console.log('employeeService - getAllEmployees, data: ', data)
+  log('employeeService - getAllEmployees, data: ', data)
 
   return data?.employees || null
 }
@@ -135,7 +136,7 @@ async function getCompanyEmployeeNumber(): Promise<string | null> {
     null
   )
 
-  console.log('employeeService - getCompanyEmployeeNumber, data: ', data)
+  log('employeeService - getCompanyEmployeeNumber, data: ', data)
 
   return data?.employeeNumber || null
 }

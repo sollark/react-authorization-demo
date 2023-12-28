@@ -1,3 +1,4 @@
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import {
   DataGrid,
@@ -47,7 +48,7 @@ const Table: FC<TableProps> = ({
   basicProps,
   specialProps,
 }: TableProps) => {
-  console.log('Table connected')
+  log('Table connected')
 
   const TableComponent = editable ? EditableTable : NotEditableTable
 

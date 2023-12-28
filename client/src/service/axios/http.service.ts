@@ -1,5 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
+import { fail, log } from '../console.service'
 import { headerService } from './header.service'
 import { responseService } from './response.service'
 
@@ -24,7 +25,7 @@ api.interceptors.request.use(
       config.headers[headerName] = value
     })
 
-    // console.log('config in request', config)
+    // log('config in request', config)
 
     return config
   },
@@ -39,12 +40,7 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest: InternalAxiosRequestConfig = error.config
 
-    console.log(
-      'interceptor',
-      error.response,
-      originalRequest,
-      originalRequest._retry
-    )
+    log('interceptor', error.response, originalRequest, originalRequest._retry)
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
@@ -101,7 +97,7 @@ async function ajax<T, R>(
     return responseService.handleApiResponse<R>(res)
   } catch (error) {
     if (isDevelopment())
-      console.log(
+      fail(
         `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
           data ? JSON.stringify(data) : null
         }, error: ${error}`

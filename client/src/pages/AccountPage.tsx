@@ -1,8 +1,9 @@
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { Outlet } from '@tanstack/react-router'
 
 const AccountPage = () => {
-  console.log('AccountPage connected')
+  log('AccountPage connected')
 
   return (
     <Box

@@ -4,6 +4,7 @@ import { Department } from '@/models/Department'
 import { Employee } from '@/models/Employee'
 import { Profile } from '@/models/Profile'
 import { httpService } from './axios/http.service'
+import { log } from './console.service'
 import { storeService } from './store.service'
 
 type AccountData = {
@@ -30,7 +31,7 @@ async function updateAccount(
     position,
   })
 
-  console.log('accountService - updateAccount, data', data)
+  log('accountService - updateAccount, data', data)
 
   if (!data) return null
 
@@ -49,7 +50,7 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
     employeeNumber,
   })
 
-  console.log('accountService - joinCompany, data', data)
+  log('accountService - joinCompany, data', data)
 
   if (!data) return null
 
@@ -62,7 +63,7 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
 async function getAccount(): Promise<Account | null> {
   const data = await httpService.get<null, AccountData>('account', null)
 
-  console.log('accountService - getAccount, data', data)
+  log('accountService - getAccount, data', data)
 
   if (!data) return null
 

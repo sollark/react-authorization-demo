@@ -2,6 +2,7 @@ import { AuthCredentials } from '@/models/Auth'
 import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
 import { accountService } from './account.service'
 import { httpService } from './axios/http.service'
+import { log } from './console.service'
 import { storeService } from './store.service'
 
 async function registration(email: string, password: string) {
@@ -9,7 +10,7 @@ async function registration(email: string, password: string) {
     AuthCredentials,
     AuthResponse
   >('auth/registration', { email, password })
-  console.log('registration, registrationResponse: ', registrationResponse)
+  log('registration, registrationResponse: ', registrationResponse)
 
   if (!isAuthResponse(registrationResponse)) return null
 
@@ -46,7 +47,7 @@ async function signIn(email: string, password: string) {
 }
 
 async function signOut() {
-  console.log('signOut')
+  log('signOut')
 
   await httpService.put('auth/signout', null)
 
@@ -54,14 +55,14 @@ async function signOut() {
 }
 
 async function refreshTokens() {
-  console.log('refreshTokens')
+  log('refreshTokens')
 
   const refreshResponse = await httpService.get<null, AuthResponse>(
     `auth/refresh`,
     null
   )
 
-  console.log('refreshTokens, response data', refreshResponse)
+  log('refreshTokens, response data', refreshResponse)
 
   if (!isAuthResponse(refreshResponse)) return null
 

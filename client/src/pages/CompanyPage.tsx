@@ -1,10 +1,11 @@
 import { companyService } from '@/service/company.service'
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 
 const CompanyPage: FC = () => {
-  console.log(' Company connected')
+  log(' Company connected')
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['company'],
@@ -30,7 +31,7 @@ const CompanyPage: FC = () => {
       }}>
       <h1>Company page</h1>
       <p>{`Company: ${data.companyName}`}</p>
-      <p> {`Company number: ${data.companyNumber}`}</p>
+      <p>{`Company number: ${data.companyNumber}`}</p>
       <p>
         {' '}
         {`Departments:${

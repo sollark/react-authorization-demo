@@ -1,4 +1,5 @@
 import UnauthorizedPage from '@/pages/UnauthorizedPage'
+import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
 import { ReactNode } from 'react'
 
@@ -12,8 +13,7 @@ const VerifiedProtectedRoute = ({
   const isAccountVerified = useAccountStore((state) => state.isVerified)()
   const isAccessAllowed = isAccountVerified
 
-  console.log('VerifiedProtectedRoute, isAccessAllowed: ', isAccessAllowed)
-
+  log('VerifiedProtectedRoute, isAccessAllowed: ', isAccessAllowed)
   return <>{isAccessAllowed ? children : <UnauthorizedPage />}</>
 }
 

@@ -1,10 +1,11 @@
 import JoinCompanyForm from '@/cmps/forms/JoinCompanyForm'
 import CustomLink from '@/cmps/link/CustomLink'
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 
 const JoinCompanyPage: FC = () => {
-  console.log('JoinCompany connected')
+  log('JoinCompany connected')
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>

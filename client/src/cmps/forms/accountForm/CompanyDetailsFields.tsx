@@ -1,9 +1,10 @@
+import { log } from '@/service/console.service'
 import useEmployeeStore from '@/stores/employeeStore'
 import { FC } from 'react'
 import Input from '../inputs/TextInput/TextInput'
 
 const CompanyDetailsFields: FC = () => {
-  console.log('CompanyDetailsFields connected')
+  log('CompanyDetailsFields connected')
 
   const employee = useEmployeeStore((state) => state.employee)
 

@@ -1,10 +1,11 @@
 import CustomLink from '@/cmps/link/CustomLink'
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 import RegistrationForm from '../cmps/forms/RegistrationForm'
 
 const RegistrationPage: FC = () => {
-  console.log('Registration connected')
+  log('Registration connected')
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>

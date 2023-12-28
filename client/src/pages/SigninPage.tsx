@@ -1,10 +1,11 @@
 import CustomLink from '@/cmps/link/CustomLink'
+import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 import SignInForm from '../cmps/forms/SignInForm'
 
 const SigninPage: FC = () => {
-  console.log('Signin connected')
+  log('Signin connected')
 
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>

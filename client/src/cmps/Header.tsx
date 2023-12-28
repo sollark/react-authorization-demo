@@ -1,3 +1,4 @@
+import { log } from '@/service/console.service'
 import { AppBar, Box, Container, Toolbar } from '@mui/material'
 import { FC, useState } from 'react'
 import Logo from './logo/Logo'
@@ -7,7 +8,7 @@ import SiteNavigation from './menu/SiteNavigation'
 import User from './user/User'
 
 const Header: FC = () => {
-  console.log('Header connected')
+  log('Header connected')
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)

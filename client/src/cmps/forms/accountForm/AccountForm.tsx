@@ -2,6 +2,7 @@ import { CompanyNameSchema } from '@/models/Company'
 import { DepartmentNameSchema, PositionSchema } from '@/models/Employee'
 import { ProfileSchema } from '@/models/Profile'
 import { accountService } from '@/service/account.service'
+import { log } from '@/service/console.service'
 import useEmployeeStore from '@/stores/employeeStore'
 import useUserStore from '@/stores/userStore'
 import { useNavigate } from '@tanstack/react-router'
@@ -38,7 +39,7 @@ const AccountForm: FC<Props> = (props: Props) => {
   }
 
   async function submit(form: any) {
-    console.log('Account form submitted: ', form)
+    log('Account form submitted: ', form)
 
     const account = await accountService.updateAccount(
       form.firstName,
@@ -49,7 +50,7 @@ const AccountForm: FC<Props> = (props: Props) => {
       form.position
     )
 
-    console.log('AccountForm, account: ', account)
+    log('AccountForm, account: ', account)
 
     if (account?.isComplete) navigate({ to: '/' })
   }

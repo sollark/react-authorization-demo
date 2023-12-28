@@ -1,4 +1,5 @@
 import { authService } from '@/service/auth.service'
+import { log } from '@/service/console.service'
 import useUserStore from '@/stores/userStore'
 import {
   Avatar,
@@ -39,7 +40,7 @@ const guestMenu = [
 const menu: Array<{ key: string; link: ReactNode }> = []
 
 const User = (props: UserProps) => {
-  console.log('User connected')
+  log('User connected')
 
   const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
   const [initials, setInitials] = useState('Guest') // State to hold the initials

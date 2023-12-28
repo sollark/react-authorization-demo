@@ -2,6 +2,7 @@ import AdvancedEmployeeTable from '@/cmps/tables/employeeTable/AdvancedEmployeeT
 import BasicEmployeeTable from '@/cmps/tables/employeeTable/BasicEmployeeTable'
 import EditableEmployeeTable from '@/cmps/tables/employeeTable/EditableEmployeeTable'
 import { Role } from '@/models/Account'
+import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
 import { Box } from '@mui/material'
 import { FC } from 'react'
@@ -15,7 +16,7 @@ const TableViews = {
 }
 
 const EmployeeListPage: FC = () => {
-  console.log(' EmployeeList connected')
+  log(' EmployeeList connected')
 
   const role: Role = useAccountStore((state) => state.role)
   const Table = TableViews[role]
