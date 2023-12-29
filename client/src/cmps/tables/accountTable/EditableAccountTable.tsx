@@ -1,5 +1,4 @@
 import { ACCOUNT_STATUS, Role, Status, USER_ROLE } from '@/models/Account'
-import { log } from '@/service/console.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import useEmployeeStore from '@/stores/employeeStore'
@@ -106,8 +105,6 @@ const EditableAccountTable: FC = () => {
       status: account.status,
     }
   })
-
-  log('accountData from api', accountData)
 
   const updateAccount = updateEmployeeAccount()
 

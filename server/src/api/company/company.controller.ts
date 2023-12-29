@@ -156,6 +156,10 @@ export async function getCompanyEmployeeBasicTableData(
     companyEmployeeIds
   )
 
+  logger.info(
+    `companyController - getCompanyEmployeeBasicTableData, companyId: ${company._id}`
+  )
+
   res.status(200).json({
     success: true,
     message: 'Successfully retrieved basic employee data',
@@ -191,11 +195,7 @@ export async function getCompanyEmployeeAdvancedTableData(
     await employeeService.getAdvancedEmployeeTableData(companyEmployeeIds)
 
   logger.info(
-    `companyController - getCompanyEmployeeAdvancedTableData, advancedEmployeeData: ${JSON.stringify(
-      advancedEmployeeData,
-      null,
-      2 // Indentation level, adjust as needed
-    )}`
+    `companyController - getCompanyEmployeeAdvancedTableData, companyId: ${company._id}`
   )
 
   res.status(200).json({

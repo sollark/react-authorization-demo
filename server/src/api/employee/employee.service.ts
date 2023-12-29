@@ -58,7 +58,10 @@ async function createEmployee(
   }
 
   const employee = await EmployeeModel.findById(employeeDoc._id)
-    .populate<{ company: Company }>('company')
+    .populate<{ company: Company }>({
+      path: 'company',
+      select: 'companyName companyNumber',
+    })
     .populate<{ department: Department }>('department')
     .populate<{ profile: Profile }>('profile')
     .populate<{ supervisor: Employee }>('supervisor')
@@ -83,7 +86,7 @@ async function createEmployee(
 }
 
 async function deleteEmployee(employeeId: Types.ObjectId) {
-  console.log('employeeService- deleteEmployee, employeeId', employeeId)
+  console.log('employeeService - deleteEmployee, employeeId', employeeId)
 
   const employeeDoc = await EmployeeModel.findById(employeeId)
   if (!employeeDoc) throw new BadRequestError('Employee is not found')
@@ -92,14 +95,14 @@ async function deleteEmployee(employeeId: Types.ObjectId) {
   const company = await companyService.getCompanyDoc(employeeDoc.company)
 
   if (!company) throw new BadRequestError('Company is not found')
-  await await companyService.removeEmployee(company._id, employeeId)
+  await companyService.removeEmployee(company._id, employeeId)
 
   // remove employee from department
   const department = await DepartmentModel.findById(employeeDoc.department)
   if (!department) throw new BadRequestError('Department is not found')
   await departmentService.removeEmployee(department._id, employeeId)
 
-  // delete employee(error here)
+  // delete employee
   await EmployeeModel.findByIdAndDelete(employeeId)
 
   logger.info(`employeeService - employee deleted ${employeeId}`)
@@ -122,7 +125,12 @@ async function updateEmployee(
     .lean()
     .exec()
 
-  logger.info(`employeeService - employee updated ${employee}`)
+  if (!employee) {
+    logger.warn(`employeeService - employee is not found: ${employeeId}`)
+    throw new BadRequestError('employee is not found')
+  }
+
+  logger.info(`employeeService - employee updated ${employee?._id}`)
 
   return employee
 }
@@ -143,7 +151,7 @@ async function getEmployeeDoc(
     .exec()
 
   logger.info(
-    `employeeService- getEmployeeDoc, employeeDoc: ${JSON.stringify(
+    `employeeService - getEmployeeDoc, employeeDoc: ${JSON.stringify(
       employeeDoc,
       null,
       2 // Indentation level, adjust as needed

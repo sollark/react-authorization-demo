@@ -1,5 +1,4 @@
 import { Department } from '@/models/Department'
-import { log } from '@/service/console.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import useCompanyStore from '@/stores/companyStore'
@@ -137,8 +136,6 @@ const EditableEmployeeTable: FC = () => {
       position: employee.position,
     }
   })
-
-  log('employeeData from api', employeeData)
 
   const updateEmployee = updateCompanyEmployee()
   const deleteEmployee = deleteCompanyEmployee()

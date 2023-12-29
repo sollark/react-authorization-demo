@@ -69,7 +69,7 @@ function EditToolbar(props: EditToolbarProps) {
         color='primary'
         startIcon={<AddCircleOutlineOutlinedIcon />}
         onClick={handleClick}>
-        Add record
+        Add employee
       </SecondaryButton>
     </GridToolbarContainer>
   )
@@ -87,7 +87,6 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
     config = { showAddButton: true, showDeleteButton: true },
   } = props
 
-  // TODO those should work now, use it
   const { showAddButton, showDeleteButton } = config
 
   const actionColumn: GridColDef[] = [
