@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
-const sensitiveData = ['__v', '_id', 'identifier']
+const sensitiveData = ['__v', '_id', 'identifier', 'password']
 
 export function deleteSensitiveData(
   req: Request,
