@@ -1,14 +1,11 @@
+import { config } from '@/config/config'
 import axios, { InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { fail, log } from '../console.service'
 import { headerService } from './header.service'
 import { responseService } from './response.service'
 
-// Vite environment variables, must start with VITE_
-const NODE_ENV = import.meta.env.VITE_NODE_ENV
-const DEV_API_URL = import.meta.env.VITE_DEV_API_URL
-const PROD_API_URL = import.meta.env.VITE_PROD_API_URL
-const API_URL = isDevelopment() ? DEV_API_URL : PROD_API_URL
+const API_URL = config.apiUrl
 
 const api = axios.create({
   // to allow cookies to be sent to the server automatically
@@ -96,17 +93,12 @@ async function ajax<T, R>(
     // return res.data
     return responseService.handleApiResponse<R>(res)
   } catch (error) {
-    if (isDevelopment())
-      fail(
-        `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
-          data ? JSON.stringify(data) : null
-        }, error: ${error}`
-      )
+    fail(
+      `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
+        data ? JSON.stringify(data) : null
+      }, error: ${error}`
+    )
 
     throw error
   }
-}
-
-function isDevelopment(): boolean {
-  return NODE_ENV === 'development'
 }

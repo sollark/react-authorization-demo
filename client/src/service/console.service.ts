@@ -1,20 +1,22 @@
-const NODE_ENV = import.meta.env.VITE_NODE_ENV
-const isDevelopmentEnvironment = NODE_ENV === 'development'
+import { config } from '@/config/config'
+
+const NODE_ENV = config.env
+const isDevEnv = NODE_ENV === 'development'
 
 function log(...args: any[]) {
-  if (isDevelopmentEnvironment) {
+  if (isDevEnv) {
     console.log(...args)
   }
 }
 
 function fail(...args: any[]) {
-  if (isDevelopmentEnvironment) {
+  if (isDevEnv) {
     console.error(...args)
   }
 }
 
 function warn(...args: any[]) {
-  if (isDevelopmentEnvironment) {
+  if (isDevEnv) {
     console.warn(...args)
   }
 }
