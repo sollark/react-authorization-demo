@@ -10,7 +10,7 @@ import NextButton from './buttons/NextButton'
 import SubmitButton from './buttons/SubmitButton'
 import { MultistepFormProvider } from './context/MultistepFormContext'
 
-interface Props {
+type Props = {
   children: ReactElement[]
   schema: any
   defaultValues: any

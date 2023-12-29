@@ -2,7 +2,7 @@ import AccentButton from '@/cmps/button/AccentButton'
 import { FC } from 'react'
 import { buttonStyle } from '../style/formStyle'
 
-interface Props {
+type Props = {
   children?: any
 }
 

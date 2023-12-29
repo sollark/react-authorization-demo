@@ -11,3 +11,6 @@ const AccentButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 export default AccentButton
+
+/* using href forces a page reload */
+/* <SecondaryButton onClick={() => navigate({ to: '/account/edit' })}>Edit</SecondaryButton> */

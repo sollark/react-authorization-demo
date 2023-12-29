@@ -6,7 +6,7 @@ type MultistepFormContextProps = {
   goToPreviousStep: () => void
 }
 
-export interface MultistepFormContextValue {
+export type MultistepFormContextValue = {
   children: ReactNode
   goToNextStep: () => void
   goToPreviousStep: () => void

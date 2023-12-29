@@ -1,7 +1,7 @@
 import { IconButton } from '@mui/material'
 import { default as Icon } from '@mui/icons-material/Menu'
 
-interface MenuIconProps {
+type MenuIconProps = {
   handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void
 }
 

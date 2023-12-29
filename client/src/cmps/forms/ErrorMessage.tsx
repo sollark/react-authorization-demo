@@ -1,6 +1,4 @@
-import React from 'react'
-
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message: String
 }
 

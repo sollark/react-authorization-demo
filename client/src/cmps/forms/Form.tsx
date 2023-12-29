@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, ReactElement, ReactNode } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-interface Props {
+type Props = {
   children: ReactNode
   submit: (data: any) => void
   schema: any

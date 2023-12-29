@@ -2,7 +2,7 @@ import logo from '@/assets/logo/logo-160.png'
 import { Box, SxProps, Typography } from '@mui/material'
 import { FC } from 'react'
 
-interface LogoProps {
+type LogoProps = {
   sxImg?: SxProps
   sxText?: SxProps
 }

@@ -2,7 +2,7 @@ import SecondaryButton from '@/cmps/button/SecondaryButton'
 import { FC } from 'react'
 import { buttonStyle } from '../style/formStyle'
 
-interface Props {
+type Props = {
   children?: any
   onClick: () => void
 }

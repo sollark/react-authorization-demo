@@ -1,4 +1,4 @@
-interface FormStyleProps {
+type FormStyleProps = {
   fullWidth?: boolean
   margin?: 'none' | 'dense' | 'normal'
 }

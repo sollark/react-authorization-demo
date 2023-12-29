@@ -2,7 +2,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { textInputStyle } from '../../style/formStyle'
-import CustomTextInput from './StyledTextInput'
+import StyledTextInput from './StyledTextInput'
 
 type InputProps = {
   name: string
@@ -32,7 +32,7 @@ const Input: FC<InputProps> = (props: InputProps) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <CustomTextInput
+        <StyledTextInput
           {...field}
           type={type}
           label={label}

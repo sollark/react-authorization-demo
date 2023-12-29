@@ -61,7 +61,7 @@ const RegistrationForm = () => {
 
       navigate({ to: '/account/join' })
     } catch (error: any) {
-      log(error)
+      log('In registrationForm', error)
       setErrorMessage(error.response.data.errors[0].message)
     }
   }
