@@ -10,6 +10,10 @@ import { storeService } from './store.service'
 type AccountData = {
   account: Account
 }
+type RegistrationData = Partial<Profile> &
+  Partial<Company> &
+  Partial<Department> &
+  Partial<Employee>
 
 async function updateAccount(
   firstName: string,
@@ -19,17 +23,17 @@ async function updateAccount(
   departmentName: string,
   position: string
 ) {
-  const data = await httpService.post<
-    Profile & Partial<Company> & Partial<Department> & Partial<Employee>,
-    AccountData
-  >('account/update', {
-    firstName,
-    lastName,
-    ID,
-    companyName,
-    departmentName,
-    position,
-  })
+  const data = await httpService.post<RegistrationData, AccountData>(
+    'account/update',
+    {
+      firstName,
+      lastName,
+      ID,
+      companyName,
+      departmentName,
+      position,
+    }
+  )
 
   log('accountService - updateAccount, data', data)
 
