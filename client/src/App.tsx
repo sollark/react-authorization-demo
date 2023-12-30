@@ -1,6 +1,7 @@
 import { useMediaQuery } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { RouterProvider } from '@tanstack/react-router'
+import { SnackbarProvider } from 'notistack'
 import React, { useMemo, useState } from 'react'
 import { router } from './routes/router'
 import { log } from './service/console.service'
@@ -27,8 +28,10 @@ function App() {
     <>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
-          {/* <CssBaseline enableColorScheme /> */}
-          <RouterProvider router={router} />
+          <SnackbarProvider maxSnack={3}>
+            {/* <CssBaseline enableColorScheme /> */}
+            <RouterProvider router={router} />
+          </SnackbarProvider>
         </ThemeProvider>
       </ColorModeContext.Provider>
       {/* <TanStackRouterDevtools router={router} /> */}

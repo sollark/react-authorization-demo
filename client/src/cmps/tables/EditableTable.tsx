@@ -18,6 +18,7 @@ import {
   GridValidRowModel,
 } from '@mui/x-data-grid'
 import { nanoid } from 'nanoid'
+import { useSnackbar } from 'notistack'
 import { FC, useState } from 'react'
 import SecondaryButton from '../button/SecondaryButton'
 
@@ -151,6 +152,7 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
   const [rowsPendingUpdates, setRowsPendingUpdates] = useState<GridRowModel[]>(
     []
   )
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
@@ -208,13 +210,20 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
 
     if (!isSuccess && oldRow.isNew) {
       setRows(rows.filter((row) => row.id !== oldRow.id))
+      enqueueSnackbar('Error adding new record', { variant: 'error' })
       return
     }
 
     if (!isSuccess && !oldRow.isNew) {
       setRows(rows.map((row) => (row.id === oldRow.id ? oldRow : row)))
+      enqueueSnackbar('Error updating record', { variant: 'error' })
       return oldRow
     }
+
+    if (isSuccess && oldRow.isNew)
+      enqueueSnackbar('Added successfully', { variant: 'success' })
+    if (isSuccess && !oldRow.isNew)
+      enqueueSnackbar('Updated successfully', { variant: 'success' })
 
     return updatedRow
   }
