@@ -181,7 +181,12 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
 
     setRows(rows.filter((row) => row.id !== id))
 
-    await deleteRow(rows.find((row) => row.id === id)!)
+    const isSuccess = await deleteRow(rows.find((row) => row.id === id)!)
+    if (!isSuccess) {
+      enqueueSnackbar('Error deleting record', { variant: 'error' })
+    } else {
+      enqueueSnackbar('Deleted successfully', { variant: 'success' })
+    }
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
