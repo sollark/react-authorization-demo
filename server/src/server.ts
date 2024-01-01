@@ -42,10 +42,6 @@ if (config.env === 'production') {
   )
 }
 
-app.get('/', (req, res) => {
-  res.send('Server is up')
-})
-
 // middlewares
 app.use(compression())
 app.use(cookieParser())
@@ -58,6 +54,10 @@ app.all('*', setupAsyncLocalStorage)
 app.use(deleteSensitiveData)
 
 // routes
+app.get('/', (req, res) => {
+  res.send('Server is up!')
+})
+
 app.use('/api/auth', authRoutes)
 app.use('/api/account', accountRoutes)
 app.use('/api/profile', profileRoutes)
