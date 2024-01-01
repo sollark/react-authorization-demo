@@ -60,7 +60,7 @@ app.get(clientRoutes, (req, res, next) => res.sendFile(publicPath))
 
 // 404
 app.use(clientRoutes, (req, res, next) => {
-  const error = new Error(`${req.method} ${req.originalUrl} not found`)
+  const error = new Error(`${req.method} ${req.originalUrl} not found!`)
   next(error)
 })
 
