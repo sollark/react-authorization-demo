@@ -63,7 +63,6 @@ function updateCompanyEmployee() {
       employeeNumber,
       position
     )
-    // TODO cant update existing employee because employee with this id already exists
 
     // TODO return false if error in response
     return true
