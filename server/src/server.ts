@@ -29,12 +29,9 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const server = http.createServer(app)
 
-app.get('/', (req, res) => {
-  res.send('Server is up')
-})
-
 // CORS
 if (config.env === 'production') {
+  console.log('Node env:', config.env)
   app.use(express.static(path.resolve(__dirname, 'public')))
 } else {
   app.use(
@@ -44,6 +41,10 @@ if (config.env === 'production') {
     })
   )
 }
+
+app.get('/', (req, res) => {
+  res.send('Server is up')
+})
 
 // middlewares
 app.use(compression())
