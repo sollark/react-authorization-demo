@@ -55,7 +55,7 @@ app.use('/api/company', companyRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, 'public')
-const clientRoutes = ['/']
+const clientRoutes = ['/**']
 app.get(clientRoutes, (req, res, next) => res.sendFile(publicPath))
 
 // 404
