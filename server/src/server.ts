@@ -30,6 +30,7 @@ const app = express()
 const server = http.createServer(app)
 
 // CORS
+console.log('cors', config.env)
 if (config.env === 'production') {
   console.log('Node env:', config.env)
   app.use(express.static(path.resolve(__dirname, 'public')))
