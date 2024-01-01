@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 const NODE_ENV = process.env.NODE_ENV || 'development'
-const SERVER_PORT = process.env.SERVER_PORT || 3030
+const SERVER_PORT = process.env.PORT || 3030
 
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS || 'http://localhost:3000'
 

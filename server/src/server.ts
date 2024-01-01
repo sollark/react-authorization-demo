@@ -78,6 +78,11 @@ app.use(clientRoutes, (req, res, next) => {
 // error handler
 app.use(errorHandler)
 
+app.use(clientRoutes, (err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Internal Server Error')
+})
+
 // start server
 server.listen(config.server.port, () =>
   console.log(`Server is up and running on port ${config.server.port}`)
