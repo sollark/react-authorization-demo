@@ -54,7 +54,7 @@ app.use('/api/employee', employeeRoutes)
 app.use('/api/company', companyRoutes)
 
 // server globals
-const publicPath = path.join(__dirname, 'public')
+const publicPath = path.join(__dirname, 'public', 'index.html')
 const clientRoutes = ['/**']
 app.get(clientRoutes, (req, res, next) => res.sendFile(publicPath))
 
