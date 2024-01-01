@@ -29,13 +29,23 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const server = http.createServer(app)
 
+app.get('/', (req, res) => {
+  res.send('Server is up')
+})
+
+// CORS
+if (config.env === 'production') {
+  app.use(express.static(path.resolve(__dirname, 'public')))
+} else {
+  app.use(
+    cors({
+      credentials: true,
+      origin: config.server.origins,
+    })
+  )
+}
+
 // middlewares
-app.use(
-  cors({
-    credentials: true,
-    origin: config.server.origins,
-  })
-)
 app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())
