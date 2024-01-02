@@ -42,9 +42,9 @@ if (config.env === 'production') {
     })
   )
 }
-app.get('/', (req, res) => {
-  res.send('Server is up!')
-})
+// app.get('/', (req, res) => {
+//   res.send('Server is up!')
+// })
 
 // middlewares
 app.use(compression())
