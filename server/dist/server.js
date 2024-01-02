@@ -35,9 +35,9 @@ else {
         origin: config.server.origins,
     }));
 }
-app.get('/', (req, res) => {
-    res.send('Server is up!');
-});
+// app.get('/', (req, res) => {
+//   res.send('Server is up!')
+// })
 // middlewares
 app.use(compression());
 app.use(cookieParser());
