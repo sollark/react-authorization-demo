@@ -84,7 +84,7 @@ async function ajax<T, R>(
 ): Promise<R | null> {
   try {
     const res = await api({
-      url: `${API_URL}${endpoint}`,
+      url: `${endpoint}`,
       method,
       data,
       params: data,
