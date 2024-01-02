@@ -81,7 +81,7 @@ app.use(clientRoutes, (err, req, res, next) => {
 })
 
 // error handler
-app.use(errorHandler)
+// app.use(errorHandler)
 
 // start server
 server.listen(config.server.port, () =>

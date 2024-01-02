@@ -17,6 +17,7 @@ function errorHandler(
   }
 
   loggerService.error(error.message)
+  loggerService.error(error.stack)
 
   if (error instanceof CustomError) {
     return res.status(error.statusCode).json({
