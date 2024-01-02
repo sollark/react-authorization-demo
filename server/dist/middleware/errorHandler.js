@@ -7,7 +7,9 @@ function errorHandler(error, req, res, next) {
     if (config.env === 'development') {
         console.log(error.stack);
     }
+    console.log(error.stack);
     loggerService.error(error.message);
+    loggerService.error(error.stack);
     if (error instanceof CustomError) {
         return res.status(error.statusCode).json({
             errors: error.serializeErrors(),
