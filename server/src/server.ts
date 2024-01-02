@@ -42,6 +42,9 @@ if (config.env === 'production') {
     })
   )
 }
+app.get('/', (req, res) => {
+  res.send('Server is up!')
+})
 
 // middlewares
 app.use(compression())
@@ -55,9 +58,6 @@ app.all('*', setupAsyncLocalStorage)
 app.use(deleteSensitiveData)
 
 // routes
-app.get('/', (req, res) => {
-  res.send('Server is up!')
-})
 
 app.use('/api/auth', authRoutes)
 app.use('/api/account', accountRoutes)
@@ -67,11 +67,11 @@ app.use('/api/company', companyRoutes)
 
 // server globals
 const publicPath = path.join(__dirname, 'public', 'index.html')
-const clientRoutes = ['/**']
-app.get(clientRoutes, (req, res, next) => res.sendFile(publicPath))
+const clientRoute = '/**'
+app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
 // 404
-app.use(clientRoutes, (req, res, next) => {
+app.use(clientRoute, (req, res, next) => {
   const error = new Error(`${req.method} ${req.originalUrl} not found!`)
   next(error)
 })
