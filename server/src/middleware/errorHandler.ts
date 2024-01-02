@@ -15,6 +15,7 @@ function errorHandler(
   if (config.env === 'development') {
     console.log(error.stack)
   }
+  console.log(error.stack)
 
   loggerService.error(error.message)
   loggerService.error(error.stack)
