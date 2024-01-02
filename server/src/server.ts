@@ -75,13 +75,9 @@ app.use(clientRoutes, (req, res, next) => {
   const error = new Error(`${req.method} ${req.originalUrl} not found!`)
   next(error)
 })
-app.use(clientRoutes, (err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).send('Internal Server Error - 500')
-})
 
 // error handler
-// app.use(errorHandler)
+app.use(errorHandler)
 
 // start server
 server.listen(config.server.port, () =>
