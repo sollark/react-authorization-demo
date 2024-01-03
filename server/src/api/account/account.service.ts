@@ -191,6 +191,15 @@ async function setRole(accountId: Types.ObjectId, role: Role) {
   ).exec()
 }
 
+async function setStatus(accountId: Types.ObjectId, status: Status) {
+  const account = await AccountModel.findByIdAndUpdate(
+    accountId,
+    { status },
+    // returns new version of document, if false returns original version, before updates
+    { new: true }
+  ).exec()
+}
+
 async function connectEmployee(
   accountId: Types.ObjectId,
   employeeId: Types.ObjectId
@@ -405,6 +414,7 @@ export const accountService = {
   getEmployeeAccountDoc,
   setProfile,
   setRole,
+  setStatus,
   connectEmployee,
   disconnectEmployee,
   completeAccount,

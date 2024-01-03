@@ -17,7 +17,7 @@ import { accountService } from './account.service.js'
 // }
 
 // TODO every updateAccount creates a new profile, employee, company, department
-// TODO when user updating account , he may update company, department, position, that is not allowed
+// TODO make a correct flow to update account(when admin updates status), create new account(that is set to admin and active), and create new account with joinCompany(user, pending)
 export async function updateAccount(
   req: Request,
   res: Response,
@@ -79,8 +79,9 @@ export async function updateAccount(
   department = await departmentService.addEmployee(department._id, employee._id)
   await accountService.connectEmployee(accountDoc._id, employee._id)
 
-  // when joining new company, set role to manager
+  // when creating a new company, set role to manager
   await accountService.setRole(identifier, USER_ROLE.manager)
+  await accountService.setStatus(identifier, 'active')
 
   const completedAccount = await accountService.completeAccount(accountDoc._id)
 
