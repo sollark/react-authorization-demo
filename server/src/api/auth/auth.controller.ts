@@ -9,6 +9,18 @@ export async function registration(
   next: NextFunction
 ) {
   const credentials = req.body
+  const { email } = credentials
+  const isMailExists = await authService.isEmailExists(email)
+
+  if (isMailExists) {
+    res.status(200).json({
+      success: false,
+      message: 'Email already exists.',
+    })
+
+    return
+  }
+
   const { accessToken, refreshToken } = await authService.registration(
     credentials
   )

@@ -12,14 +12,6 @@ import { profileService } from '../profile/profile.service.js'
 async function registration(credentials: Credentials) {
   const { email, password } = credentials
 
-  const isTaken = await isEmailTaken(email)
-  if (isTaken) {
-    logger.warn(
-      `authService - attempt to create new authentication with existing email: ${email}`
-    )
-    throw new BadRequestError('Email is already taken', email)
-  }
-
   // hash password
   const hashPassword = await bcrypt.hash(password, 10)
 
@@ -111,20 +103,17 @@ const refresh = async (refreshToken: string) => {
   return { ...tokens }
 }
 
+export async function isEmailExists(email: string) {
+  const existingAuthUser = await authModel.findOne({ email })
+  return existingAuthUser ? true : false
+}
+
 export const authService = {
   registration,
   signIn,
   signOut,
   refresh,
-}
-
-const isEmailTaken = async (email: string) => {
-  try {
-    const existingAuthUser = await authModel.findOne({ email })
-    return existingAuthUser ? true : false
-  } catch (error) {
-    throw error
-  }
+  isEmailExists,
 }
 
 async function generateTokens(uuid: string) {

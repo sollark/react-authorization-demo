@@ -56,14 +56,12 @@ const RegistrationForm = () => {
     const { email, password } = form
     setErrorMessage('')
 
-    try {
-      const account = await authService.registration(email, password)
+    const response = await authService.registration(email, password)
+    const { success, message } = response
 
-      navigate({ to: '/account/join' })
-    } catch (error: any) {
-      log('In registrationForm', error)
-      setErrorMessage(error.response.data.errors[0].message)
-    }
+    log('Registration response: ', response)
+    if (success) navigate({ to: '/account/join' })
+    else setErrorMessage(message)
   }
 
   return (
