@@ -1,12 +1,21 @@
 import { config } from '@/config/config'
-import axios, { InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { fail, log } from '../console.service'
 import { headerService } from './header.service'
-import { responseService } from './response.service'
+
+type ApiSuccessResponse<T> = {
+  success: true
+  message: string
+  data: T
+}
+
+type ApiErrorResponse = {
+  success: false
+  message: string
+}
 
 const API_URL = config.apiUrl
-
 const api = axios.create({
   // to allow cookies to be sent to the server automatically
   withCredentials: true,
@@ -63,16 +72,28 @@ api.interceptors.response.use(
 )
 
 export const httpService = {
-  get<T, R>(endpoint: string, data: T): Promise<R | null> {
+  get<T, R>(
+    endpoint: string,
+    data: T
+  ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
     return ajax<T, R>(endpoint, 'GET', data)
   },
-  post<T, R>(endpoint: string, data: T): Promise<R | null> {
+  post<T, R>(
+    endpoint: string,
+    data: T
+  ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
     return ajax<T, R>(endpoint, 'POST', data)
   },
-  put<T, R>(endpoint: string, data: T): Promise<R | null> {
+  put<T, R>(
+    endpoint: string,
+    data: T
+  ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
     return ajax<T, R>(endpoint, 'PUT', data)
   },
-  delete<T, R>(endpoint: string, data: T): Promise<R | null> {
+  delete<T, R>(
+    endpoint: string,
+    data: T
+  ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
     return ajax<T, R>(endpoint, 'DELETE', data)
   },
 }
@@ -81,17 +102,16 @@ async function ajax<T, R>(
   endpoint: string,
   method = 'GET',
   data: T | null = null
-): Promise<R | null> {
+): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
   try {
-    const res = await api({
+    const response: AxiosResponse<R> = await api({
       url: `${endpoint}`,
       method,
       data,
       params: data,
     })
 
-    // return res.data
-    return responseService.handleApiResponse<R>(res)
+    return response.data as ApiSuccessResponse<R> | ApiErrorResponse
   } catch (error) {
     fail(
       `Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: ${
