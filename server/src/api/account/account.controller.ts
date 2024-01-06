@@ -107,7 +107,18 @@ export async function joinCompany(
   const { companyNumber, employeeNumber } = req.body
 
   const company = await companyService.getCompanyDocByNumber(companyNumber)
-  if (!company) throw new BadRequestError('Cannot find company')
+  if (!company) {
+    logger.warn(
+      `accountController - joinCompany: company is not found, companyNumber ${companyNumber}`
+    )
+
+    res.status(200).json({
+      success: false,
+      message: 'Company is not found',
+    })
+
+    return
+  }
 
   const employeeDoc = await companyService.getCompanyEmployeeDocByNumber(
     company._id,
@@ -115,9 +126,15 @@ export async function joinCompany(
   )
   if (!employeeDoc) {
     logger.warn(
-      `accountController- joinCompany: employee is not found, company._id ${company._id}, employeeNumber ${employeeNumber}`
+      `accountController - joinCompany: employee is not found, company._id ${company._id}, employeeNumber ${employeeNumber}`
     )
-    throw new BadRequestError('Cannot find employee')
+
+    res.status(200).json({
+      success: false,
+      message: 'Employee is not found',
+    })
+
+    return
   }
 
   const profileId = employeeDoc.profile
