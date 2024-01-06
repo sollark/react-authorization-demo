@@ -49,7 +49,7 @@ app.use(bodyParser.json())
 // async local storage
 app.all('*', setupAsyncLocalStorage)
 
-// delete sensitive data ('__v', '_id', 'identifier', 'password')
+// delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
 app.use(deleteSensitiveData)
 
 // routes
