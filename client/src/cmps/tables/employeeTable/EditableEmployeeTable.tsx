@@ -10,6 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from '../Table'
+import { log } from '@/service/console.service'
 
 type EmployeeTableColumns = {
   firstName: string
@@ -119,6 +120,7 @@ const EditableEmployeeTable: FC = () => {
   }
 
   const employees = data
+  log('employees1', employees)
   const departmentOptions =
     companyDepartments.map(
       (department: Department) => department.departmentName

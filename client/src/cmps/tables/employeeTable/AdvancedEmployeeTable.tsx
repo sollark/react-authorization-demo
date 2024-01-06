@@ -3,6 +3,7 @@ import { GridColDef } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
 import Table from '../Table'
+import { log } from '@/service/console.service'
 
 /*
  * AdvancedEmployeeTable has full info about employees

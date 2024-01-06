@@ -3,8 +3,9 @@ import { EmployeeNumberSchema } from '@/models/Employee'
 import { accountService } from '@/service/account.service'
 import { log } from '@/service/console.service'
 import { useNavigate } from '@tanstack/react-router'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { z } from 'zod'
+import ErrorMessage from './ErrorMessage'
 import Form from './Form'
 import SubmitButton from './buttons/SubmitButton'
 import Input from './inputs/TextInput/TextInput'
@@ -27,19 +28,28 @@ const defaultValues = {
 const JoinCompanyForm: FC = () => {
   log('JoinCompanyForm connected')
 
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
   async function submit(form: any) {
     log('JoinCompanyForm form submitted: ', form)
 
-    const account = await accountService.joinCompany(
-      form.companyNumber,
-      form.employeeNumber
+    const { companyNumber, employeeNumber } = form
+    setErrorMessage('')
+
+    const response = await accountService.joinCompany(
+      companyNumber,
+      employeeNumber
     )
+    const { success, message } = response
 
-    log('AccountForm, account: ', account)
+    log('JoinCompanyForm response: ', response)
+    if (!success) {
+      setErrorMessage(message)
+      return
+    }
 
-    if (account?.isComplete) navigate({ to: '/' })
+    navigate({ to: '/' })
   }
 
   return (
@@ -50,6 +60,7 @@ const JoinCompanyForm: FC = () => {
       submitButton={<SubmitButton />}>
       <Input name='companyNumber' label='Company number' type='text' />
       <Input name='employeeNumber' label='Employee number' type='text' />
+      <ErrorMessage message={errorMessage} />
     </Form>
   )
 }
