@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { Types } from 'mongoose'
 import { config } from '../config/config.js'
-import TokenModel, { RefreshToken } from '../mongodb/models/token.model.js'
+import TokenDataModel, { TokenData } from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
@@ -24,8 +23,8 @@ function generateTokens(data: string): {
   return { accessToken, refreshToken }
 }
 
-async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
-  const tokenData = await TokenModel.findOne({ identifier })
+async function saveToken(uuid: string, refreshToken: string) {
+  const tokenData = await TokenDataModel.findOne({ uuid })
 
   // update refresh token
   if (tokenData) {
@@ -34,29 +33,27 @@ async function saveToken(identifier: Types.ObjectId, refreshToken: string) {
   }
 
   // new refresh token
-  const token = await TokenModel.create({ identifier, refreshToken })
+  const token = await TokenDataModel.create({ uuid, refreshToken })
 
   return token
 }
 
 async function removeToken(refreshToken: string) {
-  const result = await TokenModel.deleteOne({ refreshToken })
+  const result = await TokenDataModel.deleteOne({ refreshToken })
 
   return result
 }
 
-async function getToken(refreshToken: string): Promise<RefreshToken | null> {
-  const tokenData = await TokenModel.findOne({ refreshToken })
+async function getTokenData(refreshToken: string): Promise<TokenData | null> {
+  const tokenData = await TokenDataModel.findOne({ refreshToken })
 
   return tokenData
 }
 
-async function getIdentifier(
-  refreshToken: string
-): Promise<Types.ObjectId | null> {
-  const tokenData = await TokenModel.findOne({ refreshToken })
+async function getUuid(refreshToken: string): Promise<string | null> {
+  const tokenData = await TokenDataModel.findOne({ refreshToken })
 
-  return tokenData?.identifier || null
+  return tokenData?.uuid || null
 }
 
 async function validateAccessToken(token: string) {
@@ -77,6 +74,7 @@ async function validateRefreshToken(token: string) {
 
   try {
     const payload = jwt.verify(token, refreshSecret)
+    console.log('validateRefreshToken, payload', payload)
     return payload as jwt.JwtPayload
   } catch (error) {
     console.log('validateRefreshToken error', error)
@@ -88,8 +86,8 @@ export const tokenService = {
   generateTokens,
   saveToken,
   removeToken,
-  getToken,
-  getIdentifier,
+  getTokenData,
+  getUuid,
   validateAccessToken,
   validateRefreshToken,
 }
