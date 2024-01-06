@@ -23,7 +23,7 @@ async function updateAccount(
   departmentName: string,
   position: string
 ) {
-  const data = await httpService.post<RegistrationData, AccountData>(
+  const response = await httpService.post<RegistrationData, AccountData>(
     'account/update',
     {
       firstName,
@@ -35,18 +35,18 @@ async function updateAccount(
     }
   )
 
-  log('accountService - updateAccount, data', data)
+  log('accountService - updateAccount, response', response)
+  if (response && response.success) {
+    const { account } = response.data
+    storeService.saveAccount(account)
 
-  if (!data) return null
-
-  const { account } = data
-  storeService.saveAccount(account)
-
-  return account
+    return account
+  }
+  return null
 }
 
 async function joinCompany(companyNumber: string, employeeNumber: string) {
-  const data = await httpService.post<
+  const response = await httpService.post<
     Partial<Company> & Partial<Employee>,
     AccountData
   >('account/join', {
@@ -54,27 +54,31 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
     employeeNumber,
   })
 
-  log('accountService - joinCompany, data', data)
+  log('accountService - joinCompany, response', response)
 
-  if (!data) return null
+  if (response && response.success) {
+    const { account } = response.data
+    storeService.saveAccount(account)
 
-  const { account } = data
-  storeService.saveAccount(account)
+    return account
+  }
 
-  return account
+  return null
 }
 
 async function getAccount(): Promise<Account | null> {
-  const data = await httpService.get<null, AccountData>('account', null)
+  const response = await httpService.get<null, AccountData>('account', null)
 
-  log('accountService - getAccount, data', data)
+  log('accountService - getAccount, response', response)
 
-  if (!data) return null
+  if (response && response.success) {
+    const { account } = response.data
+    storeService.saveAccount(account)
 
-  const { account } = data
-  storeService.saveAccount(account)
+    return account
+  }
 
-  return account
+  return null
 }
 
 export const accountService = { updateAccount, joinCompany, getAccount }

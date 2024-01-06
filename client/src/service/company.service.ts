@@ -8,33 +8,59 @@ type BasicCompanyData = {
 }
 
 type AdvancedCompanyData = {
-  company: Company
+  advancedCompanyData: Company
 }
 
 async function getBasicCompanyData(): Promise<Partial<Company> | null> {
   const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
-  const data = await httpService.get<null, BasicCompanyData>(
+  const response = await httpService.get<null, BasicCompanyData>(
     `company/${companyNumber}/basic`,
     null
   )
 
-  log('companyService - getBasicCompanyData, data', data)
+  log('companyService - getBasicCompanyData, response', response)
 
-  return data?.basicCompanyData || null
+  if (!response) {
+    log('companyService - getBasicCompanyData, no response from the server')
+    return null
+  }
+
+  const { success, message } = response
+  if (!success) {
+    log('companyService - getBasicCompanyData, message', message)
+    return null
+  }
+
+  const { data } = response
+
+  return data.basicCompanyData || null
 }
 
 async function getAdvancedCompanyData(): Promise<Company | null> {
   const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
-  const data = await httpService.get<null, AdvancedCompanyData>(
+  const response = await httpService.get<null, AdvancedCompanyData>(
     `company/${companyNumber}`,
     null
   )
 
-  log('companyService - getAdvancedCompanyData, data', data)
+  log('companyService - getAdvancedCompanyData, response', response)
 
-  return data?.company || null
+  if (!response) {
+    log('companyService - getAdvancedCompanyData, no response from the server')
+    return null
+  }
+
+  const { success, message } = response
+  if (!success) {
+    log('companyService - getAdvancedCompanyData, message', message)
+    return null
+  }
+
+  const { data } = response
+
+  return data.advancedCompanyData || null
 }
 
 export const companyService = {

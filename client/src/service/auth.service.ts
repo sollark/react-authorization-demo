@@ -1,49 +1,61 @@
 import { AuthCredentials } from '@/models/Auth'
-import { AuthResponse, isAuthResponse } from '../models/response/AuthResponse'
+import { isAuthResponse } from '../models/response/AuthResponse'
 import { accountService } from './account.service'
 import { httpService } from './axios/http.service'
 import { log } from './console.service'
 import { storeService } from './store.service'
 
+type AuthData = {
+  accessToken: string
+}
+
 async function registration(email: string, password: string) {
   const registrationResponse = await httpService.post<
     AuthCredentials,
-    AuthResponse
+    AuthData
   >('auth/registration', { email, password })
-  log('registration, registrationResponse: ', registrationResponse)
 
-  if (!isAuthResponse(registrationResponse)) return null
+  if (!registrationResponse)
+    return { success: false, message: 'Cannot connect to server' }
 
-  const { accessToken } = registrationResponse
-  if (accessToken) {
+  const { success, message } = registrationResponse
+  if (success) {
+    const { data } = registrationResponse
+    log('registration, message: ', message)
+
+    const { accessToken } = data
     storeService.saveAccessToken(accessToken)
     storeService.setProfileAsAuthenticated()
   }
 
-  const account = await accountService.getAccount()
-  if (account) storeService.saveAccount(account)
+  // TODO clear comments
+  // lets make registration with account creation
 
-  return account ? account : null
+  return { success, message }
 }
 
+// TODO keep refactor to fit new http service
 async function signIn(email: string, password: string) {
-  const signInResponse = await httpService.post<AuthCredentials, AuthResponse>(
+  const signInResponse = await httpService.post<AuthCredentials, AuthData>(
     'auth/signin',
     { email, password }
   )
 
-  if (!isAuthResponse(signInResponse)) return null
+  if (!signInResponse)
+    return { success: false, message: 'Cannot connect to server' }
 
-  const { accessToken } = signInResponse
-  if (accessToken) {
+  const { success, message } = signInResponse
+
+  if (success) {
+    const { data } = signInResponse
+    log('signIn, message: ', message)
+
+    const { accessToken } = data
     storeService.saveAccessToken(accessToken)
     storeService.setProfileAsAuthenticated()
   }
 
-  const account = await accountService.getAccount()
-  if (account) storeService.saveAccount(account)
-
-  return account ? account : null
+  return { success, message }
 }
 
 async function signOut() {
@@ -57,7 +69,7 @@ async function signOut() {
 async function refreshTokens() {
   log('refreshTokens')
 
-  const refreshResponse = await httpService.get<null, AuthResponse>(
+  const refreshResponse = await httpService.get<null, AuthData>(
     `auth/refresh`,
     null
   )

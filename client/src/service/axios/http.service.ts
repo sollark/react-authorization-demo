@@ -4,13 +4,13 @@ import { authService } from '../auth.service'
 import { fail, log } from '../console.service'
 import { headerService } from './header.service'
 
-type ApiSuccessResponse<T> = {
+export type ApiSuccessResponse<T> = {
   success: true
   message: string
   data: T
 }
 
-type ApiErrorResponse = {
+export type ApiErrorResponse = {
   success: false
   message: string
 }
