@@ -1,3 +1,4 @@
+import { accountService } from '@/service/account.service'
 import { authService } from '@/service/auth.service'
 import { log } from '@/service/console.service'
 import { useNavigate } from '@tanstack/react-router'
@@ -44,14 +45,17 @@ const SignInForm: FC = () => {
     const { email, password } = form
     setErrorMessage('')
 
-    try {
-      const account = await authService.signIn(email, password)
-      if (account?.isComplete) navigate({ to: '/' })
-      else navigate({ to: '/account/edit' })
-    } catch (error: any) {
-      log('in SignInForm', error)
-      setErrorMessage(error.response?.data?.errors[0]?.message)
+    const response = await authService.signIn(email, password)
+    const { success, message } = response
+
+    if (!success) {
+      setErrorMessage(message)
+      return
     }
+
+    const account = await accountService.getAccount()
+    if (account?.isComplete) navigate({ to: '/' })
+    else navigate({ to: '/account/edit' })
   }
 
   return (
