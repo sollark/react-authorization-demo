@@ -21,7 +21,7 @@ export const USER_ROLE = {
 export type Role = keyof typeof USER_ROLE
 
 export type Account = {
-  uuid?: string
+  uuid: string
   profile: Profile
   status: Status
   isComplete: boolean
@@ -30,7 +30,7 @@ export type Account = {
 }
 
 export type AccountDoc = {
-  uuid?: string
+  uuid: string
   profile: Types.ObjectId
   status: Status
   isComplete: boolean
