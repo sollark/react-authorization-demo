@@ -55,15 +55,21 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
   })
 
   log('accountService - joinCompany, response', response)
+  if (!response) return { success: false, message: 'Cannot connect to server' }
 
-  if (response && response.success) {
-    const { account } = response.data
+  const { success, message } = response
+
+  if (success) {
+    const { data } = response
+    log('joinCompany, message: ', message)
+
+    const { account } = data
     storeService.saveAccount(account)
 
-    return account
+    return response
   }
 
-  return null
+  return response
 }
 
 async function getAccount(): Promise<Account | null> {

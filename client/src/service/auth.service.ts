@@ -34,7 +34,6 @@ async function registration(email: string, password: string) {
   return { success, message }
 }
 
-// TODO keep refactor to fit new http service
 async function signIn(email: string, password: string) {
   const signInResponse = await httpService.post<AuthCredentials, AuthData>(
     'auth/signin',
