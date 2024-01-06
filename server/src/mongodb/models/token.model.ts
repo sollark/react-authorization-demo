@@ -1,14 +1,14 @@
-import { model, Schema, Types } from 'mongoose'
+import { model, Schema } from 'mongoose'
 
-export type RefreshToken = {
-  identifier: Types.ObjectId
+export type TokenData = {
+  uuid: string
   refreshToken: string
 }
 
-const RefreshTokenSchema = new Schema({
-  identifier: { type: Types.ObjectId, ref: 'Auth', required: true },
+const TokenDataSchema = new Schema({
+  uuid: { type: String, required: true, unique: true },
   refreshToken: { type: String, required: true, unique: true },
 })
 
-const RefreshToken = model<RefreshToken>('RefreshToken', RefreshTokenSchema)
-export default RefreshToken
+const TokenDataModel = model<TokenData>('TokenData', TokenDataSchema)
+export default TokenDataModel

@@ -21,7 +21,7 @@ export const USER_ROLE = {
 export type Role = keyof typeof USER_ROLE
 
 export type Account = {
-  identifier?: Types.ObjectId
+  uuid?: string
   profile: Profile
   status: Status
   isComplete: boolean
@@ -30,7 +30,7 @@ export type Account = {
 }
 
 export type AccountDoc = {
-  identifier?: Types.ObjectId
+  uuid?: string
   profile: Types.ObjectId
   status: Status
   isComplete: boolean
@@ -39,7 +39,7 @@ export type AccountDoc = {
 }
 
 const AccountSchema = new Schema({
-  identifier: { type: Types.ObjectId, unique: true },
+  uuid: { type: String, unique: true },
   profile: {
     type: Schema.Types.ObjectId,
     ref: 'Profile',
