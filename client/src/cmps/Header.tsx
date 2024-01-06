@@ -6,6 +6,7 @@ import MenuIcon from './menu/MenuIcon'
 import MobileMenu from './menu/MobileMenu'
 import SiteNavigation from './menu/SiteNavigation'
 import User from './user/User'
+import LanguageSwitcher from './languageSwitcher/LanguageSwitcher'
 
 const Header: FC = () => {
   log('Header connected')
@@ -57,6 +58,11 @@ const Header: FC = () => {
             {/* Site navigation  */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <SiteNavigation handleCloseNavMenu={handleCloseNavMenu} />
+            </Box>
+
+            {/* Language section */}
+            <Box sx={{ flexGrow: 0 }}>
+              <LanguageSwitcher />
             </Box>
 
             {/* Profile section  */}
