@@ -7,13 +7,13 @@ import ProfileModel from '../../mongodb/models/profile.model.js';
 import logger from '../../service/logger.service.js';
 import { employeeService } from '../employee/employee.service.js';
 import { profileService } from '../profile/profile.service.js';
-async function createAccount(identifier, profileId) {
+async function createAccount(uuid, profileId) {
     const accountDoc = await AccountModel.create({
-        identifier,
+        uuid,
         profile: profileId,
     });
     if (!accountDoc) {
-        logger.warn(`accountService - cannot create account: ${identifier}`);
+        logger.warn(`accountService - cannot create account: ${uuid}`);
         throw new BadRequestError('Could not create account');
     }
     const account = await AccountModel.findById(accountDoc._id)
@@ -22,14 +22,14 @@ async function createAccount(identifier, profileId) {
         .lean()
         .exec();
     if (!account) {
-        logger.warn(`accountService - account is not found: ${identifier}`);
+        logger.warn(`accountService - account is not found: ${uuid}`);
         throw new BadRequestError('Account is not found');
     }
     logger.info(`accountService - createAccount, account is created:  ${account._id}`);
     return account;
 }
-async function getAccount(identifier) {
-    const account = await AccountModel.findOne({ identifier })
+async function getAccount(uuid) {
+    const account = await AccountModel.findOne({ uuid })
         .populate('role')
         .populate('profile')
         .populate({
@@ -56,7 +56,7 @@ async function getAccount(identifier) {
         .lean()
         .exec();
     if (!account) {
-        logger.warn(`accountService - getAccount, account is not found: ${identifier}`);
+        logger.warn(`accountService - getAccount, account is not found: ${uuid}`);
         throw new BadRequestError('Account is not found');
     }
     logger.info(`accountService - getAccount, account fetched: ${account._id}`);
@@ -89,10 +89,10 @@ async function getAccounts(employeeIds) {
     logger.info(`accountService - getAccounts, number of accounts fetched: ${accounts.length}`);
     return accounts;
 }
-async function getAccountDoc(identifier) {
-    const account = await AccountModel.findOne({ identifier }).lean().exec();
+async function getAccountDoc(uuid) {
+    const account = await AccountModel.findOne({ uuid }).lean().exec();
     if (!account) {
-        logger.warn(`accountService - getAccountDoc, account is not found: ${identifier}`);
+        logger.warn(`accountService - getAccountDoc, account is not found: ${uuid}`);
         throw new BadRequestError('Account is not found');
     }
     return account;
@@ -123,6 +123,11 @@ async function setProfile(accountId, profileId) {
 }
 async function setRole(accountId, role) {
     const account = await AccountModel.findByIdAndUpdate(accountId, { role }, 
+    // returns new version of document, if false returns original version, before updates
+    { new: true }).exec();
+}
+async function setStatus(accountId, status) {
+    const account = await AccountModel.findByIdAndUpdate(accountId, { status }, 
     // returns new version of document, if false returns original version, before updates
     { new: true }).exec();
 }
@@ -283,6 +288,7 @@ export const accountService = {
     getEmployeeAccountDoc,
     setProfile,
     setRole,
+    setStatus,
     connectEmployee,
     disconnectEmployee,
     completeAccount,

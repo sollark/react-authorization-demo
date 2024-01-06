@@ -1,4 +1,4 @@
-const sensitiveData = ['__v', '_id', 'identifier', 'password'];
+const sensitiveData = ['__v', '_id', 'identifier', 'password', 'uuid'];
 export function deleteSensitiveData(req, res, next) {
     console.log('deleteSensitiveData middleware');
     const originalJson = res.json;

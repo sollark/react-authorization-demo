@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 export const ACCOUNT_STATUS = {
     incomplete: 'incomplete',
     pending: 'pending',
@@ -14,7 +14,7 @@ export const USER_ROLE = {
     admin: 'admin',
 };
 const AccountSchema = new Schema({
-    identifier: { type: Types.ObjectId, unique: true },
+    uuid: { type: String, unique: true },
     profile: {
         type: Schema.Types.ObjectId,
         ref: 'Profile',

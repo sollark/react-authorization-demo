@@ -15,10 +15,10 @@ function isError(error) {
 function doLog(level, ...args) {
     const strs = args.map((arg) => typeof arg === 'string' || isError(arg) ? arg : JSON.stringify(arg));
     let line = strs.join(' | ');
-    // get the user identifier from the async local storage
+    // get the user uuid from the async local storage
     const store = asyncLocalStorage.getStore();
-    const identifier = store?.userData?.identifier;
-    const str = identifier ? `(user: ${identifier})` : 'unauthenticated';
+    const uuid = store?.userData?.uuid;
+    const str = uuid ? `(user: ${uuid})` : 'unauthenticated';
     line = `${getTime()} - ${level} - ${str}- ${line}`;
     console.log(line);
     fs.appendFile('./logs/backend.log', line, (error) => {

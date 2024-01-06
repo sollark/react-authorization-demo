@@ -1,1 +1,0 @@
-import{F as r,ab as a}from"./index-a73d646c.js";const t=r(a)(({theme:o})=>({margin:"1rem 0",marginInlineEnd:"1rem",backgroundColor:o.palette.secondary.main,color:o.palette.secondary.contrastText,"&:hover":{backgroundColor:o.palette.secondary.dark,color:o.palette.secondary.light}}));export{t as S};

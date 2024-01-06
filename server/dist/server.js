@@ -24,9 +24,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const server = http.createServer(app);
 // CORS
-console.log('cors', config.env);
 if (config.env === 'production') {
-    console.log('Node env:', config.env);
     app.use(express.static(path.resolve(__dirname, 'public')));
 }
 else {
@@ -35,16 +33,13 @@ else {
         origin: config.server.origins,
     }));
 }
-// app.get('/', (req, res) => {
-//   res.send('Server is up!')
-// })
 // middlewares
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 // async local storage
 app.all('*', setupAsyncLocalStorage);
-// delete sensitive data ('__v', '_id', 'identifier', 'password')
+// delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
 app.use(deleteSensitiveData);
 // routes
 app.use('/api/auth', authRoutes);

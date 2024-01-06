@@ -1,16 +1,26 @@
 import BadRequestError from '../../errors/BadRequestError.js';
 import logger from '../../service/logger.service.js';
 import { authService } from './auth.service.js';
+// save refresh token in cookie for 7 days
+const cookieOptions = {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    sameSite: 'strict',
+    httpOnly: true,
+    secure: true,
+};
 export async function registration(req, res, next) {
     const credentials = req.body;
+    const { email } = credentials;
+    const isMailExists = await authService.isEmailExists(email);
+    if (isMailExists) {
+        res.status(200).json({
+            success: false,
+            message: 'Email already exists.',
+        });
+        return;
+    }
     const { accessToken, refreshToken } = await authService.registration(credentials);
-    // save refresh token in cookie for 7 days
-    res.cookie('refreshToken', refreshToken, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: 'strict',
-        httpOnly: true,
-        secure: true,
-    });
+    res.cookie('refreshToken', refreshToken, cookieOptions);
     res.status(200).json({
         success: true,
         message: 'New access token.',
@@ -19,14 +29,36 @@ export async function registration(req, res, next) {
 }
 export async function signIn(req, res, next) {
     const credentials = req.body;
-    const { accessToken, refreshToken } = await authService.signIn(credentials);
-    // save refresh token in cookie for 7 days
-    res.cookie('refreshToken', refreshToken, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: 'strict',
-        httpOnly: true,
-        secure: true,
-    });
+    const { email, password } = credentials;
+    const isMailExists = await authService.isEmailExists(email);
+    if (!isMailExists) {
+        logger.warn(`authService - signIn, email does not exists ${email}`);
+        res.status(200).json({
+            success: false,
+            message: 'Email does not exists',
+        });
+        return;
+    }
+    const uuid = await authService.getUuid(email, password);
+    if (!uuid) {
+        logger.warn(`authService - signIn, invalid password for ${email}`);
+        res.status(200).json({
+            success: false,
+            message: 'Invalid credentials',
+        });
+        return;
+    }
+    const tokens = await authService.signIn(uuid);
+    if (!tokens) {
+        logger.warn(`authService - signIn, cannot generate tokens for ${email}`);
+        res.status(200).json({
+            success: false,
+            message: 'Cannot generate tokens',
+        });
+        return;
+    }
+    const { accessToken, refreshToken } = tokens;
+    res.cookie('refreshToken', refreshToken, cookieOptions);
     res.status(200).json({
         success: true,
         message: 'New access token.',
@@ -47,12 +79,7 @@ export async function refresh(req, res, next) {
     const { accessToken, refreshToken: newRefreshToken } = await authService.refresh(expiredRefreshToken);
     logger.info('refreshing expired access token');
     // save refresh token in cookie for 7 days
-    res.cookie('refreshToken', newRefreshToken, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: 'strict',
-        httpOnly: true,
-        secure: true,
-    });
+    res.cookie('refreshToken', newRefreshToken, cookieOptions);
     res.status(200).json({
         success: true,
         message: 'New access token.',

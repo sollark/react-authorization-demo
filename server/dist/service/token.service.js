@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config.js';
-import TokenModel from '../mongodb/models/token.model.js';
+import TokenDataModel from '../mongodb/models/token.model.js';
 const { refreshSecret, accessSecret } = config.jwt;
 function generateTokens(data) {
     if (!accessSecret)
@@ -16,28 +16,28 @@ function generateTokens(data) {
     });
     return { accessToken, refreshToken };
 }
-async function saveToken(identifier, refreshToken) {
-    const tokenData = await TokenModel.findOne({ identifier });
+async function saveToken(uuid, refreshToken) {
+    const tokenData = await TokenDataModel.findOne({ uuid });
     // update refresh token
     if (tokenData) {
         tokenData.refreshToken = refreshToken;
         return tokenData.save();
     }
     // new refresh token
-    const token = await TokenModel.create({ identifier, refreshToken });
+    const token = await TokenDataModel.create({ uuid, refreshToken });
     return token;
 }
 async function removeToken(refreshToken) {
-    const result = await TokenModel.deleteOne({ refreshToken });
+    const result = await TokenDataModel.deleteOne({ refreshToken });
     return result;
 }
-async function getToken(refreshToken) {
-    const tokenData = await TokenModel.findOne({ refreshToken });
+async function getTokenData(refreshToken) {
+    const tokenData = await TokenDataModel.findOne({ refreshToken });
     return tokenData;
 }
-async function getIdentifier(refreshToken) {
-    const tokenData = await TokenModel.findOne({ refreshToken });
-    return tokenData?.identifier || null;
+async function getUuid(refreshToken) {
+    const tokenData = await TokenDataModel.findOne({ refreshToken });
+    return tokenData?.uuid || null;
 }
 async function validateAccessToken(token) {
     if (!accessSecret)
@@ -56,6 +56,7 @@ async function validateRefreshToken(token) {
         throw new Error('JWT_REFRESH_SECRET is not defined');
     try {
         const payload = jwt.verify(token, refreshSecret);
+        console.log('validateRefreshToken, payload', payload);
         return payload;
     }
     catch (error) {
@@ -67,8 +68,8 @@ export const tokenService = {
     generateTokens,
     saveToken,
     removeToken,
-    getToken,
-    getIdentifier,
+    getTokenData,
+    getUuid,
     validateAccessToken,
     validateRefreshToken,
 };
