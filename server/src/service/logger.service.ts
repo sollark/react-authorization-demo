@@ -23,11 +23,11 @@ function doLog(level: string, ...args: any[]): void {
 
   let line = strs.join(' | ')
 
-  // get the user identifier from the async local storage
+  // get the user uuid from the async local storage
   const store = asyncLocalStorage.getStore()
-  const identifier = store?.userData?.identifier
+  const uuid = store?.userData?.uuid
 
-  const str = identifier ? `(user: ${identifier})` : 'unauthenticated'
+  const str = uuid ? `(user: ${uuid})` : 'unauthenticated'
   line = `${getTime()} - ${level} - ${str}- ${line}`
   console.log(line)
 
