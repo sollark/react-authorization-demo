@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Account, USER_ROLE } from '../../mongodb/models/account.model.js'
-import { getIdentifierFromALS } from '../../service/als.service.js'
+import { getUuidFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import logger from '../../service/logger.service.js'
 import { companyService } from '../company/company.service.js'
@@ -23,7 +23,7 @@ export async function updateAccount(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
   const accountData: Account = req.body
 
   console.log('updateAccount, account: ', accountData)
@@ -35,7 +35,7 @@ export async function updateAccount(
     updatedDepartmentData,
   ] = accountService.sortAccountData(accountData)
 
-  const accountDoc = await accountService.getAccountDoc(identifier)
+  const accountDoc = await accountService.getAccountDoc(uuid)
   if (!accountDoc) throw new BadRequestError('Cannot find account')
 
   const updatedProfile = await profileService.updateProfile(
@@ -80,8 +80,8 @@ export async function updateAccount(
   await accountService.connectEmployee(accountDoc._id, employee._id)
 
   // when creating a new company, set role to manager
-  await accountService.setRole(identifier, USER_ROLE.manager)
-  await accountService.setStatus(identifier, 'active')
+  await accountService.setRole(accountDoc._id, USER_ROLE.manager)
+  await accountService.setStatus(accountDoc._id, 'active')
 
   const completedAccount = await accountService.completeAccount(accountDoc._id)
 
@@ -99,8 +99,8 @@ export async function joinCompany(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
-  let account = await accountService.getAccount(identifier)
+  const uuid = getUuidFromALS()
+  let account = await accountService.getAccount(uuid)
   if (!account) throw new BadRequestError('Cannot find account')
   const accountId = account._id
 
@@ -126,7 +126,7 @@ export async function joinCompany(
   await accountService.setRole(accountId, USER_ROLE.user)
 
   // get updated account
-  account = await accountService.getAccount(identifier)
+  account = await accountService.getAccount(uuid)
 
   res.status(200).json({
     success: true,
@@ -142,8 +142,8 @@ export async function getAccount(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
-  const account = await accountService.getAccount(identifier)
+  const uuid = getUuidFromALS()
+  const account = await accountService.getAccount(uuid)
 
   res.status(200).json({
     success: true,

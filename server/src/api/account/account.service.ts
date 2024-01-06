@@ -17,16 +17,16 @@ import { employeeService } from '../employee/employee.service.js'
 import { profileService } from '../profile/profile.service.js'
 
 async function createAccount(
-  identifier: Types.ObjectId,
+  uuid: string,
   profileId: Types.ObjectId
 ): Promise<Partial<Account>> {
   const accountDoc = await AccountModel.create({
-    identifier,
+    uuid,
     profile: profileId,
   })
 
   if (!accountDoc) {
-    logger.warn(`accountService - cannot create account: ${identifier}`)
+    logger.warn(`accountService - cannot create account: ${uuid}`)
     throw new BadRequestError('Could not create account')
   }
 
@@ -37,7 +37,7 @@ async function createAccount(
     .exec()
 
   if (!account) {
-    logger.warn(`accountService - account is not found: ${identifier}`)
+    logger.warn(`accountService - account is not found: ${uuid}`)
     throw new BadRequestError('Account is not found')
   }
 
@@ -49,9 +49,9 @@ async function createAccount(
 }
 
 async function getAccount(
-  identifier: Types.ObjectId
+  uuid: string
 ): Promise<(Account & { _id: Types.ObjectId }) | null> {
-  const account = await AccountModel.findOne({ identifier })
+  const account = await AccountModel.findOne({ uuid })
     .populate<{ role: Role }>('role')
     .populate<{ profile: Profile }>('profile')
     .populate<{ employee: Employee }>({
@@ -79,9 +79,7 @@ async function getAccount(
     .exec()
 
   if (!account) {
-    logger.warn(
-      `accountService - getAccount, account is not found: ${identifier}`
-    )
+    logger.warn(`accountService - getAccount, account is not found: ${uuid}`)
     throw new BadRequestError('Account is not found')
   }
 
@@ -129,14 +127,12 @@ async function getAccounts(
 }
 
 async function getAccountDoc(
-  identifier: Types.ObjectId
+  uuid: string
 ): Promise<(AccountDoc & { _id: Types.ObjectId }) | null> {
-  const account = await AccountModel.findOne({ identifier }).lean().exec()
+  const account = await AccountModel.findOne({ uuid }).lean().exec()
 
   if (!account) {
-    logger.warn(
-      `accountService - getAccountDoc, account is not found: ${identifier}`
-    )
+    logger.warn(`accountService - getAccountDoc, account is not found: ${uuid}`)
     throw new BadRequestError('Account is not found')
   }
 

@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
-import TokenModel from '../../mongodb/models/token.model.js'
 import logger from '../../service/logger.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { accountService } from '../account/account.service.js'
@@ -24,49 +23,28 @@ async function registration(credentials: Credentials) {
   const { accessToken, refreshToken } = await generateTokens(auth.uuid)
 
   // save refresh token to db
-  await tokenService.saveToken(auth._id, refreshToken)
+  await tokenService.saveToken(uuid, refreshToken)
 
   // create new profile and new account
   const profile = await profileService.createBlankProfile()
   if (!profile) throw new BadRequestError('Could not create profile')
-  const account = await accountService.createAccount(auth._id, profile._id)
+  const account = await accountService.createAccount(uuid, profile._id)
   if (!account) throw new BadRequestError('Could not create account')
 
   return { accessToken, refreshToken }
 }
 
-const signIn = async (credentials: Credentials) => {
-  const { email, password } = credentials
-
-  // check if email exists
-  const auth = await authModel
-    .findOne({ email })
-    .select('+password')
-    .lean()
-    .exec()
-  if (!auth) {
-    logger.warn(`authService - attempt to sign in with wrong email: ${email}`)
-    throw new UnauthorizedError('Invalid credentials', email)
-  }
-
-  // check if password is valid
-  const isPasswordValid = await bcrypt.compare(password, auth.password)
-  if (!isPasswordValid) {
-    logger.warn(
-      `authService - attempt to sign in with wrong password: ${email}`
-    )
-    throw new UnauthorizedError('Invalid credentials', email)
-  }
-
+async function signIn(uuid: string) {
   // generate tokens
-  const { accessToken, refreshToken } = await generateTokens(auth.uuid)
+  const tokens = await generateTokens(uuid)
+  const { refreshToken } = tokens
 
   // save refresh token to db
-  await tokenService.saveToken(auth._id, refreshToken)
+  await tokenService.saveToken(uuid, refreshToken)
 
-  logger.info(`authService - user signed in: ${email}`)
+  logger.info(`authService - user signed in: ${uuid}`)
 
-  return { accessToken, refreshToken }
+  return tokens
 }
 
 const signOut = async (refreshToken: string) => {
@@ -81,31 +59,33 @@ const refresh = async (refreshToken: string) => {
   if (!refreshToken) throw new UnauthorizedError('Refresh token is required')
 
   const payload = await tokenService.validateRefreshToken(refreshToken)
-  const tokenFromDb = await tokenService.getToken(refreshToken)
+  const tokenData = await tokenService.getTokenData(refreshToken)
 
-  if (!payload || !tokenFromDb)
+  if (!payload || !tokenData)
     throw new UnauthorizedError('Invalid refresh token')
-
-  // find token
-  const tokenData = await TokenModel.findOne({ refreshToken })
-    .select('identifier')
-    .lean()
-    .exec()
-
-  if (!tokenData) throw new UnauthorizedError('Invalid refresh token')
 
   // generate tokens
   const tokens = tokenService.generateTokens(payload.data)
 
   // save refresh token to db
-  await tokenService.saveToken(tokenData.identifier, tokens.refreshToken)
+  await tokenService.saveToken(tokenData.uuid, tokens.refreshToken)
 
   return { ...tokens }
 }
 
-export async function isEmailExists(email: string) {
+async function isEmailExists(email: string) {
   const existingAuthUser = await authModel.findOne({ email })
   return existingAuthUser ? true : false
+}
+
+async function getUuid(email: string, password: string) {
+  const result = await authModel.findOne({ email }).select('+password')
+  if (!result) return null
+
+  const hashPassword = result.password
+  const isPasswordValid = await bcrypt.compare(password, hashPassword)
+
+  return isPasswordValid ? result.uuid : null
 }
 
 export const authService = {
@@ -114,6 +94,7 @@ export const authService = {
   signOut,
   refresh,
   isEmailExists,
+  getUuid,
 }
 
 async function generateTokens(uuid: string) {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
-import { getIdentifierFromALS } from '../../service/als.service.js'
+import { getUuidFromALS } from '../../service/als.service.js'
 import { companyNumberService } from '../../service/companyNumber.service.js'
 import { departmentService } from '../../service/department.service.js'
 import { employeeNumberService } from '../../service/employeeNumber.service.js'
@@ -15,7 +15,7 @@ export async function getCompany(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -43,7 +43,7 @@ export async function getBasicCompanyData(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -97,7 +97,7 @@ export async function getCompanyEmployees(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -135,7 +135,7 @@ export async function getCompanyEmployeeBasicTableData(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -174,7 +174,7 @@ export async function getCompanyEmployeeAdvancedTableData(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -212,7 +212,7 @@ export async function getCompanyEmployeesAccounts(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -258,7 +258,7 @@ export async function updateCompanyEmployeeAccount(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -325,7 +325,7 @@ export async function addEmployee(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -392,7 +392,7 @@ export async function updateEmployee(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValid = companyNumberService.isValidCompanyNumber(companyNumber)
@@ -503,7 +503,7 @@ export async function deleteEmployee(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValidCompanyNumber =
@@ -559,7 +559,7 @@ export async function generateEmployeeNumber(
   res: Response,
   next: NextFunction
 ) {
-  const identifier = getIdentifierFromALS()
+  const uuid = getUuidFromALS()
 
   const companyNumber = req.params.companyNumber
   const isValidCompanyNumber =

@@ -15,13 +15,13 @@ async function setupAsyncLocalStorage(
     const refreshToken = req.cookies['refreshToken']
     if (!refreshToken) return next()
 
-    const identifier = await tokenService.getIdentifier(refreshToken)
-    if (!identifier) return next()
+    const uuid = await tokenService.getUuid(refreshToken)
+    if (!uuid) return next()
 
     const alsStore = asyncLocalStorage.getStore()
     if (!alsStore) return next()
 
-    alsStore.userData = { identifier }
+    alsStore.userData = { uuid }
 
     next()
   })
