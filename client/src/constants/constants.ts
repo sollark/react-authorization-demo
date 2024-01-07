@@ -1,5 +1,5 @@
 export const LANGUAGES = [
   { value: 'en', label: 'English' },
-  { value: 'ru', label: 'Russian' },
-  { value: 'he', label: 'Hebrew' },
+  { value: 'ru', label: 'Русский' },
+  { value: 'he', label: 'עיברית' },
 ]
