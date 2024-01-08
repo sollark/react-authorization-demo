@@ -1,6 +1,7 @@
 import logo from '@/assets/logo/logo-160.png'
 import { Box, SxProps, Typography } from '@mui/material'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type LogoProps = {
   sxImg?: SxProps
@@ -9,6 +10,7 @@ type LogoProps = {
 
 const Logo: FC<LogoProps> = (props: LogoProps) => {
   const { sxImg, sxText } = props
+  const { t } = useTranslation()
 
   return (
     <>
@@ -29,7 +31,7 @@ const Logo: FC<LogoProps> = (props: LogoProps) => {
           color: 'inherit',
           textDecoration: 'none',
         }}>
-        LOGO
+        {t('labels.logo')}
       </Typography>
     </>
   )

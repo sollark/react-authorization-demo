@@ -18,5 +18,8 @@
     "error": "Error",
     "empty": "Empty",
     "confirmation": "Are you sure?"
+  },
+  "labels": {
+    "logo": "Logo"
   }
 }

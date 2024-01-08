@@ -18,5 +18,8 @@
     "error": "Ошибка",
     "empty": "Пусто",
     "confirmation": "Вы уверены?"
+  },
+  "labels": {
+    "logo": "Лого"
   }
 }

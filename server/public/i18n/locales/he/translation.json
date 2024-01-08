@@ -18,5 +18,8 @@
     "error": "שגיאה",
     "empty": "ריק",
     "confirmation": "האם אתה בטוח?"
+  },
+  "labels": {
+    "logo": "לוגו"
   }
 }

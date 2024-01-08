@@ -29,10 +29,12 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const server = http.createServer(app)
 
+// Serve static files
+const staticPath = path.join(__dirname, '../public')
+app.use(express.static(staticPath))
+
 // CORS
-if (config.env === 'production') {
-  app.use(express.static(path.resolve(__dirname, 'public')))
-} else {
+if (config.env === 'development') {
   app.use(
     cors({
       credentials: true,
@@ -60,8 +62,10 @@ app.use('/api/employee', employeeRoutes)
 app.use('/api/company', companyRoutes)
 
 // server globals
-const publicPath = path.join(__dirname, 'public', 'index.html')
+const publicPath = path.join(__dirname, '../public', 'index.html')
 const clientRoute = '/**'
+
+// Serve index.html for all other routes
 app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
 // 404

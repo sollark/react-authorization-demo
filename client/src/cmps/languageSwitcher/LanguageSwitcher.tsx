@@ -1,5 +1,7 @@
 import { config } from '@/config/config'
 import { LANGUAGES } from '@/constants/constants'
+import { i18n } from '@/i18n/config'
+
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 
 const defaultLanguage = config.defaultLanguage
@@ -23,6 +25,7 @@ const LanguageSwitcher: FC = () => {
     const newLanguageCode = event.target.value
     setCurrentLanguageCode(newLanguageCode)
     localStorage.setItem('languageCode', newLanguageCode)
+    i18n.changeLanguage(newLanguageCode)
   }
 
   return (
