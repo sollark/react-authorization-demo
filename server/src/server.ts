@@ -14,24 +14,16 @@ import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 import errorHandler from './middleware/errorHandler.js'
 
 // import routes
-import { accountRoutes } from './api/account/account.routes.js'
-import { authRoutes } from './api/auth/auth.routes.js'
-import { employeeRoutes } from './api/employee/employee.routes.js'
 
 // import for __dirname
 import { fileURLToPath } from 'url'
-import { companyRoutes } from './api/company/company.routes.js'
-import { profileRoutes } from './api/profile/profile.routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+console.log('__dirname', __dirname)
 
 const app = express()
 const server = http.createServer(app)
-
-// Serve static files
-const staticPath = path.join(__dirname, '../public')
-app.use(express.static(staticPath))
 
 // CORS
 if (config.env === 'development') {
@@ -54,25 +46,46 @@ app.all('*', setupAsyncLocalStorage)
 // delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
 app.use(deleteSensitiveData)
 
+// Serve test file as static file
+const testFilePath = path.join(__dirname, '../public')
+console.log('testFilePath', testFilePath)
+app.use('/test', express.static(testFilePath))
+
 // routes
-app.use('/api/auth', authRoutes)
-app.use('/api/account', accountRoutes)
-app.use('/api/profile', profileRoutes)
-app.use('/api/employee', employeeRoutes)
-app.use('/api/company', companyRoutes)
+// app.use('/api/auth', authRoutes)
+// app.use('/api/account', accountRoutes)
+// app.use('/api/profile', profileRoutes)
+// app.use('/api/employee', employeeRoutes)
+// app.use('/api/company', companyRoutes)
+
+// Serve i18n files
+const i18nPath = path.join(__dirname, '../public/i18n/locales')
+console.log('i18nPath', i18nPath)
+// app.use(
+//   '/i18n/locales',
+//   express.static(i18nPath, {
+//     setHeaders: (res, filePath) => {
+//       res.setHeader('Content-Type', 'application/json')
+//     },
+//   })
+// )
+
+// Serve static files
+const staticPath = path.join(__dirname, '../public')
+// app.use(express.static(staticPath))
 
 // server globals
 const publicPath = path.join(__dirname, '../public', 'index.html')
 const clientRoute = '/**'
 
 // Serve index.html for all other routes
-app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
+// app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
 // 404
-app.use(clientRoute, (req, res, next) => {
-  const error = new Error(`${req.method} ${req.originalUrl} not found!`)
-  next(error)
-})
+// app.use(clientRoute, (req, res, next) => {
+//   const error = new Error(`${req.method} ${req.originalUrl} not found!`)
+//   next(error)
+// })
 
 // error handler
 app.use(errorHandler)
