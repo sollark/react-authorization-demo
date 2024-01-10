@@ -4,6 +4,7 @@
     "back": "Back"
   },
   "actions": {
+    "actions": "Actions",
     "ok": "OK",
     "cancel": "Cancel",
     "save": "Save",
@@ -39,6 +40,7 @@
     "employee_table_labels": {
       "first_name": "First name",
       "last_name": "Last name",
+      "id": "ID",
       "department": "Department",
       "employee_number": "Employee number",
       "position": "Position",

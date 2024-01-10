@@ -20,6 +20,7 @@ import {
 import { nanoid } from 'nanoid'
 import { useSnackbar } from 'notistack'
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import SecondaryButton from '../button/SecondaryButton'
 
 type BasicTableProps = {
@@ -52,6 +53,7 @@ type EditToolbarProps = {
 // tool bar (add record button)
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, getDefaultValues } = props
+  const { t } = useTranslation()
 
   const handleClick = async () => {
     const id = nanoid()
@@ -70,7 +72,7 @@ function EditToolbar(props: EditToolbarProps) {
         color='primary'
         startIcon={<AddCircleOutlineOutlinedIcon />}
         onClick={handleClick}>
-        Add employee
+        {t('actions.add')}
       </SecondaryButton>
     </GridToolbarContainer>
   )
@@ -87,14 +89,14 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
     getDefaultValues,
     config = { showAddButton: true, showDeleteButton: true },
   } = props
-
+  const { t } = useTranslation()
   const { showAddButton, showDeleteButton } = config
 
   const actionColumn: GridColDef[] = [
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('actions.actions'),
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {

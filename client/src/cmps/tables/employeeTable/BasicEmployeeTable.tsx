@@ -2,6 +2,7 @@ import { employeeService } from '@/service/employee.service'
 import { GridColDef } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import Table from '../Table'
 
 /*
@@ -9,14 +10,31 @@ import Table from '../Table'
  * BasicEmployeeTable is not editable
  */
 
-const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name', flex: 1 },
-  { field: 'lastName', headerName: 'Last name', flex: 1 },
-  { field: 'departmentName', headerName: 'Department', flex: 1 },
-  { field: 'position', headerName: 'Position', flex: 1 },
-]
-
 const BasicEmployeeTable: FC = () => {
+  const { t } = useTranslation()
+  const employeeColumns: GridColDef[] = [
+    {
+      field: 'firstName',
+      headerName: t('employees_page.employee_table_labels.first_name'),
+      flex: 1,
+    },
+    {
+      field: 'lastName',
+      headerName: t('employees_page.employee_table_labels.last_name'),
+      flex: 1,
+    },
+    {
+      field: 'departmentName',
+      headerName: t('employees_page.employee_table_labels.department'),
+      flex: 1,
+    },
+    {
+      field: 'position',
+      headerName: t('employees_page.employee_table_labels.position'),
+      flex: 1,
+    },
+  ]
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['employees'],
     queryFn: employeeService.getCompanyEmployeeBasicData,
@@ -47,7 +65,7 @@ const BasicEmployeeTable: FC = () => {
 
   return (
     <div>
-      <h2>Employee Table</h2>
+      <h2>{t('employees_page.employee_table')}</h2>
       <Table
         basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
       />

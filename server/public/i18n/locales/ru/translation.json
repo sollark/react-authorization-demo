@@ -4,6 +4,7 @@
     "back": "Назад"
   },
   "actions": {
+    "actions": "Действия",
     "ok": "ОК",
     "cancel": "Отмена",
     "save": "Сохранить",
@@ -40,6 +41,7 @@
     "employee_table_labels": {
       "first_name": "Имя",
       "last_name": "Фамилия",
+      "id": "Номер паспорта",
       "department": "Отдел",
       "employee_number": "Номер сотрудника",
       "position": "Должность",

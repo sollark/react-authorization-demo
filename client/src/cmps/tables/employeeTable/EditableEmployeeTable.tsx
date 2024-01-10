@@ -1,4 +1,5 @@
 import { Department } from '@/models/Department'
+import { log } from '@/service/console.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import useCompanyStore from '@/stores/companyStore'
@@ -9,8 +10,8 @@ import {
 } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import Table from '../Table'
-import { log } from '@/service/console.service'
 
 type EmployeeTableColumns = {
   firstName: string
@@ -22,27 +23,6 @@ type EmployeeTableColumns = {
 }
 
 let departments: (params: GridValueOptionsParams<any>) => string[]
-
-const employeeColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name', editable: true, flex: 1 },
-  { field: 'lastName', headerName: 'Last name', editable: true, flex: 1 },
-  { field: 'ID', headerName: 'ID', editable: true, flex: 1 },
-  {
-    field: 'departmentName',
-    headerName: 'Department',
-    editable: true,
-    flex: 1,
-    type: 'singleSelect',
-    valueOptions: (params) => departments(params),
-  },
-  {
-    field: 'employeeNumber',
-    headerName: 'Employee number',
-    editable: false,
-    flex: 1,
-  },
-  { field: 'position', headerName: 'Position', editable: true, flex: 1 },
-]
 
 function updateCompanyEmployee() {
   return async (row: GridRowModel): Promise<boolean> => {
@@ -102,6 +82,48 @@ const EditableEmployeeTable: FC = () => {
     return <span>Error: Departments are not found in the store</span>
   }
 
+  const { t } = useTranslation()
+  const employeeColumns: GridColDef[] = [
+    {
+      field: 'firstName',
+      headerName: t('employees_page.employee_table_labels.first_name'),
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'lastName',
+      headerName: t('employees_page.employee_table_labels.last_name'),
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'ID',
+      headerName: t('employees_page.employee_table_labels.id'),
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'departmentName',
+      headerName: t('employees_page.employee_table_labels.department'),
+      editable: true,
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: (params) => departments(params),
+    },
+    {
+      field: 'employeeNumber',
+      headerName: t('employees_page.employee_table_labels.employee_number'),
+      editable: false,
+      flex: 1,
+    },
+    {
+      field: 'position',
+      headerName: t('employees_page.employee_table_labels.position'),
+      editable: true,
+      flex: 1,
+    },
+  ]
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['employees'],
     queryFn: employeeService.getCompanyEmployeeAdvancedData,
@@ -120,7 +142,6 @@ const EditableEmployeeTable: FC = () => {
   }
 
   const employees = data
-  log('employees1', employees)
   const departmentOptions =
     companyDepartments.map(
       (department: Department) => department.departmentName
@@ -144,7 +165,7 @@ const EditableEmployeeTable: FC = () => {
 
   return (
     <div>
-      <h2>Employee Table</h2>
+      <h2>{t('employees_page.employee_table')}</h2>
       <Table
         basicProps={{ dataRows: employeeData, tableColumns: employeeColumns }}
         specialProps={{

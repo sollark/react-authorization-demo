@@ -4,6 +4,7 @@
     "back": "אחורה"
   },
   "actions": {
+    "actions": "פעולות",
     "ok": "אישור",
     "cancel": "ביטול",
     "save": "שמור",
@@ -40,6 +41,7 @@
     "employee_table_labels": {
       "first_name": "שם פרטי",
       "last_name": "שם משפחה",
+      "id": "ת.ז.",
       "department": "מחלקה",
       "employee_number": "מספר עובד",
       "position": "תפקיד",
