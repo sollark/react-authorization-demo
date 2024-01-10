@@ -21,5 +21,43 @@
   },
   "labels": {
     "logo": "Лого"
+  },
+
+  "pages": {
+    "home": "Главная",
+    "company": "Компания",
+    "employees": "Сотрудники",
+    "accounts": "Учетные записи"
+  },
+  "company_page": {
+    "company": "Компания",
+    "company_number": "Номер компании",
+    "departments": "Отделы",
+    "number_of_employees": "Количество сотрудников"
+  },
+  "employees_page": {
+    "employee_table": "Таблица сотрудников",
+    "employee_table_labels": {
+      "first_name": "Имя",
+      "last_name": "Фамилия",
+      "department": "Отдел",
+      "employee_number": "Номер сотрудника",
+      "position": "Должность",
+      "actions": "Действия",
+      "add_employee": "Добавить сотрудника"
+    }
+  },
+  "accounts_page": {
+    "account_table": "Таблица учетных записей",
+    "account_table_labels": {
+      "first_name": "Имя",
+      "last_name": "Фамилия",
+      "id": "ID",
+      "employee_number": "Номер сотрудника",
+      "role": "Роль",
+      "status": "Статус",
+      "actions": "Действия",
+      "add_account": "Добавить учетную запись"
+    }
   }
 }
