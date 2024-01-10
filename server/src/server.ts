@@ -4,24 +4,22 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import http from 'http'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 import path from 'path'
+import { fileURLToPath } from 'url'
+import { accountRoutes } from './api/account/account.routes.js'
+import { authRoutes } from './api/auth/auth.routes.js'
+import { companyRoutes } from './api/company/company.routes.js'
+import { employeeRoutes } from './api/employee/employee.routes.js'
+import { profileRoutes } from './api/profile/profile.routes.js'
 import { config } from './config/config.js'
-import { connectMongo } from './mongodb/connect.js'
-
-// import middleware
 import setupAsyncLocalStorage from './middleware/als.js'
 import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 import errorHandler from './middleware/errorHandler.js'
-
-// import routes
-
-// import for __dirname
-import { fileURLToPath } from 'url'
+import { connectMongo } from './mongodb/connect.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-console.log('__dirname', __dirname)
-
 const app = express()
 const server = http.createServer(app)
 
@@ -35,67 +33,62 @@ if (config.env === 'development') {
   )
 }
 
-// middlewares
+// Middlewares
 app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())
+app.all('*', setupAsyncLocalStorage) // async local storage
+app.use(deleteSensitiveData) // delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
 
-// async local storage
-app.all('*', setupAsyncLocalStorage)
-
-// delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
-app.use(deleteSensitiveData)
-
-// Serve test file as static file
-const testFilePath = path.join(__dirname, '../public')
-console.log('testFilePath', testFilePath)
-app.use('/test', express.static(testFilePath))
-
-// routes
-// app.use('/api/auth', authRoutes)
-// app.use('/api/account', accountRoutes)
-// app.use('/api/profile', profileRoutes)
-// app.use('/api/employee', employeeRoutes)
-// app.use('/api/company', companyRoutes)
+// Routes
+app.use('/api/auth', authRoutes)
+app.use('/api/account', accountRoutes)
+app.use('/api/profile', profileRoutes)
+app.use('/api/employee', employeeRoutes)
+app.use('/api/company', companyRoutes)
 
 // Serve i18n files
-const i18nPath = path.join(__dirname, '../public/i18n/locales')
-console.log('i18nPath', i18nPath)
-// app.use(
-//   '/i18n/locales',
-//   express.static(i18nPath, {
-//     setHeaders: (res, filePath) => {
-//       res.setHeader('Content-Type', 'application/json')
-//     },
-//   })
-// )
+app.use('/i18n', express.static(path.join(__dirname, '../public/i18n')))
 
-// Serve static files
-const staticPath = path.join(__dirname, '../public')
-// app.use(express.static(staticPath))
+// Proxy middleware for development environment:
+// Redirects all requests to the Vite development server to enable hot-reloading and other dev features.
+if (config.env === 'development') {
+  app.use(
+    '/',
+    createProxyMiddleware({
+      target: config.server.proxy,
+      changeOrigin: true,
+      ws: true, // proxy websockets
+    })
+  )
+}
 
-// server globals
-const publicPath = path.join(__dirname, '../public', 'index.html')
-const clientRoute = '/**'
+// Serve static files for production
+if (config.env === 'production') {
+  const staticPath = path.join(__dirname, '../public')
+  app.use(express.static(staticPath))
+}
 
 // Serve index.html for all other routes
-// app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
+const publicPath = path.join(__dirname, '../public', 'index.html')
+const clientRoute = '/**'
+app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
 // 404
-// app.use(clientRoute, (req, res, next) => {
-//   const error = new Error(`${req.method} ${req.originalUrl} not found!`)
-//   next(error)
-// })
+app.use(clientRoute, (req, res, next) => {
+  const error = new Error(`${req.method} ${req.originalUrl} not found!`)
+  next(error)
+})
 
-// error handler
+// Error handler
 app.use(errorHandler)
 
-// start server
+// Start server
 server.listen(config.server.port, () =>
   console.log(`Server is up and running on port ${config.server.port}`)
 )
 
-// connect to MongoDB
+// Connect to MongoDB
 try {
   await connectMongo()
 } catch (error) {
