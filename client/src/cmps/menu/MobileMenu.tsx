@@ -1,4 +1,4 @@
-import { useNavigationPages } from '@/hooks/useNavigationPage'
+import { useNavigationMenu } from '@/hooks/useNavigationMenu'
 import { Role } from '@/models/Account'
 import useAccountStore from '@/stores/accountStore'
 import { Menu, MenuItem, Typography } from '@mui/material'
@@ -11,7 +11,7 @@ type NavigationProps = {
 const MobileMenu = (props: NavigationProps) => {
   const { anchorElNav, handleCloseNavMenu } = props
   const role: Role = useAccountStore((state) => state.role)
-  const pages = useNavigationPages(role)
+  const pages = useNavigationMenu(role)
 
   return (
     <Menu

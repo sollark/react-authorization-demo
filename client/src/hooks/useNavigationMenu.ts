@@ -1,8 +1,8 @@
-import { getAdminPages, getUserPages } from '@/cmps/menu/Pages'
-import { Role } from '@/models/Account'
-import { useEffect, useState } from 'react'
+import { getAdminPages, getUserPages } from '@/cmps/menu/Pages';
+import { Role } from '@/models/Account';
+import { useEffect, useState } from 'react';
 
-export function useNavigationPages(role: Role) {
+export function useNavigationMenu(role: Role) {
   const [pages, setPages] = useState<{ key: string; link: JSX.Element }[]>([])
 
   useEffect(() => {
