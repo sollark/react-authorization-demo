@@ -1,7 +1,7 @@
+import { useNavigationPages } from '@/hooks/useNavigationPage'
 import { Role } from '@/models/Account'
 import useAccountStore from '@/stores/accountStore'
 import { Button } from '@mui/material'
-import { getAdminPages, getUserPages } from './Pages'
 
 type SiteNavigationProps = {
   handleCloseNavMenu: () => void
@@ -10,19 +10,7 @@ type SiteNavigationProps = {
 const SiteNavigation = (props: SiteNavigationProps) => {
   const { handleCloseNavMenu } = props
   const role: Role = useAccountStore((state) => state.role)
-
-  const userPages = getUserPages()
-  const adminPages = getAdminPages()
-
-  const navigationPages = {
-    guest: userPages,
-    user: userPages,
-    supervisor: userPages,
-    manager: adminPages,
-    admin: adminPages,
-  }
-
-  const pages = navigationPages[role]
+  const pages = useNavigationPages(role)
 
   return (
     <>
