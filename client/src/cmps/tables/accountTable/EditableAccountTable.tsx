@@ -9,6 +9,7 @@ import {
 } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import Table from '../Table'
 
 type AccountTableColumns = {
@@ -22,34 +23,6 @@ type AccountTableColumns = {
 
 let roles: (params: GridValueOptionsParams<any>) => string[]
 let statuses: (params: GridValueOptionsParams<any>) => string[]
-
-const accountColumns: GridColDef[] = [
-  { field: 'firstName', headerName: 'First name', editable: false, flex: 1 },
-  { field: 'lastName', headerName: 'Last name', editable: false, flex: 1 },
-  { field: 'ID', headerName: 'ID', editable: false, flex: 1 },
-  {
-    field: 'employeeNumber',
-    headerName: 'Employee number',
-    editable: false,
-    flex: 1,
-  },
-  {
-    field: 'role',
-    headerName: 'Role',
-    editable: true,
-    flex: 1,
-    type: 'singleSelect',
-    valueOptions: (params) => roles(params),
-  },
-  {
-    field: 'status',
-    headerName: 'Status',
-    editable: true,
-    flex: 1,
-    type: 'singleSelect',
-    valueOptions: (params) => statuses(params),
-  },
-]
 
 function updateEmployeeAccount() {
   return async (row: GridRowModel): Promise<boolean> => {
@@ -70,6 +43,50 @@ function updateEmployeeAccount() {
 const EditableAccountTable: FC = () => {
   const company = useEmployeeStore((state) => state.employee?.company)
   if (!company) return <span>Error: Company is not found in the store</span>
+
+  const { t } = useTranslation()
+  const accountColumns: GridColDef[] = [
+    {
+      field: 'firstName',
+      headerName: t('accounts_page.account_table_labels.first_name'),
+      editable: false,
+      flex: 1,
+    },
+    {
+      field: 'lastName',
+      headerName: t('accounts_page.account_table_labels.last_name'),
+      editable: false,
+      flex: 1,
+    },
+    {
+      field: 'ID',
+      headerName: t('accounts_page.account_table_labels.id'),
+      editable: false,
+      flex: 1,
+    },
+    {
+      field: 'employeeNumber',
+      headerName: t('accounts_page.account_table_labels.employee_number'),
+      editable: false,
+      flex: 1,
+    },
+    {
+      field: 'role',
+      headerName: t('accounts_page.account_table_labels.role'),
+      editable: true,
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: (params) => roles(params),
+    },
+    {
+      field: 'status',
+      headerName: t('accounts_page.account_table_labels.status'),
+      editable: true,
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: (params) => statuses(params),
+    },
+  ]
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['accounts'],
@@ -110,7 +127,7 @@ const EditableAccountTable: FC = () => {
 
   return (
     <div>
-      <h2>Employee Table</h2>
+      <h2>{t('accounts_page.account_table')}</h2>
       <Table
         basicProps={{ dataRows: accountData, tableColumns: accountColumns }}
         specialProps={{
