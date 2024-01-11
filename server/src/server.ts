@@ -66,11 +66,13 @@ if (config.env === 'development') {
 // Serve static files for production
 if (config.env === 'production') {
   const staticPath = path.join(__dirname, '../public')
+  console.log('staticPath', staticPath)
   app.use(express.static(staticPath))
 }
 
 // Serve index.html for all other routes
 const publicPath = path.join(__dirname, '../public', 'index.html')
+console.log('publicPath', publicPath)
 const clientRoute = '/**'
 app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
