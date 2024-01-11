@@ -1,5 +1,4 @@
 import { AuthCredentials } from '@/models/Auth'
-import { accountService } from './account.service'
 import { httpService } from './axios/http.service'
 import { log } from './console.service'
 import { storeService } from './store.service'
@@ -78,17 +77,16 @@ async function refreshTokens() {
     return { success: false, message: 'Cannot connect to server' }
 
   const { success } = refreshResponse
-
   if (success) {
     const { data } = refreshResponse
     const { accessToken } = data
 
     storeService.saveAccessToken(accessToken)
     storeService.setProfileAsAuthenticated()
+  } else {
+    log('Failed to refresh token')
+    throw new Error()
   }
-
-  const account = await accountService.getAccount()
-  if (account) storeService.saveAccount(account)
 }
 
 export const authService = {

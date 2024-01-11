@@ -50,7 +50,6 @@ api.interceptors.response.use(
 
     log('interceptor', error.response, originalRequest, originalRequest._retry)
     if (error.response?.status === 401 && !originalRequest._retry) {
-      log('interceptor, originalRequest', originalRequest._retry)
       originalRequest._retry = true
 
       if (originalRequest.headers.Authorization) {

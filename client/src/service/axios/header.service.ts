@@ -9,7 +9,7 @@ function getHeaders(): [string, string][] {
   const accessToken = useAuthStore.getState().token
   if (accessToken) headers.push(['Authorization', `Bearer ${accessToken}`])
 
-  log('headerService - getHeaders, headers', headers)
+  // log('headerService - getHeaders, headers', headers)
   return headers
 }
 

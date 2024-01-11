@@ -61,8 +61,7 @@ const refresh = async (refreshToken: string) => {
   const payload = await tokenService.validateRefreshToken(refreshToken)
   const tokenData = await tokenService.getTokenData(refreshToken)
 
-  if (!payload || !tokenData)
-    throw new UnauthorizedError('Invalid refresh token')
+  if (!payload || !tokenData) return null
 
   // generate tokens
   const tokens = tokenService.generateTokens(payload.data)

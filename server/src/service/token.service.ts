@@ -14,10 +14,10 @@ function generateTokens(data: string): {
   // console.log('generateTokens, data', data)
 
   const accessToken = jwt.sign({ data }, accessSecret, {
-    expiresIn: '1d',
+    expiresIn: '10m',
   })
   const refreshToken = jwt.sign({ data }, refreshSecret, {
-    expiresIn: '10d',
+    expiresIn: '1h',
   })
 
   return { accessToken, refreshToken }
