@@ -1,0 +1,65 @@
+{
+  "navigation": {
+    "next": "הבא",
+    "back": "אחורה"
+  },
+  "actions": {
+    "actions": "פעולות",
+    "ok": "אישור",
+    "cancel": "ביטול",
+    "save": "שמור",
+    "edit": "ערוך",
+    "delete": "מחק",
+    "add": "הוסף"
+  },
+  "ui": {
+    "search": "חיפוש",
+    "close": "סגור",
+    "loading": "טוען...",
+    "error": "שגיאה",
+    "empty": "ריק",
+    "confirmation": "האם אתה בטוח?"
+  },
+  "labels": {
+    "logo": "לוגו"
+  },
+
+  "pages": {
+    "home": "בית",
+    "company": "חברה",
+    "employees": "עובדים",
+    "accounts": "חשבונות"
+  },
+  "company_page": {
+    "company": "חברה",
+    "company_number": "מספר חברה",
+    "departments": "מחלקות",
+    "number_of_employees": "מספר עובדים"
+  },
+  "employees_page": {
+    "employee_table": "טבלת עובדים",
+    "employee_table_labels": {
+      "first_name": "שם פרטי",
+      "last_name": "שם משפחה",
+      "id": "ת.ז.",
+      "department": "מחלקה",
+      "employee_number": "מספר עובד",
+      "position": "תפקיד",
+      "actions": "פעולות",
+      "add_employee": "הוסף עובד"
+    }
+  },
+  "accounts_page": {
+    "account_table": "טבלת חשבונות",
+    "account_table_labels": {
+      "first_name": "שם פרטי",
+      "last_name": "שם משפחה",
+      "id": "ת.ז.",
+      "employee_number": "מספר עובד",
+      "role": "תפקיד",
+      "status": "סטטוס",
+      "actions": "פעולות",
+      "add_account": "הוסף חשבון"
+    }
+  }
+}

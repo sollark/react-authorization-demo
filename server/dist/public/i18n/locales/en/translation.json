@@ -1,0 +1,64 @@
+{
+  "navigation": {
+    "next": "Next",
+    "back": "Back"
+  },
+  "actions": {
+    "actions": "Actions",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add"
+  },
+  "ui": {
+    "search": "Search",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "empty": "Empty",
+    "confirmation": "Are you sure?"
+  },
+  "labels": {
+    "logo": "Logo"
+  },
+  "pages": {
+    "home": "Home",
+    "company": "Company",
+    "employees": "Employees",
+    "accounts": "Accounts"
+  },
+  "company_page": {
+    "company": "Company",
+    "company_number": "Company number",
+    "departments": "Departments",
+    "number_of_employees": "Number of employees"
+  },
+  "employees_page": {
+    "employee_table": "Employee table",
+    "employee_table_labels": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "id": "ID",
+      "department": "Department",
+      "employee_number": "Employee number",
+      "position": "Position",
+      "actions": "Actions",
+      "add_employee": "Add employee"
+    }
+  },
+  "accounts_page": {
+    "account_table": "Account table",
+    "account_table_labels": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "id": "ID",
+      "employee_number": "Employee number",
+      "role": "Role",
+      "status": "Status",
+      "actions": "Actions",
+      "add_account": "Add account"
+    }
+  }
+}
