@@ -1,5 +1,4 @@
 import { AuthCredentials } from '@/models/Auth'
-import { isAuthResponse } from '../models/response/AuthResponse'
 import { accountService } from './account.service'
 import { httpService } from './axios/http.service'
 import { log } from './console.service'
@@ -75,10 +74,15 @@ async function refreshTokens() {
 
   log('refreshTokens, response data', refreshResponse)
 
-  if (!isAuthResponse(refreshResponse)) return null
+  if (!refreshResponse)
+    return { success: false, message: 'Cannot connect to server' }
 
-  const { accessToken } = refreshResponse
-  if (accessToken) {
+  const { success } = refreshResponse
+
+  if (success) {
+    const { data } = refreshResponse
+    const { accessToken } = data
+
     storeService.saveAccessToken(accessToken)
     storeService.setProfileAsAuthenticated()
   }

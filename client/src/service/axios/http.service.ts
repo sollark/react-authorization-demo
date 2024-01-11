@@ -25,6 +25,8 @@ const api = axios.create({
 // set access token  to the request header
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    log('interceptor: adding header')
+
     // add your custom headers to the request here
     const headers = headerService.getHeaders()
     headers.forEach(([headerName, value]) => {
@@ -48,6 +50,7 @@ api.interceptors.response.use(
 
     log('interceptor', error.response, originalRequest, originalRequest._retry)
     if (error.response?.status === 401 && !originalRequest._retry) {
+      log('interceptor, originalRequest', originalRequest._retry)
       originalRequest._retry = true
 
       if (originalRequest.headers.Authorization) {
@@ -119,6 +122,6 @@ async function ajax<T, R>(
       }, error: ${error}`
     )
 
-    throw error
+    return null
   }
 }

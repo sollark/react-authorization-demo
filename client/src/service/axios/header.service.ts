@@ -1,5 +1,6 @@
 import useAuthStore from '@/stores/authStore'
 import { AxiosRequestConfig } from 'axios'
+import { log } from '../console.service'
 
 // add custom headers here
 function getHeaders(): [string, string][] {
@@ -8,6 +9,7 @@ function getHeaders(): [string, string][] {
   const accessToken = useAuthStore.getState().token
   if (accessToken) headers.push(['Authorization', `Bearer ${accessToken}`])
 
+  log('headerService - getHeaders, headers', headers)
   return headers
 }
 
