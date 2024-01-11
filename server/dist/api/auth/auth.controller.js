@@ -76,7 +76,15 @@ export async function signOut(req, res, next) {
 // renew access token when it is expired
 export async function refresh(req, res, next) {
     const { refreshToken: expiredRefreshToken } = req.cookies;
-    const { accessToken, refreshToken: newRefreshToken } = await authService.refresh(expiredRefreshToken);
+    const response = await authService.refresh(expiredRefreshToken);
+    if (!response) {
+        res.status(200).json({
+            success: false,
+            message: 'Cannot refresh access token',
+        });
+        return;
+    }
+    const { accessToken, refreshToken: newRefreshToken } = response;
     logger.info('refreshing expired access token');
     // save refresh token in cookie for 7 days
     res.cookie('refreshToken', newRefreshToken, cookieOptions);

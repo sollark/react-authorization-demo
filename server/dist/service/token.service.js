@@ -9,10 +9,10 @@ function generateTokens(data) {
         throw new Error('JWT_REFRESH_SECRET is not defined');
     // console.log('generateTokens, data', data)
     const accessToken = jwt.sign({ data }, accessSecret, {
-        expiresIn: '1d',
+        expiresIn: '10m',
     });
     const refreshToken = jwt.sign({ data }, refreshSecret, {
-        expiresIn: '10d',
+        expiresIn: '1h',
     });
     return { accessToken, refreshToken };
 }
