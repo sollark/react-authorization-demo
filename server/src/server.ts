@@ -17,6 +17,8 @@ import setupAsyncLocalStorage from './middleware/als.js'
 import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 import errorHandler from './middleware/errorHandler.js'
 import { connectMongo } from './mongodb/connect.js'
+import { set } from 'mongoose'
+import setHeaders from './middleware/setHeaders.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -39,6 +41,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.all('*', setupAsyncLocalStorage) // async local storage
 app.use(deleteSensitiveData) // delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
+app.use(setHeaders)
 
 // Routes
 app.use('/api/auth', authRoutes)
