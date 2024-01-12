@@ -36,6 +36,9 @@ if (config.env === 'development') {
   )
 }
 
+// Headers
+if (config.env === 'production') app.use(setHeaders)
+
 // Middlewares
 app.use(collectVisitorInfo)
 app.use(requestLimit)
@@ -44,7 +47,6 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.all('*', setupAsyncLocalStorage) // async local storage
 app.use(deleteSensitiveData) // delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
-app.use(setHeaders)
 
 // Routes
 app.use('/api/auth', authRoutes)
