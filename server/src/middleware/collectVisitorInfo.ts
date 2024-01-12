@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import VisitorModel from '../mongodb/models/visitor.model'
 
-async function requestLimit(req: Request, res: Response, next: NextFunction) {
+async function collectVisitorInfo(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const ip = req.ip
   const userAgent = req.headers['user-agent'] || ''
   const path = req.path
@@ -34,4 +38,4 @@ async function requestLimit(req: Request, res: Response, next: NextFunction) {
   next()
 }
 
-export default requestLimit
+export default collectVisitorInfo

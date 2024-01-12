@@ -14,6 +14,7 @@ import { employeeRoutes } from './api/employee/employee.routes.js'
 import { profileRoutes } from './api/profile/profile.routes.js'
 import { config } from './config/config.js'
 import setupAsyncLocalStorage from './middleware/als.js'
+import collectVisitorInfo from './middleware/collectVisitorInfo.js'
 import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 import errorHandler from './middleware/errorHandler.js'
 import requestLimit from './middleware/requestLimit.js'
@@ -36,6 +37,7 @@ if (config.env === 'development') {
 }
 
 // Middlewares
+app.use(collectVisitorInfo)
 app.use(requestLimit)
 app.use(compression())
 app.use(cookieParser())
