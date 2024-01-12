@@ -30,36 +30,61 @@
     "employees": "עובדים",
     "accounts": "חשבונות"
   },
+  "account_menu": {
+    "account": "חשבון",
+    "sign_out": "התנתק"
+  },
   "company_page": {
-    "company": "חברה",
-    "company_number": "מספר חברה",
-    "departments": "מחלקות",
     "number_of_employees": "מספר עובדים"
   },
   "employees_page": {
-    "employee_table": "טבלת עובדים",
-    "employee_table_labels": {
-      "first_name": "שם פרטי",
-      "last_name": "שם משפחה",
-      "id": "ת.ז.",
-      "department": "מחלקה",
-      "employee_number": "מספר עובד",
-      "position": "תפקיד",
-      "actions": "פעולות",
-      "add_employee": "הוסף עובד"
-    }
+    "employee_table": "טבלת עובדים"
   },
   "accounts_page": {
-    "account_table": "טבלת חשבונות",
-    "account_table_labels": {
-      "first_name": "שם פרטי",
-      "last_name": "שם משפחה",
-      "id": "ת.ז.",
-      "employee_number": "מספר עובד",
-      "role": "תפקיד",
-      "status": "סטטוס",
-      "actions": "פעולות",
-      "add_account": "הוסף חשבון"
-    }
+    "account_table": "טבלת חשבונות"
+  },
+  "auth": {
+    "email": "דואר אלקטרוני",
+    "password": "סיסמה"
+  },
+  "account": {
+    "account": "חשבון"
+  },
+  "account_status": {
+    "account_status": "מצב החשבון",
+    "incomplete": "לא שלם",
+    "pending": "ממתין",
+    "active": "פעיל",
+    "inactive": "לא פעיל",
+    "suspended": "מושעה"
+  },
+  "user_role": {
+    "user_role": "תפקיד משתמש",
+    "guest": "אורח",
+    "manager": "מנהל",
+    "admin": "מנהל מערכת",
+    "supervisor": "מנהל עליון"
+  },
+  "profile": {
+    "profile": "פרופיל",
+    "first_name": "שם פרטי",
+    "last_name": "שם משפחה",
+    "id": "ת.ז.",
+    "email": "דואר אלקטרוני",
+    "phone": "טלפון",
+    "address": "כתובת"
+  },
+  "employee": {
+    "employee": "עובד",
+    "employee_number": "מספר עובד",
+    "position": "תפקיד"
+  },
+  "company": {
+    "company": "חברה",
+    "company_name": "שם החברה",
+    "company_number": "מספר החברה"
+  },
+  "department": {
+    "department": "מחלקה"
   }
 }

@@ -15,22 +15,22 @@ const BasicEmployeeTable: FC = () => {
   const employeeColumns: GridColDef[] = [
     {
       field: 'firstName',
-      headerName: t('employees_page.employee_table_labels.first_name'),
+      headerName: t('profile.first_name'),
       flex: 1,
     },
     {
       field: 'lastName',
-      headerName: t('employees_page.employee_table_labels.last_name'),
+      headerName: t('profile.last_name'),
       flex: 1,
     },
     {
       field: 'departmentName',
-      headerName: t('employees_page.employee_table_labels.department'),
+      headerName: t('department.department'),
       flex: 1,
     },
     {
       field: 'position',
-      headerName: t('employees_page.employee_table_labels.position'),
+      headerName: t('employee.position'),
       flex: 1,
     },
   ]

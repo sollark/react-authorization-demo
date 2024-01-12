@@ -1,4 +1,3 @@
-import { authService } from '@/service/auth.service'
 import { log } from '@/service/console.service'
 import useUserStore from '@/stores/userStore'
 import {
@@ -9,33 +8,14 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { Link } from '@tanstack/react-router'
 import React, { ReactNode, useEffect, useState } from 'react'
+import { getGuestMenu, getUserMenu } from './UserMenu'
 
 interface UserProps {
   anchorElUser: null | HTMLElement
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void
   handleCloseUserMenu: () => void
 }
-
-const userMenu = [
-  { key: 'Account', link: <Link to='/account/details'>Account</Link> },
-  {
-    key: 'SignOut',
-    link: (
-      <Link onClick={() => authService.signOut()} to='/signin'>
-        Sign out
-      </Link>
-    ),
-  },
-]
-
-const guestMenu = [
-  {
-    key: 'SignIn',
-    link: <Link to='/signin'>Sign in</Link>,
-  },
-]
 
 const menu: Array<{ key: string; link: ReactNode }> = []
 
@@ -46,6 +26,8 @@ const User = (props: UserProps) => {
   const [initials, setInitials] = useState('Guest') // State to hold the initials
 
   const profile = useUserStore((state) => state.profile)
+  const userMenu = getUserMenu()
+  const guestMenu = getGuestMenu()
 
   // build profile menu
   useEffect(() => {

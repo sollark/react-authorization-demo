@@ -86,25 +86,25 @@ const EditableEmployeeTable: FC = () => {
   const employeeColumns: GridColDef[] = [
     {
       field: 'firstName',
-      headerName: t('employees_page.employee_table_labels.first_name'),
+      headerName: t('profile.first_name'),
       editable: true,
       flex: 1,
     },
     {
       field: 'lastName',
-      headerName: t('employees_page.employee_table_labels.last_name'),
+      headerName: t('profile.last_name'),
       editable: true,
       flex: 1,
     },
     {
       field: 'ID',
-      headerName: t('employees_page.employee_table_labels.id'),
+      headerName: t('profile.id'),
       editable: true,
       flex: 1,
     },
     {
       field: 'departmentName',
-      headerName: t('employees_page.employee_table_labels.department'),
+      headerName: t('department.department'),
       editable: true,
       flex: 1,
       type: 'singleSelect',
@@ -112,13 +112,13 @@ const EditableEmployeeTable: FC = () => {
     },
     {
       field: 'employeeNumber',
-      headerName: t('employees_page.employee_table_labels.employee_number'),
+      headerName: t('employee.employee_number'),
       editable: false,
       flex: 1,
     },
     {
       field: 'position',
-      headerName: t('employees_page.employee_table_labels.position'),
+      headerName: t('employee.position'),
       editable: true,
       flex: 1,
     },

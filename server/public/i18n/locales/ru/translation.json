@@ -23,43 +23,67 @@
   "labels": {
     "logo": "Лого"
   },
-
   "pages": {
     "home": "Главная",
     "company": "Компания",
     "employees": "Сотрудники",
     "accounts": "Учетные записи"
   },
+  "account_menu": {
+    "account": "Аккаунт",
+    "sign_out": "Выйти"
+  },
   "company_page": {
-    "company": "Компания",
-    "company_number": "Номер компании",
-    "departments": "Отделы",
     "number_of_employees": "Количество сотрудников"
   },
   "employees_page": {
-    "employee_table": "Таблица сотрудников",
-    "employee_table_labels": {
-      "first_name": "Имя",
-      "last_name": "Фамилия",
-      "id": "Номер паспорта",
-      "department": "Отдел",
-      "employee_number": "Номер сотрудника",
-      "position": "Должность",
-      "actions": "Действия",
-      "add_employee": "Добавить сотрудника"
-    }
+    "employee_table": "Таблица сотрудников"
   },
   "accounts_page": {
-    "account_table": "Таблица учетных записей",
-    "account_table_labels": {
-      "first_name": "Имя",
-      "last_name": "Фамилия",
-      "id": "ID",
-      "employee_number": "Номер сотрудника",
-      "role": "Роль",
-      "status": "Статус",
-      "actions": "Действия",
-      "add_account": "Добавить учетную запись"
-    }
+    "account_table": "Таблица учетных записей"
+  },
+  "auth": {
+    "email": "Электронная почта",
+    "password": "Пароль"
+  },
+  "account": {
+    "account": "Учетная запись"
+  },
+  "account_status": {
+    "account_status": "Статус учетной записи",
+    "incomplete": "Неполный",
+    "pending": "В ожидании",
+    "active": "Активный",
+    "inactive": "Неактивный",
+    "suspended": "Приостановлен"
+  },
+  "user_role": {
+    "user_role": "Роль пользователя",
+    "guest": "Гость",
+    "manager": "Менеджер",
+    "admin": "Администратор",
+    "supervisor": "Супервайзер"
+  },
+  "profile": {
+    "profile": "Профиль",
+    "first_name": "Имя",
+    "last_name": "Фамилия",
+    "id": "Номер паспорта",
+    "email": "Электронная почта",
+    "phone": "Телефон",
+    "address": "Адрес"
+  },
+  "employee": {
+    "employee": "Сотрудник",
+    "employee_number": "Номер сотрудника",
+    "position": "Должность"
+  },
+  "company": {
+    "company": "Компания",
+    "company_name": "Название компании",
+    "company_number": "Номер компании"
+  },
+  "department": {
+    "department": "Отдел"
   }
 }

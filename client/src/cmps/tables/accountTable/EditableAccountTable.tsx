@@ -48,31 +48,31 @@ const EditableAccountTable: FC = () => {
   const accountColumns: GridColDef[] = [
     {
       field: 'firstName',
-      headerName: t('accounts_page.account_table_labels.first_name'),
+      headerName: t('profile.first_name'),
       editable: false,
       flex: 1,
     },
     {
       field: 'lastName',
-      headerName: t('accounts_page.account_table_labels.last_name'),
+      headerName: t('profile.last_name'),
       editable: false,
       flex: 1,
     },
     {
       field: 'ID',
-      headerName: t('accounts_page.account_table_labels.id'),
+      headerName: t('profile.id'),
       editable: false,
       flex: 1,
     },
     {
       field: 'employeeNumber',
-      headerName: t('accounts_page.account_table_labels.employee_number'),
+      headerName: t('employee.employee_number'),
       editable: false,
       flex: 1,
     },
     {
       field: 'role',
-      headerName: t('accounts_page.account_table_labels.role'),
+      headerName: t('user_role.user_role'),
       editable: true,
       flex: 1,
       type: 'singleSelect',
@@ -80,7 +80,7 @@ const EditableAccountTable: FC = () => {
     },
     {
       field: 'status',
-      headerName: t('accounts_page.account_table_labels.status'),
+      headerName: t('account_status.account_status'),
       editable: true,
       flex: 1,
       type: 'singleSelect',
