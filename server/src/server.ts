@@ -16,7 +16,7 @@ import { config } from './config/config.js'
 import setupAsyncLocalStorage from './middleware/als.js'
 import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 import errorHandler from './middleware/errorHandler.js'
-import requestLimitMiddleware from './middleware/requestLimitMiddleware.js'
+import requestLimit from './middleware/requestLimit.js'
 import setHeaders from './middleware/setHeaders.js'
 import { connectMongo } from './mongodb/connect.js'
 
@@ -36,7 +36,7 @@ if (config.env === 'development') {
 }
 
 // Middlewares
-app.use(requestLimitMiddleware)
+app.use(requestLimit)
 app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())

@@ -22,11 +22,7 @@ setInterval(() => {
   }
 }, rateLimit.windowMs)
 
-function requestLimitMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+function requestLimit(req: Request, res: Response, next: NextFunction) {
   const now = Date.now()
   const ip = req.ip
 
@@ -43,4 +39,4 @@ function requestLimitMiddleware(
   next()
 }
 
-export default requestLimitMiddleware
+export default requestLimit
