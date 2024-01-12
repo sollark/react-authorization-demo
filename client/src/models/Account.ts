@@ -6,7 +6,7 @@ export const ACCOUNT_STATUS = {
   pending: 'pending',
   active: 'active',
   inactive: 'inactive',
-  deleted: 'deleted',
+  suspended: 'suspended',
 } as const
 export type Status = keyof typeof ACCOUNT_STATUS
 
