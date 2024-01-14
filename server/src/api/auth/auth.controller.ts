@@ -57,7 +57,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     return
   }
 
-  const uuid = await authService.getUuid(email, password)
+  const uuid = await authService.signIn(email, password)
   if (!uuid) {
     logger.warn(`authService - signIn, invalid password for ${email}`)
 
@@ -69,7 +69,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     return
   }
 
-  const tokens = await authService.signIn(uuid)
+  const tokens = await authService.generateTokens(uuid)
   if (!tokens) {
     logger.warn(`authService - signIn, cannot generate tokens for ${email}`)
 

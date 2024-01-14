@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
+import { SessionData } from '../../service/als.service.js'
 import logger from '../../service/logger.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { accountService } from '../account/account.service.js'
@@ -20,7 +21,10 @@ async function registration(credentials: Credentials) {
   logger.info(`authService - New authentication created for email: ${email}`)
 
   // generate tokens
-  const { accessToken, refreshToken } = await generateTokens(auth.uuid)
+  const tokens = await generateTokens(auth.uuid)
+  if (!tokens) throw new BadRequestError('Could not generate tokens')
+
+  const { accessToken, refreshToken } = tokens
 
   // save refresh token to db
   await tokenService.saveToken(uuid, refreshToken)
@@ -34,13 +38,45 @@ async function registration(credentials: Credentials) {
   return { accessToken, refreshToken }
 }
 
-async function signIn(uuid: string) {
+async function signIn(email: string, password: string) {
+  const result = await authModel.findOne({ email }).select('+password')
+  if (!result) return null
+
+  const hashPassword = result.password
+  const isPasswordValid = await bcrypt.compare(password, hashPassword)
+
+  return isPasswordValid ? result.uuid : null
+}
+
+async function generateTokens(uuid: string) {
+  // get payload info
+  const account = await accountService.getAccount(uuid)
+  if (!account) return null
+
+  const { employee } = account
+  if (!employee) return null
+
+  const { company, employeeNumber } = employee
+  if (!company || !employeeNumber) return null
+
+  const { companyNumber } = company
+  if (!companyNumber) return null
+
+  const payload: SessionData = {
+    userData: { uuid, companyNumber, employeeNumber },
+  }
+
   // generate tokens
-  const tokens = await generateTokens(uuid)
+  const tokens = tokenService.generateTokens(payload)
   const { refreshToken } = tokens
 
   // save refresh token to db
-  await tokenService.saveToken(uuid, refreshToken)
+  // await tokenService.saveToken(uuid, refreshToken)
+
+  const data: SessionData = {
+    userData: { uuid, companyNumber, employeeNumber },
+  }
+  tokenService.generateTokens(data)
 
   logger.info(`authService - user signed in: ${uuid}`)
 
@@ -77,25 +113,11 @@ async function isEmailExists(email: string) {
   return existingAuthUser ? true : false
 }
 
-async function getUuid(email: string, password: string) {
-  const result = await authModel.findOne({ email }).select('+password')
-  if (!result) return null
-
-  const hashPassword = result.password
-  const isPasswordValid = await bcrypt.compare(password, hashPassword)
-
-  return isPasswordValid ? result.uuid : null
-}
-
 export const authService = {
   registration,
   signIn,
+  generateTokens,
   signOut,
   refresh,
   isEmailExists,
-  getUuid,
-}
-
-async function generateTokens(uuid: string) {
-  return tokenService.generateTokens(uuid)
 }

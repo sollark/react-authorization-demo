@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken'
 import { config } from '../config/config.js'
 import TokenDataModel, { TokenData } from '../mongodb/models/token.model.js'
+import { SessionData } from './als.service.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
-function generateTokens(data: string): {
+function generateTokens(payload: SessionData): {
   accessToken: string
   refreshToken: string
 } {
@@ -13,10 +14,10 @@ function generateTokens(data: string): {
 
   // console.log('generateTokens, data', data)
 
-  const accessToken = jwt.sign({ data }, accessSecret, {
+  const accessToken = jwt.sign({ payload }, accessSecret, {
     expiresIn: '10m',
   })
-  const refreshToken = jwt.sign({ data }, refreshSecret, {
+  const refreshToken = jwt.sign({ payload }, refreshSecret, {
     expiresIn: '1h',
   })
 
