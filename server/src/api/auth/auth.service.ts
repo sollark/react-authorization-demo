@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import BadRequestError from '../../errors/BadRequestError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
-import { SessionData } from '../../service/als.service.js'
+import { SessionData, setUuidToALS } from '../../service/als.service.js'
 import logger from '../../service/logger.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { accountService } from '../account/account.service.js'
@@ -44,6 +44,11 @@ async function signIn(email: string, password: string) {
 
   const hashPassword = result.password
   const isPasswordValid = await bcrypt.compare(password, hashPassword)
+
+  if (isPasswordValid) {
+    setUuidToALS(result.uuid)
+  }
+  logger.info(`authService - Sign in successful for email: ${email}`)
 
   return isPasswordValid ? result.uuid : null
 }

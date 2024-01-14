@@ -36,12 +36,14 @@ if (config.env === 'development') {
   )
 }
 
-// Headers
-if (config.env === 'production') app.use(setHeaders)
+// Production middlewares
+if (config.env === 'production') {
+  app.use(setHeaders)
+  app.use(requestLimit)
+}
 
 // Middlewares
 app.use(collectVisitorInfo)
-app.use(requestLimit)
 app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())

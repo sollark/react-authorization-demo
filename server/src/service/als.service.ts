@@ -12,6 +12,13 @@ export type SessionData = {
 
 export const asyncLocalStorage = new AsyncLocalStorage<SessionData>()
 
+export function setUuidToALS(uuid: string) {
+  const store = asyncLocalStorage.getStore()
+  if (!store) return
+
+  store.userData = { uuid }
+}
+
 export function getUuidFromALS() {
   const store = asyncLocalStorage.getStore()
   const uuid = store?.userData?.uuid
