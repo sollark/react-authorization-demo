@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 import BadRequestError from '../../errors/BadRequestError.js'
+import InternalServerError from '../../errors/InternalServerError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import { SessionData, setUuidToALS } from '../../service/als.service.js'
@@ -27,7 +28,7 @@ async function registration(credentials: Credentials) {
   const { accessToken, refreshToken } = tokens
 
   // save refresh token to db
-  await tokenService.saveToken(uuid, refreshToken)
+  await tokenService.saveToken(refreshToken)
 
   // create new profile and new account
   const profile = await profileService.createBlankProfile()
@@ -47,8 +48,10 @@ async function signIn(email: string, password: string) {
 
   if (isPasswordValid) {
     setUuidToALS(result.uuid)
-  }
-  logger.info(`authService - Sign in successful for email: ${email}`)
+    logger.info(
+      `authService - Sign in successful for email: ${email}, uuid: ${result.uuid}`
+    )
+  } else logger.warn(`authService - Sign in failed for email: ${email}`)
 
   return isPasswordValid ? result.uuid : null
 }
@@ -59,13 +62,8 @@ async function generateTokens(uuid: string) {
   if (!account) return null
 
   const { employee } = account
-  if (!employee) return null
-
-  const { company, employeeNumber } = employee
-  if (!company || !employeeNumber) return null
-
-  const { companyNumber } = company
-  if (!companyNumber) return null
+  const employeeNumber = employee ? employee.employeeNumber : undefined
+  const companyNumber = employee ? employee.company?.companyNumber : undefined
 
   const payload: SessionData = {
     userData: { uuid, companyNumber, employeeNumber },
@@ -75,46 +73,56 @@ async function generateTokens(uuid: string) {
   const tokens = tokenService.generateTokens(payload)
   const { refreshToken } = tokens
 
+  console.log('refreshToken', refreshToken)
   // save refresh token to db
-  // await tokenService.saveToken(uuid, refreshToken)
+  await tokenService.saveToken(refreshToken)
+  console.log('refreshToken', refreshToken)
 
   const data: SessionData = {
     userData: { uuid, companyNumber, employeeNumber },
   }
   tokenService.generateTokens(data)
 
-  logger.info(`authService - user signed in: ${uuid}`)
-
   return tokens
 }
 
-const signOut = async (refreshToken: string) => {
+async function signOut(refreshToken: string) {
   const result = await tokenService.removeToken(refreshToken)
 
-  logger.info(`authService - user signed out`, result)
+  logger.info(`authService - signOut, user signed out`, result)
 
   return result
 }
 
-const refresh = async (refreshToken: string) => {
-  if (!refreshToken) throw new UnauthorizedError('Refresh token is required')
+async function refresh(refreshToken: string) {
+  // const uuid = getUuidFromALS()
+  const refreshTokenCopy = await tokenService.getRefreshToken(refreshToken)
+  if (!refreshTokenCopy) throw new UnauthorizedError('Invalid refresh token')
 
-  const payload = await tokenService.validateRefreshToken(refreshToken)
-  const tokenData = await tokenService.getTokenData(refreshToken)
-
-  if (!payload || !tokenData) return null
+  const isExpired = await tokenService.isExpired(refreshTokenCopy)
+  if (isExpired) throw new UnauthorizedError('Refresh token is expired')
 
   // generate tokens
-  const tokens = tokenService.generateTokens(payload.data)
+  const payload = await tokenService.validateRefreshToken(refreshTokenCopy)
+  const sessionData = payload as SessionData
+  const uuid = sessionData.userData?.uuid
+  console.log('sessiondata and uuid', sessionData, uuid)
+  if (!uuid) throw new InternalServerError('Could not get payload')
+
+  const tokens = await generateTokens(uuid)
+  if (!tokens) throw new InternalServerError('Could not generate tokens')
 
   // save refresh token to db
-  await tokenService.saveToken(tokenData.uuid, tokens.refreshToken)
+  await tokenService.saveToken(tokens.refreshToken)
 
   return { ...tokens }
 }
 
 async function isEmailExists(email: string) {
   const existingAuthUser = await authModel.findOne({ email })
+  if (!existingAuthUser)
+    logger.warn(`authService - email does not exist: ${email}`)
+
   return existingAuthUser ? true : false
 }
 

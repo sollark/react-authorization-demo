@@ -19,7 +19,7 @@ async function setupAsyncLocalStorage(
     const tokenData = await validateToken(accessToken)
     if (!tokenData) return next()
 
-    const { uuid, companyNumber, employeeNumber } = getUserData(tokenData)
+    const { uuid, companyNumber, employeeNumber } = tokenData
 
     alsStore.userData = { uuid, companyNumber, employeeNumber }
 

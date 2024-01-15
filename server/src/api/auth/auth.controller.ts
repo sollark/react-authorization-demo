@@ -47,38 +47,28 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
 
   const isMailExists = await authService.isEmailExists(email)
   if (!isMailExists) {
-    logger.warn(`authService - signIn, email does not exists ${email}`)
-
-    res.status(200).json({
+    return res.status(200).json({
       success: false,
       message: 'Email does not exists',
     })
-
-    return
   }
 
   const uuid = await authService.signIn(email, password)
   if (!uuid) {
-    logger.warn(`authService - signIn, invalid password for ${email}`)
-
-    res.status(200).json({
+    return res.status(200).json({
       success: false,
       message: 'Invalid credentials',
     })
-
-    return
   }
 
   const tokens = await authService.generateTokens(uuid)
   if (!tokens) {
     logger.warn(`authService - signIn, cannot generate tokens for ${email}`)
 
-    res.status(200).json({
+    return res.status(200).json({
       success: false,
       message: 'Cannot generate tokens',
     })
-
-    return
   }
 
   const { accessToken, refreshToken } = tokens

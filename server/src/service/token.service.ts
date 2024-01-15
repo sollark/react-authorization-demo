@@ -12,31 +12,20 @@ function generateTokens(payload: SessionData): {
   if (!accessSecret) throw new Error('JWT_ACCESS_SECRET is not defined')
   if (!refreshSecret) throw new Error('JWT_REFRESH_SECRET is not defined')
 
-  // console.log('generateTokens, data', data)
+  console.log('generateTokens, payload', payload)
 
-  const accessToken = jwt.sign({ payload }, accessSecret, {
+  const accessToken = jwt.sign(payload, accessSecret, {
     expiresIn: '10m',
   })
-  const refreshToken = jwt.sign({ payload }, refreshSecret, {
+  const refreshToken = jwt.sign(payload, refreshSecret, {
     expiresIn: '1h',
   })
 
   return { accessToken, refreshToken }
 }
 
-async function saveToken(uuid: string, refreshToken: string) {
-  const tokenData = await TokenDataModel.findOne({ uuid })
-
-  // update refresh token
-  if (tokenData) {
-    tokenData.refreshToken = refreshToken
-    return tokenData.save()
-  }
-
-  // new refresh token
-  const token = await TokenDataModel.create({ uuid, refreshToken })
-
-  return token
+async function saveToken(refreshToken: string) {
+  await TokenDataModel.create({ refreshToken })
 }
 
 async function removeToken(refreshToken: string) {
@@ -45,16 +34,10 @@ async function removeToken(refreshToken: string) {
   return result
 }
 
-async function getTokenData(refreshToken: string): Promise<TokenData | null> {
+async function getRefreshToken(refreshToken: string) {
   const tokenData = await TokenDataModel.findOne({ refreshToken })
 
-  return tokenData
-}
-
-async function getUuid(refreshToken: string): Promise<string | null> {
-  const tokenData = await TokenDataModel.findOne({ refreshToken })
-
-  return tokenData?.uuid || null
+  return tokenData?.refreshToken
 }
 
 async function validateAccessToken(token: string) {
@@ -83,12 +66,28 @@ async function validateRefreshToken(token: string) {
   }
 }
 
+async function isExpired(token: string) {
+  const payload = await validateRefreshToken(token)
+
+  if (!payload) return true
+
+  const { exp } = payload
+
+  if (!exp) return true
+
+  const now = Math.floor(Date.now() / 1000)
+
+  if (now > exp) return true
+
+  return false
+}
+
 export const tokenService = {
   generateTokens,
   saveToken,
   removeToken,
-  getTokenData,
-  getUuid,
+  getRefreshToken,
   validateAccessToken,
   validateRefreshToken,
+  isExpired,
 }
