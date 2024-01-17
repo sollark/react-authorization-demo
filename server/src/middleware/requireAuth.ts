@@ -29,6 +29,7 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
 
     // validate access token
     const userData = await tokenService.validateAccessToken(accessToken)
+
     if (!userData) {
       return next(
         new UnauthorizedError(

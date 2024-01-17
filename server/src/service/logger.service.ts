@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { asyncLocalStorage } from './als.service.js'
+import { getUuid } from './als.service'
 
 const logsDir = './logs'
 if (!fs.existsSync(logsDir)) {
@@ -24,8 +24,10 @@ function doLog(level: string, ...args: any[]): void {
   let line = strs.join(' | ')
 
   // get the user uuid from the async local storage
-  const store = asyncLocalStorage.getStore()
-  const uuid = store?.userData?.uuid
+  let uuid = 'Unauthorized user'
+  try {
+    uuid = getUuid()
+  } catch (error) {}
 
   const str = uuid ? `(user: ${uuid})` : 'unauthenticated'
   line = `${getTime()} - ${level} - ${str}- ${line}`
