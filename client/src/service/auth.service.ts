@@ -85,7 +85,6 @@ async function refreshTokens() {
     storeService.setProfileAsAuthenticated()
   } else {
     log('Failed to refresh token')
-    throw new Error()
   }
 }
 

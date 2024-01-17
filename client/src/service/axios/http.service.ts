@@ -43,21 +43,20 @@ api.interceptors.request.use(
 )
 
 // send refresh token if access token is expired
+let isRetry = false
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest: InternalAxiosRequestConfig = error.config
 
-    log('interceptor', error.response, originalRequest, originalRequest._retry)
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
+    console.log('get error in response')
+    if (error.response?.status === 401 && !isRetry) {
+      isRetry = true
 
+      console.log('the error is 401 first time')
       if (originalRequest.headers.Authorization) {
-        try {
-          await authService.refreshTokens()
-        } catch (error) {
-          return Promise.reject(error)
-        }
+        console.log('send refresh')
+        await authService.refreshTokens()
 
         // Retry the original request with the updated headers
         const headers = headerService.getHeaders()
@@ -69,6 +68,19 @@ api.interceptors.response.use(
       }
     }
 
+    console.log('the error is 401 second time ->reject')
+    console.log(
+      'find error message that refresh is expired ',
+      error.response.data.errors[0].message
+    )
+    if (error.response.data.errors[0].message == 'Refresh token is expired') {
+      console.log('gotcha')
+      await authService.signOut()
+
+      return
+    }
+
+    isRetry = false
     return Promise.reject(error)
   }
 )
