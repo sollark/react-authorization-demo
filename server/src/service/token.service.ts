@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { config } from '../config/config.js'
-import TokenDataModel, { TokenData } from '../mongodb/models/token.model.js'
-import { SessionData } from './als.service.js'
+import TokenDataModel, { SessionData } from '../mongodb/models/token.model.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
