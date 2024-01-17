@@ -5,7 +5,7 @@ import InternalServerError from '../../errors/InternalServerError.js'
 import UnauthorizedError from '../../errors/UnauthorizedError.js'
 import authModel, { Credentials } from '../../mongodb/models/auth.model.js'
 import { SessionData } from '../../mongodb/models/token.model.js'
-import { setUserData } from '../../service/als.service.js'
+import { setUserDataToALS } from '../../service/als.service.js'
 import logger from '../../service/logger.service.js'
 import { tokenService } from '../../service/token.service.js'
 import { accountService } from '../account/account.service.js'
@@ -37,7 +37,7 @@ async function registration(credentials: Credentials) {
   const account = await accountService.createAccount(uuid, profile._id)
   if (!account) throw new BadRequestError('Could not create account')
 
-  return { accessToken, refreshToken }
+  return { uuid, accessToken, refreshToken }
 }
 
 async function signIn(email: string, password: string) {
@@ -48,11 +48,14 @@ async function signIn(email: string, password: string) {
   const isPasswordValid = await bcrypt.compare(password, hashPassword)
 
   if (isPasswordValid) {
-    setUserData({ uuid: result.uuid })
+    setUserDataToALS({ uuid: result.uuid })
+
     logger.info(
       `authService - Sign in successful for email: ${email}, uuid: ${result.uuid}`
     )
-  } else logger.warn(`authService - Sign in failed for email: ${email}`)
+  } else {
+    logger.warn(`authService - Sign in failed for email: ${email}`)
+  }
 
   return isPasswordValid ? result.uuid : null
 }
@@ -74,10 +77,8 @@ async function generateTokens(uuid: string) {
   const tokens = tokenService.generateTokens(payload)
   const { refreshToken } = tokens
 
-  console.log('refreshToken', refreshToken)
   // save refresh token to db
   await tokenService.saveToken(refreshToken)
-  console.log('refreshToken', refreshToken)
 
   const data: SessionData = {
     userData: { uuid, companyNumber, employeeNumber },
@@ -90,13 +91,13 @@ async function generateTokens(uuid: string) {
 async function signOut(refreshToken: string) {
   const result = await tokenService.removeToken(refreshToken)
 
-  logger.info(`authService - signOut, user signed out`, result)
+  logger.info(`authService - signOut, user signed out`)
 
   return result
 }
 
 async function refresh(refreshToken: string) {
-  // const uuid = getUuid()
+  // const uuid = getUuidFromALS()
   const refreshTokenCopy = await tokenService.getRefreshToken(refreshToken)
   if (!refreshTokenCopy) throw new UnauthorizedError('Invalid refresh token')
 

@@ -1,9 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import {
-  ALSStore,
-  asyncLocalStorage,
-  setUserData,
-} from '../service/als.service.js'
+import { asyncLocalStorage } from '../service/als.service.js'
 import { tokenService } from '../service/token.service.js'
 
 async function setupAsyncLocalStorage(
@@ -11,15 +7,27 @@ async function setupAsyncLocalStorage(
   res: Response,
   next: NextFunction
 ) {
-  asyncLocalStorage.run(new ALSStore(), async () => {
+  const storage = {}
+
+  asyncLocalStorage.run(storage, async () => {
+    const alsStore = asyncLocalStorage.getStore()
+    if (!alsStore) return next()
+
+    // collect user data from token
     const accessToken = getAuthToken(req)
     if (!accessToken) return next()
 
     const tokenData = await validateToken(accessToken)
     if (!tokenData) return next()
 
-    const { uuid, companyNumber, employeeNumber } = tokenData.userData
-    setUserData({ uuid, companyNumber, employeeNumber })
+    const { uuid, companyNumber, employeeNumber } = getUserData(tokenData)
+
+    alsStore.userData = { uuid, companyNumber, employeeNumber }
+
+    // collect request data from cookie
+    const publicId = req.cookies['publicId']
+
+    alsStore.requestData = { publicId }
 
     next()
   })
@@ -31,6 +39,10 @@ function getAuthToken(req: Request) {
 
 async function validateToken(token: string) {
   return await tokenService.validateAccessToken(token)
+}
+
+function getUserData(tokenData: any) {
+  return tokenData.userData
 }
 
 export default setupAsyncLocalStorage

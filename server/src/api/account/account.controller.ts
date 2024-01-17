@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import BadRequestError from '../../errors/BadRequestError.js'
 import { Account, USER_ROLE } from '../../mongodb/models/account.model.js'
-import { getUuid } from '../../service/als.service.js'
+import { getUuidFromALS } from '../../service/als.service.js'
 import { departmentService } from '../../service/department.service.js'
 import logger from '../../service/logger.service.js'
 import { companyService } from '../company/company.service.js'
@@ -23,7 +23,7 @@ export async function updateAccount(
   res: Response,
   next: NextFunction
 ) {
-  const uuid = getUuid()
+  const uuid = getUuidFromALS()
   const accountData: Account = req.body
 
   console.log('updateAccount, account: ', accountData)
@@ -99,7 +99,7 @@ export async function joinCompany(
   res: Response,
   next: NextFunction
 ) {
-  const uuid = getUuid()
+  const uuid = getUuidFromALS()
   let account = await accountService.getAccount(uuid)
   if (!account) throw new BadRequestError('Cannot find account')
   const accountId = account._id
@@ -159,7 +159,7 @@ export async function getAccount(
   res: Response,
   next: NextFunction
 ) {
-  const uuid = getUuid()
+  const uuid = getUuidFromALS()
   const account = await accountService.getAccount(uuid)
 
   res.status(200).json({

@@ -28,11 +28,12 @@ export async function registration(
     return
   }
 
-  const { accessToken, refreshToken } = await authService.registration(
+  const { uuid, accessToken, refreshToken } = await authService.registration(
     credentials
   )
 
   res.cookie('refreshToken', refreshToken, cookieOptions)
+  res.cookie('publicId', uuid, cookieOptions)
 
   res.status(200).json({
     success: true,
@@ -73,6 +74,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
 
   const { accessToken, refreshToken } = tokens
   res.cookie('refreshToken', refreshToken, cookieOptions)
+  res.cookie('publicId', uuid, cookieOptions)
 
   res.status(200).json({
     success: true,

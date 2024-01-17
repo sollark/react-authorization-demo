@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { getUuid } from './als.service'
+import { getPublicIdFromALS, getUuidFromALS } from './als.service'
 
 const logsDir = './logs'
 if (!fs.existsSync(logsDir)) {
@@ -23,14 +23,21 @@ function doLog(level: string, ...args: any[]): void {
 
   let line = strs.join(' | ')
 
-  // get the user uuid from the async local storage
-  let uuid = 'Unauthorized user'
+  // get the publicId from the async local storage
+  let publicId
   try {
-    uuid = getUuid()
+    publicId = getPublicIdFromALS() ?? 'No publicId'
   } catch (error) {}
 
-  const str = uuid ? `(user: ${uuid})` : 'unauthenticated'
-  line = `${getTime()} - ${level} - ${str}- ${line}`
+  // get the user uuid from the async local storage
+  let uuid
+  try {
+    uuid = getUuidFromALS() ?? 'No userId'
+  } catch (error) {}
+
+  const uuidStr = uuid ? `(user: ${uuid})` : 'unauthenticated'
+  const publicIdStr = publicId ? `(publicId: ${publicId})` : 'unauthenticated'
+  line = `${getTime()} - ${level} - ${publicIdStr} - ${uuidStr} \n ${line}`
   console.log(line)
 
   fs.appendFile('./logs/backend.log', line, (error) => {
