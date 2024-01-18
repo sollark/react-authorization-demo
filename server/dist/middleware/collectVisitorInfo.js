@@ -1,4 +1,4 @@
-import VisitorModel from '../mongodb/models/visitor.model';
+import VisitorModel from '../mongodb/models/visitor.model.js';
 async function collectVisitorInfo(req, res, next) {
     const ip = req.ip;
     const userAgent = req.headers['user-agent'] || '';
