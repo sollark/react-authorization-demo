@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { asyncLocalStorage } from './als.service.js';
+import { getPublicIdFromALS, getUuidFromALS } from './als.service';
 const logsDir = './logs';
 if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir);
@@ -15,11 +15,21 @@ function isError(error) {
 function doLog(level, ...args) {
     const strs = args.map((arg) => typeof arg === 'string' || isError(arg) ? arg : JSON.stringify(arg));
     let line = strs.join(' | ');
+    // get the publicId from the async local storage
+    let publicId;
+    try {
+        publicId = getPublicIdFromALS() ?? 'No publicId';
+    }
+    catch (error) { }
     // get the user uuid from the async local storage
-    const store = asyncLocalStorage.getStore();
-    const uuid = store?.userData?.uuid;
-    const str = uuid ? `(user: ${uuid})` : 'unauthenticated';
-    line = `${getTime()} - ${level} - ${str}- ${line}`;
+    let uuid;
+    try {
+        uuid = getUuidFromALS() ?? 'No userId';
+    }
+    catch (error) { }
+    const uuidStr = uuid ? `(user: ${uuid})` : 'unauthenticated';
+    const publicIdStr = publicId ? `(publicId: ${publicId})` : 'unauthenticated';
+    line = `${getTime()} - ${level} - ${publicIdStr} - ${uuidStr} \n ${line}`;
     console.log(line);
     fs.appendFile('./logs/backend.log', line, (error) => {
         if (error)

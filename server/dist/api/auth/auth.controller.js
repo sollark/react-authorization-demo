@@ -19,8 +19,9 @@ export async function registration(req, res, next) {
         });
         return;
     }
-    const { accessToken, refreshToken } = await authService.registration(credentials);
+    const { uuid, accessToken, refreshToken } = await authService.registration(credentials);
     res.cookie('refreshToken', refreshToken, cookieOptions);
+    res.cookie('publicId', uuid, cookieOptions);
     res.status(200).json({
         success: true,
         message: 'New access token.',
@@ -32,33 +33,29 @@ export async function signIn(req, res, next) {
     const { email, password } = credentials;
     const isMailExists = await authService.isEmailExists(email);
     if (!isMailExists) {
-        logger.warn(`authService - signIn, email does not exists ${email}`);
-        res.status(200).json({
+        return res.status(200).json({
             success: false,
             message: 'Email does not exists',
         });
-        return;
     }
-    const uuid = await authService.getUuid(email, password);
+    const uuid = await authService.signIn(email, password);
     if (!uuid) {
-        logger.warn(`authService - signIn, invalid password for ${email}`);
-        res.status(200).json({
+        return res.status(200).json({
             success: false,
             message: 'Invalid credentials',
         });
-        return;
     }
-    const tokens = await authService.signIn(uuid);
+    const tokens = await authService.generateTokens(uuid);
     if (!tokens) {
         logger.warn(`authService - signIn, cannot generate tokens for ${email}`);
-        res.status(200).json({
+        return res.status(200).json({
             success: false,
             message: 'Cannot generate tokens',
         });
-        return;
     }
     const { accessToken, refreshToken } = tokens;
     res.cookie('refreshToken', refreshToken, cookieOptions);
+    res.cookie('publicId', uuid, cookieOptions);
     res.status(200).json({
         success: true,
         message: 'New access token.',
@@ -82,6 +79,7 @@ export async function refresh(req, res, next) {
             success: false,
             message: 'Cannot refresh access token',
         });
+        // res.redirect('/signin')
         return;
     }
     const { accessToken, refreshToken: newRefreshToken } = response;

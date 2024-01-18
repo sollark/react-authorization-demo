@@ -29,36 +29,61 @@
     "employees": "Employees",
     "accounts": "Accounts"
   },
+  "account_menu": {
+    "account": "Account",
+    "sign_out": "Sign out"
+  },
   "company_page": {
-    "company": "Company",
-    "company_number": "Company number",
-    "departments": "Departments",
     "number_of_employees": "Number of employees"
   },
   "employees_page": {
-    "employee_table": "Employee table",
-    "employee_table_labels": {
-      "first_name": "First name",
-      "last_name": "Last name",
-      "id": "ID",
-      "department": "Department",
-      "employee_number": "Employee number",
-      "position": "Position",
-      "actions": "Actions",
-      "add_employee": "Add employee"
-    }
+    "employee_table": "Employee table"
   },
   "accounts_page": {
-    "account_table": "Account table",
-    "account_table_labels": {
-      "first_name": "First name",
-      "last_name": "Last name",
-      "id": "ID",
-      "employee_number": "Employee number",
-      "role": "Role",
-      "status": "Status",
-      "actions": "Actions",
-      "add_account": "Add account"
-    }
+    "account_table": "Account table"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password"
+  },
+  "account": {
+    "account": "Account"
+  },
+  "account_status": {
+    "account_status": "Account status",
+    "incomplete": "Incomplete",
+    "pending": "Pending",
+    "active": "Active",
+    "inactive": "Inactive",
+    "suspended": "Suspended"
+  },
+  "user_role": {
+    "user_role": "User role",
+    "guest": "Guest",
+    "manager": "Manager",
+    "admin": "Admin",
+    "supervisor": "Supervisor"
+  },
+  "profile": {
+    "profile": "Profile",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "id": "ID",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
+  },
+  "employee": {
+    "employee": "Employee",
+    "employee_number": "Employee number",
+    "position": "Position"
+  },
+  "company": {
+    "company": "Company",
+    "company_name": "Company name",
+    "company_number": "Company number"
+  },
+  "department": {
+    "department": "Department"
   }
 }
