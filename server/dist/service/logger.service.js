@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { getPublicIdFromALS, getUuidFromALS } from './als.service';
+import { getPublicIdFromALS, getUuidFromALS } from './als.service.js';
 const logsDir = './logs';
 if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir);
