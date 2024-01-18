@@ -1,21 +1,14 @@
 import bodyParser from 'body-parser'
 import compression from 'compression'
-import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import http from 'http'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { accountRoutes } from './api/account/account.routes.js'
-import { authRoutes } from './api/auth/auth.routes.js'
-import { companyRoutes } from './api/company/company.routes.js'
-import { employeeRoutes } from './api/employee/employee.routes.js'
-import { profileRoutes } from './api/profile/profile.routes.js'
+import router from './apiRouter.js'
 import { config } from './config/config.js'
-import setupAsyncLocalStorage from './middleware/als.js'
 import collectVisitorInfo from './middleware/collectVisitorInfo.js'
-import { deleteSensitiveData } from './middleware/deleteSensitiveData.js'
 import errorHandler from './middleware/errorHandler.js'
 import requestLimit from './middleware/requestLimit.js'
 import setHeaders from './middleware/setHeaders.js'
@@ -45,23 +38,15 @@ if (config.env === 'production') {
 // Middlewares
 app.use(collectVisitorInfo)
 app.use(compression())
-app.use(cookieParser())
 app.use(bodyParser.json())
-app.all('*', setupAsyncLocalStorage) // async local storage
-app.use(deleteSensitiveData) // delete sensitive data ('__v', '_id', 'identifier', 'password', 'uuid')
 
-// Routes
-app.use('/api/auth', authRoutes)
-app.use('/api/account', accountRoutes)
-app.use('/api/profile', profileRoutes)
-app.use('/api/employee', employeeRoutes)
-app.use('/api/company', companyRoutes)
+// API router
+app.use('/api', router)
 
 // Serve i18n files
 app.use('/i18n', express.static(path.join(__dirname, '../public/i18n')))
 
-// Proxy middleware for development environment:
-// Redirects all requests to the Vite development server to enable hot-reloading and other dev features.
+// Serve static files for development (vite server)
 if (config.env === 'development') {
   app.use(
     '/',
@@ -76,13 +61,11 @@ if (config.env === 'development') {
 // Serve static files for production
 if (config.env === 'production') {
   const staticPath = path.join(__dirname, '../public')
-  console.log('staticPath', staticPath)
   app.use(express.static(staticPath))
 }
 
 // Serve index.html for all other routes
 const publicPath = path.join(__dirname, '../public', 'index.html')
-console.log('publicPath', publicPath)
 const clientRoute = '/**'
 app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
