@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { config } from '../config/config.js'
-import TokenDataModel, { SessionData } from '../mongodb/models/token.model.js'
+import TokenDataModel from '../mongodb/models/token.model.js'
+import { SessionData } from './als.service.js'
 
 const { refreshSecret, accessSecret } = config.jwt
 
@@ -24,6 +25,10 @@ function generateTokens(payload: SessionData): {
 }
 
 async function saveToken(refreshToken: string) {
+  const oldRefreshToken = await getRefreshToken(refreshToken)
+  if (oldRefreshToken) {
+    await TokenDataModel.findOneAndDelete({ refreshToken })
+  }
   await TokenDataModel.create({ refreshToken })
 }
 
@@ -46,8 +51,9 @@ async function validateAccessToken(token: string) {
     const payload = jwt.verify(token, accessSecret)
 
     return payload as jwt.JwtPayload
-  } catch (error) {
-    console.log('validateAccessToken error', error)
+  } catch (error: any) {
+    console.log('validateAccessToken error', error.message)
+
     return null
   }
 }
@@ -59,8 +65,9 @@ async function validateRefreshToken(token: string) {
     const payload = jwt.verify(token, refreshSecret)
     console.log('validateRefreshToken, payload', payload)
     return payload as jwt.JwtPayload
-  } catch (error) {
-    console.log('validateRefreshToken error', error)
+  } catch (error: any) {
+    console.log('validateRefreshToken error', error.message)
+
     return null
   }
 }
