@@ -103,6 +103,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
       success: false,
       message: 'Cannot refresh access token',
     })
+    // res.redirect('/signin')
 
     return
   }

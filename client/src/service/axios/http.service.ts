@@ -25,15 +25,11 @@ const api = axios.create({
 // set access token  to the request header
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    log('interceptor: adding header')
-
     // add your custom headers to the request here
     const headers = headerService.getHeaders()
     headers.forEach(([headerName, value]) => {
       config.headers[headerName] = value
     })
-
-    // log('config in request', config)
 
     return config
   },
@@ -68,14 +64,10 @@ api.interceptors.response.use(
       }
     }
 
-    console.log('the error is 401 second time ->reject')
-    console.log(
-      'find error message that refresh is expired ',
-      error.response.data.errors[0].message
-    )
     if (error.response.data.errors[0].message == 'Refresh token is expired') {
-      console.log('gotcha')
-      await authService.signOut()
+      isRetry = false
+
+      window.location.href = '/signin'
 
       return
     }
