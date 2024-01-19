@@ -1,7 +1,7 @@
 import { config } from '@/config/config'
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
-import { fail, log } from '../console.service'
+import { fail } from '../console.service'
 import { headerService } from './header.service'
 
 export type ApiSuccessResponse<T> = {
@@ -80,9 +80,10 @@ api.interceptors.response.use(
 export const httpService = {
   get<T, R>(
     endpoint: string,
-    data: T
+    data: null,
+    params?: T
   ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
-    return ajax<T, R>(endpoint, 'GET', data)
+    return ajax<T, R>(endpoint, 'GET', data, params)
   },
   post<T, R>(
     endpoint: string,
@@ -98,24 +99,32 @@ export const httpService = {
   },
   delete<T, R>(
     endpoint: string,
-    data: T
+    data: T,
+    params?: T
   ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
-    return ajax<T, R>(endpoint, 'DELETE', data)
+    return ajax<T, R>(endpoint, 'DELETE', data, params)
   },
 }
 
 async function ajax<T, R>(
   endpoint: string,
-  method = 'GET',
-  data: T | null = null
+  method: string,
+  data: T | null = null,
+  params?: T
 ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
   try {
-    const response: AxiosResponse<R> = await api({
-      url: `${endpoint}`,
+    const config: AxiosRequestConfig = {
       method,
-      data,
-      params: data,
-    })
+      url: endpoint,
+    }
+
+    if (method === 'GET' || method === 'DELETE') {
+      config.params = params
+    } else {
+      config.data = data
+    }
+
+    const response = await api(config)
 
     return response.data as ApiSuccessResponse<R> | ApiErrorResponse
   } catch (error) {
