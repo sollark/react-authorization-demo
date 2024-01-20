@@ -1,10 +1,12 @@
 import { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import { authService } from '../auth.service'
 import { headerService } from './header.service'
+import { log } from '../console.service'
 
 function configureInterceptors(api: AxiosInstance) {
   api.interceptors.request.use(
     (config) => {
+      log('Interceptor, adding headers')
       // add your custom headers to the request here
       const headers = headerService.getHeaders()
       headers.forEach(([headerName, value]) => {

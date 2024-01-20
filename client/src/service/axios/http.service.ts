@@ -2,33 +2,22 @@ import { fail } from '../console.service'
 import { api } from './api'
 import { configureInterceptors } from './interceptors'
 
-export type ApiSuccessResponse<D> = {
+export type FailedResponse = {
+  success: false
+  message: string
+}
+
+export type SuccessfulResponse<D> = {
   success: true
   message: string
   data: D
 }
 
-export type ApiErrorResponse = {
-  success: false
-  message: string
-}
-
-type ApiResponse<T> = {
-  type: ApiResponseType
-  data?: T
-  error?: string
-}
-
-type RequestConfig<TRequest, TParams> = {
+type RequestConfig = {
   method: HttpMethod
   url: string
-  params?: TParams
+  params?: object
   data?: object
-}
-
-enum ApiResponseType {
-  Success,
-  Error,
 }
 
 enum HttpMethod {
@@ -41,82 +30,76 @@ enum HttpMethod {
 // Interceptors
 configureInterceptors(api)
 
-async function sendRequest<TResponse, TRequest, TParams>(
-  config: RequestConfig<TRequest, TParams>
-): Promise<ApiResponse<TResponse>> {
-  // Add request validation
+async function sendRequest<D>(
+  config: RequestConfig
+): Promise<FailedResponse | SuccessfulResponse<D>> {
+  // Request validation
   if (!Object.values(HttpMethod).includes(config.method)) {
-    throw Error('Invalid method')
+    throw new Error('Invalid HTTP method')
   }
 
-  // Make request
   try {
     const response = await api({
       method: config.method,
       url: config.url,
-      data: config.data as TRequest,
       params: config.params,
+      data: config.data,
     })
 
-    return {
-      type: ApiResponseType.Success,
-      data: response.data as TResponse,
-    }
+    return response.data
   } catch (error: any) {
-    fail(
-      `Had Issues ${config.method}ing to the backend, endpoint: ${
-        config.url
-      }, with data: ${
-        config.data ? JSON.stringify(config.data) : null
-      }, error: ${error}`
-    )
+    fail(`Error with ${config.method} request to ${config.url}: ${error}`)
 
     return {
-      type: ApiResponseType.Error,
-      error: error.message,
+      success: false,
+      message: error.message,
     }
   }
 }
 
 export const httpService = {
-  get<TResponse, TParams extends object>(
+  get<D>(
     endpoint: string,
-    params?: TParams
-  ): Promise<ApiResponse<TResponse>> {
+    params?: object
+  ): Promise<FailedResponse | SuccessfulResponse<D>> {
     return sendRequest({
       method: HttpMethod.GET,
-      url: `${endpoint}`,
-      params,
-    })
-  },
-  post<TResponse, TParams extends object>(
-    endpoint: string,
-    params?: TParams
-  ): Promise<ApiResponse<TResponse>> {
-    return sendRequest({
-      method: HttpMethod.GET,
-      url: `${endpoint}`,
+      url: endpoint,
       params,
     })
   },
 
-  put<TResponse, TParams extends object>(
+  post<D>(
     endpoint: string,
-    params?: TParams
-  ): Promise<ApiResponse<TResponse>> {
+    data?: object,
+    params?: object
+  ): Promise<FailedResponse | SuccessfulResponse<D>> {
     return sendRequest({
-      method: HttpMethod.GET,
-      url: `${endpoint}`,
+      method: HttpMethod.POST,
+      url: endpoint,
+      data,
       params,
     })
   },
-  delete<TResponse, TParams extends object>(
+
+  put<D>(
     endpoint: string,
-    params?: TParams
-  ): Promise<ApiResponse<TResponse>> {
+    params?: object
+  ): Promise<FailedResponse | SuccessfulResponse<D>> {
     return sendRequest({
-      method: HttpMethod.GET,
-      url: `${endpoint}`,
+      method: HttpMethod.PUT,
+      url: endpoint,
+      params,
+    })
+  },
+
+  delete<D>(
+    endpoint: string,
+    params?: object
+  ): Promise<FailedResponse | SuccessfulResponse<D>> {
+    return sendRequest({
+      method: HttpMethod.DELETE,
+      url: endpoint,
       params,
     })
   },
