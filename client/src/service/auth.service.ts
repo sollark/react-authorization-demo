@@ -1,4 +1,3 @@
-import { AuthCredentials } from '@/models/Auth'
 import { httpService } from './axios/http.service'
 import { log } from './console.service'
 import { storeService } from './store.service'
@@ -8,10 +7,10 @@ type AuthData = {
 }
 
 async function registration(email: string, password: string) {
-  const registrationResponse = await httpService.post<
-    AuthCredentials,
-    AuthData
-  >('auth/registration', { email, password })
+  const registrationResponse = await httpService.post<AuthData>(
+    'auth/registration',
+    { email, password }
+  )
 
   if (!registrationResponse)
     return { success: false, message: 'Cannot connect to server' }
@@ -33,10 +32,10 @@ async function registration(email: string, password: string) {
 }
 
 async function signIn(email: string, password: string) {
-  const signInResponse = await httpService.post<AuthCredentials, AuthData>(
-    'auth/signin',
-    { email, password }
-  )
+  const signInResponse = await httpService.post<AuthData>('auth/signin', {
+    email,
+    password,
+  })
 
   if (!signInResponse)
     return { success: false, message: 'Cannot connect to server' }
@@ -45,6 +44,8 @@ async function signIn(email: string, password: string) {
 
   if (success) {
     const { data } = signInResponse
+    log('signIn, signInResponse: ', signInResponse)
+    log('signIn, data: ', data)
     log('signIn, message: ', message)
 
     const { accessToken } = data
@@ -58,7 +59,7 @@ async function signIn(email: string, password: string) {
 async function signOut() {
   log('signOut')
 
-  await httpService.put('auth/signout', null)
+  await httpService.put('auth/signout')
 
   storeService.clearStoreStates()
 }
@@ -66,10 +67,7 @@ async function signOut() {
 async function refreshTokens() {
   log('refreshTokens')
 
-  const refreshResponse = await httpService.get<null, AuthData>(
-    `auth/refresh`,
-    null
-  )
+  const refreshResponse = await httpService.get<AuthData>(`auth/refresh`)
 
   log('refreshTokens, response data', refreshResponse)
 
