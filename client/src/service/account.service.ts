@@ -1,8 +1,4 @@
 import { Account } from '@/models/Account'
-import { Company } from '@/models/Company'
-import { Department } from '@/models/Department'
-import { Employee } from '@/models/Employee'
-import { Profile } from '@/models/Profile'
 import { httpService } from './axios/http.service'
 import { log } from './console.service'
 import { storeService } from './store.service'
@@ -10,10 +6,6 @@ import { storeService } from './store.service'
 type AccountData = {
   account: Account
 }
-type RegistrationData = Partial<Profile> &
-  Partial<Company> &
-  Partial<Department> &
-  Partial<Employee>
 
 async function updateAccount(
   firstName: string,

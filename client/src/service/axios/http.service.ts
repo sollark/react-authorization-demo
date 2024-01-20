@@ -1,6 +1,6 @@
 import { fail } from '../console.service'
 import { api } from './api'
-import { configureInterceptors } from './interceptors'
+import { interceptorService } from './interceptor.service'
 
 export type FailedResponse = {
   success: false
@@ -28,7 +28,7 @@ enum HttpMethod {
 }
 
 // Interceptors
-configureInterceptors(api)
+interceptorService.configureInterceptors(api)
 
 async function sendRequest<D>(
   config: RequestConfig

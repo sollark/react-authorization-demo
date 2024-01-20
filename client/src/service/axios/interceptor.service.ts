@@ -60,4 +60,4 @@ function configureInterceptors(api: AxiosInstance) {
   )
 }
 
-export { configureInterceptors }
+export const interceptorService = { configureInterceptors }
