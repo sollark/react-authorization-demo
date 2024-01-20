@@ -14,9 +14,8 @@ type AdvancedCompanyData = {
 async function getBasicCompanyData(): Promise<Partial<Company> | null> {
   const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
-  const response = await httpService.get<null, BasicCompanyData>(
-    `company/${companyNumber}/basic`,
-    null
+  const response = await httpService.get<BasicCompanyData>(
+    `company/${companyNumber}/basic`
   )
 
   log('companyService - getBasicCompanyData, response', response)
@@ -40,9 +39,8 @@ async function getBasicCompanyData(): Promise<Partial<Company> | null> {
 async function getAdvancedCompanyData(): Promise<Company | null> {
   const companyNumber = useCompanyStore.getState().getCompanyNumber()
 
-  const response = await httpService.get<null, AdvancedCompanyData>(
-    `company/${companyNumber}`,
-    null
+  const response = await httpService.get<AdvancedCompanyData>(
+    `company/${companyNumber}`
   )
 
   log('companyService - getAdvancedCompanyData, response', response)

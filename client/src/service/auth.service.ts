@@ -44,10 +44,6 @@ async function signIn(email: string, password: string) {
 
   if (success) {
     const { data } = signInResponse
-    log('signIn, signInResponse: ', signInResponse)
-    log('signIn, data: ', data)
-    log('signIn, message: ', message)
-
     const { accessToken } = data
     storeService.saveAccessToken(accessToken)
     storeService.setProfileAsAuthenticated()
