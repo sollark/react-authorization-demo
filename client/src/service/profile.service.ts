@@ -1,7 +1,7 @@
 import { Profile } from '../models/Profile'
 import {
-  ApiErrorResponse,
-  ApiSuccessResponse,
+  FailedResponse,
+  SuccessfulResponse,
   httpService,
 } from './axios/http.service'
 import { log } from './console.service'
@@ -12,12 +12,21 @@ type ProfileData = {
 
 // TODO Get a blank profile from server
 async function createBlankProfile(profile: Profile): Promise<Profile | null> {
-  const response = await httpService.post<Profile, ProfileData>(
+  const response = await httpService.post<ProfileData>(
     '/createBlankProfile',
     profile
   )
 
-  const data = handleResponse(response, 'profileService - createBlankProfile')
+  const { success, message } = response
+  if (!success) {
+    log('profileService - createBlankProfile, message', message)
+    return null
+  }
+
+  const data = getDataFromResponse(
+    response,
+    'profileService - createBlankProfile'
+  )
 
   return data?.newProfile || null
 }
@@ -26,8 +35,8 @@ export const profileService = {
   createBlankProfile,
 }
 
-function handleResponse<T>(
-  response: ApiSuccessResponse<T> | ApiErrorResponse | null,
+function getDataFromResponse<T>(
+  response: FailedResponse | SuccessfulResponse<T>,
   functionName: string
 ): T | null {
   if (!response) {
@@ -36,7 +45,7 @@ function handleResponse<T>(
   }
 
   if (!response.success) {
-    log(`${functionName}, message`, response.message)
+    log(`${functionName}, error in response`, response.message)
     return null
   }
 

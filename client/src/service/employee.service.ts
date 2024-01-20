@@ -191,6 +191,11 @@ function getDataFromResponse<T>(
   response: FailedResponse | SuccessfulResponse<T>,
   functionName: string
 ): T | null {
+  if (!response) {
+    log(`${functionName}, no response from the server`)
+    return null
+  }
+
   if (!response.success) {
     log(`${functionName}, error in response`, response.message)
     return null

@@ -23,17 +23,14 @@ async function updateAccount(
   departmentName: string,
   position: string
 ) {
-  const response = await httpService.post<RegistrationData, AccountData>(
-    'account/update',
-    {
-      firstName,
-      lastName,
-      ID,
-      companyName,
-      departmentName,
-      position,
-    }
-  )
+  const response = await httpService.post<AccountData>('account/update', {
+    firstName,
+    lastName,
+    ID,
+    companyName,
+    departmentName,
+    position,
+  })
 
   log('accountService - updateAccount, response', response)
   if (response && response.success) {
@@ -46,10 +43,7 @@ async function updateAccount(
 }
 
 async function joinCompany(companyNumber: string, employeeNumber: string) {
-  const response = await httpService.post<
-    Partial<Company> & Partial<Employee>,
-    AccountData
-  >('account/join', {
+  const response = await httpService.post<AccountData>('account/join', {
     companyNumber,
     employeeNumber,
   })
@@ -73,7 +67,7 @@ async function joinCompany(companyNumber: string, employeeNumber: string) {
 }
 
 async function getAccount(): Promise<Account | null> {
-  const response = await httpService.get<null, AccountData>('account', null)
+  const response = await httpService.get<AccountData>('account')
 
   log('accountService - getAccount, response', response)
 
