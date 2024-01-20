@@ -78,39 +78,40 @@ api.interceptors.response.use(
 )
 
 export const httpService = {
-  get<T, R>(
+  get<T, P, R>(
     endpoint: string,
     data: null,
-    params?: T
+    params?: P
   ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
-    return ajax<T, R>(endpoint, 'GET', data, params)
+    return ajax<T, P, R>(endpoint, 'GET', data, params)
   },
-  post<T, R>(
+  post<T, P, R>(
     endpoint: string,
     data: T
   ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
-    return ajax<T, R>(endpoint, 'POST', data)
+    return ajax<T, P, R>(endpoint, 'POST', data)
   },
-  put<T, R>(
-    endpoint: string,
-    data: T
-  ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
-    return ajax<T, R>(endpoint, 'PUT', data)
-  },
-  delete<T, R>(
+  put<T, P, R>(
     endpoint: string,
     data: T,
-    params?: T
+    params?: P
   ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
-    return ajax<T, R>(endpoint, 'DELETE', data, params)
+    return ajax<T, P, R>(endpoint, 'PUT', data, params)
+  },
+  delete<T, P, R>(
+    endpoint: string,
+    data: T,
+    params?: P
+  ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
+    return ajax<T, P, R>(endpoint, 'DELETE', data, params)
   },
 }
 
-async function ajax<T, R>(
+async function ajax<T, P, R>(
   endpoint: string,
   method: string,
   data: T | null = null,
-  params?: T
+  params?: P
 ): Promise<ApiSuccessResponse<R> | ApiErrorResponse | null> {
   try {
     const config: AxiosRequestConfig = {
