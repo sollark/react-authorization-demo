@@ -1,5 +1,4 @@
 import { Department } from '@/models/Department'
-import { log } from '@/service/console.service'
 import { employeeService } from '@/service/employee.service'
 import { adaptTableRowToObject } from '@/service/utils.service'
 import useCompanyStore from '@/stores/companyStore'
@@ -45,8 +44,7 @@ function updateCompanyEmployee() {
       position
     )
 
-    // TODO return false if error in response
-    return true
+    return response ? true : false
   }
 }
 
@@ -57,8 +55,7 @@ function deleteCompanyEmployee() {
 
     const response = await employeeService.deleteCompanyEmployee(employeeNumber)
 
-    // TODO return false if error in response
-    return true
+    return response ? true : false
   }
 }
 

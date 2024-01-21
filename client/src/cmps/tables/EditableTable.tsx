@@ -213,6 +213,7 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
 
+    // api call to update row
     const isSuccess = await updateRow(newRow)
 
     if (!isSuccess && oldRow.isNew) {

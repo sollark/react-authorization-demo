@@ -83,6 +83,12 @@ async function updateCompanyEmployee(
     }
   )
 
+  const { success, message } = response
+  if (!success) {
+    log('employeeService - updateCompanyEmployee, message', message)
+    return null
+  }
+
   const data = getDataFromResponse(
     response,
     'employeeService - updateCompanyEmployee'
