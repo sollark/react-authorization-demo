@@ -84,12 +84,12 @@ export const httpService = {
 
   put<D>(
     endpoint: string,
-    params?: object
+    data?: object
   ): Promise<FailedResponse | SuccessfulResponse<D>> {
     return sendRequest({
       method: HttpMethod.PUT,
       url: endpoint,
-      params,
+      data,
     })
   },
 
