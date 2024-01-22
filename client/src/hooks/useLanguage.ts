@@ -1,11 +1,14 @@
+import { LanguageContext } from '@/Providers'
 import { config } from '@/config/config'
 import { LANGUAGES } from '@/constants/constants'
 import { i18n } from '@/i18n/config'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 const DEFAULT_LANGUAGE = config.defaultLanguage
 
-export const useLanguage = () => {
+export const useLanguage = (): [string, (newLanguageCode: string) => void] => {
+  const languageContext = useContext(LanguageContext)
+
   const initialLanguageCode =
     LANGUAGES.find((lang) => lang.value === DEFAULT_LANGUAGE)?.value ||
     LANGUAGES[0].value
@@ -14,16 +17,15 @@ export const useLanguage = () => {
 
   useEffect(() => {
     const storedLanguageCode = localStorage.getItem('languageCode')
-    if (storedLanguageCode) {
-      setCurrentLanguageCode(storedLanguageCode)
-    }
+    storedLanguageCode && setCurrentLanguageCode(storedLanguageCode)
   }, [])
 
   const setLanguage = (newLanguageCode: string) => {
     setCurrentLanguageCode(newLanguageCode)
     localStorage.setItem('languageCode', newLanguageCode)
+    languageContext.setLanguage(newLanguageCode)
     i18n.changeLanguage(newLanguageCode)
   }
 
-  return { currentLanguageCode, setLanguage }
+  return [currentLanguageCode, setLanguage]
 }

@@ -3,7 +3,7 @@ import { useLanguage } from '@/hooks/useLanguage'
 import { ChangeEvent, FC } from 'react'
 
 const LanguageSwitcher: FC = () => {
-  const { currentLanguageCode, setLanguage } = useLanguage()
+  const [currentLanguageCode, setLanguage] = useLanguage()
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.target.value)

@@ -10,7 +10,7 @@ type SiteNavigationProps = {
 const SiteNavigation = (props: SiteNavigationProps) => {
   const { handleCloseNavMenu } = props
   const role: Role = useAccountStore((state) => state.role)
-  const pages = useNavigationMenu(role)
+  const [pages] = useNavigationMenu(role)
 
   return (
     <>

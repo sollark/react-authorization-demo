@@ -1,24 +1,30 @@
-import { getAdminPages, getUserPages } from '@/cmps/menu/Pages';
-import { Role } from '@/models/Account';
-import { useEffect, useState } from 'react';
+import { getAdminPages, getUserPages } from '@/cmps/menu/Pages'
+import { Role } from '@/models/Account'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export function useNavigationMenu(role: Role) {
   const [pages, setPages] = useState<{ key: string; link: JSX.Element }[]>([])
+  const { i18n } = useTranslation()
 
   useEffect(() => {
-    const userPages = getUserPages()
-    const adminPages = getAdminPages()
+    let navigationPages
 
-    const navigationPages = {
-      guest: userPages,
-      user: userPages,
-      supervisor: userPages,
-      manager: adminPages,
-      admin: adminPages,
+    switch (role) {
+      case 'manager':
+      case 'admin':
+        navigationPages = getAdminPages()
+        break
+      case 'guest':
+      case 'user':
+      case 'supervisor':
+      default:
+        navigationPages = getUserPages()
+        break
     }
 
-    setPages(navigationPages[role])
-  }, [role])
+    setPages(navigationPages)
+  }, [role, i18n.language])
 
-  return pages
+  return [pages]
 }
