@@ -1,70 +1,65 @@
+import { log } from '@/service/console.service.js'
+import { tokens } from './colorTokens'
+
 type PaletteMode = 'light' | 'dark'
 
-const cyan = 'hsl(180, 86%, 67%)'
-const cyanLight = 'hsl(180, 86%, 90%)'
-const cyanDark = 'hsl(180, 86%, 25%)'
+// Mui theme setting
+export const getDesignTokens = (mode: PaletteMode, lang: string) => {
+  log(`Mui theme, mode ${mode}, lang ${lang}`)
 
-const moonstone = 'hsl(189, 43%, 56%)'
-const moonstoneLight = 'hsl(189, 41%, 85%)'
-const moonstoneDark = 'hsl(189, 43%, 25%)'
+  const colors = tokens(mode)
 
-const yellow = 'hsl(40, 98%, 47%)'
-const yellowLight = 'hsl(40, 98%, 65%)'
-const yellowDark = 'hsl(40, 98%, 47%)'
-
-const getDesignTokens = (mode: PaletteMode) => {
   return {
     palette: {
-      mode,
-      ...(mode === 'light'
+      mode: mode,
+      ...(mode === 'dark'
         ? {
             primary: {
-              main: cyanLight,
-              light: cyanLight,
-              dark: cyanDark,
-              divider: cyanDark,
-              contrastText: 'black',
+              main: colors.primary[500],
             },
             secondary: {
-              main: moonstoneLight,
-              light: moonstoneLight,
-              dark: moonstoneDark,
-              divider: moonstoneDark,
-              contrastText: 'black',
+              main: colors.secondary[500],
             },
             accent: {
-              main: yellowLight,
-              light: yellowLight,
-              dark: yellowDark,
-              divider: yellowDark,
-              contrastText: 'black',
+              main: colors.accent[500],
+            },
+            neutral: {
+              dark: colors.grey[700],
+              main: colors.grey[500],
+              light: colors.grey[100],
+            },
+            background: {
+              default: colors.primary[500],
+              paper: colors.grey[800],
             },
           }
         : {
             primary: {
-              main: cyanDark,
-              light: cyanLight,
-              dark: cyanDark,
-              divider: cyanLight,
-              contrastText: 'white',
+              main: colors.primary[500],
             },
             secondary: {
-              main: moonstoneDark,
-              light: moonstoneLight,
-              dark: moonstoneDark,
-              divider: moonstoneLight,
-              contrastText: 'white',
+              main: colors.secondary[500],
             },
             accent: {
-              main: yellowDark,
-              light: yellowLight,
-              dark: yellowDark,
-              divider: yellowLight,
-              contrastText: 'black',
+              main: colors.accent[500],
+            },
+            neutral: {
+              dark: colors.grey[100],
+              main: colors.grey[500],
+              light: colors.grey[700],
+            },
+            background: {
+              default: colors.grey[100],
+              paper: colors.grey[800],
             },
           }),
     },
+    typography: {
+      fontFamily:
+        lang === 'he'
+          ? 'Noto, Helvetica, Arial, sans-serif'
+          : 'Roboto, Helvetica, Arial, sans-serif',
+      fontSize: lang === 'he' ? 16 : 14,
+    },
   }
 }
-
-export default getDesignTokens

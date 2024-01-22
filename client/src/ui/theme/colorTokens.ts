@@ -1,4 +1,5 @@
 import { PaletteMode } from '@mui/material'
+
 export const tokens = (mode: PaletteMode) => ({
   ...(mode === 'dark'
     ? {
@@ -29,15 +30,11 @@ export const tokens = (mode: PaletteMode) => ({
         },
         // Accent orange
         accent: {
-          100: '#fce6cf', // Light Orange
-          200: '#facc9e', // Orange
-          300: '#f7b36e', // Medium Orange
-          400: '#f5993d', // Dark Orange
-          500: '#f2800d', // Deep Orange
-          600: '#c2660a', // Dark Deep Orange
-          700: '#914d08', // Darker Deep Orange
-          800: '#613305', // Darker Orange
-          900: '#301a03', // Black
+          ...commonColors.accent,
+        },
+        // Common grey
+        grey: {
+          ...commonColors.grey,
         },
       }
     : {
@@ -68,15 +65,37 @@ export const tokens = (mode: PaletteMode) => ({
         },
         // Accent orange
         accent: {
-          100: '#fce6cf', // Light Orange
-          200: '#facc9e', // Orange
-          300: '#f7b36e', // Medium Orange
-          400: '#f5993d', // Dark Orange
-          500: '#f2800d', // Deep Orange
-          600: '#c2660a', // Dark Deep Orange
-          700: '#914d08', // Darker Deep Orange
-          800: '#613305', // Darker Orange
-          900: '#301a03', // Black
+          ...commonColors.accent,
+        },
+        // Common grey
+        grey: {
+          ...commonColors.grey,
         },
       }),
 })
+
+// Common accent and grey colors for both light and dark modes
+const commonColors = {
+  accent: {
+    100: '#fce6cf', // Light Orange
+    200: '#facc9e', // Orange
+    300: '#f7b36e', // Medium Orange
+    400: '#f5993d', // Dark Orange
+    500: '#f2800d', // Deep Orange
+    600: '#c2660a', // Dark Deep Orange
+    700: '#914d08', // Darker Deep Orange
+    800: '#613305', // Darker Orange
+    900: '#301a03', // Black
+  },
+  grey: {
+    100: '#e6e6e6',
+    200: '#cccccc',
+    300: '#b3b3b3',
+    400: '#999999',
+    500: '#808080',
+    600: '#666666',
+    700: '#4d4d4d',
+    800: '#333333',
+    900: '#1a1a1a',
+  },
+}
