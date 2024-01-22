@@ -33,16 +33,8 @@ const NotEditableTable = (props: BasicTableProps) => {
   const data = generateKeys(dataRows)
   const columns = tableColumns
   const [rows, setRows] = useState(data)
-  const theme = useTheme()
-  const color = theme.palette.primary.main
-  return (
-    <DataGrid
-      sx={{
-        color: color,
-      }}
-      columns={columns}
-      rows={rows}></DataGrid>
-  )
+
+  return <DataGrid columns={columns} rows={rows}></DataGrid>
 }
 
 type TableProps = {

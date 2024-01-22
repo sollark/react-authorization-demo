@@ -4,7 +4,7 @@ import EditableEmployeeTable from '@/cmps/tables/employeeTable/EditableEmployeeT
 import { Role } from '@/models/Account'
 import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import { FC } from 'react'
 
 const TableViews = {
@@ -24,6 +24,8 @@ const EmployeeListPage: FC = () => {
   return (
     <Box
       sx={{
+        backgroundColor: 'primary.main',
+        color: 'primary.contrastText',
         p: 4,
       }}>
       <h1>Employee page</h1>

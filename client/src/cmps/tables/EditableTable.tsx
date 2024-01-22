@@ -241,13 +241,8 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
     setRowModesModel(newRowModesModel)
   }
 
-  const theme = useTheme()
-  const color = theme.palette.primary.main
   return (
     <DataGrid
-      sx={{
-        color: color,
-      }}
       columns={columns}
       rows={rows}
       editMode='row'
