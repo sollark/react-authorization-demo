@@ -15,13 +15,16 @@ export const getDesignTokens = (mode: PaletteMode, lang: string) => {
       ...(mode === 'dark'
         ? {
             primary: {
-              main: colors.primary[500],
+              main: colors.primary[700],
+              contrastText: colors.grey[100], // Add contrast text color
             },
             secondary: {
-              main: colors.secondary[500],
+              main: colors.secondary[700],
+              contrastText: colors.grey[100], // Add contrast text color
             },
             accent: {
               main: colors.accent[500],
+              contrastText: colors.grey[100], // Add contrast text color
             },
             neutral: {
               dark: colors.grey[700],
@@ -29,19 +32,22 @@ export const getDesignTokens = (mode: PaletteMode, lang: string) => {
               light: colors.grey[100],
             },
             background: {
-              default: colors.primary[500],
+              default: colors.primary[900],
               paper: colors.grey[800],
             },
           }
         : {
             primary: {
               main: colors.primary[500],
+              contrastText: colors.grey[800], // Add contrast text color
             },
             secondary: {
               main: colors.secondary[500],
+              contrastText: colors.grey[800], // Add contrast text color
             },
             accent: {
               main: colors.accent[500],
+              contrastText: colors.grey[800], // Add contrast text color
             },
             neutral: {
               dark: colors.grey[100],

@@ -22,15 +22,11 @@ import { useSnackbar } from 'notistack'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SecondaryButton from '../button/SecondaryButton'
+import { useTheme } from '@mui/material'
 
 type BasicTableProps = {
   dataRows: readonly GridValidRowModel[]
   tableColumns: GridColDef[]
-}
-
-type TableConfig = {
-  showAddButton?: boolean
-  showDeleteButton?: boolean
 }
 
 type EditableTableProps = {
@@ -38,6 +34,11 @@ type EditableTableProps = {
   deleteRow?: (row: GridRowModel) => Promise<boolean>
   getDefaultValues?: () => GridRowModel
   config?: TableConfig
+}
+
+type TableConfig = {
+  showAddButton?: boolean
+  showDeleteButton?: boolean
 }
 
 // tool bar props(add record button)
@@ -240,8 +241,13 @@ const EditableTable: FC<BasicTableProps & EditableTableProps> = (
     setRowModesModel(newRowModesModel)
   }
 
+  const theme = useTheme()
+  const color = theme.palette.primary.main
   return (
     <DataGrid
+      sx={{
+        color: color,
+      }}
       columns={columns}
       rows={rows}
       editMode='row'

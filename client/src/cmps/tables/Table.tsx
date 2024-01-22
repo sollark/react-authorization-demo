@@ -1,5 +1,5 @@
 import { log } from '@/service/console.service'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -33,8 +33,16 @@ const NotEditableTable = (props: BasicTableProps) => {
   const data = generateKeys(dataRows)
   const columns = tableColumns
   const [rows, setRows] = useState(data)
-
-  return <DataGrid columns={columns} rows={rows}></DataGrid>
+  const theme = useTheme()
+  const color = theme.palette.primary.main
+  return (
+    <DataGrid
+      sx={{
+        color: color,
+      }}
+      columns={columns}
+      rows={rows}></DataGrid>
+  )
 }
 
 type TableProps = {
