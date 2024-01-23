@@ -14,9 +14,11 @@ const useThemeMode = (): ['light' | 'dark', () => void] => {
   }, [mode])
 
   const toggleColorMode = useCallback(() => {
+    console.log('toggleColorMode')
     setMode((prevMode) => {
       const newMode = prevMode === 'light' ? 'dark' : 'light'
       localStorage.setItem('theme', newMode)
+
       return newMode
     })
   }, [])

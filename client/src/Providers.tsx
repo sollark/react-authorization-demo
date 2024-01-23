@@ -20,28 +20,30 @@ export const LanguageContext = createContext({
   currentLanguageCode: '',
   setLanguage: (languageCode: string) => {},
 })
-const ColorModeContext = createContext({
+export const ColorModeContext = createContext({
   mode: '',
-  setMode: () => {},
+  toggleColorMode: () => {},
 })
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   log('Providers connected')
 
-  const [mode, setMode] = useThemeMode()
+  // Light / Dark
+  const [mode, toggleColorMode] = useThemeMode()
+  // Hebrew, Russian , English
   const [currentLanguageCode, setLanguage] = useLanguage()
+  // Theme
   const theme = useMemo(
     () => createTheme(getDesignTokens(mode, currentLanguageCode)),
     [mode, currentLanguageCode]
   )
-
-  // Set text direction
+  // Text direction
   const { i18n } = useTranslation()
   document.body.dir = i18n.dir()
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ColorModeContext.Provider value={{ mode, setMode }}>
+      <ColorModeContext.Provider value={{ mode, toggleColorMode }}>
         <LanguageContext.Provider value={{ currentLanguageCode, setLanguage }}>
           <ThemeProvider theme={theme}>
             <SnackbarProvider autoHideDuration={5000} maxSnack={3}>
