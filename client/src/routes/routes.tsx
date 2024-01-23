@@ -1,4 +1,4 @@
-import RootPage from '@/pages/RootPage'
+import RootPage from '@/layouts/RootPage'
 import { RootRoute, Route, lazyRouteComponent } from '@tanstack/react-router'
 import Home from '../pages/HomePage'
 import AuthProtectedRoute from './AuthProtectedRoute'
