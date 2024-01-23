@@ -1,36 +1,38 @@
-import { useLanguageAndTheme } from '@/hooks/useLanguageAndTheme'
+import { ColorModeContext } from '@/Providers'
+import LanguageSwitcher from '@/cmps/languageSwitcher/LanguageSwitcher'
 import {
   Brightness4 as DarkIcon,
-  Language as LanguageIcon,
   Brightness7 as LightIcon,
   Notifications as NotificationsIcon,
   Search as SearchIcon,
 } from '@mui/icons-material'
 import { AppBar, Badge, IconButton, InputBase, Toolbar } from '@mui/material'
+import { useContext } from 'react'
 
 const Topbar = () => {
-  const { currentLanguageCode, setLanguage, mode, toggleColorMode } =
-    useLanguageAndTheme()
+  const { mode, toggleColorMode } = useContext(ColorModeContext)
+
   const isDarkMode = mode === 'dark'
 
   const handleThemeChange = () => {
     toggleColorMode()
   }
 
-  const handleLanguageChange = () => {
-    // Handle language change logic here
-  }
-
   return (
     <AppBar position='static'>
-      <Toolbar>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: '0 1rem',
+        }}>
         <div>
           <IconButton color='inherit'>
             <SearchIcon />
           </IconButton>
           <InputBase placeholder='Search...' />
         </div>
-        <div style={{ marginLeft: 'auto' }}>
+        <div>
           <IconButton color='inherit'>
             <Badge badgeContent={3} color='error'>
               <NotificationsIcon />
@@ -39,9 +41,7 @@ const Topbar = () => {
           <IconButton color='inherit' onClick={handleThemeChange}>
             {isDarkMode ? <LightIcon /> : <DarkIcon />}
           </IconButton>
-          <IconButton color='inherit' onClick={handleLanguageChange}>
-            <LanguageIcon />
-          </IconButton>
+          <LanguageSwitcher />
         </div>
       </Toolbar>
     </AppBar>

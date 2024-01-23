@@ -1,9 +1,9 @@
+import { LanguageContext } from '@/Providers'
 import { LANGUAGES } from '@/constants/constants'
-import { useLanguage } from '@/hooks/useLanguage'
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent, FC, useContext } from 'react'
 
 const LanguageSwitcher: FC = () => {
-  const [currentLanguageCode, setLanguage] = useLanguage()
+  const { currentLanguageCode, setLanguage } = useContext(LanguageContext)
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.target.value)
