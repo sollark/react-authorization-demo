@@ -1,7 +1,6 @@
 import {
   CSSObject,
   Divider,
-  Drawer,
   IconButton,
   List,
   ListItem,
@@ -14,10 +13,13 @@ import {
 } from '@mui/material'
 import MuiDrawer from '@mui/material/Drawer'
 
+import Logo from '@/cmps/logo/Logo'
+import User from '@/cmps/user/User'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import MailIcon from '@mui/icons-material/Mail'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
+import { useState } from 'react'
 
 const drawerWidth = 240
 
@@ -77,9 +79,27 @@ const Sidebar = (props: SidebarProps) => {
   const { isSidebarOpen, closeSidebar } = props
   const theme = useTheme()
 
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget)
+  }
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+  }
+
   return (
     <StyledDrawer variant='permanent' open={isSidebarOpen}>
-      <DrawerHeader>
+      <DrawerHeader
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <Logo
+          sxImg={{ display: { xs: 'none', md: 'flex' } }}
+          sxText={{ display: { xs: 'none', md: 'flex' } }}
+        />
         <IconButton onClick={closeSidebar}>
           {theme.direction === 'rtl' ? (
             <ChevronRightIcon />
@@ -88,6 +108,12 @@ const Sidebar = (props: SidebarProps) => {
           )}
         </IconButton>
       </DrawerHeader>
+      <Divider />{' '}
+      <User
+        handleOpenUserMenu={handleOpenUserMenu}
+        anchorElUser={anchorElUser}
+        handleCloseUserMenu={handleCloseUserMenu}
+      />
       <Divider />
       <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (

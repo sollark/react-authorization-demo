@@ -48,21 +48,20 @@ const User = (props: UserProps) => {
 
   return (
     <>
-      <Tooltip title='Open settings'>
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar
-            alt='Avatar'
-            src=''
-            sx={{
-              bgcolor: 'secondary.main',
-              color: 'secondary.contrastText',
-              width: 60,
-              height: 60,
-            }}>
-            {initials}
-          </Avatar>
-        </IconButton>
-      </Tooltip>
+      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+        <Avatar
+          alt='Avatar'
+          src=''
+          sx={{
+            bgcolor: 'secondary.main',
+            color: 'secondary.contrastText',
+            width: 45,
+            height: 45,
+          }}>
+          {initials}
+        </Avatar>
+      </IconButton>
+
       <Menu
         sx={{ mt: '60px' }}
         id='menu-appbar'

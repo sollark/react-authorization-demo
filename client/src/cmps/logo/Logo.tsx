@@ -1,4 +1,4 @@
-import logo from '@/assets/logo/logo-160.png'
+import logo from '@/assets/logo/logo-50.png'
 import { Box, SxProps, Typography } from '@mui/material'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,7 @@ const Logo: FC<LogoProps> = (props: LogoProps) => {
         <img src={logo} alt='Logo Image' />
       </Box>
       <Typography
-        variant='h6'
+        variant='h4'
         noWrap
         component='a'
         href='/'
