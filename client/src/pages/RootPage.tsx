@@ -1,4 +1,5 @@
 import Header from '@/cmps/Header'
+import Topbar from '@/layouts/Topbar'
 import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
@@ -21,6 +22,7 @@ const RootPage: FC = () => {
 
   return (
     <>
+      <Topbar />
       <Header />
       <Outlet />
     </>
