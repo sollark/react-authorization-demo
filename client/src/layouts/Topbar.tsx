@@ -6,10 +6,39 @@ import {
   Notifications as NotificationsIcon,
   Search as SearchIcon,
 } from '@mui/icons-material'
-import { AppBar, Badge, IconButton, InputBase, Toolbar } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import { Badge, IconButton, InputBase, Toolbar, styled } from '@mui/material'
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useContext } from 'react'
 
-const Topbar = () => {
+const drawerWidth = 240
+
+interface AppBarProps extends MuiAppBarProps {
+  isSidebarOpen?: boolean
+  openSidebar: () => void
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'isSidebarOpen',
+})<AppBarProps>(({ theme, isSidebarOpen }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(isSidebarOpen && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}))
+
+const Topbar = (props: AppBarProps) => {
+  const { isSidebarOpen, openSidebar } = props
+
   const { mode, toggleColorMode } = useContext(ColorModeContext)
 
   const isDarkMode = mode === 'dark'
@@ -19,7 +48,10 @@ const Topbar = () => {
   }
 
   return (
-    <AppBar position='static'>
+    <AppBar
+      position='fixed'
+      isSidebarOpen={isSidebarOpen}
+      openSidebar={openSidebar}>
       <Toolbar
         sx={{
           display: 'flex',
@@ -27,6 +59,18 @@ const Topbar = () => {
           padding: '0 1rem',
         }}>
         <div>
+          {/* Open/Close sidebar */}
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            onClick={openSidebar}
+            edge='start'
+            sx={{
+              marginRight: 5,
+              ...(isSidebarOpen && { display: 'none' }),
+            }}>
+            <MenuIcon />
+          </IconButton>
           <IconButton color='inherit'>
             <SearchIcon />
           </IconButton>
