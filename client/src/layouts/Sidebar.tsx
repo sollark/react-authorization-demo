@@ -134,7 +134,7 @@ const Sidebar = (props: SidebarProps) => {
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: isSidebarOpen ? 3 : 'auto',
+                  marginInlineEnd: isSidebarOpen ? 3 : 'auto',
                   justifyContent: 'center',
                 }}>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -146,7 +146,7 @@ const Sidebar = (props: SidebarProps) => {
       </List>
       <Divider />
       <List>
-        {['Lumin', 'Chat', 'Schedules'].map((text, index) => (
+        {['Lumin', 'Chat', 'Schedule'].map((text, index) => (
           <ListItem key={text} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               sx={{
@@ -157,7 +157,7 @@ const Sidebar = (props: SidebarProps) => {
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: isSidebarOpen ? 3 : 'auto',
+                  marginInlineEnd: isSidebarOpen ? 3 : 'auto',
                   justifyContent: 'center',
                 }}>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

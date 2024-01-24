@@ -38,7 +38,6 @@ const RootPage: FC = () => {
     <Box
       sx={{
         display: 'flex',
-        // flexDirection: i18n.dir() === 'ltr' ? 'row-reverse' : 'row',
       }}>
       <Sidebar closeSidebar={handleSidebarClose} isSidebarOpen={isOpen} />
       <Topbar openSidebar={handleSidebarOpen} isSidebarOpen={isOpen} />
