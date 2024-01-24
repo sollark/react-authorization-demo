@@ -38,11 +38,11 @@ const RootPage: FC = () => {
     <Box
       sx={{
         display: 'flex',
-        flexDirection: i18n.dir() === 'ltr' ? 'row-reverse' : 'row',
+        // flexDirection: i18n.dir() === 'ltr' ? 'row-reverse' : 'row',
       }}>
       <Sidebar closeSidebar={handleSidebarClose} isSidebarOpen={isOpen} />
       <Topbar openSidebar={handleSidebarOpen} isSidebarOpen={isOpen} />
-      <Box component='main' sx={{ flexGrow: 1, p: 3, pt: '86px' }}>
+      <Box component='main' sx={{ flexGrow: 1, pt: 8 }}>
         <Outlet />
       </Box>
     </Box>
