@@ -20,6 +20,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import MailIcon from '@mui/icons-material/Mail'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import { useState } from 'react'
+import useAccountStore from '@/stores/accountStore'
+import { Role } from '@/models/Account'
+import { useNavigationMenu } from '@/hooks/useNavigationMenu'
+import { useTranslation } from 'react-i18next'
 
 const drawerWidth = 240
 
@@ -77,7 +81,7 @@ type SidebarProps = {
 
 const Sidebar = (props: SidebarProps) => {
   const { isSidebarOpen, closeSidebar } = props
-  const theme = useTheme()
+  const { i18n } = useTranslation()
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -88,8 +92,15 @@ const Sidebar = (props: SidebarProps) => {
     setAnchorElUser(null)
   }
 
+  // Pages
+  const role: Role = useAccountStore((state) => state.role)
+  const [pages] = useNavigationMenu(role)
+
   return (
-    <StyledDrawer variant='permanent' open={isSidebarOpen}>
+    <StyledDrawer
+      anchor={i18n.dir() === 'ltr' ? 'left' : 'right'}
+      variant='permanent'
+      open={isSidebarOpen}>
       <DrawerHeader
         sx={{
           display: 'flex',
@@ -101,11 +112,7 @@ const Sidebar = (props: SidebarProps) => {
           sxText={{ display: { xs: 'none', md: 'flex' } }}
         />
         <IconButton onClick={closeSidebar}>
-          {theme.direction === 'rtl' ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
+          {i18n.dir() === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </DrawerHeader>
       <Divider />{' '}
@@ -116,8 +123,8 @@ const Sidebar = (props: SidebarProps) => {
       />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+        {pages.map((page, index) => (
+          <ListItem key={page.key} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -132,17 +139,14 @@ const Sidebar = (props: SidebarProps) => {
                 }}>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText
-                primary={text}
-                sx={{ opacity: isSidebarOpen ? 1 : 0 }}
-              />
+              {page.link}
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['Lumin', 'Chat', 'Schedules'].map((text, index) => (
           <ListItem key={text} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               sx={{

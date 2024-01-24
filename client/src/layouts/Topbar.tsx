@@ -15,6 +15,10 @@ const drawerWidth = 240
 
 interface AppBarProps extends MuiAppBarProps {
   isSidebarOpen?: boolean
+}
+
+type TopbarProps = {
+  isSidebarOpen?: boolean
   openSidebar: () => void
 }
 
@@ -27,7 +31,7 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(isSidebarOpen && {
-    marginLeft: drawerWidth,
+    marginInlineStart: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -36,7 +40,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }))
 
-const Topbar = (props: AppBarProps) => {
+const Topbar = (props: TopbarProps) => {
   const { isSidebarOpen, openSidebar } = props
 
   const { mode, toggleColorMode } = useContext(ColorModeContext)
@@ -48,10 +52,7 @@ const Topbar = (props: AppBarProps) => {
   }
 
   return (
-    <AppBar
-      position='fixed'
-      isSidebarOpen={isSidebarOpen}
-      openSidebar={openSidebar}>
+    <AppBar position='fixed' isSidebarOpen={isSidebarOpen}>
       <Toolbar
         sx={{
           display: 'flex',
@@ -66,7 +67,7 @@ const Topbar = (props: AppBarProps) => {
             onClick={openSidebar}
             edge='start'
             sx={{
-              marginRight: 5,
+              marginInlineEnd: 5,
               ...(isSidebarOpen && { display: 'none' }),
             }}>
             <MenuIcon />
