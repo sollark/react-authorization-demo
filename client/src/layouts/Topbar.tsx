@@ -11,8 +11,6 @@ import { Badge, IconButton, InputBase, Toolbar, styled } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import { useContext } from 'react'
 
-const drawerWidth = 240
-
 interface AppBarProps extends MuiAppBarProps {
   isSidebarOpen?: boolean
 }
@@ -20,28 +18,17 @@ interface AppBarProps extends MuiAppBarProps {
 type TopbarProps = {
   isSidebarOpen?: boolean
   openSidebar: () => void
+  closeSidebar: () => void
 }
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'isSidebarOpen',
 })<AppBarProps>(({ theme, isSidebarOpen }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(isSidebarOpen && {
-    marginInlineStart: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
 }))
 
 const Topbar = (props: TopbarProps) => {
-  const { isSidebarOpen, openSidebar } = props
+  const { isSidebarOpen, openSidebar, closeSidebar } = props
 
   const { mode, toggleColorMode } = useContext(ColorModeContext)
 
@@ -58,18 +45,23 @@ const Topbar = (props: TopbarProps) => {
           display: 'flex',
           justifyContent: 'space-between',
           padding: '0 1rem',
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark'
+              ? theme.palette.primary.main
+              : theme.palette.primary.main,
+          color: (theme) =>
+            theme.palette.mode === 'dark'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[800],
         }}>
         <div>
           {/* Open/Close sidebar */}
           <IconButton
             color='inherit'
             aria-label='open drawer'
-            onClick={openSidebar}
+            onClick={isSidebarOpen ? closeSidebar : openSidebar}
             edge='start'
-            sx={{
-              marginInlineEnd: 5,
-              ...(isSidebarOpen && { display: 'none' }),
-            }}>
+            sx={{ marginInlineEnd: 5 }}>
             <MenuIcon />
           </IconButton>
           <IconButton color='inherit'>

@@ -9,20 +9,19 @@ import {
   ListItemText,
   Theme,
   styled,
-  useTheme,
 } from '@mui/material'
 import MuiDrawer from '@mui/material/Drawer'
 
 import Logo from '@/cmps/logo/Logo'
 import User from '@/cmps/user/User'
+import { useNavigationMenu } from '@/hooks/useNavigationMenu'
+import { Role } from '@/models/Account'
+import useAccountStore from '@/stores/accountStore'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import MailIcon from '@mui/icons-material/Mail'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import { useState } from 'react'
-import useAccountStore from '@/stores/accountStore'
-import { Role } from '@/models/Account'
-import { useNavigationMenu } from '@/hooks/useNavigationMenu'
 import { useTranslation } from 'react-i18next'
 
 const drawerWidth = 240
@@ -100,7 +99,17 @@ const Sidebar = (props: SidebarProps) => {
     <StyledDrawer
       anchor={i18n.dir() === 'ltr' ? 'left' : 'right'}
       variant='permanent'
-      open={isSidebarOpen}>
+      open={isSidebarOpen}
+      sx={{
+        backgroundColor: (theme) =>
+          theme.palette.mode === 'dark'
+            ? theme.palette.secondary.main
+            : theme.palette.secondary.main,
+        color: (theme) =>
+          theme.palette.mode === 'dark'
+            ? theme.palette.grey[100]
+            : theme.palette.grey[800],
+      }}>
       <DrawerHeader
         sx={{
           display: 'flex',
@@ -139,7 +148,7 @@ const Sidebar = (props: SidebarProps) => {
                 }}>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              {page.link}
+              {isSidebarOpen && page.link}
             </ListItemButton>
           </ListItem>
         ))}

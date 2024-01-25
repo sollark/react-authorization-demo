@@ -2,17 +2,15 @@ import Topbar from '@/layouts/Topbar'
 import { log } from '@/service/console.service'
 import useAccountStore from '@/stores/accountStore'
 import useAuthStore from '@/stores/authStore'
-import { Box, useTheme } from '@mui/material'
+import { Box } from '@mui/material'
 import { MakeLinkOptions, Outlet, useNavigate } from '@tanstack/react-router'
 import { FC, useEffect, useState } from 'react'
-import Sidebar from './Sidebar'
 import { useTranslation } from 'react-i18next'
+import Sidebar from './Sidebar'
 
 const RootPage: FC = () => {
   log('RootPage connected')
 
-  const { i18n } = useTranslation()
-  const textDirection = i18n.dir()
   const navigate = useNavigate()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const isComplete = useAccountStore((state) => state.isComplete)
@@ -38,9 +36,22 @@ const RootPage: FC = () => {
     <Box
       sx={{
         display: 'flex',
+        backgroundColor: (theme) =>
+          theme.palette.mode === 'dark'
+            ? theme.palette.primary.main
+            : theme.palette.primary.main,
+        color: (theme) =>
+          theme.palette.mode === 'dark'
+            ? theme.palette.grey[100]
+            : theme.palette.grey[800],
+        height: '100vh',
       }}>
       <Sidebar closeSidebar={handleSidebarClose} isSidebarOpen={isOpen} />
-      <Topbar openSidebar={handleSidebarOpen} isSidebarOpen={isOpen} />
+      <Topbar
+        openSidebar={handleSidebarOpen}
+        closeSidebar={handleSidebarClose}
+        isSidebarOpen={isOpen}
+      />
       <Box component='main' sx={{ flexGrow: 1, pt: 8 }}>
         <Outlet />
       </Box>
