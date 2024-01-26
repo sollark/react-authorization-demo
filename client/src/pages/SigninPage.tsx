@@ -1,4 +1,5 @@
 import CustomLink from '@/cmps/link/CustomLink'
+import TestSignIn from '@/cmps/testSignIn/testSignIn'
 import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
@@ -15,6 +16,7 @@ const SigninPage: FC = () => {
         Don't have an account?{' '}
         <CustomLink to='/registration'>Registration</CustomLink>
       </p>
+      <TestSignIn />
     </Box>
   )
 }
