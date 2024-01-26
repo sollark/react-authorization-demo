@@ -3,18 +3,20 @@ import { config } from '../config/config.js'
 import { deleteDatabase } from './delete.js'
 import { populate } from './populate.js'
 
-export const connectMongo = async () => {
-  if (!config.mongo.url) {
+export const connectMongo = async (db: 'development' | 'production') => {
+  const url =
+    db === 'development' ? config.mongo.test_url : config.mongo.prod_url
+  if (!url) {
     throw new Error('MONGO_URL is not defined')
   }
 
   try {
     mongoose.set('strictQuery', true)
-    await mongoose.connect(config.mongo.url)
-    console.log('Connected to MongoDB')
+    await mongoose.connect(url)
+    console.log(`Connected to MongoDB ${db} database`)
   } catch (error) {
     console.log(error)
-    throw new Error('Failed to connect to MongoDB')
+    throw new Error(`Failed to connect to MongoDB ${db} database`)
   }
 
   // Uncomment this lines to delete the database

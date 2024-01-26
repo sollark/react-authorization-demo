@@ -85,7 +85,15 @@ server.listen(config.server.port, () =>
 
 // Connect to MongoDB
 try {
-  await connectMongo()
+  switch (config.env) {
+    case 'development':
+    case 'production':
+      await connectMongo(config.env)
+      break
+    default:
+      throw new Error('NODE_ENV is not defined')
+  }
 } catch (error) {
+  console.error(error)
   process.exit(1)
 }
