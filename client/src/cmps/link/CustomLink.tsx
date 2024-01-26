@@ -11,8 +11,7 @@ const CustomLink: FC<CustomLinkProps> = ({ color, children, ...rest }) => {
   const theme = useTheme()
   const linkColor = color
     ? theme.palette[color].dark
-    : theme.palette.primary.dark
-
+    : theme.palette.accent.dark
   return (
     <Link style={{ color: linkColor }} {...rest}>
       {children}

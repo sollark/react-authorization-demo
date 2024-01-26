@@ -3,11 +3,12 @@ import { Button, ButtonProps, styled } from '@mui/material'
 const SecondaryButton = styled(Button)<ButtonProps>(({ theme }) => ({
   margin: '1rem 0',
   marginInlineEnd: '1rem',
-  backgroundColor: theme.palette.secondary.main,
-  color: theme.palette.secondary.contrastText,
+  borderStyle: 'solid',
+  borderColor: theme.palette.secondary.main,
+  borderWidth: '2px',
+  color: theme.palette.primary.contrastText,
   '&:hover': {
-    backgroundColor: theme.palette.secondary.dark,
-    color: theme.palette.secondary.light,
+    backgroundColor: theme.palette.secondary.main,
   },
 }))
 

@@ -11,7 +11,6 @@ import {
   styled,
 } from '@mui/material'
 import MuiDrawer from '@mui/material/Drawer'
-
 import Logo from '@/cmps/logo/Logo'
 import User from '@/cmps/user/User'
 import { useNavigationMenu } from '@/hooks/useNavigationMenu'
@@ -124,7 +123,7 @@ const Sidebar = (props: SidebarProps) => {
           {i18n.dir() === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </DrawerHeader>
-      <Divider />{' '}
+      <Divider />
       <User
         handleOpenUserMenu={handleOpenUserMenu}
         anchorElUser={anchorElUser}

@@ -6,7 +6,8 @@ const AccentButton = styled(Button)<ButtonProps>(({ theme }) => ({
   backgroundColor: theme.palette.accent.main,
   color: theme.palette.accent.contrastText,
   '&:hover': {
-    backgroundColor: theme.palette.accent.dark,
+    backgroundColor: theme.palette.accent.main,
+    color: theme.palette.accent.contrastText,
   },
 }))
 

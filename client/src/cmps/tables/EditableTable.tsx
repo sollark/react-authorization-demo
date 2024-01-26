@@ -70,7 +70,7 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <SecondaryButton
-        color='primary'
+        // color='secondary'
         startIcon={<AddCircleOutlineOutlinedIcon />}
         onClick={handleClick}>
         {t('actions.add')}

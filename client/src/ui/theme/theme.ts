@@ -19,12 +19,14 @@ export const getDesignTokens = (mode: PaletteMode, lang: string) => {
               contrastText: colors.grey[100], // Add contrast text color
             },
             secondary: {
-              main: colors.secondary[700],
+              main: colors.secondary[800],
               contrastText: colors.grey[100], // Add contrast text color
             },
             accent: {
-              main: colors.accent[500],
-              contrastText: colors.grey[100], // Add contrast text color
+              dark: colors.accent[100],
+              main: colors.accent[300],
+              light: colors.accent[400],
+              contrastText: colors.grey[800], // Add contrast text color
             },
             neutral: {
               dark: colors.grey[700],
@@ -33,20 +35,22 @@ export const getDesignTokens = (mode: PaletteMode, lang: string) => {
             },
             background: {
               default: colors.primary[900],
-              paper: colors.grey[800],
+              // paper: colors.grey[800],
             },
           }
         : {
             primary: {
-              main: colors.primary[500],
+              main: colors.primary[100],
               contrastText: colors.grey[800], // Add contrast text color
             },
             secondary: {
-              main: colors.secondary[500],
+              main: colors.secondary[200],
               contrastText: colors.grey[800], // Add contrast text color
             },
             accent: {
-              main: colors.accent[500],
+              light: colors.accent[100],
+              main: colors.accent[300],
+              dark: colors.accent[500],
               contrastText: colors.grey[800], // Add contrast text color
             },
             neutral: {
@@ -56,7 +60,7 @@ export const getDesignTokens = (mode: PaletteMode, lang: string) => {
             },
             background: {
               default: colors.grey[100],
-              paper: colors.grey[800],
+              // paper: colors.grey[200],
             },
           }),
     },
