@@ -1,5 +1,7 @@
 import { ColorModeContext } from '@/Providers'
 import LanguageSwitcher from '@/cmps/languageSwitcher/LanguageSwitcher'
+import Logo from '@/cmps/logo/Logo'
+import User from '@/cmps/user/User'
 import {
   Brightness4 as DarkIcon,
   Brightness7 as LightIcon,
@@ -29,9 +31,7 @@ const AppBar = styled(MuiAppBar, {
 
 const Topbar = (props: TopbarProps) => {
   const { isSidebarOpen, openSidebar, closeSidebar } = props
-
   const { mode, toggleColorMode } = useContext(ColorModeContext)
-
   const isDarkMode = mode === 'dark'
 
   const handleThemeChange = () => {
@@ -54,7 +54,14 @@ const Topbar = (props: TopbarProps) => {
               ? theme.palette.grey[100]
               : theme.palette.grey[800],
         }}>
-        <div>
+        {/* Open/Close sidebar button and logo */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: 3,
+          }}>
           {/* Open/Close sidebar */}
           <IconButton
             color='inherit'
@@ -64,12 +71,28 @@ const Topbar = (props: TopbarProps) => {
             sx={{ marginInlineEnd: 5 }}>
             <MenuIcon />
           </IconButton>
+
+          {/* Logo */}
+          <Logo
+            sxImg={{ display: { xs: 'none', md: 'flex' } }}
+            sxText={{ display: { xs: 'none', md: 'flex' } }}
+          />
+        </div>
+        {/* Search bar */}
+        <div>
           <IconButton color='inherit'>
             <SearchIcon />
           </IconButton>
           <InputBase placeholder='Search...' />
         </div>
-        <div>
+        {/* User menu and theme toggle button  */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: 3,
+          }}>
           <IconButton color='inherit'>
             <Badge badgeContent={3} color='error'>
               <NotificationsIcon />
@@ -79,6 +102,7 @@ const Topbar = (props: TopbarProps) => {
             {isDarkMode ? <LightIcon /> : <DarkIcon />}
           </IconButton>
           <LanguageSwitcher />
+          <User />
         </div>
       </Toolbar>
     </AppBar>

@@ -18,7 +18,8 @@ export const config = {
   env: NODE_ENV,
   mongo: {
     test_url: MONGO_TEST_URL,
-    prod_url: MONGO_PRODUCTION_URL,
+    prod_url: MONGO_TEST_URL,
+    // prod_url: MONGO_PRODUCTION_URL,
   },
   server: {
     port: SERVER_PORT,

@@ -13,12 +13,17 @@ const Logo: FC<LogoProps> = (props: LogoProps) => {
   const { t } = useTranslation()
 
   return (
-    <>
-      <Box sx={{ ...sxImg, mr: 1 }}>
-        <img src={logo} alt='Logo Image' />
-      </Box>
+    <Box
+      sx={{
+        ...sxImg,
+        mr: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <img src={logo} alt='Logo Image' />
       <Typography
-        variant='h4'
+        variant='h5'
         noWrap
         component='a'
         href='/'
@@ -32,8 +37,8 @@ const Logo: FC<LogoProps> = (props: LogoProps) => {
           textDecoration: 'none',
         }}>
         {t('labels.logo')}
-      </Typography>
-    </>
+      </Typography>{' '}
+    </Box>
   )
 }
 

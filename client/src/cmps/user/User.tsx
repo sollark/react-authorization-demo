@@ -1,28 +1,22 @@
 import { log } from '@/service/console.service'
 import useUserStore from '@/stores/userStore'
-import {
-  Avatar,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { Avatar, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { getGuestMenu, getUserMenu } from './UserMenu'
 
-interface UserProps {
-  anchorElUser: null | HTMLElement
-  handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void
-  handleCloseUserMenu: () => void
-}
-
 const menu: Array<{ key: string; link: ReactNode }> = []
 
-const User = (props: UserProps) => {
+const User = () => {
   log('User connected')
 
-  const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } = props
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget)
+  }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+  }
+
   const [initials, setInitials] = useState('Guest') // State to hold the initials
 
   const profile = useUserStore((state) => state.profile)
@@ -48,7 +42,7 @@ const User = (props: UserProps) => {
 
   return (
     <>
-      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+      <IconButton onClick={handleOpenUserMenu} sx={{ p: '5px' }}>
         <Avatar
           alt='Avatar'
           src=''

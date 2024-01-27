@@ -1,3 +1,11 @@
+import Logo from '@/cmps/logo/Logo'
+import { useNavigationMenu } from '@/hooks/useNavigationMenu'
+import { Role } from '@/models/Account'
+import useAccountStore from '@/stores/accountStore'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import MailIcon from '@mui/icons-material/Mail'
+import InboxIcon from '@mui/icons-material/MoveToInbox'
 import {
   CSSObject,
   Divider,
@@ -11,16 +19,6 @@ import {
   styled,
 } from '@mui/material'
 import MuiDrawer from '@mui/material/Drawer'
-import Logo from '@/cmps/logo/Logo'
-import User from '@/cmps/user/User'
-import { useNavigationMenu } from '@/hooks/useNavigationMenu'
-import { Role } from '@/models/Account'
-import useAccountStore from '@/stores/accountStore'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import MailIcon from '@mui/icons-material/Mail'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const drawerWidth = 240
@@ -81,15 +79,6 @@ const Sidebar = (props: SidebarProps) => {
   const { isSidebarOpen, closeSidebar } = props
   const { i18n } = useTranslation()
 
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget)
-  }
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
-  }
-
   // Pages
   const role: Role = useAccountStore((state) => state.role)
   const [pages] = useNavigationMenu(role)
@@ -124,12 +113,6 @@ const Sidebar = (props: SidebarProps) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <User
-        handleOpenUserMenu={handleOpenUserMenu}
-        anchorElUser={anchorElUser}
-        handleCloseUserMenu={handleCloseUserMenu}
-      />
-      <Divider />
       <List>
         {pages.map((page, index) => (
           <ListItem key={page.key} disablePadding sx={{ display: 'block' }}>
@@ -154,29 +137,31 @@ const Sidebar = (props: SidebarProps) => {
       </List>
       <Divider />
       <List>
-        {['Lumin', 'Chat', 'Schedule'].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: isSidebarOpen ? 'initial' : 'center',
-                px: 2.5,
-              }}>
-              <ListItemIcon
+        {['Lumin', 'Chat', 'Schedule', 'Check in', 'Task'].map(
+          (text, index) => (
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
                 sx={{
-                  minWidth: 0,
-                  marginInlineEnd: isSidebarOpen ? 3 : 'auto',
-                  justifyContent: 'center',
+                  minHeight: 48,
+                  justifyContent: isSidebarOpen ? 'initial' : 'center',
+                  px: 2.5,
                 }}>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText
-                primary={text}
-                sx={{ opacity: isSidebarOpen ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    marginInlineEnd: isSidebarOpen ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: isSidebarOpen ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
       </List>
     </StyledDrawer>
   )

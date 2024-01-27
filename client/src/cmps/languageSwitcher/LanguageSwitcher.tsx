@@ -10,13 +10,15 @@ const LanguageSwitcher: FC = () => {
   }
 
   return (
-    <select value={currentLanguageCode} onChange={handleLanguageChange}>
-      {LANGUAGES.map((language) => (
-        <option key={language.value} value={language.value}>
-          {language.label}
-        </option>
-      ))}
-    </select>
+    <div style={{ padding: '5px' }}>
+      <select value={currentLanguageCode} onChange={handleLanguageChange}>
+        {LANGUAGES.map((language) => (
+          <option key={language.value} value={language.value}>
+            {language.label}
+          </option>
+        ))}
+      </select>
+    </div>
   )
 }
 
