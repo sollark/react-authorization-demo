@@ -4,17 +4,20 @@ import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'
 import SignInForm from '../cmps/forms/SignInForm'
+import { useTranslation } from 'react-i18next'
 
 const SigninPage: FC = () => {
   log('Signin connected')
 
+  const { t } = useTranslation()
+
   return (
     <Box component='article' sx={{ maxWidth: '25rem', mx: 'auto', p: '1rem' }}>
-      <h1>Sign In</h1>
+      <h1>{t('pages.sign_in')}</h1>
       <SignInForm />
       <p>
-        Don't have an account?{' '}
-        <CustomLink to='/registration'>Registration</CustomLink>
+        {t("sign_in_page.Don't have an account?")}{' '}
+        <CustomLink to='/registration'>{t('auth.registration')}</CustomLink>
       </p>
       <TestSignIn />
     </Box>
