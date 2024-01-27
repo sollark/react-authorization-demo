@@ -5,7 +5,6 @@ import useAuthStore from '@/stores/authStore'
 import { Box } from '@mui/material'
 import { MakeLinkOptions, Outlet, useNavigate } from '@tanstack/react-router'
 import { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import Sidebar from './Sidebar'
 
 const RootPage: FC = () => {
@@ -44,7 +43,6 @@ const RootPage: FC = () => {
           theme.palette.mode === 'dark'
             ? theme.palette.grey[100]
             : theme.palette.grey[800],
-        height: '100vh',
       }}>
       <Sidebar closeSidebar={handleSidebarClose} isSidebarOpen={isOpen} />
       <Topbar

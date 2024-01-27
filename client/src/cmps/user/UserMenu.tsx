@@ -14,7 +14,7 @@ export function getUserMenu() {
       key: 'SignOut',
       link: (
         <Link onClick={() => authService.signOut()} to='/signin'>
-          {t('account_menu.sign_out')}
+          {t('auth.sign_out')}
         </Link>
       ),
     },
