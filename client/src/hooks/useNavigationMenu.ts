@@ -16,7 +16,7 @@ export function useNavigationMenu(role: Role) {
         navigationPages = getAdminPages()
         break
       case 'guest':
-      case 'user':
+      case 'employee':
       case 'supervisor':
       default:
         navigationPages = getUserPages()

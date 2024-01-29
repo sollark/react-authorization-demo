@@ -12,7 +12,7 @@ export type Status = keyof typeof ACCOUNT_STATUS
 
 export const USER_ROLE = {
   guest: 'guest',
-  user: 'user',
+  employee: 'employee',
   manager: 'manager',
   supervisor: 'supervisor',
   admin: 'admin',

@@ -9,7 +9,7 @@ import { FC } from 'react'
 
 const TableViews = {
   guest: BasicEmployeeTable,
-  user: BasicEmployeeTable,
+  employee: BasicEmployeeTable,
   supervisor: AdvancedEmployeeTable,
   manager: EditableEmployeeTable,
   admin: EditableEmployeeTable,

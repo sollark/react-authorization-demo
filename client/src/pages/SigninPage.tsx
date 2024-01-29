@@ -1,5 +1,5 @@
 import CustomLink from '@/cmps/link/CustomLink'
-import TestSignIn from '@/cmps/testSignIn/testSignIn'
+import TestSignIn from '@/cmps/oneClickSignIn/OneClickSignIn'
 import { log } from '@/service/console.service'
 import { Box } from '@mui/material'
 import { FC } from 'react'

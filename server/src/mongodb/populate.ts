@@ -7,9 +7,9 @@ import { departmentService } from '../service/department.service.js'
 async function populateTestData() {
   console.log('Populating test data in the database...')
 
-  // register user, manager, supervisor and admin
+  // register employee, manager, supervisor and admin
   authService.registration({
-    email: 'user@test.com',
+    email: 'employee@test.com',
     password: 'useruser',
   })
   authService.registration({
