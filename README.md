@@ -12,7 +12,6 @@
 
 ## Website
 
-Visit [React authorization demo](https://react-authorization-demo.onrender.com)
 Visit <a href="https://react-authorization-demo.onrender.com" target="_blank">React authorization demo</a>
 
 ![screenshot](client/src/assets/screenshot.png)
@@ -37,12 +36,13 @@ Provide instructions on how to use your project here.
 ### Frontend
 - Vite
 - React
-- MUI library
-- i18n next
+- MUI ui library
+- i18n next internationalization-framework 
 - Zustand
 - Zod
 
 ### Backend
+- Node
 - Express
 - Mongoose
 
