@@ -14,8 +14,6 @@
 
 Visit <a href="https://react-authorization-demo.onrender.com" target="_blank">React authorization demo</a>
 
-![screenshot](client/src/assets/screenshot.png)
-
 ## Key Features
 
 * Role-Based Accounts: The system supports different account types, including managers and employees. This allows for different access levels and functionalities based on the user's role.
@@ -23,6 +21,10 @@ Visit <a href="https://react-authorization-demo.onrender.com" target="_blank">Re
 * Employee Management: Managers have the ability to manage their employees, including adding new employees, updating employee information, and removing employees from the system.
 
 * Resource Access: Employees can access important company resources and information through their accounts.
+
+* Muiltilanguage support
+
+* Dark / Light modes 
 
 * Request Limit: The system includes a request limit feature to prevent abuse and ensure fair usage.
 
