@@ -44,7 +44,7 @@ app.use(bodyParser.json())
 app.use('/api', router)
 
 // Serve i18n files
-app.use('/i18n', express.static(path.join(__dirname, '../public/i18n')))
+app.use('/i18n', express.static(path.join(__dirname, 'public/i18n')))
 
 // Serve static files for development (vite server)
 if (config.env === 'development') {
@@ -60,12 +60,12 @@ if (config.env === 'development') {
 
 // Serve static files for production
 if (config.env === 'production') {
-  const staticPath = path.join(__dirname, '../public')
+  const staticPath = path.join(__dirname, 'public')
   app.use(express.static(staticPath))
 }
 
 // Serve index.html for all other routes
-const publicPath = path.join(__dirname, '../public', 'index.html')
+const publicPath = path.join(__dirname, 'public', 'index.html')
 const clientRoute = '/**'
 app.get(clientRoute, (req, res, next) => res.sendFile(publicPath))
 
