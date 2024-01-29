@@ -23,7 +23,7 @@ async function createDepartment(
     .exec()
 
   logger.info(
-    `departmentService- createDepartment, department:  ${department?.departmentName}`
+    `departmentService  - createDepartment, department:  ${department?.departmentName}`
   )
 
   return department

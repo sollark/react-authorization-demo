@@ -98,7 +98,7 @@ async function getCompanyByNumber(
     .exec()
 
   logger.info(
-    `companyService- getCompany, company is fetched ${company?._id}  ${company?.companyName}`
+    `companyService - getCompany, company is fetched ${company?._id}  ${company?.companyName}`
   )
 
   return company
@@ -132,6 +132,8 @@ async function addDepartment(
     .lean()
     .exec()
 
+  logger.info('companyService - addDepartment', departmentId)
+
   return company
 }
 
@@ -139,7 +141,11 @@ async function getCompanyDepartmentDocByName(
   companyId: Types.ObjectId,
   departmentName: string
 ) {
-  console.log('getCompanyDepartmentDocByName', companyId, departmentName)
+  console.log(
+    'companyService - getCompanyDepartmentDocByName',
+    companyId,
+    departmentName
+  )
 
   const departmentDoc = await DepartmentModel.findOne({
     company: companyId,
@@ -188,7 +194,7 @@ async function getCompanyEmployeeDocByNumber(
 
   if (!company) {
     logger.error(
-      `companyService- getCompanyEmployeeDocByNumber, company is not found ${companyId}`
+      `companyService - getCompanyEmployeeDocByNumber, company is not found ${companyId}`
     )
 
     return null
@@ -253,7 +259,7 @@ async function updateCompany(
     .exec()
 
   logger.info(
-    `companyService- updateCompany, company is updated ${company?._id}  ${company?.companyName}`
+    `companyService - updateCompany, company is updated ${company?._id}  ${company?.companyName}`
   )
 
   return company
