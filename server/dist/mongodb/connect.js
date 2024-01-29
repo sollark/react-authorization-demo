@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
 import { config } from '../config/config.js';
+// import { deleteDatabase } from './delete.js'
+// import { populate } from './populate.js'
 export const connectMongo = async (db) => {
     const url = db === 'development' ? config.mongo.test_url : config.mongo.prod_url;
     if (!url) {
