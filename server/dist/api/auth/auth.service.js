@@ -17,13 +17,6 @@ async function registration(credentials) {
     const uuid = uuidv4();
     const auth = await authModel.create({ uuid, email, password: hashPassword });
     logger.info(`authService - New authentication created for email: ${email}`);
-    // generate tokens
-    const tokens = await generateTokens(auth.uuid);
-    if (!tokens)
-        throw new BadRequestError('Could not generate tokens');
-    const { accessToken, refreshToken } = tokens;
-    // save refresh token to db
-    await tokenService.saveToken(refreshToken);
     // create new profile and new account
     const profile = await profileService.createBlankProfile();
     if (!profile)
@@ -31,6 +24,13 @@ async function registration(credentials) {
     const account = await accountService.createAccount(uuid, profile._id);
     if (!account)
         throw new BadRequestError('Could not create account');
+    // generate tokens
+    const tokens = await generateTokens(auth.uuid);
+    if (!tokens)
+        throw new BadRequestError('Could not generate tokens');
+    const { accessToken, refreshToken } = tokens;
+    // save refresh token to db
+    await tokenService.saveToken(refreshToken);
     return { uuid, accessToken, refreshToken };
 }
 async function signIn(email, password) {

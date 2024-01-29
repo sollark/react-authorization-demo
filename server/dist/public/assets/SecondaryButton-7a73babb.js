@@ -1,0 +1,1 @@
+import{B as o}from"./TextField-a99ce118.js";import{J as t}from"./index-4c6a8037.js";const n=t(o)(({theme:r})=>({margin:"1rem 0",marginInlineEnd:"1rem",borderStyle:"solid",borderColor:r.palette.secondary.main,borderWidth:"2px",color:r.palette.primary.contrastText,"&:hover":{backgroundColor:r.palette.secondary.main}}));export{n as S};

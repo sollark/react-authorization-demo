@@ -8,7 +8,7 @@ export const ACCOUNT_STATUS = {
 };
 export const USER_ROLE = {
     guest: 'guest',
-    user: 'user',
+    employee: 'employee',
     manager: 'manager',
     supervisor: 'supervisor',
     admin: 'admin',
@@ -34,7 +34,7 @@ const AccountSchema = new Schema({
     role: {
         type: String,
         enum: Object.values(USER_ROLE),
-        default: USER_ROLE.user,
+        default: USER_ROLE.employee,
         required: true,
     },
     employee: {

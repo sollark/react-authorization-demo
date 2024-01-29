@@ -26,5 +26,5 @@ export function useNavigationMenu(role: Role) {
     setPages(navigationPages)
   }, [role, i18n.language])
 
-  return [pages]
+  return pages
 }

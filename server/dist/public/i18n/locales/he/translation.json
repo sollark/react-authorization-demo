@@ -10,7 +10,8 @@
     "save": "שמור",
     "edit": "ערוך",
     "delete": "מחק",
-    "add": "הוסף"
+    "add": "הוסף",
+    "submit": "שליחה"
   },
   "ui": {
     "search": "חיפוש",
@@ -25,14 +26,21 @@
   },
 
   "pages": {
+    "sign_in": "התחברות",
+    "registration": "הרשמה",
     "home": "בית",
     "company": "חברה",
     "employees": "עובדים",
     "accounts": "חשבונות"
   },
   "account_menu": {
-    "account": "חשבון",
-    "sign_out": "התנתק"
+    "account": "חשבון"
+  },
+  "sign_in_page": {
+    "Don't have an account?": "אין חשבון?"
+  },
+  "registration_page": {
+    "Already have an account?": "היו חשבונות?"
   },
   "company_page": {
     "number_of_employees": "מספר עובדים"
@@ -45,7 +53,10 @@
   },
   "auth": {
     "email": "דואר אלקטרוני",
-    "password": "סיסמה"
+    "password": "סיסמה",
+    "registration": "הרשמה",
+    "sign_in": "התחברות",
+    "sign_out": "התנתק"
   },
   "account": {
     "account": "חשבון"

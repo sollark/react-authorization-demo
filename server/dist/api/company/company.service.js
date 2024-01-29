@@ -69,7 +69,7 @@ async function getCompanyByNumber(companyNumber) {
     })
         .lean()
         .exec();
-    logger.info(`companyService- getCompany, company is fetched ${company?._id}  ${company?.companyName}`);
+    logger.info(`companyService - getCompany, company is fetched ${company?._id}  ${company?.companyName}`);
     return company;
 }
 async function getCompanyDoc(companyId) {
@@ -89,10 +89,11 @@ async function addDepartment(companyId, departmentId) {
         .populate({ path: 'employees', model: 'Employee' })
         .lean()
         .exec();
+    logger.info('companyService - addDepartment', departmentId);
     return company;
 }
 async function getCompanyDepartmentDocByName(companyId, departmentName) {
-    console.log('getCompanyDepartmentDocByName', companyId, departmentName);
+    console.log('companyService - getCompanyDepartmentDocByName', companyId, departmentName);
     const departmentDoc = await DepartmentModel.findOne({
         company: companyId,
         departmentName,
@@ -118,7 +119,7 @@ async function removeEmployee(companyId, employeeId) {
 async function getCompanyEmployeeDocByNumber(companyId, employeeNumber) {
     const company = await CompanyModel.findById(companyId);
     if (!company) {
-        logger.error(`companyService- getCompanyEmployeeDocByNumber, company is not found ${companyId}`);
+        logger.error(`companyService - getCompanyEmployeeDocByNumber, company is not found ${companyId}`);
         return null;
     }
     const employeeIds = company.employees;
@@ -158,7 +159,7 @@ async function updateCompany(id, name) {
         .populate('employees')
         .lean()
         .exec();
-    logger.info(`companyService- updateCompany, company is updated ${company?._id}  ${company?.companyName}`);
+    logger.info(`companyService - updateCompany, company is updated ${company?._id}  ${company?.companyName}`);
     return company;
 }
 async function deleteCompany(companyId) {

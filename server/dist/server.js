@@ -65,9 +65,17 @@ app.use(errorHandler);
 server.listen(config.server.port, () => console.log(`Server is up and running on port ${config.server.port}`));
 // Connect to MongoDB
 try {
-    await connectMongo();
+    switch (config.env) {
+        case 'development':
+        case 'production':
+            await connectMongo(config.env);
+            break;
+        default:
+            throw new Error('NODE_ENV is not defined');
+    }
 }
 catch (error) {
+    console.error(error);
     process.exit(1);
 }
 //# sourceMappingURL=server.js.map

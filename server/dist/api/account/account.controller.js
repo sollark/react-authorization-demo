@@ -88,9 +88,10 @@ export async function joinCompany(req, res, next) {
         return;
     }
     const profileId = employeeDoc.profile;
+    const employeeId = employeeDoc._id;
     await accountService.setProfile(accountId, profileId);
-    await accountService.connectEmployee(accountId, employeeDoc._id);
-    await accountService.setRole(accountId, USER_ROLE.user);
+    await accountService.connectEmployee(accountId, employeeId);
+    await accountService.setRole(accountId, USER_ROLE.employee);
     // get updated account
     account = await accountService.getAccount(uuid);
     res.status(200).json({

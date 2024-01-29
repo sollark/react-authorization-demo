@@ -12,7 +12,7 @@ async function createDepartment(companyId, departmentName) {
         .populate('employees')
         .lean()
         .exec();
-    logger.info(`departmentService- createDepartment, department:  ${department?.departmentName}`);
+    logger.info(`departmentService  - createDepartment, department:  ${department?.departmentName}`);
     return department;
 }
 async function updateDepartment(departmentId, updatedDepartmentData) {

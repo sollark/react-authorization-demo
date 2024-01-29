@@ -10,7 +10,8 @@
     "save": "Save",
     "edit": "Edit",
     "delete": "Delete",
-    "add": "Add"
+    "add": "Add",
+    "submit": "Submit"
   },
   "ui": {
     "search": "Search",
@@ -24,14 +25,21 @@
     "logo": "Logo"
   },
   "pages": {
+    "sign_in": "Sign in",
+    "registration": "Registration",
     "home": "Home",
     "company": "Company",
     "employees": "Employees",
     "accounts": "Accounts"
   },
   "account_menu": {
-    "account": "Account",
-    "sign_out": "Sign out"
+    "account": "Account"
+  },
+  "sign_in_page": {
+    "Don't have an account?": "Don't have an account?"
+  },
+  "registration_page": {
+    "Already have an account?": "Already have an account?"
   },
   "company_page": {
     "number_of_employees": "Number of employees"
@@ -44,7 +52,10 @@
   },
   "auth": {
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "registration": "Registration",
+    "sign_in": "Sign in",
+    "sign_out": "Sign out"
   },
   "account": {
     "account": "Account"

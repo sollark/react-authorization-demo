@@ -81,7 +81,7 @@ const Sidebar = (props: SidebarProps) => {
 
   // Pages
   const role: Role = useAccountStore((state) => state.role)
-  const [pages] = useNavigationMenu(role)
+  const pages = useNavigationMenu(role)
 
   return (
     <StyledDrawer

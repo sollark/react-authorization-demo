@@ -1,0 +1,1 @@
+import{j as e,B as t}from"./index-4c6a8037.js";const n=()=>e.jsx(t,{sx:{m:"auto",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",maxHeight:"100vh",maxWidth:["100%","100%","100%","75%","75%"],backgroundColor:"primary.light"},children:e.jsx("h1",{children:"The page is not found!"})});export{n as default};
